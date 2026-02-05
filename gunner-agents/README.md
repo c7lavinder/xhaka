@@ -74,3 +74,14 @@ Agent runner reactivates
 | Coaching | ⏳ Queued | TBD |
 | Dispo | ⏳ Queued | TBD |
 | KPI Monitor | ⏳ Queued | TBD |
+| AI Caller | 📋 Future | Requires call analysis first |
+
+## Future Add-ons (Roadmap)
+
+### AI Caller
+Voice AI for immediate lead response. Prerequisites:
+- Analyze 1000+ calls to map common Q&A patterns
+- Train on successful call techniques from Gunner grading
+- Handle: weekend leads, after-hours, overflow
+
+**Natural Gunner integration:** Uses call coaching data to train the AI voice.

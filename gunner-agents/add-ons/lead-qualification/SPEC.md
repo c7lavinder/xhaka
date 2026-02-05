@@ -113,9 +113,13 @@ GHL: New Contact Created (or Opportunity Created)
 
 **"Contact" = logged call attempt in GHL**
 
-**Weekend Exception:**
+**Weekend Handling:**
 - SLA paused on weekends (Sat-Sun)
-- Leads that come in Fri night → first call Monday AM
+- Weekend leads get immediate SMS/email auto-response
+- Task created (will show overdue Monday AM)
+- Monday morning: weekend leads prioritized first
+
+**Current State:** Task created → overdue by Monday when LM arrives
 
 **Note:** SOPs for this process are in GHL dashboard (bottom of page)
 
@@ -195,10 +199,11 @@ Every customer can customize these values. NAH's values are the defaults.
 | BatchLeads | Skip tracing, owner info, property data | API (NAH has subscription) |
 | County Records | Tax records, liens, ownership history | Varies by county — many different sites |
 
-**County Data Challenge:**
-- Each county has different website/format
-- This has made training humans difficult in the past
-- Agent opportunity: standardize county data retrieval
+**County Data (Tennessee):**
+- NAH works pretty much every county in TN
+- Most rural counties: same site (easier)
+- Different external sites: Hamilton, Knox, Blount
+- Agent opportunity: standardize retrieval across all formats
 
 ✅ VERIFIED by Corey 2026-02-05
 
@@ -215,9 +220,26 @@ Every customer can customize these values. NAH's values are the defaults.
 
 ---
 
+## Future: AI Caller Add-on
+
+**Not building now, but on roadmap.**
+
+Prerequisites before AI caller:
+- Analyze hundreds/thousands of NAH calls
+- Map common questions sellers ask
+- Map how team handles each question
+- Train AI voice on successful call patterns
+
+**When ready:** AI caller handles immediate response for:
+- Weekend leads (speed to lead)
+- After-hours leads
+- Overflow when LMs are maxed
+
+---
+
 ## Next Steps
 
-1. **Corey confirms rules above** ✋ WAITING
+1. ✅ Corey verified rules (2026-02-05)
 2. Write agent system prompts
 3. Build workflow logic
 4. Test with historical NAH leads
