@@ -55,20 +55,20 @@ GHL: New Contact Created (or Opportunity Created)
 
 ### Lead Scoring (5 Factors)
 
-| Factor | Weight | HOT Criteria | WARM Criteria | COLD Criteria |
-|--------|--------|--------------|---------------|---------------|
-| **Timeline** | High | Wants to sell within 30 days | 30-60 days | 60+ days or "just looking" |
-| **Condition** | Medium | Distressed, needs work, vacant | Some repairs needed | Move-in ready, retail condition |
-| **Price** | Medium | Will sell below market | Flexible on price | Wants retail/above market |
-| **Motivation** | Highest | Clear pain (inherited, divorce, foreclosure, tired landlord, code violations) | Some motivation present | No clear motivation |
-| **Source** | Low | High-intent source (direct mail response, PPC, driving for dollars) | Medium-intent (cold call answered) | Low-intent (Facebook, bought list) |
+| Factor | Weight | HOT Criteria | WARM Criteria |
+|--------|--------|--------------|---------------|
+| **Timeline** | High | Wants to sell within 30 days | 30+ days or unclear |
+| **Condition** | Medium | Distressed, needs work, vacant | Some repairs or move-in ready |
+| **Price** | Medium | Will sell below market | Flexible or wants retail |
+| **Motivation** | Highest | Clear pain (inherited, divorce, foreclosure, tired landlord, code violations) | Some or unclear motivation |
+| **Source** | Low | High-intent source (direct mail response, PPC, driving for dollars) | Lower-intent (cold call, Facebook, list) |
 
 **Scoring Logic:**
 - 3+ factors = HOT
-- 2 factors = WARM
-- 0-1 factors = COLD
+- 0-2 factors = WARM
+- **No COLD category** — all leads get worked
 
-**Is this accurate? Any adjustments needed?**
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -76,16 +76,31 @@ GHL: New Contact Created (or Opportunity Created)
 
 | Lead Score | Assignment | Task Created |
 |------------|------------|--------------|
-| **HOT** | Kyle (AM) | "Priority call - HOT lead" due in 1 hour |
-| **WARM** | Next available LM (Chris or Daniel) | "Follow up - WARM lead" due in 4 hours |
-| **COLD** | Auto-nurture sequence (no human assignment) | None - enters drip |
+| **HOT** | Daniel (LM doing qual) | "Priority call - HOT lead" due in 15 min |
+| **WARM** | Daniel (LM doing qual) | "Call - WARM lead" due in 15 min |
 
-**LM Rotation Logic:**
-- Round-robin between Chris and Daniel
+**Current State (NAH):**
+- Daniel is only LM doing new lead qualification
+- ALL leads assigned to Daniel
+- 15 minute SLA for first call attempt
+
+**Future State (larger team):**
+- Round-robin between multiple LMs
 - Skip if LM has 10+ open tasks
 - Track assignment count for fairness
 
-**Is this accurate? Any adjustments needed?**
+**Drip Logic:**
+- Drip ONLY triggers if lead doesn't answer first call
+- Workflow: "Working Drip" in CRM Drips folder
+- Drip = email/SMS sequence
+- Drip STOPS if lead replies
+
+**Weekend Gap:**
+- No calls happen on weekends currently
+- Known issue — needs resolution
+- AI caller considered but not preferred
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -93,13 +108,18 @@ GHL: New Contact Created (or Opportunity Created)
 
 | Lead Score | First Contact SLA | Escalation |
 |------------|-------------------|------------|
-| HOT | 1 hour | Alert Corey if no contact in 2 hours |
-| WARM | 4 hours | Alert assigned LM manager if no contact in 8 hours |
-| COLD | N/A (in drip) | N/A |
+| HOT | 15 minutes | Alert Corey if no call in 30 min |
+| WARM | 15 minutes | Alert Corey if no call in 30 min |
 
-**"Contact" = logged call, SMS sent, or appointment set in GHL**
+**"Contact" = logged call attempt in GHL**
 
-**Is this accurate? Any adjustments needed?**
+**Weekend Exception:**
+- SLA paused on weekends (Sat-Sun)
+- Leads that come in Fri night → first call Monday AM
+
+**Note:** SOPs for this process are in GHL dashboard (bottom of page)
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -128,24 +148,30 @@ GHL: New Contact Created (or Opportunity Created)
   "config": {
     "scoring": {
       "factors": ["timeline", "condition", "price", "motivation", "source"],
-      "hotThreshold": 3,
-      "warmThreshold": 2
+      "hotThreshold": 3
     },
     "routing": {
-      "hotAssignee": "user_kyle_id",
-      "warmAssignees": ["user_chris_id", "user_daniel_id"],
-      "coldAction": "nurture_sequence",
-      "rotationMethod": "round-robin"
+      "qualAssignees": ["user_daniel_id"],
+      "rotationMethod": "round-robin",
+      "noAnswerAction": "working_drip"
     },
     "sla": {
-      "hotMinutes": 60,
-      "warmMinutes": 240,
-      "escalationTarget": "user_corey_id"
+      "firstCallMinutes": 15,
+      "escalationMinutes": 30,
+      "escalationTarget": "user_corey_id",
+      "weekendPause": true
+    },
+    "dataSources": {
+      "redfin": true,
+      "zillow": true,
+      "batchleads": true,
+      "countyRecords": ["davidson", "williamson", "rutherford"]
     },
     "ghlMapping": {
       "scoreField": "lead_score",
       "factorsField": "score_factors",
-      "enrichmentField": "property_data"
+      "enrichmentField": "property_data",
+      "workingDripWorkflow": "working_drip_id"
     }
   }
 }
@@ -153,18 +179,28 @@ GHL: New Contact Created (or Opportunity Created)
 
 Every customer can customize these values. NAH's values are the defaults.
 
+**GHL Reference Workflows (NAH):**
+- New lead trigger: "New Lead - Entry Point" in Acquisitions folder
+- Working drip: "Working Drip" in CRM Drips folder
+- SOPs: Dashboard (bottom of page)
+
 ---
 
 ## Data Sources for Enrichment
 
 | Source | Data Retrieved | API/Method |
 |--------|---------------|------------|
+| Redfin | Comps, listing history, price estimates | Scrape or API |
 | Zillow | Zestimate, beds/baths, sqft, lot size, year built | API or scrape |
-| PropStream | Owner info, mortgage, tax value, equity estimate | API (requires subscription) |
-| County Records | Tax records, liens, ownership history | Varies by county |
-| GHL Contact | Existing tags, notes, previous interactions | API |
+| BatchLeads | Skip tracing, owner info, property data | API (NAH has subscription) |
+| County Records | Tax records, liens, ownership history | Varies by county — many different sites |
 
-**What data sources does NAH currently use for property research?**
+**County Data Challenge:**
+- Each county has different website/format
+- This has made training humans difficult in the past
+- Agent opportunity: standardize county data retrieval
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
