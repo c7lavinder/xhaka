@@ -57,14 +57,14 @@ def check_lead(lead):
         return  # SLA met
     
     if time_since_assignment > 30 minutes:
-        escalate_to_corey(lead)
+        escalate_to_jessica(lead)  # Jessica Guzman (Data Manager)
     elif time_since_assignment > 15 minutes:
         add_warning(lead)
 ```
 
 ## Escalation Message
 
-When escalating to Corey:
+When escalating to Jessica Guzman:
 
 ```
 🚨 SLA BREACH: [Lead Name] - [Address]

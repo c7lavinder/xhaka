@@ -91,10 +91,12 @@ Monday 8 AM: Weekend leads sorted to top of call list
 
 | Condition | Escalate To | Method |
 |-----------|-------------|--------|
-| No call attempt in 30 min (weekday) | Corey | Telegram alert |
-| Lead replies but no response in 1 hour | Corey | Telegram alert |
+| No call attempt in 30 min (weekday) | Jessica Guzman | Telegram/GHL alert |
+| Lead replies but no response in 1 hour | Jessica Guzman | Telegram/GHL alert |
 | LM marks lead as "needs AM" | Kyle | GHL task + notification |
 | Appointment set | Kyle | GHL notification |
+
+**Note:** Jessica (Data Manager) handles first-level escalation for SLA breaches. Corey only gets escalated for critical issues or if Jessica can't resolve.
 
 ## GHL Updates on Assignment
 

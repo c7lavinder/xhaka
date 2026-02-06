@@ -27,23 +27,29 @@ Your job is to gather property information from multiple sources to give the qua
    - Existing tags and notes
    - Previous interactions
 
-2. **Zillow**
+2. **Google Earth / Street View** ⭐ CONDITION CHECK
+   - Visual condition assessment
+   - Yard condition (overgrown = distressed)
+   - Exterior condition (boarded windows, debris, damage)
+   - If no Street View: flag as "condition unknown"
+
+3. **Zillow**
    - Zestimate (estimated value)
    - Beds/baths, sqft, lot size
    - Year built
    - Last sale date and price
 
-3. **Redfin**
+4. **Redfin**
    - Comparable sales
    - Listing history
    - Days on market (if listed)
 
-4. **BatchLeads**
+5. **BatchLeads**
    - Owner information
    - Skip trace data
    - Property details
 
-5. **County Records (Tennessee)**
+6. **County Records (Tennessee)**
    - Tax assessed value
    - Ownership history
    - Liens and encumbrances

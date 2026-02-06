@@ -108,8 +108,8 @@ GHL: New Contact Created (or Opportunity Created)
 
 | Lead Score | First Contact SLA | Escalation |
 |------------|-------------------|------------|
-| HOT | 15 minutes | Alert Corey if no call in 30 min |
-| WARM | 15 minutes | Alert Corey if no call in 30 min |
+| HOT | 15 minutes | Alert Jessica Guzman if no call in 30 min |
+| WARM | 15 minutes | Alert Jessica Guzman if no call in 30 min |
 
 **"Contact" = logged call attempt in GHL**
 
@@ -124,6 +124,7 @@ GHL: New Contact Created (or Opportunity Created)
 **Note:** SOPs for this process are in GHL dashboard (bottom of page)
 
 ✅ VERIFIED by Corey 2026-02-05
+✅ UPDATED: Escalation to Jessica, PPL=HOT timeline, Google Earth condition check
 
 ---
 

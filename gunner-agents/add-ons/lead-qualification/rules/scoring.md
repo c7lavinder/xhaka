@@ -12,11 +12,16 @@ Single source of truth for lead qualification scoring.
 | Within 30 days | ✅ HOT factor |
 | 30+ days, unclear, or "eventually" | WARM factor |
 
+**Source-Based Default:**
+- **PPL / Form submission** → Assume HOT (they took action to submit, want to sell now)
+- **SMS / Cold call** → Don't assume timeline, verify on call (they may say "few months")
+
 **Signals:**
 - "Need to sell fast" → HOT
 - "As soon as possible" → HOT
 - "No rush" → WARM
 - "Just seeing what it's worth" → WARM
+- Form/PPL submission with no other info → Default HOT for timeline
 
 ---
 
@@ -28,6 +33,12 @@ Single source of truth for lead qualification scoring.
 | Distressed, needs work, vacant, tear-down | ✅ HOT factor |
 | Some repairs needed, dated, livable | WARM factor |
 | Move-in ready, recently updated | WARM factor |
+
+**Pre-Call Check: Google Earth**
+Before calling, check property condition via Google Earth / Street View:
+- Overgrown yard, debris, boarded windows → likely distressed (HOT)
+- Well-maintained exterior → likely good condition (WARM)
+- No Street View available → flag as "condition unknown", verify on call
 
 **Signals:**
 - "Needs a lot of work" → HOT
