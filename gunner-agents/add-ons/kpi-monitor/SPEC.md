@@ -25,37 +25,39 @@ Automated monitoring of business KPIs. Daily summaries without asking, anomaly a
 
 ## Outputs
 
-### 1. Daily Summary (Every Morning)
+### 1. Daily Summary (Every Evening)
 
-Delivered to Corey via Telegram at 8 AM:
+Delivered to Corey + Jessica via Telegram at 9 PM CT:
 
 ```
 📊 NAH DAILY SUMMARY — Feb 5, 2026
 
 LEADS
-• New leads yesterday: 12 (▲ vs 8 avg)
+• New leads today: 12 (▲ vs 8 avg)
 • Sources: PPL (7), Cold Call (3), Direct Mail (2)
 • Hot leads: 4 | Warm leads: 8
 
 CALLS
 • Total calls: 47
 • Connect rate: 34%
-• Appointments set: 3
+• Talk time: 2.3 hrs
 
-PIPELINE
-• New Lead: 23
-• Warm: 45
-• Hot: 12
-• Pending Apt: 8
-• Made Offer: 5
+TEXTS
+• Sent: 89
+• Responses: 23 (26%)
+
+APPOINTMENTS
+• Set today: 3
+• Completed: 2
+• No-shows: 1
 
 DEALS
 • Under contract: 2
-• Closed this week: 1 ($12k assignment)
-• Closing this month: 3 (est. $35k)
+• Closed today: 1 ($12k)
+• Pipeline value: $47k (4 deals)
 
 ALERTS
-⚠️ 2 leads assigned >48h with no call attempt
+⚠️ 2 leads assigned >24h with no call attempt
 ⚠️ Lead volume from PPL down 30% vs last week
 
 Full dashboard: [link]
@@ -119,15 +121,17 @@ WINS 🎉
 | Category | Metrics |
 |----------|---------|
 | **Lead Flow** | New leads/day, by source, hot/warm ratio |
-| **Call Activity** | Calls made, connect rate, talk time |
-| **Pipeline** | Leads per stage, stage velocity, stuck deals |
+| **Calls** | Calls made, connect rate, talk time |
+| **Texts** | Texts sent, response rate |
 | **Appointments** | Set, completed, no-show rate |
 | **Offers** | Made, accepted, rejected, counter |
 | **Deals** | Under contract, closed, fell through |
-| **Revenue** | Assignment fees, monthly total, pipeline value |
+| **Revenue** | Assignment fees (from Dispo Pipeline), monthly total, pipeline value |
 | **Team** | Activity per rep, conversion per rep |
 
-**Are these the right KPIs? Any missing?**
+**Note:** Pipeline per stage not needed — focus on stuck deals only, not stage counts.
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -153,12 +157,14 @@ When to alert:
 
 | Report | Frequency | Delivery | Time |
 |--------|-----------|----------|------|
-| Daily Summary | Every day | Telegram | 8 AM CT |
+| Daily Summary | Every day | Telegram | **Evening (9 PM CT)** |
 | Anomaly Alert | Real-time | Telegram | Immediate |
-| Weekly Recap | Monday | Telegram + Email | 8 AM CT |
-| Monthly Report | 1st of month | Email | 8 AM CT |
+| Weekly Recap | Monday | Telegram + Email | 9 PM CT |
+| Monthly Report | 1st of month | Email | 9 PM CT |
 
-**Is Telegram the right channel? Different times?**
+**Recipients:** Corey + Jessica (both get all reports)
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -170,12 +176,20 @@ Where to pull KPI data:
 |------|--------|
 | Leads | GHL Contacts (created date, source, tags) |
 | Calls | GHL Call logs |
-| Pipeline | GHL Opportunities |
+| Texts | GHL SMS logs |
 | Appointments | GHL Calendars |
-| Deals | GHL Opportunities (specific stages) |
-| Revenue | GHL Custom fields or manual input? |
+| Deals | GHL Opportunities (Dispo Pipeline) |
+| Revenue | **Dispo Pipeline — Opportunity Value** |
 
-**Is revenue tracked in GHL or elsewhere?**
+**Revenue Tracking (How Corey uses it):**
+- Deal enters dispo → Value = hoped assignment fee
+- After buyer feedback → Updated to realistic estimate
+- After offers received → Updated to expected fee
+- After close → Updated to actual fee received
+
+KPI Monitor pulls from the Opportunity monetary value field.
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
@@ -183,12 +197,12 @@ Where to pull KPI data:
 
 | Report | Recipients |
 |--------|------------|
-| Daily Summary | Corey |
-| Anomaly Alerts | Corey, Jessica (Data Manager) |
-| Weekly Recap | Corey |
-| Team Performance | Corey (shared with team?) |
+| Daily Summary | Corey + Jessica |
+| Anomaly Alerts | Corey + Jessica |
+| Weekly Recap | Corey + Jessica |
+| Team Performance | Corey + Jessica |
 
-**Anyone else need reports?**
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
