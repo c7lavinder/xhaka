@@ -10,16 +10,28 @@ Automated monitoring of business KPIs. Daily summaries without asking, anomaly a
 
 ---
 
+## Monitoring Framework
+
+Three types of monitoring, each with its own purpose:
+
+| Type | Purpose | Question It Answers |
+|------|---------|---------------------|
+| **Business Health** | Track performance metrics | "Is the business growing?" |
+| **Process Health** | Verify systems are working | "Are our systems broken?" |
+| **Accountability** | Ensure team execution | "Is the team doing their job?" |
+
+---
+
 ## Agents
 
 | Agent | Role | Responsibility |
 |-------|------|----------------|
 | **Ops Monitor** | Lead | Runs periodic checks, aggregates data, coordinates reports |
-| **Lead Flow Tracker** | Worker | Monitors lead volume by source, alerts on drops |
-| **Pipeline Auditor** | Worker | Checks pipeline stages for stuck deals, flags stale opportunities |
-| **Follow-Up Auditor** | Worker | Monitors follow-up completion rates, flags reps falling behind |
-| **Daily Reporter** | Worker | Compiles daily summary (leads in, calls made, offers sent, deals closed) |
-| **Anomaly Alerter** | Worker | Detects unusual patterns, sends immediate alerts |
+| **Business Health Tracker** | Worker | Monitors revenue, conversions, deal flow |
+| **Process Health Tracker** | Worker | Monitors lead sources, automations, data flow |
+| **Accountability Tracker** | Worker | Monitors team SLAs, follow-up rates, response times |
+| **Daily Reporter** | Worker | Compiles daily summary across all 3 categories |
+| **Alert Dispatcher** | Worker | Sends real-time alerts when thresholds breached |
 
 ---
 
@@ -32,55 +44,86 @@ Delivered to Corey + Jessica via Telegram at 9 PM CT:
 ```
 📊 NAH DAILY SUMMARY — Feb 5, 2026
 
-LEADS
-• New leads today: 12 (▲ vs 8 avg)
-• Sources: PPL (7), Cold Call (3), Direct Mail (2)
-• Hot leads: 4 | Warm leads: 8
-
-CALLS
-• Total calls: 47
-• Connect rate: 34%
-• Talk time: 2.3 hrs
-
-TEXTS
-• Sent: 89
-• Responses: 23 (26%)
-
-APPOINTMENTS
-• Set today: 3
-• Completed: 2
-• No-shows: 1
-
-DEALS
-• Under contract: 2
-• Closed today: 1 ($12k)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📈 BUSINESS HEALTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• New leads: 12 (▲ vs 8 avg)
+• Appointments set: 3
+• Offers made: 2
+• Deals closed: 1 ($12k)
 • Pipeline value: $47k (4 deals)
 
-ALERTS
-⚠️ 2 leads assigned >24h with no call attempt
-⚠️ Lead volume from PPL down 30% vs last week
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙️ PROCESS HEALTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Lead sources: PPL (7), Cold Call (3), DM (2)
+• All sources active ✓
+• Automations firing ✓
+• Stuck deals: 1 (456 Oak Ave - 8 days)
 
-Full dashboard: [link]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 ACCOUNTABILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Daniel: 47 calls, 89 texts, 3 apts ✓
+Kyle: 12 calls, 5 walkthroughs, 2 offers ✓
+Esteban: 15 buyers contacted, 2 deals sent ✓
+
+⚠️ 2 leads not called within 30 min
+⚠️ 1 hot lead no contact >24h
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 2. Anomaly Alerts (Real-Time)
+### 2. Real-Time Alerts
 
-Sent immediately when something's off:
+Sent immediately when thresholds are breached:
 
+**📈 Business Health Alert:**
 ```
-🚨 ANOMALY ALERT
+📉 BUSINESS HEALTH ALERT
 
-Lead volume dropped significantly:
-• Today so far: 2 leads
-• Same time yesterday: 8 leads
-• Same time last week: 7 leads
+Weekly lead-to-appointment conversion dropped
+• This week: 6%
+• Last week: 12%
+• 4-week avg: 11%
+
+Possible causes:
+• Lead quality declining?
+• Qualification criteria too loose?
+• Rep performance issue?
+
+[View conversion details]
+```
+
+**⚙️ Process Health Alert:**
+```
+⚠️ PROCESS HEALTH ALERT
+
+No leads from PPL in 6+ hours
+• Last lead: 9:15 AM
+• Current time: 3:30 PM
+• Normal avg: 1 lead/hour
 
 Possible causes:
 • PPL campaign paused?
-• Website form broken?
-• Lead source issue?
+• Integration broken?
+• Budget exhausted?
 
-Recommend: Check lead sources ASAP
+[Check PPL dashboard]
+```
+
+**👤 Accountability Alert:**
+```
+🚨 ACCOUNTABILITY ALERT
+
+Daniel has 3 hot leads not called
+• Lead 1: Khalid S. — assigned 45 min ago
+• Lead 2: Maria G. — assigned 38 min ago  
+• Lead 3: James T. — assigned 32 min ago
+
+SLA: 30 minutes
+
+[View leads] [Notify Daniel]
 ```
 
 ### 3. Weekly Recap (Monday Morning)
@@ -116,40 +159,110 @@ WINS 🎉
 
 ## ⚠️ RULES TO VERIFY - Corey please confirm
 
-### KPIs to Track
+### Metrics by Category
 
-| Category | Metrics |
-|----------|---------|
-| **Lead Flow** | New leads/day, by source, hot/warm ratio |
-| **Calls** | Calls made, connect rate, talk time |
-| **Texts** | Texts sent, response rate |
-| **Appointments** | Set, completed, no-show rate |
-| **Offers** | Made, accepted, rejected, counter |
-| **Deals** | Under contract, closed, fell through |
-| **Revenue** | Assignment fees (from Dispo Pipeline), monthly total, pipeline value |
-| **Team** | Activity per rep, conversion per rep |
+## 📈 BUSINESS HEALTH
 
-**Note:** Pipeline per stage not needed — focus on stuck deals only, not stage counts.
+*"Is the business growing?"*
+
+| Metric | What It Tells You |
+|--------|-------------------|
+| New leads/day | Lead generation working? |
+| Lead-to-appointment rate | Qualification efficiency |
+| Appointment-to-offer rate | AM effectiveness |
+| Offer acceptance rate | Pricing/negotiation |
+| Deals closed/month | Overall output |
+| Revenue closed | Money in the bank |
+| Pipeline value | Future revenue |
+| Avg assignment fee | Deal quality |
+
+**Business Health Alerts:**
+- Revenue trending down month-over-month
+- Conversion rates dropping significantly
+- Pipeline value declining
+- Deal velocity slowing
+
+---
+
+## ⚙️ PROCESS HEALTH
+
+*"Are our systems broken?"*
+
+| Metric | What It Tells You |
+|--------|-------------------|
+| Leads by source | Which sources are flowing? |
+| Hours since last lead (by source) | Is a source dead? |
+| Automation trigger rate | Are workflows firing? |
+| Drip response rate | Are drips working? |
+| Data completeness | Is info being entered? |
+| Stuck deals (7+ days) | Process bottlenecks? |
+
+**Process Health Alerts:**
+- No leads from [source] in 6+ hours
+- Automation not firing on new leads
+- Drip engagement dropped significantly
+- Multiple deals stuck in same stage
+
+---
+
+## 👤 ACCOUNTABILITY
+
+*"Is the team executing?"*
+
+| Metric | What It Tells You |
+|--------|-------------------|
+| Leads not called within 30 min | Speed to lead |
+| Hot leads with no contact >24h | Leads going cold |
+| Follow-up completion rate | Persistence |
+| Calls per rep per day | Activity level |
+| Texts per rep per day | Activity level |
+| Appointments set per rep | Effectiveness |
+| Response time to inbound | Responsiveness |
+
+**Accountability Alerts:**
+- [Rep] has X leads not called in 30+ min
+- [Rep] has X hot leads with no contact >24h
+- [Rep] follow-up rate below 75%
+- [Rep] activity significantly below average
+
+---
 
 ✅ VERIFIED by Corey 2026-02-05
 
 ---
 
-### Anomaly Thresholds
+### Alert Thresholds by Category
 
-When to alert:
+**📈 BUSINESS HEALTH ALERTS**
 
-| Anomaly | Threshold |
-|---------|-----------|
-| Lead volume drop | >30% below 7-day average |
-| No leads in X hours | 4+ hours (business hours) |
-| Stuck lead (no activity) | >48 hours |
-| Hot lead gone cold | >24 hours no contact |
-| Pipeline stage stuck | >7 days in same stage |
-| Follow-up rate drop | <75% (target 85%) |
-| Offer acceptance drop | <20% (if normally higher) |
+| Alert | Threshold | Urgency |
+|-------|-----------|---------|
+| Lead volume drop | >30% below 7-day avg | Medium |
+| Conversion rate drop | >25% below avg | Medium |
+| Revenue behind target | >20% behind monthly goal | High |
+| No deals closed in X days | 14+ days | Medium |
 
-**Are these thresholds right for your business?**
+**⚙️ PROCESS HEALTH ALERTS**
+
+| Alert | Threshold | Urgency |
+|-------|-----------|---------|
+| No leads from source | 6+ hours (business hours) | High |
+| Automation not firing | 2+ missed triggers | High |
+| Drip engagement drop | >40% below avg | Medium |
+| Deal stuck in stage | 7+ days | Medium |
+| Data field empty rate | >30% of new leads | Low |
+
+**👤 ACCOUNTABILITY ALERTS**
+
+| Alert | Threshold | Urgency |
+|-------|-----------|---------|
+| Lead not called | 30+ min after assignment | High |
+| Hot lead no contact | 24+ hours | Critical |
+| Follow-up rate low | <75% (target 85%) | Medium |
+| Rep activity below avg | <50% of team avg | Medium |
+| No-show rate high | >30% of appointments | Medium |
+
+✅ VERIFIED by Corey 2026-02-05
 
 ---
 
