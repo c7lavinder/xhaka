@@ -435,9 +435,16 @@ When a new Gunner customer enables Dispo:
 
 ## Next Steps
 
-1. **Corey confirms rules above** ✋ WAITING
+1. ~~**Corey confirms rules above**~~ ✅ DONE
 2. Write agent system prompts
 3. Build workflow logic
 4. Test with real deals
 5. Integrate with GHL pipelines
-6. Create Manus PRD for Dispo Dashboard UI
+6. ~~Create Manus PRD for Dispo Dashboard UI~~ ✅ DONE — See `MANUS-PRD.md`
+
+---
+
+## Related Documents
+
+- **Frontend PRD:** `MANUS-PRD.md` — Control Room UI spec for Manus
+- **Backend Spec:** This file — Agent automation logic
