@@ -1,6 +1,6 @@
-# Dispo Control Room — Manus PRD
+# Dispo — Manus PRD
 
-**Feature:** Dispo Control Room (Gunner Tab)
+**Feature:** Dispo (Gunner Tab)
 **Target:** Manus build
 **Priority:** High
 **Backend Spec:** See `SPEC.md` (agent automation logic)
@@ -9,7 +9,7 @@
 
 ## Overview
 
-The **Control Room** is a dedicated Gunner tab that gives Dispo Managers complete visibility and control over their deal distribution workflow. Think mission control for wholesale deals — see every deal in flight, every buyer response, every pending action.
+**Dispo** is a dedicated Gunner tab that gives Dispo Managers complete visibility and control over their deal distribution workflow. See every deal in flight, every buyer response, every pending action — Esteban's daily command center.
 
 ---
 
@@ -34,14 +34,14 @@ The **Control Room** is a dedicated Gunner tab that gives Dispo Managers complet
 ## Page Structure
 
 ### Tab Location
-- Gunner sidebar: **"Control Room"** (with radar/control icon)
+- Gunner sidebar: **"Dispo"** (with send/distribute icon)
 - Position: After Leads, before Settings
 
 ### Layout: Three-Column Dashboard
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  🎯 CONTROL ROOM                                      [Filters ▼]   │
+│  🎯 DISPO                                             [Filters ▼]   │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  ┌──────────────┐  ┌──────────────────────┐  ┌───────────────────┐ │
@@ -197,7 +197,7 @@ Shows real-time buyer activity across ALL deals.
 
 ### 4. Metrics Bar (Bottom)
 
-Persistent stats strip across bottom of Control Room.
+Persistent stats strip across bottom of Dispo page.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -321,7 +321,7 @@ On mobile/tablet, collapse to single column:
 - Triggers follow-ups
 - Preps assignment docs
 
-### Frontend (Control Room)
+### Frontend (Dispo Page)
 - Displays queue and deal details
 - Shows pending actions (approve outreach)
 - Enables quick replies
@@ -341,7 +341,7 @@ On mobile/tablet, collapse to single column:
 
 ## Tenant Configuration (UI)
 
-### Settings Page (Control Room → ⚙️)
+### Settings Page (Dispo → ⚙️)
 
 ```
 CONTROL ROOM SETTINGS
@@ -417,7 +417,7 @@ CONTROL ROOM SETTINGS
 
 ## Questions for Corey
 
-1. ✅ Name confirmed: "Control Room"
+1. ✅ Name confirmed: "Dispo" (Control Room is separate business-wide dashboard)
 2. Any specific metrics you want prominently displayed?
 3. Should buyer tier colors match anything in GHL?
 4. Priority: real-time activity feed or detailed analytics?
