@@ -12,7 +12,7 @@ We've spec'd out several expansions to Gunner. This package contains everything 
 
 **Priority Order:**
 1. 🔥 **Dispo Dashboard** — New tab in Gunner (most urgent)
-2. 📊 **KPI Monitor** — Daily summaries + anomaly alerts
+2. 📊 **The Pulse** — Daily summaries + anomaly alerts
 3. 🎯 **Lead IQ Agents** — Automated lead qualification (backend)
 4. 📦 **Dispo Assist Agents** — Buyer matching automation (backend)
 
@@ -56,7 +56,7 @@ We've spec'd out several expansions to Gunner. This package contains everything 
 
 ---
 
-## 2. KPI Monitor (REPORTING)
+## 2. The Pulse (REPORTING)
 
 **File:** `gunner-agents/add-ons/kpi-monitor/SPEC.md`
 

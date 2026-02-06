@@ -18,7 +18,7 @@ gunner-agents/
 │   ├── comp-analysis/          # Comp Agent - $79/mo
 │   ├── coaching/               # Coaching Bot - $49/mo
 │   ├── dispo/                  # Dispo Assist - $49/mo
-│   └── kpi-monitor/            # Ops Monitor - $29/mo
+│   └── kpi-monitor/            # The Pulse - $29/mo
 │
 └── docs/                       # Documentation
     ├── setup-guide.md
@@ -73,7 +73,7 @@ Agent runner reactivates
 | Comp Analysis | ⏳ Queued | TBD |
 | Coaching | ⏳ Queued | TBD |
 | Dispo | ⏳ Queued | TBD |
-| KPI Monitor | ⏳ Queued | TBD |
+| The Pulse | ⏳ Queued | TBD |
 | AI Caller | 📋 Future | Requires call analysis first |
 
 ## Future Add-ons (Roadmap)

@@ -1,8 +1,10 @@
-# KPI Monitor Add-on
+# The Pulse
 
-**Product Name:** Ops Monitor
+**Product Name:** The Pulse
 **Price:** $29/mo
 **Status:** 🔨 Designing
+
+> *"Check the pulse of your business — Business Health, Process Health, Accountability"*
 
 ## Purpose
 
@@ -26,7 +28,7 @@ Three types of monitoring, each with its own purpose:
 
 | Agent | Role | Responsibility |
 |-------|------|----------------|
-| **Ops Monitor** | Lead | Runs periodic checks, aggregates data, coordinates reports |
+| **The Pulse** | Lead | Runs periodic checks, aggregates data, coordinates reports |
 | **Business Health Tracker** | Worker | Monitors revenue, conversions, deal flow |
 | **Process Health Tracker** | Worker | Monitors lead sources, automations, data flow |
 | **Accountability Tracker** | Worker | Monitors team SLAs, follow-up rates, response times |
@@ -300,7 +302,7 @@ Where to pull KPI data:
 - After offers received → Updated to expected fee
 - After close → Updated to actual fee received
 
-KPI Monitor pulls from the Opportunity monetary value field.
+The Pulse pulls from the Opportunity monetary value field.
 
 ✅ VERIFIED by Corey 2026-02-05
 
