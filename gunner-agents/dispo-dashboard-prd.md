@@ -230,6 +230,109 @@ When clicking on a specific deal:
 - Close rates
 - Time to close
 
+### 7. Offer Tracking (NEW)
+- Track offers received from buyers
+- Log offer amount, terms, contingencies
+- Track counter-offers and negotiations
+- Status: Pending → Accepted → Rejected → Countered
+- Compare multiple offers on same deal
+
+**Offer Tracking View:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  OFFERS: 123 Main St                                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Contract Price: $145,000 │ Assignment: $10,000                │
+│                                                                 │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ Buyer          │ Offer    │ Terms        │ Status │ Action ││
+│  ├────────────────┼──────────┼──────────────┼────────┼────────┤│
+│  │ Brian Thompson │ $155,000 │ Cash, 14 day │ ⭐ BEST│ [Accept]││
+│  │ Sarah Williams │ $152,000 │ Cash, 21 day │ Pending│ [Counter││
+│  │ Mike Chen      │ $148,000 │ Financing    │ Low    │ [Reject]││
+│  └─────────────────────────────────────────────────────────────┘│
+│                                                                 │
+│  [Add Offer] [Compare Offers]                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 8. Showing Management (NEW)
+- Schedule buyer showings/walkthroughs
+- Track confirmations and no-shows
+- Collect feedback after showing
+- Calendar integration
+
+**Showing Management View:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  SHOWINGS: 123 Main St                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  UPCOMING                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ Feb 6, 10:00 AM │ Brian Thompson │ Confirmed ✓ │ [Reschedule]│
+│  │ Feb 6, 2:00 PM  │ Sarah Williams │ Pending     │ [Remind]   ││
+│  └─────────────────────────────────────────────────────────────┘│
+│                                                                 │
+│  COMPLETED                                                     │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ Feb 4, 11:00 AM │ Mike Chen │ Showed │ Feedback: "Too much  ││
+│  │                 │           │        │ work for the price"  ││
+│  └─────────────────────────────────────────────────────────────┘│
+│                                                                 │
+│  [Schedule Showing]                                            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 9. Assignment Agreement Workflow (NEW)
+- Trigger agreement when buyer commits
+- Pull buyer info (Name, Company, Email) from database
+- Auto-populate DocHub template
+- Send for signature
+- Track signature status
+- Notify when signed
+
+**Agreement Trigger Flow:**
+```
+Buyer accepts offer
+       ↓
+[Send Assignment Agreement] button appears
+       ↓
+System checks buyer info complete:
+  ✓ Buyer Name
+  ✓ Company Name  
+  ✓ Email
+       ↓
+If missing → prompt to collect
+If complete → populate DocHub template
+       ↓
+Send via DocHub
+       ↓
+Track status: Sent → Viewed → Signed
+       ↓
+Notify Esteban + Corey when signed
+       ↓
+Auto-move deal to "UC with Buyer" stage
+```
+
+**Agreement Status Panel:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  ASSIGNMENT AGREEMENT                                          │
+├─────────────────────────────────────────────────────────────────┤
+│  Buyer: Brian Thompson                                         │
+│  Company: Thompson Investments LLC                             │
+│  Email: brian@thompsoninv.com                                  │
+│                                                                 │
+│  Status: ✅ SIGNED                                             │
+│  Sent: Feb 5, 4:30 PM                                          │
+│  Viewed: Feb 5, 4:45 PM                                        │
+│  Signed: Feb 5, 5:12 PM                                        │
+│                                                                 │
+│  [View Document] [Download PDF]                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## GHL Integration
@@ -289,10 +392,16 @@ Gunner App
 ├── Dispo (NEW) ← This PRD
 │   ├── Overview (default)
 │   ├── Inventory
+│   │   └── Deal Detail
+│   │       ├── Buyer Engagement
+│   │       ├── Offers (NEW)
+│   │       ├── Showings (NEW)
+│   │       └── Agreement (NEW)
 │   ├── Buyers
+│   ├── Showings Calendar (NEW)
 │   └── Performance
 └── Settings (existing)
-    └── Dispo Settings (field mapping)
+    └── Dispo Settings (field mapping, DocHub)
 ```
 
 ---
@@ -332,7 +441,9 @@ Gunner App
 - Full performance metrics
 - Automated outreach (text/email from dashboard)
 - Marketing packet generation
-- Assignment agreement via DocHub
+- **Offer tracking system** (compare, accept, reject, counter)
+- **Showing management** (schedule, confirm, collect feedback)
+- **Assignment agreement workflow** (DocHub integration, auto-populate, track signature)
 - Advanced analytics and reporting
 
 ---
