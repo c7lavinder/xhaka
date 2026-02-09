@@ -198,55 +198,196 @@ Settings → Disputes → Open Dispute → Select lead → Submit
 
 ## Filing System
 
-### Primary Method: Email Submission
-Most reliable for multi-tenant SaaS. Works across all platforms.
+### Method: Browser Automation (Form Submission)
+Bot logs into each PPL provider portal and fills out their dispute forms directly.
 
-**Email Template:**
+---
+
+### Leadzolo Form Automation
+
+**Login URL:** `https://portal.leadzolo.com/app/login`
+**Form URL:** `https://www.leadzolo.com/lead-return-policy1657028939148`
+
+**Login Flow:**
 ```
-To: [platform support email]
-Subject: Lead Dispute Request - [Lead ID] - [Company Name]
-
-Hello,
-
-We are requesting a refund for the following lead:
-
-LEAD INFORMATION
-────────────────────────────────────
-Lead ID: [Lead ID if known]
-Lead Name: [Name]
-Phone: [Phone]
-Email: [Lead Email]
-Property Address: [Address]
-Date Received: [Date]
-
-REASON FOR DISPUTE
-────────────────────────────────────
-[Reason]: [Description]
-
-EVIDENCE
-────────────────────────────────────
-[Auto-compiled evidence from GHL]
-
-• Call attempt 1: [Date/Time] - [Outcome]
-• Call attempt 2: [Date/Time] - [Outcome]
-• SMS sent: [Date/Time] - [Response status]
-[Additional evidence as applicable]
-
-Per your return policy, this lead qualifies for a refund.
-
-Please confirm receipt and process this dispute.
-
-Thank you,
-[Company Name]
-[Portal Email]
-[Phone]
+1. Navigate to portal.leadzolo.com/app/login
+2. Enter email in "Email address" field
+3. Enter password in "Password" field
+4. Check "I agree to the following" checkbox
+5. Click "Sign in"
+6. Verify redirect to dashboard (portal.leadzolo.com/app/[id])
 ```
 
-### Secondary Method: Portal Form (where available)
-For platforms with stable portal forms, bot can fill and submit directly.
+**Dispute Form Fields:**
+| Field | Selector/Label | Value Source | Required |
+|-------|----------------|--------------|----------|
+| Reason | "Select The Reason For The Return" dropdown | Detection logic | ✅ |
+| Lead Email | "Lead Email" text input | GHL contact email | ✅ |
+| Lead Address | "Lead Address" text input | GHL contact address | ✅ |
+| Additional Info | "Additional Information" textarea | Evidence compiler | ❌ |
+| Client Name | "Client Name" text input | Tenant company name | ✅ |
+| Client Email | "Client Email (Your Leadzolo Portal Login Email)" | Tenant login email | ✅ |
+| Supporting Proof | File upload | Screenshots/docs | ❌ |
+
+**Reason Dropdown Options:**
+- Wrong Lead Type
+- Wholesaler Lead
+- Duplicate Lead
+- Not The Property Owner
+- Invalid Contact Information
+- Other
+
+**Submit Flow:**
+```
+1. Navigate to return policy page
+2. Click "Start Return" button (scrolls to form)
+3. Select reason from dropdown
+4. Fill Lead Email
+5. Fill Lead Address
+6. Fill Additional Information with evidence
+7. Fill Client Name
+8. Fill Client Email
+9. (Optional) Upload supporting proof
+10. Click "Submit"
+11. Capture confirmation
+```
+
+---
+
+### MotivatedSellers Form Automation
+
+**Login URL:** `https://motivatedsellers.com/leads/signin`
+**Portal URL:** `https://motivatedsellers.com/leads/app/leads`
+
+**⚠️ Challenge: reCAPTCHA on login**
+Options:
+1. Use CAPTCHA solving service (2captcha, Anti-Captcha)
+2. Maintain persistent session (reduce login frequency)
+3. Manual login trigger (tenant clicks "Connect" once)
+
+**Login Flow:**
+```
+1. Navigate to motivatedsellers.com/leads/signin
+2. Enter email
+3. Enter password
+4. Complete reCAPTCHA (service or manual)
+5. Click "Sign In"
+6. Verify redirect to dashboard
+```
+
+**Dispute Flow:**
+```
+1. Navigate to My Leads page
+2. Locate lead by name/address/date
+3. Click lead to open detail view OR
+4. Navigate to Settings → Disputes → Open Dispute
+5. Select lead from list
+6. Choose reason from dropdown
+7. Enter description with evidence
+8. Submit
+9. Capture confirmation
+```
+
+**Reason Options:**
+- MLS Listed
+- Mobile Home
+- Vacant Land
+- Wholesaler
+- Duplicate
+- Wrong Number
+
+---
+
+### PropertyLeads Form Automation
+
+**Login URL:** `https://www.propertyleads.com/login` (verify)
+**Portal URL:** `https://www.propertyleads.com/get-leads/`
+
+**Login Flow:**
+```
+1. Navigate to login page
+2. Enter email
+3. Enter password
+4. Click Sign In
+5. Verify redirect to dashboard
+```
+
+**Request Refund Page:** `My Leads → Request Refund`
+
+**Form Structure (inline per lead):**
+| Column | Purpose |
+|--------|---------|
+| Lead ID | Identifier |
+| Lead Type, Date & Time | Reference |
+| Lead Details | Name, Phone, Email |
+| Reason | Dropdown selector |
+| Description | Text input (required) |
+| Action | Submit button |
+
+**Dispute Flow:**
+```
+1. Navigate to My Leads → Request Refund
+2. Find lead in table (by Lead ID or search)
+3. Select reason from dropdown for that row
+4. Enter description in text field for that row
+5. Click Action button for that row
+6. Capture confirmation
+7. Check status at My Leads → Refund Status
+```
+
+**Reason Dropdown Options:** (to be verified in portal)
+- Wrong Number
+- Disconnected
+- Duplicate
+- Listed on MLS
+- Not Property Owner
+- Other
+
+---
+
+### Session Management
+
+**Strategy:** Maintain persistent sessions per tenant per platform
+- Store session cookies securely
+- Refresh sessions before expiration
+- Re-authenticate only when session invalid
+- Queue disputes if auth fails, alert tenant
+
+**Session Storage:**
+```json
+{
+  "tenantId": "abc123",
+  "sessions": {
+    "leadzolo": {
+      "cookies": "[encrypted]",
+      "lastAuth": "2026-02-09T12:00:00Z",
+      "expiresAt": "2026-02-16T12:00:00Z",
+      "status": "active"
+    },
+    "motivatedsellers": {
+      "cookies": "[encrypted]",
+      "lastAuth": "2026-02-09T12:00:00Z",
+      "expiresAt": "2026-02-10T12:00:00Z",
+      "status": "active"
+    },
+    "propertyleads": {
+      "cookies": "[encrypted]",
+      "lastAuth": "2026-02-09T12:00:00Z",
+      "expiresAt": "2026-02-16T12:00:00Z",
+      "status": "active"
+    }
+  }
+}
+```
+
+---
 
 ### Fallback: Manual Queue
-If automation fails, tenant sees lead in "Manual Filing Required" queue with pre-compiled evidence.
+If automation fails (CAPTCHA, UI change, auth failure):
+1. Tenant sees lead in "Manual Filing Required" queue
+2. Pre-compiled evidence shown
+3. Direct link to provider's dispute page
+4. Tenant can file manually with one click
 
 ---
 
