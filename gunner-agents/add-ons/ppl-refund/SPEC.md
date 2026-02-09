@@ -1,291 +1,360 @@
-# PPL Refund Bot
+# PPL Refund Bot — Gunner Add-on
 
 ## Overview
-Automates Pay-Per-Lead refund requests. Identifies refund-eligible leads, documents reasons, and files disputes with providers. Recovers money that would otherwise be lost.
+Automates Pay-Per-Lead refund requests for Gunner tenants. Identifies refund-eligible leads from GHL, documents reasons, and files disputes with PPL providers. Recovers money that would otherwise be lost.
 
-## Design Principle: Zero-Config Ready
-- Pre-built refund criteria (industry standard)
-- Auto-detects PPL leads from source
-- Documents issues automatically
-- One-click dispute filing (or full auto)
+**Add-on Type:** Multi-tenant SaaS feature  
+**User Effort:** ~2 min setup (select platforms, enter credentials)  
+**Value:** Automated money recovery from bad PPL leads
 
 ---
 
-## Platform Details (Verified Feb 2026)
+## Tenant Onboarding Flow
 
-### 1. Leadzolo
-**URL:** leadzolo.com  
-**Return Policy:** https://www.leadzolo.com/lead-return-policy1657028939148  
-**Login:** corey@newagainhouses.com  
+### Step 1: Enable Add-on
+Tenant clicks "Enable" on PPL Refund Bot in Gunner add-ons marketplace.
 
+### Step 2: Select Platforms (checkboxes)
+```
+Which PPL platforms do you use?
+
+☑️ PropertyLeads (propertyleads.com)
+☑️ MotivatedSellers (motivatedsellers.com)
+☑️ Leadzolo (leadzolo.com)
+☐ Other (specify)
+```
+
+### Step 3: Enter Credentials (per platform)
+```
+PropertyLeads
+─────────────────────────
+Email: [________________________]
+Password: [________________________]
+☑️ Save credentials (encrypted)
+
+MotivatedSellers  
+─────────────────────────
+Email: [________________________]
+Password: [________________________]
+☑️ Save credentials (encrypted)
+
+Leadzolo
+─────────────────────────
+Email: [________________________]
+Password: [________________________]
+☑️ Save credentials (encrypted)
+```
+
+### Step 4: Configure Preferences
+```
+Automation Level
+─────────────────────────
+○ Full Auto — File disputes automatically for clear-cut cases
+● Semi-Auto — Queue all disputes for my approval before filing
+○ Manual — Just detect and alert me, I'll file myself
+
+Notifications
+─────────────────────────
+☑️ Alert me when disputes are filed
+☑️ Alert me when disputes are approved/denied
+☑️ Weekly summary report
+```
+
+### Step 5: Done
+```
+✅ PPL Refund Bot is now active!
+
+We'll monitor your GHL leads and identify refund opportunities.
+You'll see dispute-eligible leads in your Gunner dashboard.
+```
+
+---
+
+## Platform Details
+
+### PropertyLeads
 | Attribute | Value |
 |-----------|-------|
-| Dispute Window | **7 calendar days** |
-| Processing Time | Up to 5 business days |
-| Refund Type | Account credit (not cash) |
-| Contact | support@leadzolo.com |
+| Website | propertyleads.com |
+| Dispute Window | 7 days (estimated) |
+| Lead Cost | Varies by market |
+| Filing Method | Portal form or email |
+| Support Email | support@propertyleads.com |
 
 **Valid Dispute Reasons:**
-| Reason | Description | Evidence Required |
-|--------|-------------|-------------------|
-| Wrong Lead Type | Property type or zipcode doesn't match bid scope | Bid settings vs lead data |
-| Wholesaler Lead | Property under contract, not actual owner | Any proof (call notes, public records) |
-| Duplicate Lead | Same lead received multiple times | Lead IDs |
-| Not Property Owner | Submitter doesn't own/can't sell property | Tax records, call recording |
-| Invalid Contact Info | Disconnected, wrong person, bounced email, fake/nonsense data | Call log, email bounce |
-| Other | Anything else | **Must have supporting docs** (call recordings, screenshots, tax records) |
+- Wrong number / disconnected
+- Wrong person
+- Duplicate lead
+- Listed on MLS
+- Not property owner
+- Invalid/fake information
 
-**Filing Method:** Form at return policy URL ("Start" button)
+**Portal Navigation:**
+```
+My Leads → Request Refund → Select lead → Choose reason → Enter description → Submit
+My Leads → Refund Status → Check outcomes
+```
 
 ---
 
-### 2. MotivatedSellers
-**URL:** motivatedsellers.com  
-**Portal:** motivatedsellers.com/leads/app/leads  
-**Login:** corey@newagainhouses.com  
-
+### MotivatedSellers
 | Attribute | Value |
 |-----------|-------|
-| Dispute Window | **10 calendar days** |
-| Processing | Manual review (may contact seller) |
-| Lead Cost | $150/lead |
-| Refund Type | Account credit |
+| Website | motivatedsellers.com |
+| Dispute Window | **10 days** |
+| Lead Cost | $150/lead (standard) |
+| Filing Method | Portal or email |
+| Support Email | support@motivatedsellers.com |
+| Returns Page | motivatedsellers.com/returns |
 
-**Navigation:**
+**Valid Dispute Reasons:**
+- MLS Listed
+- Mobile Home
+- Vacant Land
+- Wholesaler
+- Duplicate
+- Wrong Number
+
+**Portal Navigation:**
 ```
 Dashboard → My Leads → [view leads]
-Settings → Disputes → Open Dispute
+Settings → Disputes → Open Dispute → Select lead → Submit
 ```
-
-**Filing Method:** "Open Dispute" button in account settings, links to lead return policy
 
 ---
 
-### 3. PropertyLeads
-**URL:** propertyleads.com  
-**Portal:** propertyleads.com/get-leads/  
-**Login:** corey@newagainhouses.com  
-
+### Leadzolo
 | Attribute | Value |
 |-----------|-------|
-| Dispute Window | TBD (verify in policy) |
-| Account Stat | Tracks "Declined Refund %" (currently 4.89%) |
-| Lead Type | Motivated Seller US |
-| Budget | Resets monthly |
+| Website | leadzolo.com |
+| Portal | portal.leadzolo.com |
+| Dispute Window | **7 days** |
+| Processing Time | Up to 5 business days |
+| Refund Type | Account credit |
+| Support Email | support@leadzolo.com |
+| Return Policy | leadzolo.com/lead-return-policy1657028939148 |
 
-**Navigation:**
-```
-My Leads → My Leads → Motivated Seller US (view leads)
-My Leads → Request Refund (file disputes)
-My Leads → Refund Status (check outcomes)
-```
+**Valid Dispute Reasons:**
+| Reason | Description |
+|--------|-------------|
+| Wrong Lead Type | Property type or zipcode doesn't match bid scope |
+| Wholesaler Lead | Property under contract, not actual owner |
+| Duplicate Lead | Same lead received multiple times |
+| Not Property Owner | Submitter doesn't own/can't sell property |
+| Invalid Contact Info | Disconnected, wrong person, bounced email, fake data |
+| Other | Requires supporting documentation |
 
-**Filing Method:** Inline on Request Refund page
-1. Select lead from list
-2. Choose reason from dropdown
-3. Enter description (required)
-4. Click Action button to submit
-
-**Key Insight:** PropertyLeads tracks your declined refund rate — file strategically to maintain good standing.
+**Return Form Fields:**
+| Field | Type | Required |
+|-------|------|----------|
+| Reason for Return | Dropdown | ✅ |
+| Lead Email | Text | ✅ |
+| Lead Address | Text | ✅ |
+| Additional Information | Textarea | ❌ |
+| Client Name | Text | ✅ |
+| Client Email (Portal Login) | Text | ✅ |
+| Supporting Proof | File upload | ❌ |
 
 ---
 
-## Automation Logic
+## Detection Logic
 
-### Trigger Sources
-Bot monitors GHL for PPL-sourced leads via:
-1. **Lead Source field** contains "PPL", "PropertyLeads", "MotivatedSellers", "Leadzolo"
-2. **Custom tag** applied at lead creation
-3. **Cost field** matches PPL price ($150 for MotivatedSellers, varies by provider)
+### How It Works
+1. **GHL Integration:** Bot monitors tenant's GHL contacts tagged as PPL leads
+2. **Source Detection:** Identifies which platform lead came from (lead source field)
+3. **Issue Detection:** Checks for refund-eligible conditions
+4. **Evidence Collection:** Compiles call logs, notes, SMS history from GHL
+5. **Filing:** Submits dispute via email (most reliable) or portal
 
-### Detection Stages
+### Detection Triggers
 
-**Stage 1: Immediate Detection (Day 0-1)**
-| Issue | Detection | Auto-File? |
-|-------|-----------|------------|
-| Disconnected number | First call fails + carrier message | ✅ Yes |
-| Wrong number | Reaches different person | ✅ Yes |
-| Invalid email | Bounce notification | ✅ Yes |
-| Fake/nonsense data | Name = celebrity, profanity, gibberish | ✅ Yes |
-| Duplicate lead | Same phone/address in last 90 days | ✅ Yes |
-| Wrong property type | Listed as commercial, mobile home | ✅ Yes |
-| Wrong market | Address outside bid area | ✅ Yes |
+**Immediate (Day 0-1) — Auto-file eligible:**
+| Issue | Detection Method | Evidence |
+|-------|------------------|----------|
+| Disconnected number | First call = carrier disconnect message | Call log |
+| Wrong number | Reaches different person | Call notes |
+| Invalid email | Bounce notification | Email bounce |
+| Fake/nonsense data | Name = celebrity, profanity, gibberish | Lead data |
+| Duplicate lead | Same phone/address in last 90 days | Lead IDs |
+| Wrong property type | Commercial, mobile home, land | Property data |
+| Wrong market | Address outside bid area | Lead address vs GHL location |
 
-**Stage 2: No Response Detection (Day 5-7)**
-| Issue | Detection | Auto-File? |
-|-------|-----------|------------|
-| No answer after 5+ attempts | Call log: 5 calls, 0 connects | ⚠️ Queue for review |
-| No SMS response | 2+ texts sent, 0 received | ⚠️ Queue for review |
-| Voicemail only | 3+ VMs left, no callback | ⚠️ Queue for review |
+**Delayed (Day 5-7) — Queue for approval:**
+| Issue | Detection Method | Evidence |
+|-------|------------------|----------|
+| No answer 5+ attempts | Call log: 5 calls, 0 connects | Call log |
+| No SMS response | 2+ texts sent, 0 received | SMS log |
+| Voicemail only | 3+ VMs, no callback | Call log |
 
-**Stage 3: Qualification Detection (Day 1-10)**
-| Issue | Detection | Auto-File? |
-|-------|-----------|------------|
-| Listed on MLS | MLS Monitor alert | ✅ Yes |
-| Not the owner | LM notes from call | ⚠️ Queue for review |
-| Wholesaler | Discovered during call | ⚠️ Queue for review |
-| Not motivated | "Just curious", no urgency | ⚠️ Queue for review |
-| Already sold | Property records updated | ✅ Yes |
+**Qualification-based (Day 1-10) — Queue for approval:**
+| Issue | Detection Method | Evidence |
+|-------|------------------|----------|
+| Listed on MLS | MLS Monitor alert | MLS screenshot |
+| Not the owner | LM notes | Call notes |
+| Wholesaler | Discovered during call | Call notes |
+| Already sold | Property records | Public records |
 
-### Evidence Collection
+---
 
-Bot auto-compiles evidence package:
+## Filing System
 
+### Primary Method: Email Submission
+Most reliable for multi-tenant SaaS. Works across all platforms.
+
+**Email Template:**
 ```
-═══════════════════════════════════════════════════════
-PPL REFUND REQUEST
-═══════════════════════════════════════════════════════
+To: [platform support email]
+Subject: Lead Dispute Request - [Lead ID] - [Company Name]
 
-LEAD INFO
-─────────────────────────────────────────────────────
-Provider:     PropertyLeads
-Lead ID:      #45879325
-Name:         Deanna Jonker
-Phone:        (423) 969-1021
-Email:        countrygurl613@gmail.com
-Property:     123 Main St, Cleveland TN 37323
-Received:     Feb 08, 2026
-Deadline:     Feb 15, 2026 (7 days remaining)
+Hello,
 
-ISSUE: Invalid Phone Number - Disconnected
-─────────────────────────────────────────────────────
+We are requesting a refund for the following lead:
+
+LEAD INFORMATION
+────────────────────────────────────
+Lead ID: [Lead ID if known]
+Lead Name: [Name]
+Phone: [Phone]
+Email: [Lead Email]
+Property Address: [Address]
+Date Received: [Date]
+
+REASON FOR DISPUTE
+────────────────────────────────────
+[Reason]: [Description]
 
 EVIDENCE
-─────────────────────────────────────────────────────
-• Call #1: Feb 08, 9:15 AM
-  Result: "Number disconnected" carrier message
-  
-• Call #2: Feb 08, 2:30 PM  
-  Result: Same disconnected message
-  
-• SMS #1: Feb 08, 2:35 PM
-  Result: Delivery failed
+────────────────────────────────────
+[Auto-compiled evidence from GHL]
 
-• Skip trace attempted: Feb 08, 3:00 PM
-  Result: No alternate number found
+• Call attempt 1: [Date/Time] - [Outcome]
+• Call attempt 2: [Date/Time] - [Outcome]
+• SMS sent: [Date/Time] - [Response status]
+[Additional evidence as applicable]
 
-CONCLUSION
-─────────────────────────────────────────────────────
-Phone number is confirmed disconnected. No alternate
-contact method available. Lead is unworkable.
+Per your return policy, this lead qualifies for a refund.
 
-REQUEST: Full refund per provider terms (invalid contact)
-═══════════════════════════════════════════════════════
+Please confirm receipt and process this dispute.
+
+Thank you,
+[Company Name]
+[Portal Email]
+[Phone]
 ```
 
-### Deadline Tracking
+### Secondary Method: Portal Form (where available)
+For platforms with stable portal forms, bot can fill and submit directly.
 
-| Provider | Window | Alert at |
-|----------|--------|----------|
+### Fallback: Manual Queue
+If automation fails, tenant sees lead in "Manual Filing Required" queue with pre-compiled evidence.
+
+---
+
+## Tenant Dashboard
+
+### Disputes Overview
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ PPL Refund Bot                                    [Settings] ⚙️ │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  💰 MONEY RECOVERED                                             │
+│  ─────────────────────────────────────────────────────────────  │
+│  This Month: $600        YTD: $3,450                           │
+│                                                                 │
+│  📊 DISPUTE STATS                                               │
+│  ─────────────────────────────────────────────────────────────  │
+│  Pending: 3    Filed: 12    Approved: 10    Denied: 2          │
+│  Approval Rate: 83%                                            │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│ NEEDS ATTENTION (2)                              [Review All]   │
+├─────────────────────────────────────────────────────────────────┤
+│ ⚠️  Ryan Gambill — MotivatedSellers — No response 5 days       │
+│     Deadline: 3 days remaining                    [Review]      │
+│                                                                 │
+│ ⚠️  Deanna Jonker — PropertyLeads — Disconnected number        │
+│     Deadline: 5 days remaining                    [Review]      │
+├─────────────────────────────────────────────────────────────────┤
+│ RECENTLY FILED (3)                                              │
+├─────────────────────────────────────────────────────────────────┤
+│ ✅  Kenneth Stansberry — Leadzolo — Wrong market — Approved    │
+│ ⏳  Larry Shaw — MotivatedSellers — Duplicate — Pending        │
+│ ❌  Michelle Mays — PropertyLeads — Not motivated — Denied     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Dispute Detail View
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ DISPUTE: Ryan Gambill                                          │
+├─────────────────────────────────────────────────────────────────┤
+│ Platform: MotivatedSellers                                     │
+│ Lead Received: Feb 9, 2026                                     │
+│ Dispute Deadline: Feb 19, 2026 (3 days remaining)              │
+│ Status: ⏳ Awaiting Approval                                    │
+├─────────────────────────────────────────────────────────────────┤
+│ LEAD INFO                                                       │
+│ Name: Ryan Gambill                                              │
+│ Phone: (423) 920-2252                                           │
+│ Email: ryangambill7@gmail.com                                   │
+│ Address: 1255 Eagle Park Rd NE, Cleveland, TN 37323            │
+│ Cost: $150                                                      │
+├─────────────────────────────────────────────────────────────────┤
+│ ISSUE DETECTED                                                  │
+│ Type: No Response After 5 Days                                  │
+│ Confidence: High                                                │
+├─────────────────────────────────────────────────────────────────┤
+│ EVIDENCE (auto-compiled from GHL)                               │
+│ • Call #1: Feb 9, 9:15 AM — No answer, left VM                 │
+│ • Call #2: Feb 9, 2:30 PM — No answer                          │
+│ • SMS #1: Feb 9, 2:35 PM — Delivered, no response              │
+│ • Call #3: Feb 10, 10:00 AM — No answer, left VM               │
+│ • Call #4: Feb 11, 11:00 AM — No answer                        │
+│ • Call #5: Feb 12, 9:00 AM — No answer                         │
+│ • SMS #2: Feb 12, 9:05 AM — Delivered, no response             │
+│                                                                 │
+│ Total: 5 calls, 2 SMS over 5 days — 0 responses                │
+├─────────────────────────────────────────────────────────────────┤
+│                      [Approve & File]  [Reject]  [Edit]         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Deadline Management
+
+| Platform | Window | Alert Tenant At |
+|----------|--------|-----------------|
 | Leadzolo | 7 days | Day 5 |
 | MotivatedSellers | 10 days | Day 7 |
-| PropertyLeads | TBD | Day 5 (conservative) |
+| PropertyLeads | 7 days (est.) | Day 5 |
 
-Bot sends daily alert for leads approaching deadline with unresolved issues.
-
----
-
-## Filing Workflow
-
-### Option A: Auto-File (Slam Dunks)
-For clear-cut cases (disconnected, duplicate, wrong market):
-1. Bot detects issue
-2. Bot compiles evidence
-3. Bot files dispute automatically
-4. Bot logs confirmation
-5. Human gets notification: "Filed refund for Lead #X - Disconnected number"
-
-### Option B: Approval Queue (Judgment Calls)
-For cases needing human review (no response, not motivated):
-1. Bot detects issue
-2. Bot compiles evidence
-3. Bot adds to approval queue
-4. Human reviews: Approve / Reject / Edit
-5. If approved → Bot files
-6. Bot tracks status
-
-### Filing by Platform
-
-**Leadzolo:**
-```
-1. Navigate to: leadzolo.com/lead-return-policy...
-2. Click "Start" button
-3. Enter Lead ID
-4. Select reason from dropdown
-5. Paste evidence in description
-6. Attach supporting files if needed
-7. Submit
-8. Capture confirmation
-```
-
-**MotivatedSellers:**
-```
-1. Navigate to: motivatedsellers.com/leads/app/leads
-2. Click Settings → Disputes
-3. Click "Open Dispute"
-4. Select lead
-5. Choose reason
-6. Enter description with evidence
-7. Submit
-8. Capture confirmation
-```
-
-**PropertyLeads:**
-```
-1. Navigate to: propertyleads.com → My Leads → Request Refund
-2. Find lead in list
-3. Select reason from dropdown
-4. Enter description (required) with evidence
-5. Click Action button
-6. Capture confirmation
-7. Check status at: My Leads → Refund Status
-```
-
----
-
-## Status Tracking
-
-| Status | Meaning | Next Action |
-|--------|---------|-------------|
-| Detected | Issue identified | Review / Auto-file |
-| Queued | Awaiting human approval | Review queue |
-| Filed | Dispute submitted | Wait for response |
-| Under Review | Provider processing | Monitor |
-| Approved | Refund granted | Verify credit |
-| Denied | Refund rejected | Review for appeal |
-| Credited | Money returned | Close case |
-| Expired | Missed deadline | Log for reporting |
-
-### Follow-Up Automation
-- Day 7 no response → Send follow-up inquiry
-- Day 14 no response → Escalate (email support)
-- Denied → Flag for human review (appeal?)
-
----
-
-## Reporting
-
-### Daily Alert (if any deadlines)
+**Daily Deadline Alert:**
 ```
 ⚠️ PPL REFUND DEADLINES
 
 EXPIRING TODAY:
 • Lead #45879325 (PropertyLeads) - Deanna Jonker
-  Issue: No response | Status: Not filed
-  → File now or lose eligibility
+  Issue: Disconnected | Status: Not filed
+  → [File Now] or lose eligibility
 
 EXPIRING IN 2 DAYS:
-• Lead #991ac3cb (MotivatedSellers) - Ryan Gambill
-  Issue: Disconnected | Status: Queued
-  → Approve to file
+• Lead #991ac3cb (MotivatedSellers) - Ryan Gambill  
+  Issue: No response | Status: Queued
+  → [Approve to File]
 ```
 
-### Weekly Summary
+---
+
+## Reporting
+
+### Weekly Summary (emailed to tenant)
 ```
-📊 PPL REFUND REPORT - Week of Feb 3-9, 2026
+📊 PPL REFUND REPORT — Week of Feb 3-9, 2026
 
 ACTIVITY
-────────────────────────────
+────────────────────────────────────
 New issues detected:    8
 Disputes filed:         6
 Disputes approved:      4
@@ -293,62 +362,76 @@ Disputes denied:        0
 Disputes pending:       2
 
 MONEY RECOVERED
-────────────────────────────
+────────────────────────────────────
 This week:        $600
 Month to date:    $1,200
 Year to date:     $3,450
 
-BY PROVIDER
-────────────────────────────
+BY PLATFORM
+────────────────────────────────────
 PropertyLeads:    $300 (3 leads)
 MotivatedSellers: $300 (2 leads)
 Leadzolo:         $0   (0 leads)
 
 BY REASON
-────────────────────────────
+────────────────────────────────────
 Disconnected:     3
 No response:      2
 Wrong market:     1
 
 APPROVAL RATE: 100% (4/4)
+
+[View Full Report in Gunner →]
 ```
 
 ---
 
-## NAH-Specific Configuration
+## Technical Architecture
 
+### Data Flow
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   GHL       │────▶│   Gunner    │────▶│  PPL Email  │
+│  (tenant)   │     │  PPL Bot    │     │  Providers  │
+└─────────────┘     └─────────────┘     └─────────────┘
+      │                    │                    │
+      │                    ▼                    │
+      │            ┌─────────────┐              │
+      └───────────▶│  Evidence   │◀─────────────┘
+                   │  Compiler   │   (status updates)
+                   └─────────────┘
+```
+
+### Tenant Configuration Schema
 ```json
 {
   "pplRefundBot": {
     "enabled": true,
-    "providers": {
-      "leadzolo": {
+    "tenantId": "abc123",
+    "platforms": {
+      "propertyleads": {
         "enabled": true,
-        "url": "leadzolo.com",
-        "login": "corey@newagainhouses.com",
-        "disputeWindow": 7,
-        "alertDays": 5
+        "email": "user@company.com",
+        "password": "[encrypted]",
+        "disputeWindow": 7
       },
       "motivatedsellers": {
         "enabled": true,
-        "url": "motivatedsellers.com",
-        "login": "corey@newagainhouses.com",
-        "disputeWindow": 10,
-        "alertDays": 7,
-        "leadCost": 150
+        "email": "user@company.com", 
+        "password": "[encrypted]",
+        "disputeWindow": 10
       },
-      "propertyleads": {
+      "leadzolo": {
         "enabled": true,
-        "url": "propertyleads.com",
-        "login": "corey@newagainhouses.com",
-        "disputeWindow": 7,
-        "alertDays": 5
+        "email": "user@company.com",
+        "password": "[encrypted]",
+        "disputeWindow": 7
       }
     },
     "automation": {
-      "autoFileImmediate": ["disconnected", "duplicate", "wrong_market", "invalid_data"],
-      "queueForReview": ["no_response", "not_owner", "wholesaler", "not_motivated"],
-      "requireApproval": true
+      "level": "semi-auto",
+      "autoFileReasons": ["disconnected", "duplicate", "wrong_market"],
+      "queueReasons": ["no_response", "not_owner", "wholesaler"]
     },
     "detection": {
       "noResponseDays": 5,
@@ -356,59 +439,60 @@ APPROVAL RATE: 100% (4/4)
       "duplicateWindowDays": 90
     },
     "notifications": {
-      "deadlineAlert": true,
-      "filingConfirmation": true,
+      "onFiled": true,
+      "onResolved": true,
       "weeklyReport": true,
-      "slackChannel": null,
-      "emailTo": null
+      "deadlineAlerts": true
     }
   }
 }
 ```
 
----
-
-## Integration Points
-
-### Inputs
-| Source | Data |
-|--------|------|
-| GHL Contacts | Lead info, source, cost |
-| GHL Call Logs | Attempts, outcomes, durations |
-| GHL Conversations | SMS sent/received |
-| GHL Notes | LM qualification notes |
-| MLS Monitor Bot | Listing alerts |
-| Skip Trace | Alternate contact attempts |
-
-### Outputs
-| Destination | Data |
-|-------------|------|
-| Provider Portals | Dispute filings |
-| GHL Tags | Refund status per lead |
-| GHL Notes | Evidence package, filing confirmation |
-| Reports | Weekly/monthly summaries |
-| Notifications | Deadline alerts, approvals |
+### GHL Integration Points
+| GHL Object | Data Used |
+|------------|-----------|
+| Contacts | Lead info, source, phone, email, address |
+| Contact Notes | LM notes about lead issues |
+| Call Logs | Attempts, outcomes, durations |
+| Conversations | SMS sent/received |
+| Tags | PPL source, dispute status |
+| Custom Fields | Lead cost, lead ID, platform |
 
 ---
 
-## Success Metrics
+## Security
+
+### Credential Storage
+- All PPL platform credentials encrypted at rest (AES-256)
+- Credentials never logged or exposed in UI after initial entry
+- Tenant can update/delete credentials anytime
+
+### Access Control
+- Each tenant only sees their own disputes
+- Admin cannot see tenant credentials (only masked)
+- Audit log of all dispute filings
+
+### Constraints
+⚠️ **Bot NEVER:**
+- Adds or changes bids on any platform
+- Modifies lead data in PPL portals
+- Takes actions beyond dispute filing
+
+---
+
+## Success Metrics (per tenant)
 
 | Metric | Target |
 |--------|--------|
-| Refund identification rate | >90% of eligible leads |
-| Filing accuracy (approval rate) | >80% |
-| Money recovered / month | Track trend |
-| Time from issue → filing | <24h for auto, <48h for queued |
+| Refund identification rate | >90% of eligible |
+| Approval rate | >80% |
 | Missed deadlines | 0 |
-| Provider standing | Maintain <10% decline rate |
+| Time to file (from detection) | <24h auto, <48h queued |
 
----
-
-## Security & Constraints
-
-⚠️ **CRITICAL RESTRICTIONS:**
-- **NEVER add or change bids** on any platform
-- **ONLY file disputes** — no other portal actions
-- All filings logged for audit
-- Human approval required for judgment calls
-- Credentials stored securely (not in spec)
+### Gunner-wide Metrics
+| Metric | Tracking |
+|--------|----------|
+| Total $ recovered (all tenants) | Monthly |
+| Avg recovery per tenant | Monthly |
+| Most common dispute reasons | Weekly |
+| Platform approval rates | Weekly |
