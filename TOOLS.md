@@ -71,6 +71,12 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - **Access Level:** API (read SMS metrics)
 - **Purpose:** Pull SMS data for KPI Entry
 
+### CallRail (Call Tracking + Voicemails)
+- **URL:** callrail.com
+- **API Key:** 267bcdd64628abc9c9c4c43e8a46dca2
+- **Access Level:** API (read voicemails, call logs)
+- **Purpose:** Voicemail Bot - pull and process voicemails
+
 ---
 
 Add more tools/access as we go.
