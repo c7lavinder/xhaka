@@ -4,6 +4,13 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ## Accounts & Access
 
+### Gunner (getgunner.ai)
+- **URL:** getgunner.ai
+- **Login:** Google auth via xhakalavinder@gmail.com
+- **What it is:** AI-powered call coaching platform Corey built
+- **Access Level:** Full (admin/owner)
+- **Integration:** Pulls calls from GHL automatically, grades them with AI
+
 ### GoHighLevel (GHL)
 - **URL:** app.gohighlevel.com
 - **Account:** New Again Houses Nashville
@@ -33,6 +40,24 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - **URL:** https://docs.google.com/document/d/1Mv5b0I6ra9jaxZKFpVwkRQf9gVfJ3dc0vyKiy70oTrM/edit
 - **Access Level:** Edit
 - **Purpose:** Document NAH's GHL setup for team onboarding
+
+### PPL (Pay Per Lead) Platforms
+**⚠️ DISPUTES ONLY — NEVER add or change bids**
+
+**Leadzolo**
+- **URL:** leadzolo.com
+- **Login:** corey@newagainhouses.com / Belmont2026
+- **Access Level:** Disputes only
+
+**PropertyLeads**
+- **URL:** propertyleads.com
+- **Login:** corey@newagainhouses.com / Belmont2026!
+- **Access Level:** Disputes only
+
+**MotivatedSellers**
+- **URL:** motivatedsellers.com
+- **Login:** corey@newagainhouses.com / Belmont2026
+- **Access Level:** Disputes only
 
 ---
 

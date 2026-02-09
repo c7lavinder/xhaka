@@ -25,6 +25,15 @@
 **Role:** Founder/operator — leads team
 **Day-to-day:** Operations, money, property valuations, coaching team on situational responses
 
+**Gunner** — getgunner.ai
+- AI-powered call coaching platform Corey built
+- Grades sales calls, tracks team performance, gamifies improvement
+- Integrated with GHL — pulls NAH calls automatically
+- Central to his direction going forward
+- Currently used by NAH team (Daniel, Kyle, Chris visible on leaderboard)
+- Login: Google auth via xhakalavinder@gmail.com
+- Potential future communication channel for team AI assistants
+
 **Team:**
 - Kyle — Acquisition Manager (AM)
 - Chris, Daniel — Lead Managers (LMs)

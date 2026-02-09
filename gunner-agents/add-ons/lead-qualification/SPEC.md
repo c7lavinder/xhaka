@@ -32,7 +32,7 @@ GHL: New Contact Created (or Opportunity Created)
         ↓
 [2] Coordinator → Data Enricher: "Enrich this lead"
         ↓
-[3] Data Enricher pulls: property data, tax records, Zillow estimate, ownership info
+[3] Data Enricher pulls: property data, tax records, Zillow estimate, all owner names on title
         ↓
 [4] Coordinator → Qualifier: "Score this lead" (with enriched data)
         ↓
@@ -130,17 +130,24 @@ GHL: New Contact Created (or Opportunity Created)
 
 ### GHL Updates (What agents write)
 
-| Field | Value |
-|-------|-------|
-| Tag | `lead-iq-scored`, `hot`/`warm`/`cold` |
-| Custom Field: Lead Score | HOT / WARM / COLD |
-| Custom Field: Score Factors | "Timeline: Y, Motivation: Y, Price: N..." |
-| Custom Field: Enrichment | Property details from Data Enricher |
-| Pipeline Stage | Move to appropriate stage based on score |
-| Task | Created for assigned rep |
-| Note | Agent reasoning: why this score was assigned |
+| Data | GHL Field |
+|------|-----------|
+| **Lead Score** | Tags: `Hot` or `Warm` |
+| **Property street(s)** | General Info → Business Name (supports multiple with `&`) |
+| **Property full address** | General Info → Street Address, City, State, Postal Code |
+| **Mailing address** | Contact → Mailing Street, Mailing City, Mailing State, Mailing Zip |
+| **Owner names (all on title)** | Contact Note |
+| **All enrichment data** | Contact Note (property details, Zillow estimate, tax info, score reasoning) |
+| **Pipeline Stage** | Move to appropriate stage based on score |
+| **Task** | Created for assigned rep |
 
-**Are these the right fields to update? Any custom fields I should know about?**
+**Data Storage Philosophy:**
+- **Notes over custom fields** — works across any GHL setup without field creation
+- **Tags for scoring** — simple `Hot` / `Warm` tags, no custom dropdowns
+- **Standard GHL fields only** — no custom field setup required for new tenants
+- All enrichment data (owner names, property data, comps, etc.) → single formatted Note
+
+✅ VERIFIED by Corey 2026-02-09
 
 ---
 
@@ -197,8 +204,10 @@ Every customer can customize these values. NAH's values are the defaults.
 |--------|---------------|------------|
 | Redfin | Comps, listing history, price estimates | Scrape or API |
 | Zillow | Zestimate, beds/baths, sqft, lot size, year built | API or scrape |
-| BatchLeads | Skip tracing, owner info, property data | API (NAH has subscription) |
-| County Records | Tax records, liens, ownership history | Varies by county — many different sites |
+| BatchLeads | Skip tracing, **all owner names on title**, property data | API (NAH has subscription) |
+| County Records | Tax records, liens, ownership history, **owner names** | Varies by county — many different sites |
+
+**Owner Names:** Capture ALL names on title (e.g., "John Smith & Jane Smith", "ABC Holdings LLC", trusts, etc.) — critical for contracts and skip tracing additional contacts.
 
 **County Data (Tennessee):**
 - NAH works pretty much every county in TN
