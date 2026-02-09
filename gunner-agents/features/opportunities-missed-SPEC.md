@@ -155,6 +155,18 @@ Each flagged lead gets an "opportunity score" (0-100):
 
 ---
 
+## Permissions / Visibility
+
+| Role | What They See |
+|------|---------------|
+| Lead Manager (rep) | Only their own top 5 missed opportunities |
+| Acquisition Manager | Team-wide top 5 missed opportunities |
+| Admin | Team-wide top 5 missed opportunities |
+
+This keeps reps focused on their own improvement while managers can see the full picture.
+
+---
+
 ## User Actions
 
 ### On Each Card
@@ -252,7 +264,7 @@ Track over time:
 ## Questions for Corey
 
 1. Should dismissed opportunities be visible to anyone, or just the dismisser?
-2. Should reps see their own missed opportunities, or only managers?
+2. ~~Should reps see their own missed opportunities, or only managers?~~ ✅ Answered: Reps see own top 5, AM/Admin see team-wide top 5
 3. Any specific motivation keywords to add for your market?
 4. Want email/SMS alert when high-score opportunity is flagged?
 
