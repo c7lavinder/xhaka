@@ -59,6 +59,18 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - **Login:** corey@newagainhouses.com / Belmont2026
 - **Access Level:** Disputes only
 
+### BatchDialer (Calling Platform)
+- **URL:** batchdialer.com
+- **API Key:** d98ac867-62b7-439d-8d72-a19004a93e25
+- **Access Level:** API (read call metrics)
+- **Purpose:** Pull call data for KPI Entry
+
+### BatchLeads (SMS Platform)
+- **URL:** batchleads.io
+- **API Key:** 06b81a7c-f69c-42c3-bc1f-c8ed55d01e1a
+- **Access Level:** API (read SMS metrics)
+- **Purpose:** Pull SMS data for KPI Entry
+
 ---
 
 Add more tools/access as we go.
