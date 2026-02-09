@@ -65,9 +65,11 @@ Leads that may deserve a second look
 │ frustration. Use price anchor before discussing     │
 │ numbers."                                           │
 │                                                     │
-│ [Listen to Call]  [View Contact]  [Dismiss]         │
+│                                          [✓]  [🗑]  │
 └─────────────────────────────────────────────────────┘
 ```
+
+Click card to view call details. Use ✓ to check off (handled), 🗑 to delete.
 
 ### Empty State
 ```
@@ -159,35 +161,43 @@ Each flagged lead gets an "opportunity score" (0-100):
 
 | Role | What They See |
 |------|---------------|
-| Lead Manager (rep) | Only their own top 5 missed opportunities |
+| Lead Generator | Only their own top 5 missed opportunities |
+| Lead Manager | Only their own top 5 missed opportunities |
 | Acquisition Manager | Team-wide top 5 missed opportunities |
 | Admin | Team-wide top 5 missed opportunities |
 
-This keeps reps focused on their own improvement while managers can see the full picture.
+This keeps individual contributors focused on their own improvement while managers can see the full picture.
 
 ---
 
 ## User Actions
 
 ### On Each Card
-1. **Listen to Call** → Opens call detail page
-2. **View Contact** → Opens GHL contact (or internal contact view)
-3. **Dismiss** → Removes from list (with optional reason)
-4. **Reassign** → Assign to different rep for callback (optional v2)
+1. **✓ Check off** → Marks as reviewed/handled, moves to history
+2. **🗑 Delete** → Removes from list, moves to history
 
-### Dismiss Flow
+That's it. Simple. Click the card itself to drill into call details if needed.
+
+### History
+All checked off and deleted opportunities are logged in a "History" tab/section:
+
 ```
-Are you sure you want to dismiss this opportunity?
-
-○ Already re-contacted
-○ Confirmed not a fit
-○ Bad contact info
-○ Other: [____________]
-
-[Cancel] [Dismiss]
+┌─────────────────────────────────────────────────────────────┐
+│ 📋 History                                                  │
+├─────────────────────────────────────────────────────────────┤
+│ John Smith      ✓ Checked off    Chris Segura    2/9/26    │
+│ Mary Johnson    🗑 Deleted        Daniel Lozano   2/8/26    │
+│ Bob Wilson      ✓ Checked off    Kyle Barks      2/7/26    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-Dismissed opportunities don't reappear but are logged for analytics.
+History shows:
+- Lead name
+- Action taken (checked off vs deleted)
+- Who took action
+- When
+
+Accessible via "View History" link on the Opportunities Missed section.
 
 ---
 
@@ -239,15 +249,15 @@ Track over time:
 
 ### Phase 1 (MVP)
 - Flag based on call duration + grade + keyword detection
-- Simple dashboard card (top 5)
-- Dismiss functionality
-- Link to call detail
+- Simple dashboard card (top 5 per role visibility rules)
+- Check off (✓) and delete (🗑) buttons
+- History page showing all checked off / deleted items
+- Click card to view call detail
 
 ### Phase 2 (Enhanced)
 - Deeper AI analysis of transcript flow
 - Opportunity scoring refinement
-- Reassign to different rep
-- Analytics dashboard
+- Analytics on history (what got acted on vs deleted)
 - Re-contact tracking
 
 ---
@@ -274,7 +284,7 @@ Track over time:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│ 🔍 Opportunities Missed                          View All → │
+│ 🔍 Opportunities Missed                    View History →   │
 │    Leads that may deserve a second look                      │
 ├──────────────────────────────────────────────────────────────┤
 │ ┌─────────────────────────┐ ┌─────────────────────────┐     │
@@ -284,10 +294,12 @@ Track over time:
 │ │ ⚠️ Rental frustration   │ │ ⚠️ Mentioned divorce    │     │
 │ │ not explored            │ │ but wasn't probed       │     │
 │ │                         │ │                         │     │
-│ │ [Call] [View] [✕]       │ │ [Call] [View] [✕]       │     │
+│ │                 [✓] [🗑] │ │                 [✓] [🗑] │     │
 │ └─────────────────────────┘ └─────────────────────────┘     │
 └──────────────────────────────────────────────────────────────┘
 ```
+
+Click card → view call. ✓ = check off (handled). 🗑 = delete. Both go to history.
 
 ---
 
