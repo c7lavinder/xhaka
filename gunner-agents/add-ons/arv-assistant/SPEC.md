@@ -101,6 +101,19 @@ Construction Budget = Grade × Market Construction Index × SqFt
 ```
 (Market index is backend MasterSuite data per market — AI just enters grades)
 
+### Fallback: No Street View
+
+When Street View is unavailable, outdated, or obstructed, use **seller's description from call notes**:
+
+| Seller Description | Grade |
+|--------------------|-------|
+| Needs a ton of work | 7 |
+| Needs updating throughout | 5 |
+| Needs very little | 3 |
+| Needs nothing | 1 |
+
+Source: GHL contact notes, call summaries, or conversation history.
+
 ### Post-Walkthrough
 
 - **Grade stays forever** — never changed after initial entry
