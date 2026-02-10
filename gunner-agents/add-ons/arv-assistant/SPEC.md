@@ -49,8 +49,8 @@ If AI gets 80% of the way there, Corey validates/adjusts in 2-5 min instead of 1
 | | Wider tolerance for very small/large properties |
 | **Distance** | Urban: as close as possible for 5 good comps |
 | | Rural: go as far as needed, 3 decent comps acceptable |
-| **Recency** | Recent sales preferred (TBD: 3-6 months?) |
-| **Beds/Baths** | Similar preferred (TBD: exact match or ±1?) |
+| **Recency** | Max 12 months, prioritize newest |
+| **Beds/Baths** | Best match possible, ±1 okay when needed (e.g., 3/1 comp for 3/2 subject) |
 
 **Comp Risk Flag:** If comps are hard to find → mark Comp Risk intangible as negative
 
@@ -212,10 +212,10 @@ New Lead → AI runs analysis (auto) → Corey reviews (2-5 min) → Approve/adj
 
 ## Remaining Questions
 
-1. **Recency:** How old can comps be? (3 months? 6 months? 12 for rural?)
-2. **Beds/Baths:** Exact match needed, or ±1 okay?
-3. **Data sources:** Just Zillow, or also Redfin/other?
-4. **No good comps:** What do you do when there are zero decent comps?
+1. ~~**Recency:** How old can comps be?~~ ✅ Max 12 months, prioritize newest
+2. ~~**Beds/Baths:** Exact match needed, or ±1 okay?~~ ✅ Best match, ±1 okay when needed
+3. ~~**Data sources:** Just Zillow, or also Redfin/other?~~ ✅ Zillow (best UI)
+4. ~~**No good comps:** What do you do when there are zero decent comps?~~ ✅ Find best 2-3 available, flag Comp Risk
 
 ---
 
