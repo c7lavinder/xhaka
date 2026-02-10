@@ -154,7 +154,7 @@ Each field uses a simple **+/-/O** scale:
 | 4 | Good area | Well-maintained, nice houses |
 | 5 | Best | Nice street, desirable neighborhood |
 
-**Default to 3** unless clearly better or worse.
+**Default to 3** when in doubt. Only deviate if clearly better (4-5) or clearly worse (1-2).
 
 ---
 
