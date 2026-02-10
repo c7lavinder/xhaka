@@ -1,16 +1,19 @@
-# ARV Assistant — Spec (DRAFT)
+# ARV Assistant — Spec v1.0
 
-**Status:** Draft — needs Corey input  
+**Status:** Ready for Development  
 **Priority:** HIGH — saves 1.5-2.5 hrs/day  
-**Integration:** MasterSuite + Zillow
+**Integration:** MasterSuite + Zillow + Google Street View
 
 ---
 
 ## Problem
 
-Corey spends 15-30 min per property running comps on Zillow and entering them into MasterSuite Valuation tab. At 5 properties/day, that's 1.5-2.5 hours daily on ARV analysis alone.
+Corey spends 15-30 min per property on:
+- Running comps on Zillow → ARV
+- Assessing exterior condition via Street View → Construction Budget
+- Evaluating intangibles and location → Offer adjustments
 
-Rural properties take longer (fewer comps, wider search needed).
+At 5 properties/day, that's 1.5-2.5 hours daily on property analysis alone.
 
 ---
 
@@ -18,10 +21,10 @@ Rural properties take longer (fewer comps, wider search needed).
 
 AI assistant that:
 1. Takes subject property address
-2. Pulls comparable sales from Zillow
-3. Scores comps for similarity
-4. Suggests ARV range (Low-End / High-End / Recommended)
-5. Pre-populates MasterSuite Valuation tab (or provides data for manual entry)
+2. Pulls comparable sales from Zillow → calculates ARV
+3. Pulls Google Street View → grades Construction Budget
+4. Assesses intangibles and location from visual data
+5. Enters all data into MasterSuite via Playwright automation
 
 **Corey's role shifts from:** researcher + data entry → reviewer + approver
 
@@ -31,13 +34,15 @@ AI assistant that:
 
 **Stage 3 = "Accurate" (not perfect)**
 
-The goal is getting close enough to make an offer. Stage 4 (post-walkthrough) is where numbers get refined.
+The goal is getting close enough to make an offer. Stage 4 (post-walkthrough) is where numbers get refined with exact construction estimates.
 
 If AI gets 80% of the way there, Corey validates/adjusts in 2-5 min instead of 15-30.
 
 ---
 
-## Comp Selection Criteria (Confirmed by Corey)
+## Part 1: ARV Calculation
+
+### Comp Selection Criteria
 
 | Criteria | Rule |
 |----------|------|
@@ -46,214 +51,230 @@ If AI gets 80% of the way there, Corey validates/adjusts in 2-5 min instead of 1
 | **Sqft Range** | Similar, but flexible for outliers |
 | | Small (700 sqft) → include up to 1000 sqft |
 | | Large (2500 sqft) → include up to 3000 sqft |
-| | Wider tolerance for very small/large properties |
 | **Distance** | Urban: as close as possible for 5 good comps |
 | | Rural: go as far as needed, 3 decent comps acceptable |
 | **Recency** | Max 12 months, prioritize newest |
-| **Beds/Baths** | Best match possible, ±1 okay when needed (e.g., 3/1 comp for 3/2 subject) |
+| **Beds/Baths** | Best match possible, ±1 okay when needed |
 
-**Comp Risk Flag:** If comps are hard to find → mark Comp Risk intangible as negative
+### ARV Calculation Method
 
----
-
-## Comp Scoring
-
-Each comp scored on similarity to subject:
-
-| Factor | Weight | Notes |
-|--------|--------|-------|
-| Distance | High | Closer = better |
-| Sqft match | High | Similar size |
-| Beds/Baths | Medium | Same config preferred |
-| Recency | Medium | More recent = better |
-| Condition | High | Remodeled/updated preferred |
-| Location grade | Medium | Same neighborhood quality |
-
-**Output:** Top 5-10 comps ranked by similarity score
-
----
-
-## ARV Calculation (Confirmed by Corey)
-
-**Method:** Combination of $/sqft AND price relative to comps
-- Not just a simple average
-- Consider both metrics together
+**Combination of $/sqft AND price relative to comps** (not just simple average)
 
 **Low-End / High-End Range:**
 - Usually **20-30 $/sqft** spread between low and high
 - Super urban with lots of comps → can narrow to **10 $/sqft** spread
-- Represents range of fully remodeled houses with similar specs
-- **Entered as $/sqft** — system calculates full price
-
-**Example:**
-- Subject: 1,855 sqft
-- Low-End: $200/sqft = $371,000
-- High-End: $225/sqft = $417,375
-- Spread: $25/sqft (typical)
+- **Entered as $/sqft** — MasterSuite calculates full price
 
 ---
 
-## Construction Budget
+## Part 2: Construction Budget Grading
 
-**Not in scope for V1** — this requires property condition assessment (photos, walkthrough).
+**Source:** Google Street View (virtual "drive-by")
 
-Could be Phase 2: AI analyzes property photos to suggest rehab level.
+### Grading Formula
+
+**Baseline: 2.5** (every property starts here)
+
+Add points for visible damage/issues:
+
+| Category | Points | What to Look For |
+|----------|--------|------------------|
+| **Exterior Indicators** | -0.5 to +1.5 | Overgrown yard, trash, boarded windows, obvious neglect, general disrepair |
+| **Roof** | 0 or +0.5 | Visible sag, missing shingles, tarps, moss/damage |
+| **Windows** | 0 or +0.5 | Broken/boarded, obviously old/failed, mismatched |
+| **Paint/Siding** | 0, +0.5, or +1.0 | Peeling paint, rotting wood, damaged/missing siding |
+| **Premium (unseen)** | +1.5 | **Auto-add for Stage 3** — no walkthrough yet, buffer for hidden issues |
+
+### Grade Interpretation
+
+| Grade | Meaning |
+|-------|---------|
+| 2.5 | Clean property, no visible issues |
+| 3.0-3.5 | Minor issues (1-2 categories need work) |
+| 4.0-4.5 | Multiple visible problems |
+| 5.0+ | Major exterior damage |
+| 6.0-6.5 | Full gut job territory |
+
+### Formula
+```
+Construction Budget = Grade × Market Construction Index × SqFt
+```
+(Market index is backend MasterSuite data per market — AI just enters grades)
+
+### Post-Walkthrough
+
+- **Grade stays forever** — never changed after initial entry
+- **Blue box** = exact construction estimate entered after walkthrough
+- Grade is historical reference; blue box is the real number
 
 ---
 
-## Integration (Full Automation via Browser)
+## Part 3: Intangibles
 
-**No API integration with MasterSuite** — use Playwright browser automation instead.
+**Source:** Street View + Zillow photos + property data
 
-**Workflow:**
-1. Input: Property address (single or batch)
-2. AI searches Zillow → finds and scores comps
-3. AI opens MasterSuite → navigates to property's Valuation tab
-4. AI clicks "Add Comparable" for each top comp (3-5)
-5. AI fills in comp details:
-   - Address
-   - Price
-   - Sqft
-   - Beds/baths
-   - Sold date
-   - **Category**: Sold or Active (based on MLS status)
-   - **Condition**: New / Remodeled / Updated
-   - **Location**: Similar / Worse / Better (relative to subject — AI discretion)
-   - **Zillow URL**: Required
-6. AI saves
-7. Corey reviews final ARV numbers on Analysis tab — approve or adjust
+Each field uses a simple **+/-/O** scale:
+- **+ Asset** = adds value
+- **- Liability** = detracts value  
+- **O Typical** = neutral (no adjustment)
 
-**Corey's role:** Review and approve, not data entry.
+| Field | + Asset | - Liability | O Typical |
+|-------|---------|-------------|-----------|
+| **Comp Risk** | Strong comps available | Weak/few comps | Normal comp situation |
+| **Basement** | Finished/bonus space | Issues/water damage signs | None or unfinished |
+| **Beds/Baths** | More than comps | Fewer than comps | Same as comps |
+| **Curb Appeal** | Great looking | Ugly/eyesore | Average |
+| **Neighbors** | Nice houses on street | Rough area visible | Normal neighborhood |
+| **Parking** | Garage/extra parking | Street only | Typical driveway |
+| **Yard** | Big/nice lot | Tiny/issues | Normal yard |
 
-**Tech Stack:** TypeScript + Playwright (same as PPL Refund Bot)
+### Assessment Sources
 
----
-
-## Data Sources
-
-### Primary: Zillow
-- Sold listings
-- Property details
-- Photos (for future condition assessment)
-
-### Secondary (potential):
-- Redfin
-- Realtor.com
-- MLS data (if accessible)
-- County tax records
-
-**Question for Corey:** Do you ever use sources other than Zillow for comps?
+| Field | Primary Source |
+|-------|----------------|
+| Comp Risk | Zillow comp search results |
+| Basement | Zillow property data |
+| Beds/Baths | Zillow data vs comp avg |
+| Curb Appeal | Street View |
+| Neighbors | Street View |
+| Parking | Street View + Zillow photos |
+| Yard | Street View + Zillow photos |
 
 ---
 
-## Rural Property Handling
+## Part 4: Location Score
 
-Rural properties have:
-- Fewer comps nearby
-- Larger lot sizes (acreage matters more)
-- More variance in property types
+**Source:** Google Street View
 
-**AI should:**
-- Flag when comp pool is thin (<3 comps within criteria)
-- Suggest expanding search radius
-- Weight lot size higher for rural
-- Note confidence level (high/medium/low)
+| Score | Meaning | Visual Indicators |
+|-------|---------|-------------------|
+| 1 | War zone | Boarded houses, abandoned cars, obvious blight |
+| 2 | Rough area | Deferred maintenance throughout, some blight |
+| 3 | Average | Normal working-class neighborhood (MOST COMMON) |
+| 4 | Good area | Well-maintained, nice houses |
+| 5 | Best | Nice street, desirable neighborhood |
 
----
-
-## Output Format
-
-For each subject property:
-
-```
-SUBJECT: 1172 Linn Cove Court, Gallatin TN 37066
-Sqft: 1,855 | Beds: 3 | Baths: 2 | Lot: 0.5 acres
-
-SUGGESTED ARV RANGE:
-- Low-End: $380,000 ($205/sqft)
-- Recommended: $410,000 ($221/sqft)  
-- High-End: $440,000 ($237/sqft)
-- Confidence: HIGH (8 comps found)
-
-TOP COMPS:
-1. 123 Main St — $425,000 ($220/sqft) — 1,932 sqft — 0.3 mi — Sold 45 days ago — Score: 94
-2. 456 Oak Ave — $395,000 ($215/sqft) — 1,837 sqft — 0.5 mi — Sold 60 days ago — Score: 91
-3. 789 Pine Rd — $415,000 ($225/sqft) — 1,844 sqft — 0.4 mi — Sold 30 days ago — Score: 89
-...
-
-NOTES:
-- Subject is slightly smaller than avg comp (1,855 vs 1,871 avg)
-- Zip avg is $202/sqft, suggested ARV is 9% above (justified by condition)
-```
+**Default to 3** unless clearly better or worse.
 
 ---
 
-## Workflow Integration
+## MasterSuite Integration
 
-### Current (Manual):
-```
-New Lead → Open Zillow → Search comps (15-30 min) → Enter in MasterSuite → Stage 2/3
-```
+**Method:** Playwright browser automation (no API)
 
-### With ARV Assistant:
-```
-New Lead → AI runs analysis (auto) → Corey reviews (2-5 min) → Approve/adjust → Stage 2/3
-```
+### Fields to Populate
+
+**Valuation Tab:**
+- Comparable properties (address, price, sqft, beds/baths, sold date, URL)
+- Comp category: Sold or Active
+- Comp condition: New / Remodeled / Updated
+- Comp location: Similar / Worse / Better
+
+**Analysis Tab (Construction Budget):**
+- Exterior Indicators grade
+- Roof grade
+- Windows grade
+- Paint/Siding grade
+- Premium (+1.5 for Stage 3)
+- (Blue box left empty — for post-walkthrough)
+
+**Analysis Tab (Intangibles):**
+- Comp Risk: +/-/O
+- Basement: +/-/O
+- Beds/Baths: +/-/O
+- Curb Appeal: +/-/O
+- Neighbors: +/-/O
+- Parking: +/-/O
+- Yard: +/-/O
+
+**Analysis Tab (Location):**
+- Location Score: 1-5
+
+---
+
+## Workflow
+
+### Input
+- Property address (single or batch from GHL/MasterSuite)
+
+### Process
+1. **Zillow Scrape:**
+   - Pull property details (sqft, beds, baths, lot size)
+   - Search for comps within criteria
+   - Score and rank comps
+   - Calculate ARV range
+
+2. **Street View Analysis:**
+   - Pull Street View imagery
+   - Grade: Exterior, Roof, Windows, Siding
+   - Assess: Curb Appeal, Neighbors, Parking, Yard
+   - Score Location (1-5)
+
+3. **MasterSuite Entry:**
+   - Navigate to property
+   - Enter comps on Valuation tab
+   - Enter grades on Analysis tab
+   - Enter intangibles
+   - Enter location score
+   - Save
+
+### Output
+- Property fully populated in MasterSuite
+- Summary message to Corey: "7170 Bidwell Rd ready for review — ARV: $X, CB Grade: Y, Location: Z"
 
 ---
 
 ## Success Metrics
 
-- Time per property: 15-30 min → 2-5 min
-- Daily time saved: 1-2 hours
-- Accuracy: AI suggestion within 5% of Corey's final ARV 80%+ of time
-- Rural accuracy: AI suggestion within 10% for rural properties
+| Metric | Target |
+|--------|--------|
+| Time per property | 15-30 min → 2-5 min review |
+| Daily time saved | 1-2 hours |
+| ARV accuracy | Within 5% of Corey's final 80%+ of time |
+| CB Grade accuracy | Within 0.5 of Corey's assessment |
+| Throughput | Handle 5+ properties/day without backlog |
 
 ---
 
-## Answered Questions
+## Technical Stack
 
-✅ Comp criteria — similar type, remodeled, flexible sqft  
-✅ Distance — urban close (5 comps), rural far (3 comps okay)  
-✅ ARV calculation — combo of $/sqft and price relative to comps  
-✅ Low-End / High-End — 20-30 $/sqft spread (10 for dense urban)  
-✅ Rejection criteria — none if specs/location/condition match  
-✅ Integration — standalone tool (no MasterSuite integration)
+- **Language:** TypeScript
+- **Browser Automation:** Playwright
+- **Data Sources:** Zillow (scraping), Google Street View
+- **Target:** MasterSuite (nashc.mastersuite.com)
+- **Auth:** corey@newagainhouses.com / lavinder
 
-## Remaining Questions
+---
 
-1. ~~**Recency:** How old can comps be?~~ ✅ Max 12 months, prioritize newest
-2. ~~**Beds/Baths:** Exact match needed, or ±1 okay?~~ ✅ Best match, ±1 okay when needed
-3. ~~**Data sources:** Just Zillow, or also Redfin/other?~~ ✅ Zillow (best UI)
-4. ~~**No good comps:** What do you do when there are zero decent comps?~~ ✅ Find best 2-3 available, flag Comp Risk
+## Training Reference
+
+**Drive-By Grading Guide:**  
+`gunner-agents/add-ons/arv-assistant/training/construction-budget-grading.pdf`
+
+Google Slides source:  
+https://docs.google.com/presentation/d/1HTycxhZqmtut3pPVdtPDOPcVJKFmi_SGDNVJe2GWAcc/
 
 ---
 
 ## Build Phases
 
-### Phase 1: Basic Comp Pull + ARV Suggestion
-- Zillow scraping/API
-- Basic similarity scoring
-- ARV range output
-- Standalone tool
+### Phase 1: Core Automation
+- Zillow comp scraping + ARV calculation
+- Street View grading for Construction Budget
+- MasterSuite entry via Playwright
+- Basic intangibles and location scoring
 
-### Phase 2: MasterSuite Integration
-- Auto-populate Valuation tab
-- Or browser automation to enter comps
+### Phase 2: Intelligence Layer
+- Improve comp scoring algorithm
+- Better visual analysis of Street View
+- Confidence scoring for rural properties
+- Batch processing from GHL
 
 ### Phase 3: Photo Analysis
-- AI reviews property photos
-- Suggests construction budget / rehab level
-- Condition assessment
+- Zillow interior photos → refine CB grade
+- Detect specific issues (dated kitchen, old HVAC, etc.)
+- Pre-walkthrough condition report
 
 ---
 
-## Technical Notes
-
-- Zillow doesn't have a public API — will need scraping or third-party data provider
-- Alternatives: RapidAPI Zillow endpoints, Redfin (more scrape-friendly), or licensed MLS data
-- MasterSuite integration depends on their API availability
-
----
-
-*Draft spec — will refine with Corey's input*
+*Spec v1.0 — Ready for development*
