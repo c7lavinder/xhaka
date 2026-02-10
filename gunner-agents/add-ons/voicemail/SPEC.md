@@ -1,63 +1,166 @@
 # Voicemail Bot
 
 ## Overview
-Processes incoming voicemails: transcribes, summarizes, extracts key info, creates tasks, and alerts appropriate team members. Never miss important call-backs.
+Pulls voicemails from **CallRail**, transcribes/summarizes, extracts key info, matches to GHL contacts, creates tasks, and alerts team members. Feeds disposition data to PPL Refund Bot.
 
-## Trigger
-- New voicemail received in GHL
-- Missed call with voicemail
+## Source
+**CallRail** (NOT GHL) — NAH uses CallRail for call tracking and voicemails.
+
+---
+
+## CallRail API Integration
+
+### Authentication
+```
+Authorization: Token token="267bcdd64628abc9c9c4c43e8a46dca2"
+```
+
+### Get Voicemails
+```http
+GET https://api.callrail.com/v3/a/{account_id}/calls.json?voicemail=true&date_range=today
+```
+
+**Key Filters:**
+| Filter | Description |
+|--------|-------------|
+| `voicemail=true` | Only calls with voicemails |
+| `answered=false` | Missed calls only |
+| `date_range=recent` | Last 30 days (default) |
+| `date_range=today` | Today only |
+| `start_date` / `end_date` | Custom range |
+
+### Response Fields
+```json
+{
+  "id": 444941612,
+  "answered": false,
+  "voicemail": true,
+  "customer_name": "John Smith",
+  "customer_phone_number": "+16155551234",
+  "customer_city": "Nashville",
+  "customer_state": "TN",
+  "tracking_phone_number": "+16155559999",
+  "start_time": "2026-02-09T15:30:00.000Z",
+  "duration": 45,
+  "recording": "https://cdn.callrail.com/v3/a/{account}/calls/{id}/recording.json",
+  "recording_duration": 42,
+  "recording_player": "https://app.callrail.com/calls/{id}/recording",
+  "voicemail_transcription": "Hi, this is John calling about the house...",
+  "source": "Google Ads",
+  "medium": "paid",
+  "campaign": "Nashville Sellers",
+  "landing_page_url": "https://newagainhouses.com/sell",
+  "company_id": "COM123456",
+  "company_name": "New Again Houses Nashville"
+}
+```
+
+### Get Recording
+```http
+GET https://api.callrail.com/v3/a/{account_id}/calls/{call_id}/recording.json
+```
+Returns URL to audio file (MP3/WAV).
+
+### Get Transcription (if available)
+CallRail provides `voicemail_transcription` field if transcription is enabled. If not, use Whisper API on the recording.
+
+---
+
+## Trigger Options
+
+### Option A: Polling (Simple)
+- Poll CallRail every 5 minutes for new voicemails
+- Filter: `voicemail=true&start_date={last_poll_time}`
+- Store last processed call ID to avoid duplicates
+
+### Option B: Webhook (Recommended)
+CallRail can send webhooks on new calls/voicemails:
+```json
+{
+  "webhook_url": "https://gunner.app/webhooks/callrail",
+  "events": ["post_call"]
+}
+```
+Filter for `voicemail: true` in webhook payload.
+
+---
+
+## Processing Flow
+
+```
+CallRail Voicemail Received
+    ↓
+1. Fetch voicemail details from API
+    ↓
+2. Get/verify transcription
+   - Use CallRail transcription if available
+   - Fall back to Whisper API if needed
+    ↓
+3. Extract key info from transcript
+   - Caller intent
+   - Property mentioned
+   - Callback urgency
+   - Disposition signals (not selling, wrong number, etc.)
+    ↓
+4. Match to GHL contact by phone number
+   - Found → Link voicemail to contact
+   - Not found → Create new contact or flag
+    ↓
+5. Classify urgency
+    ↓
+6. Create GHL task for callback
+    ↓
+7. Alert appropriate team member
+    ↓
+8. Log summary to GHL contact notes
+    ↓
+9. Feed disposition data to PPL Refund Bot
+```
 
 ---
 
 ## Agents
 
-### 1. Voicemail Coordinator
-**Role:** Orchestrates voicemail processing
+### 1. CallRail Poller
+**Role:** Fetches new voicemails from CallRail
 
-**Flow:**
+**Logic:**
+```python
+def poll_voicemails():
+    last_check = get_last_poll_time()
+    
+    response = callrail.get("/calls.json", params={
+        "voicemail": "true",
+        "start_date": last_check,
+        "per_page": 100
+    })
+    
+    for call in response["calls"]:
+        if not already_processed(call["id"]):
+            process_voicemail(call)
+    
+    save_last_poll_time(now())
 ```
-Voicemail Received
-    ↓
-Transcribe audio
-    ↓
-Extract key info
-    ↓
-Classify urgency
-    ↓
-Match to existing contact
-    ↓
-Create task
-    ↓
-Alert appropriate person
-    ↓
-Log to contact record
-```
+
+**Frequency:** Every 5 minutes (configurable)
 
 ### 2. Transcriber
-**Role:** Converts voicemail audio to text
+**Role:** Ensures transcript is available
 
-**Transcription Sources:**
-- GHL built-in transcription
-- Whisper API (if higher quality needed)
-- External transcription service
+**Sources (in order):**
+1. `voicemail_transcription` from CallRail (if enabled)
+2. Whisper API on recording URL
+3. Manual review queue (if both fail)
 
 **Output:**
+```json
+{
+  "transcript": "Hi, this is John Smith calling about...",
+  "confidence": 0.95,
+  "duration_seconds": 42,
+  "source": "callrail_native"
+}
 ```
-VOICEMAIL TRANSCRIPT
---------------------
-Duration: 0:42
-Quality: Good
-Confidence: 95%
-
-"Hi, this is John Smith calling about the house on Main Street. 
-I talked to someone last week about selling and wanted to follow up. 
-My number is 615-555-1234. I'm available anytime today. Thanks."
-```
-
-**Quality Handling:**
-- If confidence <80%: Flag for manual review
-- If unintelligible: Note "Poor audio quality"
-- If background noise: Attempt noise reduction first
 
 ### 3. Info Extractor
 **Role:** Pulls key information from transcript
@@ -65,246 +168,157 @@ My number is 615-555-1234. I'm available anytime today. Thanks."
 **Extracted Fields:**
 | Field | Example |
 |-------|---------|
-| Caller name | John Smith |
-| Phone number | 615-555-1234 |
-| Property mentioned | Main Street |
-| Reason for call | Follow up on selling |
-| Callback preference | Available anytime today |
-| Urgency signals | None |
-| Sentiment | Neutral/positive |
+| caller_name | John Smith |
+| phone_number | 615-555-1234 |
+| property_mentioned | "house on Main Street" |
+| call_reason | follow_up / new_inquiry / question |
+| callback_preference | "today", "anytime", "after 5pm" |
+| urgency_signals | "ASAP", "other buyer", "need decision" |
+| disposition_signals | "not selling", "wrong number", "already sold" |
+| sentiment | positive / neutral / negative |
 
-**Extraction Output:**
+**Disposition Detection (for PPL Refund Bot):**
 ```json
 {
-  "callerName": "John Smith",
-  "phoneNumber": "615-555-1234",
-  "propertyAddress": "Main Street (partial)",
-  "callReason": "follow_up",
-  "previousContact": true,
-  "callbackWindow": "today, anytime",
-  "urgency": "normal",
-  "sentiment": "positive"
+  "disposition": "not_selling",
+  "confidence": 0.9,
+  "evidence": "Caller said 'I changed my mind, not selling anymore'"
 }
 ```
 
-### 4. Urgency Classifier
-**Role:** Determines how quickly callback is needed
+Detected dispositions:
+- `not_selling` — "not selling", "changed my mind", "keeping the house"
+- `wrong_number` — "wrong number", "don't know what you're talking about"
+- `not_owner` — "don't own this", "sold it years ago"
+- `already_sold` — "already sold", "under contract"
+- `do_not_call` — "stop calling", "remove from list"
+- `interested` — positive engagement, wants callback
 
-**Urgency Levels:**
-
-**URGENT:**
-- "Call back ASAP"
-- "Emergency"
-- "Need to sell this week"
-- "Contract expiring"
-- "Other buyer interested"
-
-**HIGH:**
-- "Today if possible"
-- "Important"
-- "Time sensitive"
-- "Decision ready"
-
-**NORMAL:**
-- Standard follow-up
-- Questions
-- Information requests
-
-**LOW:**
-- "When you get a chance"
-- "No rush"
-- General inquiries
-
-**Urgency Actions:**
-| Level | Response Time | Alert |
-|-------|---------------|-------|
-| Urgent | 15 min | SMS + Call |
-| High | 1 hour | SMS |
-| Normal | Same day | Task only |
-| Low | Next day OK | Task only |
-
-### 5. Contact Matcher
-**Role:** Links voicemail to existing contact record
+### 4. GHL Contact Matcher
+**Role:** Links voicemail to GHL contact
 
 **Matching Logic:**
-1. Phone number exact match → Link
-2. Name + partial address match → Suggest
-3. New caller → Create contact or flag
+1. Search GHL contacts by phone number (exact match)
+2. If found → Return contact ID + context
+3. If not found → Create new contact or flag for review
+
+**GHL API Call:**
+```http
+GET /contacts/search?query={phone_number}
+Authorization: Bearer {ghl_token}
+```
 
 **Match Output:**
+```json
+{
+  "matched": true,
+  "contact_id": "abc123",
+  "contact_name": "John Smith",
+  "pipeline_stage": "Made Offer",
+  "assigned_to": "Kyle",
+  "last_activity": "2026-02-07",
+  "tags": ["ppl", "motivatedsellers", "nashville"]
+}
 ```
-CONTACT MATCH: ✅ Found
 
-Existing Contact: John Smith
-Phone: 615-555-1234
-Property: 123 Main St, Nashville
-Stage: Made Offer
-Last Contact: 5 days ago
-Notes: Waiting on wife decision
+### 5. Urgency Classifier
+**Role:** Determines callback priority
 
-Context: Likely calling about offer decision
-```
-
-**New Contact:**
-```
-CONTACT MATCH: ❌ Not Found
-
-Creating new contact...
-Name: John Smith
-Phone: 615-555-1234
-Source: Inbound Call
-Status: New Lead
-
-Action: Assign to on-duty LM
-```
+**Levels:**
+| Level | Signals | Response Time | Alert |
+|-------|---------|---------------|-------|
+| URGENT | "ASAP", "other buyer", "today or never" | 15 min | SMS + Push |
+| HIGH | "today", "important", "decision ready" | 1 hour | SMS |
+| NORMAL | Standard follow-up, questions | Same day | Task only |
+| LOW | "no rush", "when you get a chance" | Next day | Task only |
 
 ### 6. Task Creator
-**Role:** Creates follow-up tasks from voicemails
+**Role:** Creates callback tasks in GHL
 
-**Task Template:**
-```
-📞 CALLBACK: {{caller_name}}
-
-Phone: {{phone_number}}
-Property: {{property_address}}
-
-Voicemail Summary:
-{{summary}}
-
-Callback Window: {{callback_preference}}
-Urgency: {{urgency_level}}
-
-[Play Voicemail] [View Contact]
+**GHL API:**
+```http
+POST /contacts/{contact_id}/tasks
+{
+  "title": "📞 Callback: John Smith",
+  "body": "Voicemail Summary:\n{{summary}}\n\nCallback: {{preference}}",
+  "dueDate": "{{due_date}}",
+  "assignedTo": "{{assigned_user_id}}"
+}
 ```
 
 **Assignment Logic:**
 - Existing contact → Assigned owner
 - New contact → On-duty LM
-- Urgent → Available team member
+- Urgent + no owner → First available
 
 ### 7. Alert Agent
-**Role:** Notifies appropriate team members
+**Role:** Notifies team members
 
-**Alert by Urgency:**
-
-**Urgent Alert (SMS + notification):**
+**Urgent Alert (SMS via GHL):**
 ```
-🚨 URGENT CALLBACK NEEDED
+🚨 URGENT CALLBACK
 
 John Smith - 615-555-1234
-"Other buyer interested, need decision today"
+"Other buyer interested, needs answer today"
 
-Property: 123 Main St (Made Offer stage)
+Property: 123 Main St (Made Offer)
 
-Call immediately!
+Call NOW!
 ```
 
-**High Alert (SMS):**
+**Normal Alert (GHL notification only):**
 ```
-📞 Callback needed today
-
-John Smith - 615-555-1234
+📞 New voicemail from John Smith
 RE: 123 Main St
-"Ready to discuss offer"
-
-Requested: Call today
-```
-
-**Normal (Task only + optional notification):**
-```
-New voicemail from John Smith (615-555-1234)
-RE: Follow up on Main Street property
 Task created - due today
 ```
 
 ### 8. Summary Writer
-**Role:** Creates concise voicemail summaries for records
+**Role:** Logs summary to GHL contact notes
 
-**Summary Format:**
-```
-📞 VOICEMAIL - {{date}} {{time}}
-
-From: {{caller_name}} ({{phone}})
-Duration: {{duration}}
-Urgency: {{urgency}}
-
-Summary: {{one_line_summary}}
-
-Key Points:
-• {{point_1}}
-• {{point_2}}
-
-Callback: {{callback_preference}}
-
-[▶️ Play Recording]
+**GHL API:**
+```http
+POST /contacts/{contact_id}/notes
+{
+  "body": "📞 VOICEMAIL - Feb 9, 2026 3:42 PM\n\nFrom: John Smith\nDuration: 0:42\nUrgency: Normal\n\nSummary: Following up on Main St offer discussion.\n\nKey Points:\n• Wants to continue conversation\n• Available today anytime\n\n🎧 Recording: {{recording_url}}"
+}
 ```
 
-**Example:**
+### 9. PPL Disposition Reporter
+**Role:** Feeds disposition data to PPL Refund Bot
+
+When a voicemail indicates a bad lead disposition:
+```json
+{
+  "contact_id": "abc123",
+  "phone": "+16155551234",
+  "disposition": "not_selling",
+  "confidence": 0.9,
+  "source": "voicemail",
+  "evidence": "Voicemail transcript: 'I changed my mind, not selling the house anymore'",
+  "timestamp": "2026-02-09T15:30:00Z",
+  "ppl_source": "motivatedsellers",
+  "disputable": true
+}
 ```
-📞 VOICEMAIL - Feb 8, 2026 3:42 PM
 
-From: John Smith (615-555-1234)
-Duration: 0:42
-Urgency: Normal
-
-Summary: Following up on Main St property discussion from last week.
-
-Key Points:
-• Wants to continue conversation about selling
-• Available anytime today
-
-Callback: Today, anytime
-
-[▶️ Play Recording]
-```
+PPL Refund Bot can then:
+1. Match to PPL lead by phone/address
+2. Check if within dispute window
+3. Queue for dispute filing
 
 ---
 
-## Voicemail Categories
+## Voicemail Categories & Routing
 
-### Seller Callbacks
-- Follow-up on previous conversation
-- Ready to make decision
-- Questions about offer/process
-- Scheduling/rescheduling
-
-### New Inquiries
-- First-time caller
-- Responding to marketing
-- Referral mention
-
-### Buyer Calls
-- Interest in property
-- Showing requests
-- Offer questions
-
-### Other
-- Wrong number
-- Spam/solicitation
-- Vendor/partner
-
-**Category Detection → Routing:**
-| Category | Route To |
-|----------|----------|
-| Seller - Existing | Assigned AM/LM |
-| Seller - New | On-duty LM |
-| Buyer | Dispo team |
-| Other | Ignore or admin |
-
----
-
-## Integration Points
-
-### Inputs
-- GHL voicemail recordings
-- GHL call logs (missed calls)
-- GHL contact database
-
-### Outputs
-- GHL contact notes (summary)
-- GHL tasks (callbacks)
-- Team SMS/notifications
-- Voicemail transcript storage
+| Category | Detection | Route To |
+|----------|-----------|----------|
+| Seller - Existing | Contact found, seller tags | Assigned owner |
+| Seller - New | No contact, mentions selling | On-duty LM |
+| Buyer | Mentions buying, property inquiry | Dispo team |
+| Wrong Number | "wrong number", confusion | Log + ignore |
+| Spam | Robocall, solicitation | Ignore |
+| Not Selling | "not selling", "keep house" | Log disposition → PPL Bot |
 
 ---
 
@@ -314,36 +328,80 @@ Callback: Today, anytime
 {
   "voicemailBot": {
     "enabled": true,
-    "transcriptionService": "ghl_native",
+    "source": "callrail",
+    "callrail": {
+      "apiKey": "{{CALLRAIL_API_KEY}}",
+      "accountId": "{{CALLRAIL_ACCOUNT_ID}}",
+      "pollIntervalMinutes": 5,
+      "useWebhook": false
+    },
+    "transcription": {
+      "preferCallrailNative": true,
+      "fallbackToWhisper": true,
+      "whisperModel": "whisper-1"
+    },
+    "urgencyKeywords": {
+      "urgent": ["ASAP", "emergency", "other buyer", "today or never"],
+      "high": ["today", "important", "decision", "ready to sign"],
+      "low": ["no rush", "when you can", "not urgent"]
+    },
+    "dispositionKeywords": {
+      "not_selling": ["not selling", "changed my mind", "keeping", "decided not to"],
+      "wrong_number": ["wrong number", "don't know", "never contacted"],
+      "not_owner": ["don't own", "sold years ago", "not my house"]
+    },
     "alertThresholds": {
-      "urgent": {
-        "keywords": ["ASAP", "emergency", "urgent", "other buyer"],
-        "alertMethod": ["sms", "push"],
-        "responseTarget": 15
-      },
-      "high": {
-        "keywords": ["today", "important", "decision"],
-        "alertMethod": ["sms"],
-        "responseTarget": 60
-      },
-      "normal": {
-        "alertMethod": ["task"],
-        "responseTarget": 240
-      }
+      "urgent": { "responseMinutes": 15, "alertMethod": ["sms", "push"] },
+      "high": { "responseMinutes": 60, "alertMethod": ["sms"] },
+      "normal": { "responseMinutes": 240, "alertMethod": ["task"] }
     },
     "routing": {
       "existingContact": "assigned_owner",
-      "newContact": "on_duty_lm",
+      "newSeller": "on_duty_lm",
       "buyer": "dispo_team"
     },
-    "workingHours": {
-      "start": "08:00",
-      "end": "19:00"
-    },
-    "afterHoursHandling": "queue_for_morning"
+    "pplIntegration": {
+      "enabled": true,
+      "feedDispositionsTo": "ppl_refund_bot"
+    }
   }
 }
 ```
+
+---
+
+## NAH-Specific Configuration
+
+```json
+{
+  "callrail": {
+    "apiKey": "267bcdd64628abc9c9c4c43e8a46dca2",
+    "accountId": "{{NAH_ACCOUNT_ID}}"
+  },
+  "ghl": {
+    "locationId": "hmD7eWGQJE7EVFpJxj4q"
+  },
+  "team": {
+    "lms": ["Daniel", "Chris"],
+    "ams": ["Kyle"],
+    "dispo": ["Esteban"]
+  }
+}
+```
+
+---
+
+## Integration Points
+
+### Inputs
+- CallRail API (voicemails, recordings, transcriptions)
+- GHL API (contact lookup, notes, tasks)
+
+### Outputs
+- GHL contact notes (voicemail summaries)
+- GHL tasks (callbacks)
+- Team alerts (SMS/push via GHL)
+- PPL Refund Bot (disposition data)
 
 ---
 
@@ -351,18 +409,72 @@ Callback: Today, anytime
 
 | Scenario | Action |
 |----------|--------|
-| Transcription fails | Flag for manual review, attach audio |
-| Poor audio quality | Note in summary, attempt anyway |
-| Contact not found | Create new, flag for verification |
-| No callback number | Search contact DB, flag if not found |
-| Spam detected | Log, don't create task |
+| CallRail API rate limit | Back off, retry with exponential delay |
+| Transcription fails | Flag for manual review, still create task |
+| GHL contact not found | Create new contact, tag as "voicemail_new" |
+| Recording unavailable | Note in summary, process transcript only |
+| Webhook missed | Polling catches it on next run |
 
 ---
 
 ## Success Metrics
 
+- Voicemail processing time (target: <2 min from receipt)
 - Transcription accuracy (target: >95%)
-- Time to process voicemail (target: <2 min)
-- Urgent callback response time
-- Callback completion rate
+- Urgent callback response time (target: <15 min)
+- Disposition detection accuracy (feeds PPL refunds)
 - Missed callback rate (target: <5%)
+- PPL disputes generated from voicemail dispositions
+
+---
+
+## Example: Full Flow
+
+**1. CallRail receives voicemail:**
+```json
+{
+  "id": 123456,
+  "voicemail": true,
+  "customer_phone_number": "+16155551234",
+  "voicemail_transcription": "Hi, this is John. I talked to someone about selling my house on Main Street but I changed my mind. I'm not selling anymore. Please stop calling.",
+  "start_time": "2026-02-09T15:30:00Z"
+}
+```
+
+**2. Info Extractor output:**
+```json
+{
+  "caller_name": "John",
+  "disposition": "not_selling",
+  "disposition_confidence": 0.95,
+  "urgency": "low",
+  "callback_needed": false,
+  "do_not_call": true
+}
+```
+
+**3. GHL Contact matched:**
+- Contact: John Smith, 123 Main St, Nashville
+- Tags: `ppl`, `motivatedsellers`, `nashville`
+- Stage: "Made Offer"
+
+**4. Actions taken:**
+- ✅ GHL note added with voicemail summary
+- ✅ Contact marked DND (do not call)
+- ✅ Stage updated to "Dead - Not Selling"
+- ✅ PPL Refund Bot notified:
+  ```json
+  {
+    "platform": "motivatedsellers",
+    "phone": "+16155551234",
+    "disposition": "not_selling",
+    "evidence": "Voicemail: 'I changed my mind. I'm not selling anymore.'",
+    "action": "queue_for_dispute"
+  }
+  ```
+
+**5. PPL Refund Bot:**
+- Finds matching lead on MotivatedSellers
+- Within 10-day window ✓
+- Files dispute: "Not Selling" with voicemail transcript as evidence
+- Potential refund: $150
