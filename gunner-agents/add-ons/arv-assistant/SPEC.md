@@ -110,7 +110,16 @@ Could be Phase 2: AI analyzes property photos to suggest rehab level.
 2. AI searches Zillow → finds and scores comps
 3. AI opens MasterSuite → navigates to property's Valuation tab
 4. AI clicks "Add Comparable" for each top comp (3-5)
-5. AI fills in comp details (address, price, sqft, beds/baths, sold date, etc.)
+5. AI fills in comp details:
+   - Address
+   - Price
+   - Sqft
+   - Beds/baths
+   - Sold date
+   - **Category**: Sold or Active (based on MLS status)
+   - **Condition**: New / Remodeled / Updated
+   - **Location**: Similar / Worse / Better (relative to subject — AI discretion)
+   - **Zillow URL**: Required
 6. AI saves
 7. Corey reviews final ARV numbers on Analysis tab — approve or adjust
 
