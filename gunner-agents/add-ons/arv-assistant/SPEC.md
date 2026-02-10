@@ -101,21 +101,22 @@ Could be Phase 2: AI analyzes property photos to suggest rehab level.
 
 ---
 
-## Integration (Confirmed: Standalone Tool)
+## Integration (Full Automation via Browser)
 
-MasterSuite integration not feasible. Build as standalone tool.
+**No API integration with MasterSuite** — use Playwright browser automation instead.
 
 **Workflow:**
-1. Corey inputs address (or batch of addresses)
-2. AI runs comp analysis
-3. Returns suggested ARV range + top comps
-4. Corey reviews, adjusts if needed
-5. Manually enters final numbers into MasterSuite
+1. Input: Property address (single or batch)
+2. AI searches Zillow → finds and scores comps
+3. AI opens MasterSuite → navigates to property's Valuation tab
+4. AI clicks "Add Comparable" for each top comp (3-5)
+5. AI fills in comp details (address, price, sqft, beds/baths, sold date, etc.)
+6. AI saves
+7. Corey reviews final ARV numbers on Analysis tab — approve or adjust
 
-**Future possibility:** Gunner Add-On
-- When lead enters Gunner, auto-run ARV analysis
-- Results attached to lead record
-- Corey reviews in Gunner before MasterSuite entry
+**Corey's role:** Review and approve, not data entry.
+
+**Tech Stack:** TypeScript + Playwright (same as PPL Refund Bot)
 
 ---
 
