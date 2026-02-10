@@ -157,42 +157,65 @@ Settings → Disputes → Open Dispute → Select lead → Submit
 
 ---
 
-## Detection Logic
+## Detection Logic — Fully Automated
 
 ### How It Works
-1. **GHL Integration:** Bot monitors tenant's GHL contacts tagged as PPL leads
-2. **Source Detection:** Identifies which platform lead came from (lead source field)
-3. **Issue Detection:** Checks for refund-eligible conditions
-4. **Evidence Collection:** Compiles call logs, notes, SMS history from GHL
-5. **Filing:** Submits dispute via email (most reliable) or portal
+```
+PPL Lead Arrives in GHL (via webhook)
+         ↓
+    DAY 0: Immediate Checks
+         ↓
+    ┌─────────────────────────────────┐
+    │ 1. Property Type Check          │
+    │    Is it Single Family?         │
+    │    NO → Auto-file dispute       │
+    └─────────────────────────────────┘
+         ↓
+    ┌─────────────────────────────────┐
+    │ 2. MLS Check                    │
+    │    Is property listed on MLS?   │
+    │    YES → Auto-file dispute      │
+    └─────────────────────────────────┘
+         ↓
+    DAY 1-4: Monitor Contact Attempts
+         ↓
+    ┌─────────────────────────────────┐
+    │ 3. No Response Check (Day 4)    │
+    │    3+ calls AND 2+ SMS          │
+    │    AND no response?             │
+    │    YES → Auto-file dispute      │
+    └─────────────────────────────────┘
+```
 
 ### Detection Triggers
 
-**Immediate (Day 0-1) — Auto-file eligible:**
-| Issue | Detection Method | Evidence |
-|-------|------------------|----------|
-| Disconnected number | First call = carrier disconnect message | Call log |
-| Wrong number | Reaches different person | Call notes |
-| Invalid email | Bounce notification | Email bounce |
-| Fake/nonsense data | Name = celebrity, profanity, gibberish | Lead data |
-| Duplicate lead | Same phone/address in last 90 days | Lead IDs |
-| Wrong property type | Commercial, mobile home, land | Property data |
-| Wrong market | Address outside bid area | Lead address vs GHL location |
+**Immediate (Day 0) — Auto-file:**
+| Check | Condition | Dispute Reason | Evidence |
+|-------|-----------|----------------|----------|
+| Property Type | NOT single family (mobile home, vacant land, commercial) | Wrong Lead Type | Property data from lead |
+| MLS Status | Property is actively listed on MLS | MLS Listed | Zillow/Redfin/MLS link |
 
-**Delayed (Day 5-7) — Queue for approval:**
-| Issue | Detection Method | Evidence |
-|-------|------------------|----------|
-| No answer 5+ attempts | Call log: 5 calls, 0 connects | Call log |
-| No SMS response | 2+ texts sent, 0 received | SMS log |
-| Voicemail only | 3+ VMs, no callback | Call log |
+**Delayed (Day 4) — Auto-file:**
+| Check | Condition | Dispute Reason | Evidence |
+|-------|-----------|----------------|----------|
+| No Response | 3+ call attempts AND 2+ SMS sent AND 0 responses after 4 days | Invalid Contact Info / No Response | Call log + SMS log from GHL |
 
-**Qualification-based (Day 1-10) — Queue for approval:**
-| Issue | Detection Method | Evidence |
-|-------|------------------|----------|
-| Listed on MLS | MLS Monitor alert | MLS screenshot |
-| Not the owner | LM notes | Call notes |
-| Wholesaler | Discovered during call | Call notes |
-| Already sold | Property records | Public records |
+### Data Sources for Checks
+
+**Property Type Check:**
+- Lead data from PPL (often includes property type)
+- Property enrichment API (Zillow, county records)
+- GHL custom field if populated
+
+**MLS Check:**
+- Query Zillow API for address
+- Query Redfin for active listings
+- MLS Monitor integration (if available)
+
+**No Response Check:**
+- GHL Call Logs (via Gunner from BatchDialer)
+- GHL SMS Conversations (via Gunner from BatchLeads)
+- Track: attempts made, responses received, days elapsed
 
 ---
 

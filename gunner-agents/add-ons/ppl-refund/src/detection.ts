@@ -1,7 +1,10 @@
 /**
- * PPL Refund Bot - Detection Engine
+ * PPL Refund Bot - Detection Engine (v2)
  * 
- * Monitors GHL contacts and identifies dispute-eligible PPL leads
+ * Fully automated detection with 3 core checks:
+ * 1. Property Type (Day 0) - Must be single family
+ * 2. MLS Status (Day 0) - Must NOT be listed
+ * 3. No Response (Day 4) - 3+ calls, 2+ SMS, no reply
  */
 
 import {
@@ -28,6 +31,36 @@ const DISPUTE_WINDOWS: Record<PPLPlatform, number> = {
   motivatedsellers: 10,
   propertyleads: 7,
 };
+
+// Valid single family property types
+const VALID_PROPERTY_TYPES = [
+  'single family',
+  'single-family',
+  'sfr',
+  'house',
+  'residential',
+  'detached',
+];
+
+// Invalid property types that trigger dispute
+const INVALID_PROPERTY_TYPES = [
+  'mobile home',
+  'manufactured',
+  'mobile',
+  'trailer',
+  'vacant land',
+  'land',
+  'lot',
+  'commercial',
+  'multi-family',
+  'multifamily',
+  'duplex',
+  'triplex',
+  'apartment',
+  'condo',
+  'townhome',
+  'townhouse',
+];
 
 export class DetectionEngine {
   private config: TenantConfig;
@@ -68,64 +101,259 @@ export class DetectionEngine {
     return Math.max(0, window - daysSince);
   }
 
+  // ============================================
+  // CORE CHECK #1: Property Type (Day 0)
+  // ============================================
+  
   /**
-   * Analyze a lead and detect any dispute-eligible issues
+   * Check if property type is valid (single family)
+   * Returns dispute reason if NOT valid
    */
-  detectIssues(
-    lead: PPLLead,
-    callLogs: CallLog[],
-    smsLogs: SMSLog[],
-    notes: string[]
-  ): DetectedDispute | null {
-    // Build evidence
-    const evidence = this.buildEvidence(lead, callLogs, smsLogs, notes);
-
-    // Check for various issue types
-    const checks = [
-      () => this.checkDisconnected(evidence, callLogs),
-      () => this.checkWrongNumber(evidence, notes),
-      () => this.checkDuplicate(lead, notes),
-      () => this.checkInvalidData(lead),
-      () => this.checkNoResponse(evidence),
-      () => this.checkNotOwner(notes),
-      () => this.checkWholesaler(notes),
-      () => this.checkMLSListed(notes),
-      () => this.checkWrongMarket(lead, notes),
-      () => this.checkWrongPropertyType(notes),
-    ];
-
-    for (const check of checks) {
-      const result = check();
-      if (result) {
-        const daysRemaining = this.getDaysRemaining(lead);
-        
+  async checkPropertyType(lead: PPLLead): Promise<DetectionResult | null> {
+    const propertyType = lead.propertyType?.toLowerCase() || '';
+    
+    // Check if it's an invalid type
+    for (const invalidType of INVALID_PROPERTY_TYPES) {
+      if (propertyType.includes(invalidType)) {
         return {
-          id: `dispute_${lead.id}_${Date.now()}`,
-          tenantId: this.config.tenantId,
-          lead,
-          reason: result.reason,
-          reasonDetails: result.details,
-          confidence: result.confidence,
-          evidence,
-          deadline: new Date(lead.receivedAt.getTime() + DISPUTE_WINDOWS[lead.platform] * 24 * 60 * 60 * 1000),
-          daysRemaining,
-          status: this.determineInitialStatus(result.reason),
-          detectedAt: new Date(),
+          reason: 'wrong_property_type',
+          details: `Invalid property type: "${lead.propertyType}". Not single family residential.`,
+          confidence: 'high',
+          autoFile: true,
         };
       }
+    }
+
+    // If property type is empty, try to enrich from external source
+    if (!propertyType) {
+      const enrichedType = await this.enrichPropertyType(lead.address, lead.city, lead.state);
+      if (enrichedType) {
+        for (const invalidType of INVALID_PROPERTY_TYPES) {
+          if (enrichedType.toLowerCase().includes(invalidType)) {
+            return {
+              reason: 'wrong_property_type',
+              details: `Invalid property type (from records): "${enrichedType}". Not single family residential.`,
+              confidence: 'high',
+              autoFile: true,
+            };
+          }
+        }
+      }
+    }
+
+    return null; // Property type is valid or unknown
+  }
+
+  /**
+   * Enrich property type from external sources
+   */
+  private async enrichPropertyType(address: string, city: string, state: string): Promise<string | null> {
+    // TODO: Integrate with property data API (Zillow, county records, etc.)
+    // For now, return null - will be implemented with actual API
+    console.log(`[PropertyEnrich] Would query: ${address}, ${city}, ${state}`);
+    return null;
+  }
+
+  // ============================================
+  // CORE CHECK #2: MLS Status (Day 0)
+  // ============================================
+
+  /**
+   * Check if property is listed on MLS
+   * Returns dispute reason if listed
+   */
+  async checkMLSStatus(lead: PPLLead): Promise<DetectionResult | null> {
+    const mlsListing = await this.queryMLSStatus(lead.address, lead.city, lead.state, lead.zip);
+    
+    if (mlsListing.isListed) {
+      return {
+        reason: 'mls_listed',
+        details: `Property is actively listed on MLS. ${mlsListing.listingUrl ? `Listing: ${mlsListing.listingUrl}` : ''}`,
+        confidence: 'high',
+        autoFile: true,
+        evidence: {
+          mlsUrl: mlsListing.listingUrl,
+          listPrice: mlsListing.listPrice,
+          daysOnMarket: mlsListing.daysOnMarket,
+        },
+      };
+    }
+
+    return null; // Not listed on MLS
+  }
+
+  /**
+   * Query MLS/Zillow/Redfin for active listing
+   */
+  private async queryMLSStatus(address: string, city: string, state: string, zip?: string): Promise<MLSResult> {
+    // TODO: Integrate with Zillow API, Redfin API, or MLS data provider
+    // For now, return mock - will be implemented with actual API
+    
+    console.log(`[MLSCheck] Would query: ${address}, ${city}, ${state} ${zip || ''}`);
+    
+    // Placeholder - in production, this would call real APIs
+    return {
+      isListed: false,
+      listingUrl: null,
+      listPrice: null,
+      daysOnMarket: null,
+    };
+  }
+
+  // ============================================
+  // CORE CHECK #3: No Response (Day 4)
+  // ============================================
+
+  /**
+   * Check if lead is unresponsive after sufficient contact attempts
+   * Triggers on Day 4: 3+ calls AND 2+ SMS AND 0 responses
+   */
+  checkNoResponse(lead: PPLLead, callLogs: CallLog[], smsLogs: SMSLog[]): DetectionResult | null {
+    const daysSinceReceived = this.daysSince(lead.receivedAt);
+    
+    // Only check on Day 4+
+    if (daysSinceReceived < 4) {
+      return null;
+    }
+
+    // Count outbound attempts
+    const outboundCalls = callLogs.filter(c => c.direction === 'outbound');
+    const outboundSMS = smsLogs.filter(s => s.direction === 'outbound');
+    
+    // Count any responses
+    const inboundCalls = callLogs.filter(c => c.direction === 'inbound');
+    const inboundSMS = smsLogs.filter(s => s.direction === 'inbound');
+    const answeredCalls = callLogs.filter(c => c.outcome === 'answered' || c.outcome === 'connected');
+    
+    const totalResponses = inboundCalls.length + inboundSMS.length + answeredCalls.length;
+
+    // Check thresholds: 3+ calls AND 2+ SMS AND 0 responses
+    if (outboundCalls.length >= 3 && outboundSMS.length >= 2 && totalResponses === 0) {
+      return {
+        reason: 'no_response',
+        details: `No response after ${outboundCalls.length} calls and ${outboundSMS.length} texts over ${daysSinceReceived} days.`,
+        confidence: 'high',
+        autoFile: true,
+        evidence: {
+          callAttempts: outboundCalls.length,
+          smsAttempts: outboundSMS.length,
+          daysSinceReceived,
+          responses: 0,
+        },
+      };
+    }
+
+    return null;
+  }
+
+  // ============================================
+  // MAIN DETECTION RUNNER
+  // ============================================
+
+  /**
+   * Run all checks on a lead (called when lead arrives and daily)
+   */
+  async runAllChecks(
+    lead: PPLLead,
+    callLogs: CallLog[],
+    smsLogs: SMSLog[]
+  ): Promise<DetectedDispute | null> {
+    
+    // Check 1: Property Type (immediate)
+    const propertyTypeIssue = await this.checkPropertyType(lead);
+    if (propertyTypeIssue) {
+      return this.createDispute(lead, propertyTypeIssue, callLogs, smsLogs);
+    }
+
+    // Check 2: MLS Status (immediate)
+    const mlsIssue = await this.checkMLSStatus(lead);
+    if (mlsIssue) {
+      return this.createDispute(lead, mlsIssue, callLogs, smsLogs);
+    }
+
+    // Check 3: No Response (Day 4+)
+    const noResponseIssue = this.checkNoResponse(lead, callLogs, smsLogs);
+    if (noResponseIssue) {
+      return this.createDispute(lead, noResponseIssue, callLogs, smsLogs);
+    }
+
+    return null; // No issues detected
+  }
+
+  /**
+   * Run immediate checks only (on lead arrival)
+   */
+  async runImmediateChecks(lead: PPLLead): Promise<DetectedDispute | null> {
+    // Check 1: Property Type
+    const propertyTypeIssue = await this.checkPropertyType(lead);
+    if (propertyTypeIssue) {
+      return this.createDispute(lead, propertyTypeIssue, [], []);
+    }
+
+    // Check 2: MLS Status
+    const mlsIssue = await this.checkMLSStatus(lead);
+    if (mlsIssue) {
+      return this.createDispute(lead, mlsIssue, [], []);
     }
 
     return null;
   }
 
   /**
-   * Build evidence package from GHL data
+   * Run delayed checks only (daily cron for Day 4+ leads)
+   */
+  runDelayedChecks(
+    lead: PPLLead,
+    callLogs: CallLog[],
+    smsLogs: SMSLog[]
+  ): DetectedDispute | null {
+    const noResponseIssue = this.checkNoResponse(lead, callLogs, smsLogs);
+    if (noResponseIssue) {
+      return this.createDispute(lead, noResponseIssue, callLogs, smsLogs);
+    }
+
+    return null;
+  }
+
+  // ============================================
+  // HELPERS
+  // ============================================
+
+  /**
+   * Create dispute object from detection result
+   */
+  private createDispute(
+    lead: PPLLead,
+    result: DetectionResult,
+    callLogs: CallLog[],
+    smsLogs: SMSLog[]
+  ): DetectedDispute {
+    const evidence = this.buildEvidence(lead, callLogs, smsLogs, result.evidence);
+    const daysRemaining = this.getDaysRemaining(lead);
+
+    return {
+      id: `dispute_${lead.id}_${Date.now()}`,
+      tenantId: this.config.tenantId,
+      lead,
+      reason: result.reason,
+      reasonDetails: result.details,
+      confidence: result.confidence,
+      evidence,
+      deadline: new Date(lead.receivedAt.getTime() + DISPUTE_WINDOWS[lead.platform] * 24 * 60 * 60 * 1000),
+      daysRemaining,
+      status: result.autoFile ? 'ready_to_file' : 'queued',
+      detectedAt: new Date(),
+    };
+  }
+
+  /**
+   * Build evidence package
    */
   private buildEvidence(
     lead: PPLLead,
     callLogs: CallLog[],
     smsLogs: SMSLog[],
-    notes: string[]
+    additionalEvidence?: Record<string, unknown>
   ): Evidence {
     const outboundCalls = callLogs.filter(c => c.direction === 'outbound');
     const outboundSMS = smsLogs.filter(s => s.direction === 'outbound');
@@ -141,313 +369,15 @@ export class DetectionEngine {
     return {
       callLogs,
       smsLogs,
-      notes,
+      notes: [],
       totalCallAttempts: outboundCalls.length,
       totalSMSSent: outboundSMS.length,
       totalResponses: inboundResponses.length,
       firstContactAttempt: allAttempts[0]?.timestamp,
       lastContactAttempt: allAttempts[allAttempts.length - 1]?.timestamp,
       daysSinceReceived: this.daysSince(lead.receivedAt),
+      ...additionalEvidence,
     };
-  }
-
-  /**
-   * Check for disconnected number
-   */
-  private checkDisconnected(evidence: Evidence, callLogs: CallLog[]): DetectionResult | null {
-    const disconnectedCalls = callLogs.filter(
-      c => c.outcome === 'disconnected' || c.outcome === 'failed'
-    );
-
-    // If first call was disconnected, high confidence
-    if (callLogs.length > 0 && callLogs[0].outcome === 'disconnected') {
-      return {
-        reason: 'disconnected',
-        details: 'Phone number is disconnected. First call attempt resulted in carrier disconnect message.',
-        confidence: 'high',
-      };
-    }
-
-    // If multiple calls disconnected
-    if (disconnectedCalls.length >= 2) {
-      return {
-        reason: 'disconnected',
-        details: `Phone number appears disconnected. ${disconnectedCalls.length} calls failed with disconnect message.`,
-        confidence: 'high',
-      };
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for wrong number
-   */
-  private checkWrongNumber(evidence: Evidence, notes: string[]): DetectionResult | null {
-    const wrongNumberKeywords = [
-      'wrong number',
-      'wrong person',
-      'not them',
-      "doesn't live here",
-      'never heard of',
-      'sold the house',
-      'different person',
-    ];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of wrongNumberKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'wrong_number',
-            details: `Wrong number confirmed. Notes indicate: "${note.substring(0, 100)}"`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for duplicate lead
-   */
-  private checkDuplicate(lead: PPLLead, notes: string[]): DetectionResult | null {
-    const duplicateKeywords = ['duplicate', 'already have', 'received before', 'same lead'];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of duplicateKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'duplicate',
-            details: 'Duplicate lead. This contact was previously received.',
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for invalid/fake data
-   */
-  private checkInvalidData(lead: PPLLead): DetectionResult | null {
-    // Check for obviously fake names
-    const fakeNamePatterns = [
-      /^test/i,
-      /^fake/i,
-      /^asdf/i,
-      /mickey mouse/i,
-      /donald trump/i,
-      /joe biden/i,
-      /john doe/i,
-      /jane doe/i,
-      /^\d+$/, // All numbers
-    ];
-
-    for (const pattern of fakeNamePatterns) {
-      if (pattern.test(lead.name)) {
-        return {
-          reason: 'invalid_data',
-          details: `Invalid/fake name detected: "${lead.name}"`,
-          confidence: 'high',
-        };
-      }
-    }
-
-    // Check for invalid phone (too short, all same digit)
-    const phoneDigits = lead.phone.replace(/\D/g, '');
-    if (phoneDigits.length < 10) {
-      return {
-        reason: 'invalid_data',
-        details: `Invalid phone number: "${lead.phone}" (too short)`,
-        confidence: 'high',
-      };
-    }
-
-    if (/^(\d)\1+$/.test(phoneDigits)) {
-      return {
-        reason: 'invalid_data',
-        details: `Invalid phone number: "${lead.phone}" (fake pattern)`,
-        confidence: 'high',
-      };
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for no response after configured attempts/days
-   */
-  private checkNoResponse(evidence: Evidence): DetectionResult | null {
-    const { noResponseDays, noResponseAttempts } = this.config.detection;
-
-    if (
-      evidence.daysSinceReceived >= noResponseDays &&
-      evidence.totalCallAttempts >= noResponseAttempts &&
-      evidence.totalResponses === 0
-    ) {
-      return {
-        reason: 'no_response',
-        details: `No response after ${evidence.totalCallAttempts} calls and ${evidence.totalSMSSent} texts over ${evidence.daysSinceReceived} days.`,
-        confidence: 'medium',
-      };
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for not property owner
-   */
-  private checkNotOwner(notes: string[]): DetectionResult | null {
-    const notOwnerKeywords = [
-      'not the owner',
-      "doesn't own",
-      'not property owner',
-      'tenant',
-      'renter',
-      'not on title',
-      "can't sell",
-    ];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of notOwnerKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'not_owner',
-            details: `Not the property owner. Notes: "${note.substring(0, 100)}"`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for wholesaler
-   */
-  private checkWholesaler(notes: string[]): DetectionResult | null {
-    const wholesalerKeywords = [
-      'wholesaler',
-      'under contract',
-      'assignment',
-      'fellow investor',
-      'already has buyer',
-    ];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of wholesalerKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'wholesaler',
-            details: `Wholesaler lead. Property is under contract with another investor.`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for MLS listed
-   */
-  private checkMLSListed(notes: string[]): DetectionResult | null {
-    const mlsKeywords = ['mls', 'listed', 'on market', 'with agent', 'realtor'];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of mlsKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'mls_listed',
-            details: `Property is listed on MLS. Notes: "${note.substring(0, 100)}"`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for wrong market/area
-   */
-  private checkWrongMarket(lead: PPLLead, notes: string[]): DetectionResult | null {
-    const wrongMarketKeywords = ['wrong area', 'wrong market', 'outside', 'not in our area'];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of wrongMarketKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'wrong_market',
-            details: `Lead is outside service area. Address: ${lead.address}, ${lead.city}, ${lead.state}`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Check for wrong property type
-   */
-  private checkWrongPropertyType(notes: string[]): DetectionResult | null {
-    const wrongTypeKeywords = [
-      'mobile home',
-      'manufactured',
-      'commercial',
-      'vacant land',
-      'land only',
-      'no structure',
-    ];
-
-    for (const note of notes) {
-      const noteLower = note.toLowerCase();
-      for (const keyword of wrongTypeKeywords) {
-        if (noteLower.includes(keyword)) {
-          return {
-            reason: 'wrong_property_type',
-            details: `Wrong property type. Notes indicate: "${note.substring(0, 100)}"`,
-            confidence: 'high',
-          };
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * Determine initial status based on reason and automation config
-   */
-  private determineInitialStatus(reason: DisputeReason): 'detected' | 'queued' {
-    if (this.config.automation.level === 'manual') {
-      return 'detected';
-    }
-
-    if (
-      this.config.automation.level === 'full-auto' &&
-      this.config.automation.autoFileReasons.includes(reason)
-    ) {
-      return 'detected'; // Will be auto-filed
-    }
-
-    return 'queued'; // Needs approval
   }
 
   /**
@@ -464,6 +394,15 @@ interface DetectionResult {
   reason: DisputeReason;
   details: string;
   confidence: 'high' | 'medium' | 'low';
+  autoFile: boolean;
+  evidence?: Record<string, unknown>;
+}
+
+interface MLSResult {
+  isListed: boolean;
+  listingUrl: string | null;
+  listPrice: number | null;
+  daysOnMarket: number | null;
 }
 
 export default DetectionEngine;

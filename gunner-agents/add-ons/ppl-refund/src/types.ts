@@ -23,6 +23,7 @@ export type DisputeReason =
 export type DisputeStatus =
   | 'detected'      // Issue identified, not yet filed
   | 'queued'        // Awaiting tenant approval
+  | 'ready_to_file' // Auto-approved, ready for filing
   | 'filing'        // Currently being filed
   | 'filed'         // Successfully submitted
   | 'pending'       // Under review by provider
@@ -89,6 +90,7 @@ export interface PPLLead {
   city: string;
   state: string;
   zip: string;
+  propertyType?: string; // Single family, mobile home, etc.
   receivedAt: Date;
   cost: number;
   source: string; // Original lead source field
