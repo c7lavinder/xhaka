@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAH Business Process Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e0e0e0; padding: 20px; min-height: 100vh; }
+  
+  h1 { text-align: center; font-size: 28px; margin-bottom: 5px; color: #fff; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 8px; font-size: 14px; }
+  
+  .progress-bar-container { max-width: 500px; margin: 0 auto 30px; text-align: center; }
+  .progress-label { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .progress-label span { color: #22c55e; }
+  .progress-bar { height: 12px; background: #1e2130; border-radius: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); border-radius: 6px; transition: width 0.6s ease; }
+  .progress-counts { font-size: 12px; color: #666; margin-top: 6px; }
+  
+  .map-container { display: flex; flex-direction: column; gap: 0; max-width: 1400px; margin: 0 auto; }
+  
+  .phase { background: #1a1d2e; border-radius: 12px; padding: 20px; margin-bottom: 2px; position: relative; }
+  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .phase-number { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .phase-title { font-size: 18px; font-weight: 700; }
+  .phase-role { font-size: 12px; color: #888; background: #252840; padding: 3px 10px; border-radius: 12px; margin-left: auto; }
+  
+  .steps { display: flex; flex-wrap: wrap; gap: 10px; }
+  
+  .step { background: #252840; border-radius: 10px; padding: 14px; flex: 1; min-width: 200px; max-width: 300px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; position: relative; }
+  .step:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .step.human { border-color: #3b82f6; }
+  .step.automated { border-color: #22c55e; background: #1a2e1a; }
+  .step.hybrid { border-color: #f59e0b; }
+  
+  .step-icon { font-size: 24px; margin-bottom: 4px; display: inline-block; }
+  .step-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .step-desc { font-size: 11px; color: #888; line-height: 1.4; margin-bottom: 8px; }
+  
+  .step-agents { display: flex; flex-wrap: wrap; gap: 4px; }
+  .agent-tag { font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 600; background: #14532d; color: #4ade80; white-space: nowrap; }
+  .agent-tag.planned { background: #1e2130; color: #666; border: 1px dashed #444; }
+  
+  .step-badge { position: absolute; top: 8px; right: 8px; font-size: 9px; padding: 2px 7px; border-radius: 8px; font-weight: 600; text-transform: uppercase; }
+  .step.human .step-badge { background: #1e3a5f; color: #60a5fa; }
+  .step.automated .step-badge { background: #14532d; color: #4ade80; }
+  .step.hybrid .step-badge { background: #451a03; color: #fbbf24; }
+  
+  .arrow { text-align: center; font-size: 20px; color: #444; margin: 4px 0; }
+  
+  .phase-lg .phase-number { background: #7c3aed; color: #fff; }
+  .phase-lm .phase-number { background: #3b82f6; color: #fff; }
+  .phase-am .phase-number { background: #f59e0b; color: #fff; }
+  .phase-dispo .phase-number { background: #ef4444; color: #fff; }
+  .phase-ops .phase-number { background: #6b7280; color: #fff; }
+  .phase-close .phase-number { background: #22c55e; color: #fff; }
+  
+  .legend { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .legend-dot.human { background: #3b82f6; }
+  .legend-dot.automated { background: #22c55e; }
+  .legend-dot.hybrid { background: #f59e0b; }
+  .legend-tag { display: inline-flex; align-items: center; gap: 4px; }
+  .legend-tag .agent-tag { font-size: 10px; padding: 2px 8px; }
+  
+  .click-toggle { text-align: center; margin-bottom: 20px; font-size: 12px; color: #666; }
+
+  .bot-index { max-width: 1400px; margin: 40px auto 0; background: #1a1d2e; border-radius: 12px; padding: 24px; }
+  .bot-index h2 { font-size: 18px; margin-bottom: 16px; color: #fff; }
+  .bot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .bot-card { background: #252840; border-radius: 8px; padding: 12px; border-left: 3px solid #22c55e; }
+  .bot-card.planned { border-left-color: #444; }
+  .bot-card-name { font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 4px; }
+  .bot-card.planned .bot-card-name { color: #888; }
+  .bot-card-desc { font-size: 11px; color: #888; line-height: 1.4; }
+  .bot-card-steps { font-size: 10px; color: #60a5fa; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>🏠 NAH Business Process Map</h1>
+<p class="subtitle">New Again Houses Nashville — Lead to Close · Every step mapped to its Gunner agent</p>
+<p class="click-toggle">💡 Click any step to toggle: Human → Hybrid → Automated</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot human"></div> Manual (Human)</div>
+  <div class="legend-item"><div class="legend-dot hybrid"></div> AI-Assisted (Hybrid)</div>
+  <div class="legend-item"><div class="legend-dot automated"></div> Fully Automated (Bot)</div>
+  <div class="legend-item legend-tag"><div class="agent-tag">Active Bot</div></div>
+  <div class="legend-item legend-tag"><div class="agent-tag planned">Planned Bot</div></div>
+</div>
+
+<div class="progress-bar-container">
+  <div class="progress-label">Business Automation: <span id="pct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-counts" id="progressCounts"></div>
+</div>
+
+<div class="map-container" id="map"></div>
+
+<div class="bot-index" id="botIndex">
+  <h2>🤖 Full Agent Index — <span id="botCount">0</span> Gunner Agents</h2>
+  <div class="bot-grid" id="botGrid"></div>
+</div>
+
+<script>
+const phases = [
+  {
+    id: 'lg', title: '1. Lead Generation', role: 'Lead Generators · Alex, Efren, Mirna', color: 'lg',
+    steps: [
+      { name: 'Cold Calling', desc: 'Outbound calls to property owners from skip-traced lists via BatchDialer', agents: [
+        { name: 'After-Hours Bot', active: false },
+        { name: 'Callback Capture Bot', active: false },
+      ], state: 'human' },
+      { name: 'Cold Texting', desc: 'SMS campaigns via BatchLeads to generate responses', agents: [
+        { name: 'Follow Up Bot', active: false },
+      ], state: 'human' },
+      { name: 'PPL Lead Intake', desc: 'Leads purchased from Leadzolo, PropertyLeads, MotivatedSellers', agents: [
+        { name: 'PPL Refund Bot', active: true },
+        { name: 'Lead IQ', active: false },
+      ], state: 'human' },
+      { name: 'County Data Mining', desc: 'Pull tax delinquencies, probate, code violations, pre-foreclosures from public records', agents: [
+        { name: 'County Data Bot', active: false },
+      ], state: 'human' },
+      { name: 'MLS Monitoring', desc: 'Track expired listings, price reductions, FSBO, withdrawn listings', agents: [
+        { name: 'MLS Scraper Bot', active: false },
+      ], state: 'human' },
+      { name: 'Warm Transfer', desc: 'Hot lead transferred live to Lead Manager for qualification', agents: [
+        { name: 'Lead IQ', active: false },
+      ], state: 'human' },
+    ]
+  },
+  {
+    id: 'lm', title: '2. Lead Qualification', role: 'Lead Managers · Daniel, Chris', color: 'lm',
+    steps: [
+      { name: 'Initial Contact', desc: 'First call — build rapport, set expectations, qualify interest', agents: [
+        { name: 'LM Assistant', active: false },
+        { name: 'AI Coach', active: true },
+      ], state: 'human' },
+      { name: 'Motivation & Property', desc: 'Dig into why they sell, property condition, bedrooms, repairs, occupancy', agents: [
+        { name: 'AI Coach', active: true },
+        { name: 'Special Situation Advisor', active: false },
+      ], state: 'human' },
+      { name: 'Price Discussion', desc: 'Anchor expectations, discuss range, gauge flexibility', agents: [
+        { name: 'AI Coach', active: true },
+      ], state: 'human' },
+      { name: 'Post-Call Summary', desc: 'Structured lead summary posted to team — property, motivation, pricing, timeline', agents: [
+        { name: 'Lead Summary Auto-Poster', active: false },
+        { name: 'LM Assistant', active: false },
+      ], state: 'human' },
+      { name: 'Appointment Setting', desc: 'Lock walkthrough or offer call with AM — date, time, commitment', agents: [
+        { name: 'Appointment Bot', active: false },
+        { name: 'Scheduling Coordinator', active: false },
+      ], state: 'human' },
+      { name: 'Address Verification', desc: 'Verify property exists in MasterSuite, cross-ref GHL data', agents: [
+        { name: 'Address Verification Bot', active: false },
+      ], state: 'human' },
+      { name: 'Follow-Up Attempts', desc: 'Track contact attempts, retry at optimal times, escalate if unreachable', agents: [
+        { name: 'Follow-Up Persistence Tracker', active: false },
+        { name: 'Follow Up Bot', active: false },
+      ], state: 'human' },
+    ]
+  },
+  {
+    id: 'am', title: '3. Acquisition', role: 'Acquisition Manager · Kyle (+ Brian)', color: 'am',
+    steps: [
+      { name: 'Walkthrough Decision', desc: 'Determine walkthrough vs offer call based on price gap, distance, property type', agents: [
+        { name: 'Walkthrough vs Offer Bot', active: false },
+      ], state: 'human' },
+      { name: 'Walkthrough', desc: 'Visit property, assess condition, build rapport — ALWAYS HUMAN', agents: [
+        { name: 'ARV Assistant', active: false },
+      ], state: 'human' },
+      { name: 'Underwriting', desc: 'Calculate ARV, repair costs, max offer via MasterSuite', agents: [
+        { name: 'ARV Assistant', active: false },
+        { name: 'MasterSuite Integration', active: false },
+      ], state: 'human' },
+      { name: 'Offer Presentation', desc: 'Present cash offer — explain benefits, handle objections', agents: [
+        { name: 'AM Assistant', active: false },
+        { name: 'AI Coach', active: true },
+      ], state: 'human' },
+      { name: 'Negotiation', desc: 'Counter-offers, justify numbers, close the gap', agents: [
+        { name: 'AM Assistant', active: false },
+      ], state: 'human' },
+      { name: 'Contract Signing', desc: 'Generate purchase agreement, send via DocHub, get signatures', agents: [
+        { name: 'Contract Bot', active: false },
+      ], state: 'human' },
+    ]
+  },
+  {
+    id: 'dispo', title: '4. Disposition', role: 'Dispo Manager · Esteban', color: 'dispo',
+    steps: [
+      { name: 'Deal Packaging', desc: 'Prepare deal summary, photos, sqft, price, seller timeline for buyers', agents: [
+        { name: 'Deal Packaging Bot', active: false },
+      ], state: 'human' },
+      { name: 'Photo Scheduling', desc: 'Coordinate property access with sellers for photos', agents: [
+        { name: 'Photo Scheduling Bot', active: false },
+      ], state: 'human' },
+      { name: 'Buyer Outreach', desc: 'Send deal to buyer list via EZREI and GHL, gauge interest', agents: [
+        { name: 'Deal Distribution Bot', active: false },
+      ], state: 'human' },
+      { name: 'Buyer Negotiation', desc: 'Handle buyer questions, negotiate assignment fee, track offers', agents: [
+        { name: 'Buyer Negotiation Tracker', active: false },
+      ], state: 'human' },
+      { name: 'Title Coordination', desc: 'Track title company tasks, chase addendum acceptance, flag stalls', agents: [
+        { name: 'Title Coordination Bot', active: false },
+      ], state: 'human' },
+      { name: 'Assignment/Close', desc: 'Assign contract to buyer or execute double-close', agents: [
+        { name: 'Contract Bot', active: false },
+        { name: 'Cross-Platform Sync', active: false },
+      ], state: 'human' },
+    ]
+  },
+  {
+    id: 'ops', title: '5. Operations & Intelligence', role: 'All Roles · Jessica (Data)', color: 'ops',
+    steps: [
+      { name: 'Pipeline Monitoring', desc: 'Watch for stuck deals, missed follow-ups, stale leads across all stages', agents: [
+        { name: 'Pipeline Signals', active: true },
+        { name: 'Pipeline Hygiene Nudge', active: false },
+      ], state: 'automated' },
+      { name: 'Follow-Up Nurture', desc: 'Long-term drip for leads not ready yet — intelligent timing', agents: [
+        { name: 'Follow Up Bot', active: false },
+        { name: 'Seller Re-engagement Bot', active: false },
+      ], state: 'human' },
+      { name: 'KPI Tracking', desc: 'Daily calls, conversations, appointments, deals — auto-populated', agents: [
+        { name: 'KPI Entry Bot', active: false },
+        { name: 'Control Room', active: false },
+      ], state: 'human' },
+      { name: 'Data Hygiene', desc: 'Clean duplicates, update contacts, fix mismatches between systems', agents: [
+        { name: 'Data Hygiene Bot', active: false },
+      ], state: 'human' },
+      { name: 'Reporting', desc: 'Daily digest, weekly snapshot, monthly deep dive to Corey', agents: [
+        { name: 'Report Generator', active: false },
+        { name: 'Team Chat Digest', active: false },
+      ], state: 'human' },
+      { name: 'PPL Disputes', desc: 'File refund disputes for bad pay-per-lead leads', agents: [
+        { name: 'PPL Refund Bot', active: true },
+      ], state: 'automated' },
+      { name: 'GHL Unread Alerts', desc: 'Alert team when they have unread messages past time threshold', agents: [
+        { name: 'Unread Message Alert', active: false },
+      ], state: 'human' },
+      { name: 'Cancellation Handling', desc: 'Track walkthrough cancellations, auto-reschedule, flag serial cancelers', agents: [
+        { name: 'Cancellation Handler', active: false },
+      ], state: 'human' },
+      { name: 'Process Compliance', desc: 'Enforce rules (wrong # = delete, stage resets) — auto-flag violations', agents: [
+        { name: 'Process Compliance Bot', active: false },
+      ], state: 'human' },
+    ]
+  },
+  {
+    id: 'close', title: '6. Post-Close & Market Intel', role: 'All Roles', color: 'close',
+    steps: [
+      { name: 'Thank You & Reviews', desc: 'Send thank you, request Google review, ask for referrals', agents: [
+        { name: 'Post-Close Bot', active: false },
+      ], state: 'human' },
+      { name: 'Market Watch', desc: 'Monitor market trends, comps, and pricing shifts in active areas', agents: [
+        { name: 'Market Watch Bot', active: false },
+      ], state: 'human' },
+      { name: 'MLS Alerts', desc: 'Alert when pipeline properties list on MLS — competitor awareness', agents: [
+        { name: 'MLS Monitor Bot', active: false },
+      ], state: 'human' },
+    ]
+  }
+];
+
+const stateOrder = ['human', 'hybrid', 'automated'];
+const stateIcons = { human: '👤', hybrid: '🤝', automated: '🤖' };
+const stateLabels = { human: 'Manual', hybrid: 'Hybrid', automated: 'Automated' };
+
+function render() {
+  const map = document.getElementById('map');
+  map.innerHTML = '';
+  
+  phases.forEach((phase, pi) => {
+    if (pi > 0) {
+      const arrow = document.createElement('div');
+      arrow.className = 'arrow';
+      arrow.textContent = '▼';
+      map.appendChild(arrow);
+    }
+    
+    const div = document.createElement('div');
+    div.className = `phase phase-${phase.color}`;
+    div.innerHTML = `
+      <div class="phase-header">
+        <div class="phase-number">${pi + 1}</div>
+        <div class="phase-title">${phase.title}</div>
+        <div class="phase-role">${phase.role}</div>
+      </div>
+      <div class="steps" id="steps-${phase.id}"></div>
+    `;
+    map.appendChild(div);
+    
+    const stepsDiv = div.querySelector('.steps');
+    phase.steps.forEach((step) => {
+      const s = document.createElement('div');
+      s.className = `step ${step.state}`;
+      
+      const agentTags = step.agents.map(a => 
+        `<span class="agent-tag ${a.active ? '' : 'planned'}">${a.active ? '✓ ' : ''}${a.name}</span>`
+      ).join('');
+      
+      s.innerHTML = `
+        <div class="step-badge">${stateLabels[step.state]}</div>
+        <div class="step-icon">${stateIcons[step.state]}</div>
+        <div class="step-name">${step.name}</div>
+        <div class="step-desc">${step.desc}</div>
+        <div class="step-agents">${agentTags}</div>
+      `;
+      s.addEventListener('click', () => {
+        const idx = stateOrder.indexOf(step.state);
+        step.state = stateOrder[(idx + 1) % 3];
+        render();
+      });
+      stepsDiv.appendChild(s);
+    });
+  });
+  
+  updateProgress();
+  renderBotIndex();
+}
+
+function updateProgress() {
+  let total = 0, auto = 0, humanCount = 0, hybridCount = 0, autoCount = 0;
+  phases.forEach(p => p.steps.forEach(s => {
+    total++;
+    if (s.state === 'automated') { auto += 1; autoCount++; }
+    else if (s.state === 'hybrid') { auto += 0.5; hybridCount++; }
+    else { humanCount++; }
+  }));
+  const pct = Math.round((auto / total) * 100);
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressCounts').textContent = 
+    `${total} steps: ${humanCount} manual · ${hybridCount} hybrid · ${autoCount} automated`;
+}
+
+function renderBotIndex() {
+  const botMap = {};
+  phases.forEach(p => p.steps.forEach(s => {
+    s.agents.forEach(a => {
+      if (!botMap[a.name]) botMap[a.name] = { active: a.active, steps: [] };
+      botMap[a.name].steps.push(s.name);
+      if (a.active) botMap[a.name].active = true;
+    });
+  }));
+  
+  const sorted = Object.entries(botMap).sort((a, b) => {
+    if (a[1].active !== b[1].active) return a[1].active ? -1 : 1;
+    return a[0].localeCompare(b[0]);
+  });
+  
+  document.getElementById('botCount').textContent = sorted.length;
+  const grid = document.getElementById('botGrid');
+  grid.innerHTML = sorted.map(([name, info]) => `
+    <div class="bot-card ${info.active ? '' : 'planned'}">
+      <div class="bot-card-name">${info.active ? '✓ ' : '◻ '}${name}</div>
+      <div class="bot-card-steps">📍 ${info.steps.join(' → ')}</div>
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>
