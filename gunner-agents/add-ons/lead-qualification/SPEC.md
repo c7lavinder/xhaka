@@ -53,22 +53,35 @@ GHL: New Contact Created (or Opportunity Created)
 
 ## ⚠️ RULES TO VERIFY - Corey please confirm these are accurate
 
-### Lead Scoring (5 Factors)
+### Lead Scoring (v2 — updated per Corey's audit 2026-02-16)
 
 | Factor | Weight | HOT Criteria | WARM Criteria |
 |--------|--------|--------------|---------------|
+| **Motivation** | Highest | Clear pain (inherited, divorce, foreclosure, tired landlord, code violations) | Some or unclear motivation |
 | **Timeline** | High | Wants to sell within 30 days | 30+ days or unclear |
 | **Condition** | Medium | Distressed, needs work, vacant | Some repairs or move-in ready |
 | **Price** | Medium | Will sell below market | Flexible or wants retail |
-| **Motivation** | Highest | Clear pain (inherited, divorce, foreclosure, tired landlord, code violations) | Some or unclear motivation |
-| **Source** | Low | High-intent source (direct mail response, PPC, driving for dollars) | Lower-intent (cold call, Facebook, list) |
+| **Source** | High | High-intent source (PPL, direct mail, PPC, driving for dollars) | Lower-intent (cold call, Facebook, list) |
+| **PPL Bonus** | ×2 | PPL source counts as 2 factors (implied timeline + high-intent) | — |
+| **Conversation History** | Bonus | 3+ notes OR 5+ messages AND motivation/timeline/price keywords present | Not enough history or no keywords |
+| **Multi-Unit Penalty** | -1 | Apartment/multi-unit detected (apt, unit, #, complex, multi-family) | Single family |
 
-**Scoring Logic:**
-- 3+ factors = HOT
-- 0-2 factors = WARM
+**Scoring Logic (v2):**
+- PPL source = 2 factors (source + ppl_bonus)
+- Conversation history with engagement + keywords = +1 bonus factor
+- Multi-unit/apartment = -1 penalty factor
+- 3+ net factors = HOT, less = WARM
 - **No COLD category** — all leads get worked
 
+**Flags (informational, don't change score):**
+- 🏠 **Street View**: Link included for condition check when condition is unknown
+- 🏢 **Multi-unit**: Flagged for unit ambiguity
+- 💰 **Buybox**: Luxury/commercial properties flagged but not auto-rejected
+- 👤 **Fake Name**: Data Hygiene flag noted but doesn't downgrade score
+- 🏗️ **Good Condition**: Property in good shape = less urgency (condition factor not checked)
+
 ✅ VERIFIED by Corey 2026-02-05
+✅ UPDATED per Corey's audit feedback 2026-02-16
 
 ---
 
