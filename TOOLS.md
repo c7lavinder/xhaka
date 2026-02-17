@@ -2,6 +2,13 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
+## Railway (Deployment)
+- **API Token:** 107983f5-06cc-40b3-92d6-833004dee064
+- **Project ID:** f379b683-e34d-4e0e-a91a-f64d0ab499ea
+- **Service ID:** b14d0504-8190-419a-80c5-7dd64dfefcc1 (gunner-engine)
+- **Environment ID:** 8f2d6455-5535-43d0-b198-b1248c949c0f (production)
+- **Access Level:** Full (manage env vars, deployments, logs)
+
 ## Accounts & Access
 
 ### Gunner (getgunner.ai)

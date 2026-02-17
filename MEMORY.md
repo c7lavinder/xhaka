@@ -57,6 +57,27 @@ Wholesaling is the engine, not the end goal:
 - BatchDialer ✅ (connected 2/9)
 - BatchLeads ✅ (connected 2/9)
 
+### Add-On Marketplace Model
+- Every engine = toggleable add-on behind paywall
+- Call Summary Bot = $49/mo (auto-writes conversation notes)
+- Task Manager Bot = $49/mo (centralized task creation + dedup)
+- Each independently toggleable via `ENGINE_<NAME>=active`
+- Agents feed context to Call Summary via `addContext()` API — they don't write their own notes
+- Task Manager deduplicates — all engines route through it instead of `ghl.createTask()` directly
+
+### Full Seller Lead Chain (CRITICAL — always reference LEAD-FLOW.md)
+```
+Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
+  → 1. Data Hygiene (clean/enrich/verify)
+  → 2. Lead IQ (score → tag → assign → move to Warm/Hot → task → email)
+  → 3. New Lead Responder (immediate SMS)
+  → 4. Team member calls
+  → 5. No answer → Working Drip (104-day sequence)
+```
+- Pipeline poller is the ONLY trigger for seller processing
+- Contact poller = observation only (catches all contact types)
+- LEAD-FLOW.md = single source of truth (`gunner-agents/LEAD-FLOW.md`)
+
 ### Gunner Agent Suite (22 agents spec'd)
 
 **Approved & Ready (15 agents):**
@@ -249,6 +270,10 @@ InvestorLift, Mevlo, Facebook
 - **Course focus:** NOT "how to run NAH" but "how to enter any market and get consistent deals"
 - **Multi-tenant from day one** — everything built for Gunner is architected for resale
 - **Zero-config where possible** — bots auto-discover pipelines, stages, team
+- **RentCast (formerly RealtyMole) for property data** — free Developer tier (50 req/mo), API key active, code updated
+- **Phone type detection dropped** — Corey doesn't care, NumVerify killed
+- **Working Leads Drip = contact attempt sequence** — warm/hot leads, stops on first contact (NOT nurture)
+- **Never change Source field** — source IS the lead type (PPL, dialer, sms, etc.)
 
 ---
 
