@@ -59,11 +59,17 @@ Wholesaling is the engine, not the end goal:
 
 ### Add-On Marketplace Model
 - Every engine = toggleable add-on behind paywall
-- Call Summary Bot = $49/mo (auto-writes conversation notes)
-- Task Manager Bot = $49/mo (centralized task creation + dedup)
 - Each independently toggleable via `ENGINE_<NAME>=active`
-- Agents feed context to Call Summary via `addContext()` API — they don't write their own notes
-- Task Manager deduplicates — all engines route through it instead of `ghl.createTask()` directly
+
+### 5 Execution Bots (agents think, bots do)
+1. **Call Summary** → `addContext()` — $49/mo — notes/context
+2. **Task Manager** → `createTask()` — $49/mo — tasks + dedup
+3. **Message Queue** → `queueMessage()` — $49/mo — ALL outbound SMS + email (dedup, send windows, handoff detection)
+4. **Opportunity Conductor** → `movePipeline()`, `assignUser()`, `activateEngine()`, `transferContact()` — $49/mo — CRM state + agent directing
+5. **Appointment Bot** → `scheduleAppointment()` — $49/mo — scheduling + reminders + no-show (DRY RUN)
+
+**Agent directing:** Opportunity Conductor controls which engines own which contact. `isEngineActive(contactId, engine)` = single authority.
+**Rule:** Zero direct GHL mutations from agents. Only `ghl.addTag()` direct. Everything else through execution bots.
 
 ### Full Seller Lead Chain (CRITICAL — always reference LEAD-FLOW.md)
 ```
@@ -104,6 +110,18 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - #14 Commission Bot
 - #15 Cash Flow Bot
 - #18 Email Triage
+
+### Version Map (Corey's definition)
+- **V1** = current state (GHL workflows + gunner-engine live)
+- **V2** = automate 90%+ of business (all bots, full suite, marketplace)
+- **V3** = move away from funnel/pipeline view entirely (new UX)
+
+### Follow-Up Bot V2 ($199/mo bundle, 3 agents)
+1. **Organizer** — bucket mgmt (1mo/4mo/12mo), motivation scoring, delta analysis, tasks, notes
+2. **Messenger** — crafts personalized re-engagement SMS + email, NOT static templates. GHL templates = floor.
+3. **Closer** — converts re-engaged leads back to Sales Process, books appointments (STUB, needs work)
+- DEAD = ONLY legal threats, confirmed sold, unviable property. Low motivation NEVER = dead.
+- GHL follow-up workflows extracted to `gunner-agents/follow-up-workflows/GHL-FOLLOWUP-CONTENT.md`
 
 ### Gunner V1 Fixes Identified
 - TOS/Privacy links dead → Manus fixing
@@ -270,7 +288,14 @@ InvestorLift, Mevlo, Facebook
 - **Course focus:** NOT "how to run NAH" but "how to enter any market and get consistent deals"
 - **Multi-tenant from day one** — everything built for Gunner is architected for resale
 - **Zero-config where possible** — bots auto-discover pipelines, stages, team
-- **RentCast (formerly RealtyMole) for property data** — free Developer tier (50 req/mo), API key active, code updated
+- **BatchLeads for property data** — beds/baths/sqft/type pulled via BatchLeads API (key in TOOLS.md). RentCast dropped.
+- **All agents industry-agnostic** — Playbook dictates output. Swap Playbook = new industry, zero code changes. Locked in ARCHITECTURE.md.
+- **Intelligence Services understand. Bots execute.** — hard line, applies everywhere. Locked in ARCHITECTURE.md.
+- **Outbound Manager** — centralized send layer for ALL outbound SMS/email across every agent. No agent owns its own send queue.
+- **Call Analyzer** — 6 outputs post-call: call type, summary, extracted data, prospect sentiment, LM signals, next step. Playbook-driven.
+- **Gunner Analyzer** — fires independently of CRM workflow. Scores calls, coaches LM, feeds Gunner platform. Playbook-driven (V2 refactors hardcoded wholesale logic).
+- **Ghosted Agent** — fires at day 12 (time-based). Stops LM manual calls (6c), drip (6b) continues full duration.
+- **Lead IQ task = the only task** for a new lead. Checked off on real conversation. Working Drip Agent also turns off at that point.
 - **Phone type detection dropped** — Corey doesn't care, NumVerify killed
 - **Working Leads Drip = contact attempt sequence** — warm/hot leads, stops on first contact (NOT nurture)
 - **Never change Source field** — source IS the lead type (PPL, dialer, sms, etc.)
