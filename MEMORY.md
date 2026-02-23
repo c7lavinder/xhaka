@@ -112,9 +112,20 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - #18 Email Triage
 
 ### Version Map (Corey's definition)
-- **V1** = current state (GHL workflows + gunner-engine live)
-- **V2** = automate 90%+ of business (all bots, full suite, marketplace)
+- **V1** = current state (GHL workflows + gunner-engine live, CRASHED/paused)
+- **V2** = automate 90%+ of business (all bots, full suite, marketplace) — **IN PROGRESS**
 - **V3** = move away from funnel/pipeline view entirely (new UX)
+
+### Gunner V2 Live Status (as of Feb 23, 2026)
+- **URL**: https://gunner-v2-production.up.railway.app
+- **Auditor**: https://gunner-v2-production.up.railway.app/audit
+- **Service ID**: `38646fdb-45aa-4c50-a742-ffb4540d2268`
+- **DRY_RUN**: currently `true` — Corey reviewing before going live
+- **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → Working Drip)
+- **AI model**: gemini-2.0-flash
+- **GHL token**: pit-bfb34a58-a87d-4a4d-835a-5019f257a46c
+- **Known open bug**: SMS has blank property address ("reaching out about .") — PPL leads don't have address in standard GHL fields, need to map it
+- **Next**: Flip DRY_RUN=false to go live once Corey approves preview
 
 ### Follow-Up Bot V2 ($199/mo bundle, 3 agents)
 1. **Organizer** — bucket mgmt (1mo/4mo/12mo), motivation scoring, delta analysis, tasks, notes
@@ -349,6 +360,11 @@ InvestorLift, Mevlo, Facebook
 - **Text > Brain** — if I want to remember something, write it to a file
 - **Save personal/life context too** — Corey's Costa Rica trip was lost because I only saved business stuff
 - **Session transcripts exist** in `~/.openclaw/agents/main/sessions/*.jsonl` — can search them for lost context
+- **GHL v2 API**: Every search endpoint needs `location_id`. Conversation create returns 400 on duplicate — search first. `/conversations/messages` needs `contactId` + `locationId` in body
+- **ContactContext.fields**: Standard contact fields (phone, email, firstName, lastName, source) are top-level CRM properties, NOT in customFields. Always merge them into fields explicitly — otherwise agents hard-stop on "no phone"
+- **Gemini models**: `gemini-1.5-flash` is dead in v1beta. Use `gemini-2.0-flash`
+- **Postgres + TypeScript**: node-postgres returns timestamps as JavaScript Date objects, not strings. Must cast: `(row.timestamp as unknown as Date).toISOString()`
+- **Dry-run mode**: Must bypass BOTH Guard idempotency AND OutboundManager dedup — otherwise contacts are silently skipped even in preview mode
 
 ---
 
