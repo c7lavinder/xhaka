@@ -16,10 +16,13 @@
 - Corey reviewing dry-run output before approving go-live
 
 ## Pending Decision
-- [ ] **Flip DRY_RUN=false** to go live — waiting for Corey approval
-- [ ] Fix blank property address in SMS ("reaching out about .")
+- [ ] **Flip DRY_RUN=false** — LOCKED. Do NOT change without Corey explicitly saying "go live"
+- [x] Fix blank property address in SMS — deployed (e2ac35c)
+- [x] Fix company name "New Again Houses Nashville" → "New Again Houses" — deployed
 - [ ] Working Drip Agent (Step 6b) — DB-backed 104-day sequence (built, not fully tested)
+- [ ] Data Hygiene all 7 outputs — deployed (f55bf5b), needs dry-run review before go-live
 
 ## Do NOT
 - Restart gunner-engine (v1)
-- Change DRY_RUN without Corey's explicit approval
+- Change DRY_RUN under ANY circumstances — Corey must explicitly say "go live" or "flip dry run off"
+- Send any messages to the 4 existing leads (Billy, Rachel, Opal, Charles)

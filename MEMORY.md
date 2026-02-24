@@ -1,6 +1,6 @@
 # MEMORY.md — Long-Term Memory
 
-*Last updated: 2026-02-10*
+*Last updated: 2026-02-23 (evening)*
 
 ---
 
@@ -116,16 +116,18 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - **V2** = automate 90%+ of business (all bots, full suite, marketplace) — **IN PROGRESS**
 - **V3** = move away from funnel/pipeline view entirely (new UX)
 
-### Gunner V2 Live Status (as of Feb 23, 2026)
+### Gunner V2 Live Status (as of Feb 23, 2026 — evening)
 - **URL**: https://gunner-v2-production.up.railway.app
 - **Auditor**: https://gunner-v2-production.up.railway.app/audit
 - **Service ID**: `38646fdb-45aa-4c50-a742-ffb4540d2268`
 - **DRY_RUN**: currently `true` — Corey reviewing before going live
-- **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → Working Drip)
-- **AI model**: gemini-2.0-flash
+- **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → Working Drip) — 8 leads processed clean
+- **AI model**: gemini-2.5-flash (current Railway `AI_MODEL`)
 - **GHL token**: pit-bfb34a58-a87d-4a4d-835a-5019f257a46c
-- **Known open bug**: SMS has blank property address ("reaching out about .") — PPL leads don't have address in standard GHL fields, need to map it
-- **Next**: Flip DRY_RUN=false to go live once Corey approves preview
+- **STAGE_ID_NEW_LEAD**: `a977dd60-4ef9-40e1-9d8a-b62aaa6bb88f` (set in Railway)
+- **Webhook bug fixed**: `opportunity-created` events now route to `handleNewLead`; `isNewLeadStage()` checks both name AND stageId
+- **All bugs resolved**: blank address, company name, UTC timezone, global market fallback, sender phone, dry-run path
+- **Next**: LM Assistant Supervisor build, then go-live decision
 
 ### Follow-Up Bot V2 ($199/mo bundle, 3 agents)
 1. **Organizer** — bucket mgmt (1mo/4mo/12mo), motivation scoring, delta analysis, tasks, notes
@@ -149,6 +151,30 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - Real example saved: `gunner-agents/signals-v2-examples.md` (Robin Phelps case)
 - AI Coach contactId bug fixed (was undefined during action execution)
 - AI Coach preference/learning system discussed — V1 approach: capture before/after edits, build per-user preference profiles, inject at session start
+
+### Phase 1 Bot/Registry — COMPLETE (Feb 23, 2026)
+- **BotRegistry** at `src/registry/index.ts` — 22 bots (8 action + 14 observation) registered and validated at boot
+- **14 observation bots** in `src/bots/observation/`: conversation, response tracker, unread, gap, stage velocity, age, activity, recording, transcript (GHL+AssemblyAI), duration, disposition, attempt counter, double-dial checker, task completion
+- **CRM interface extended**: `getUnreadMessages`, `getCallsForContact`, `getCallRecordingUrl`, `getUser/s`, `getNewLeadContacts`, `CRMCall`, `CRMUser` types
+- **ARCHITECTURE.md completed** — `/Users/wholesaleai/.openclaw/workspace/gunner-agents/ARCHITECTURE.md`
+- **`src/intelligence/call/quality-scorer.ts`** — full implementation: AI scoring + rule-based fallback, A–F grade, 6 factors (Rapport/Discovery/Timeline/Motivation/Objection Handling/Next Step), scorable flag
+
+### Follow-Up Bot — BUILT (Feb 23, 2026 evening)
+- **Organizer**: `src/agents/follow-up/organizer.ts` — polls 1mo/4mo/1yr stages, runs re-engagement analysis, sends personalized SMS, advances buckets
+- **Messenger**: `src/agents/follow-up/messenger.ts` — AI-crafted SMS (5 tones: check-in, time-sensitive, empathetic, rekindle, final-touch)
+- **Closer**: `src/agents/follow-up/closer.ts` — fires on positive reply, moves back to Warm, creates LM task
+- **Poller**: `src/core/follow-up-poller.ts` — runs every 6h (FOLLOW_UP_POLL_INTERVAL_MS)
+- **DB table**: `follow_up_state` — tracks touch count, last/next contact, motivation score, bucket, status
+- **Cadence**: 1mo: 14 days / 2 max → 4mo: 30 days / 4 max → 1yr: 60 days / 6 max → close
+- **Trigger endpoints**: POST /api/audit/followup-trigger, ?force=true, GET /api/audit/followup-state
+- **Wired**: server.ts + response.ts (Closer fires on interested/scheduling intent)
+
+### LM Assistant — NEXT PRIORITY (not yet built)
+- **Location**: `src/supervisors/lm-assistant.ts`
+- **Pattern**: follow `src/supervisors/new-lead.ts` (124 lines)
+- **Also needs**: `src/intelligence/call/disposition.ts`, `sentiment.ts` (stubs), `src/agents/call-coaching.ts`, `src/core/call-poller.ts`
+- **Disposition routing**: 7 outcomes (no-answer/voicemail, no-answer/no-voicemail, conversation-no-apt, apt-set, not-interested, already-sold, wrong-number)
+- **CallCoachingAgent fires on EVERY call** regardless of disposition
 
 ### Gunner Gaps to Verify (Reminder fired 2/10)
 1. Chris Segura linked to account? — YES, visible on leaderboard (36%, 168 calls as of 2/12)
@@ -291,6 +317,16 @@ InvestorLift, Mevlo, Facebook
 
 ---
 
+## Standing Rules
+
+- **Playbooks update with every build** — `playbooks/base/WHOLESALE-RE.md` (industry floor) and `playbooks/nah/PLAYBOOK.md` (NAH ceiling) must stay in sync with the code. Any new agent, config var, template variable, or behavioral rule gets documented in the appropriate playbook in the same commit it's built. No exceptions.
+  - New env var → add to NAH Playbook env var table + base Playbook if industry-level
+  - New agent → document its trigger, behavior, and config in the relevant playbook section
+  - New template variable → add to Drip Template Variables table in base Playbook
+  - New intelligence factor → add to Lead Scoring table in base Playbook
+
+---
+
 ## Key Decisions Made
 
 - **Buyer fields on Contact, Deal fields on Opportunity** — clean separation in GHL
@@ -369,3 +405,33 @@ InvestorLift, Mevlo, Facebook
 ---
 
 *This file is my curated long-term memory. Daily logs go in `memory/YYYY-MM-DD.md`.*
+
+---
+
+## Updates — Feb 24, 2026
+
+### Business Rules (confirmed by Corey in process map review)
+- **Drip trigger**: first text fires within 5 min of LM's double dial — NOT on a timer
+- **Send window**: 9am–6pm in the LEAD's timezone (not NAH timezone)
+- **No-answer/voicemail**: no task created — existing overdue task IS the pressure
+- **Appointment set**: drip CANCELLED (not paused). No AM task. GHL automation handles prep
+- **Real conversation**: Lead IQ task checked off + follow-up text sent from LM's number
+- **Follow-up buckets are NOT linear**: 1mo = selling in ~30 days but blocked; 4mo = selling in 6 months; 12mo = anyone else. LM places directly based on call
+- **Already sold**: always verify UC vs. sold via transcript + county records. If UC → re-engage. Auto-move to Lost only if confirmed sold
+- **Wrong number**: opportunity deleted from GHL
+- **Coaching**: stays in Gunner app only. GHL gets call summary (what/facts/next step)
+- **Follow-up exhausted**: NO tag applied
+- **"Not interested"** label changed to **"Not right now"** everywhere
+
+### Bot Registry — 28 bots (13 action, 15 observation)
+New bots added Feb 24:
+- ContactNotesBot (observation) — reads GHL contact notes
+- InboundMessageBot (observation) — inbound messages since timestamp
+- OpportunityBot (action) — deletes opportunities, dry-run aware
+
+### New Agents Added Feb 24
+- `src/agents/ghosted-agent.ts` — Day 14: moves to Ghosted stage, applies tag, checks off Lead IQ task
+- `src/agents/already-sold-agent.ts` — audits transcript (UC vs sold), county records task, coaching flag, auto-moves to Lost
+
+### Pending Extractions (known violations)
+- `already-sold-agent.ts` `auditTranscript()` → extract to `src/intelligence/call/sold-verifier.ts`
