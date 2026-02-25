@@ -493,26 +493,32 @@ New bots added Feb 24:
 - **Wizard is the end goal** — 10-min deploy into any GHL, generates tenant playbook via industry-specific conversation
 - Do NOT build wizard early — needs all phases represented first
 
-### Still Pending (carry to next session — Feb 24 night)
-- **AM walkthrough-no-offer path** — if AM completes walkthrough without same-day offer, create AM task "run numbers, return with offer within 24h" — playbook has it, not yet in `am-assistant.ts`
-- **CRM-agnostic final pass** — inspect `call-intel.ts:115,143` and `follow-up-router.ts:78`; replace "GHL note" → "CRM note" if inside template literal AI prompt strings
-- **Wire TC/Dispo send medium** — `sendOutbound()` in `tc-packager.ts` and `dispo-packager.ts` when Corey ready
-- **Dispo Pipeline GHL IDs** — Corey to provide Dispo Pipeline ID + first stage ID for `nah.json`
-- **Inject `coachingFlags`** into coaching AI prompt body in `call-coaching.ts`
-- **Export `resetFollowUpState`** from `organizer.ts` + wire bucket re-eval into `response.ts`
-- **Build `/playbook` page** — renders `nah.md` as formatted HTML
-- **Extract `auditTranscript()`** → `src/intelligence/call/sold-verifier.ts`
-- **Disable GHL automation workflows** for walkthroughs (`y0r0nS6fKHeypYaVAAZd`) + offer calls (`JFnptaNnUpgcHT6ptdDI`) before going live
-- **Validate call-intel** on 5–10 real GHL transcripts before go-live
-- **Flip DRY_RUN=false** — ONLY when Corey explicitly says "go live"
+### Key Business Context (Corey corrections — Feb 24 night)
+- **Offer Reply most common = STALL**: "still waiting", "not ready yet", "dealing with something" — reset chase, don't cancel
+- **UC Monitor**: TC work is OUTSIDE GHL. Real fires = seller communication post-contract (anxiety, dispute, confusion, closing questions). NOT inspection findings (flows TO seller). NOT access requests (buyer-side).
+- **V2 completion criteria**: Bots built + EACH ROLE HAS A VIEW. Team won't trust what they can't see. Role view = live activity feed + "needs your attention" section per person.
 
-### Latest Commits (as of Feb 24 night)
-- `22279ea` — hardcoded names removal (Kyle/Esteban/Jessica → dynamic from config)
-- `4f6526c` — visual pages fully synced with code
-- `fc83b98` — apt stage fix (Pending Apt = appointment stage ID `09016bf4`)
-- `2144c62` — LM reschedule task on no-show
-- `ec70936` — offer-rejected: bucket + 1-week task (no Jessica, no renegotiate)
-- `a2c69b9` — cadence extension to 15d/60d/180d (6 touches each bucket)
-- `37d5fb6` — org.html status badges + name cleanup
-- `d7a3161` — ROADMAP.md V3 vision added
-- `7378a87` — KPIs reordered to Phase 4
+### New Agents (Feb 24 late)
+- **Offer Reply Agent** (`src/agents/offer-reply-agent.ts`) — 5 outcomes: accept/counter/stall/reject/unclear
+- **UC Monitor** (`src/agents/uc-monitor.ts`) — 3-tier routing: auto-reply/TC/AM. Every 30 min.
+- **UC Message Classifier** (`src/intelligence/uc/uc-message-classifier.ts`) — concern/dispute/closing-logistics/confusion/general
+- **UC Auto Reply Crafter** (`src/intelligence/uc/uc-auto-reply.ts`)
+- `resetOfferChase()` added to offer-chase.ts
+- `'tc'` added to TeamRole union
+
+### Still Pending (carry forward)
+- **AM walkthrough-no-offer path** — playbook has it, not yet in `am-assistant.ts`
+- **Wire TC/Dispo send medium** — when Corey ready
+- **Dispo Pipeline IDs** — Corey to provide
+- **Flip DRY_RUN=false** — Corey explicit only
+- **Role views** — Phase 1 complete when AM + LM each have a role view
+- **Disable CRM automation workflows** for walkthroughs/offer calls before go-live
+
+### Latest Commits (as of Feb 24 late night)
+- `b3fe4ef` — full visual audit: stall outcome added, all GHL refs in descriptions cleaned
+- `168a1e4` — code audit: hardcoded names/GHL refs removed (KylePrepInput→AMPrepInput, BUCKET_TO_GHL→BUCKET_TO_STAGE, etc.)
+- `6084519` — UC Monitor categories corrected to real wholesale context
+- `8d18552` — UC Monitor 3-tier routing (auto-reply/TC/AM)
+- `1f13fd8` — UC Monitor added to process-map inside Closing Automation phase
+- `fa6ef83` — Offer Reply Agent + UC Monitor redesigned from Corey corrections
+- `971751f` — initial Offer Reply Agent + UC Monitor + stage-aware Response Agent
