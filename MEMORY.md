@@ -507,11 +507,15 @@ New bots added Feb 24:
 - `'tc'` added to TeamRole union
 
 ### Still Pending (carry forward)
-- **AM walkthrough-no-offer path** — playbook has it, not yet in `am-assistant.ts`
+- **AM walkthrough-no-offer path** — ✅ BUILT (commit `2e0178a`) — creates 24h task for AM to run numbers and return with offer
 - **Wire TC/Dispo send medium** — when Corey ready
 - **Dispo Pipeline IDs** — Corey to provide
 - **Flip DRY_RUN=false** — Corey explicit only
-- **Role views** — Phase 1 complete when AM + LM each have a role view
+- **Role views** — ✅ BUILT: `/lm` and `/am` pages live (commits `fe883fb`). Phase 1 Acquisition is COMPLETE.
+- **Auditor Agent Guide** — ✅ BUILT: "🤖 Agent Guide" tab in auditor covers all 22 agents in plain English (commit `7c2e527`)
+- **5 design mockups sent to Corey** — `/design-1.html` through `/design-5.html` for auditor rebuild. Awaiting design choice.
+- **DRY_RUN=true confirmed** on Railway. Working drip `dryRun:false` in metadata is a display artifact — no real messages sending.
+- **"Unknown Lead" fix** — Pipeline API now does batch CRM lookup for missing names; drip logs contactName going forward (commit `cce1e06`)
 - **Disable CRM automation workflows** for walkthroughs/offer calls before go-live
 
 ### Latest Commits (as of Feb 24 late night)
