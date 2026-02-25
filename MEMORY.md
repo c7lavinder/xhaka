@@ -124,7 +124,22 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → Working Drip) — 8 leads processed clean
 - **AI model**: gemini-2.5-flash (current Railway `AI_MODEL`)
 - **GHL token**: pit-bfb34a58-a87d-4a4d-835a-5019f257a46c
-- **STAGE_ID_NEW_LEAD**: `a977dd60-4ef9-40e1-9d8a-b62aaa6bb88f` (set in Railway)
+- **GHL_LOCATION_ID**: `hmD7eWGQJE7EVFpJxj4q`
+- **PIPELINE_SALES_ID**: `tOqQbembKlIoPiXbepP3` (Sales Process)
+- **PIPELINE_FOLLOW_UP_ID**: `grDjCVlwUKx4ShCiOqGi`
+- **Stage IDs (confirmed from Railway)**:
+  - `newLead` → `a977dd60-4ef9-40e1-9d8a-b62aaa6bb88f`
+  - `warm` → `34b88324-9bb1-4110-8531-d4271c6c1567`
+  - `hot` → `84c5583f-7b6b-494a-83b2-df9e54db3c8c`
+  - `appointment` → `09016bf4-c573-4bf5-941b-2a2fb146a9af` ("Pending Apt" in GHL)
+  - `offer` → `4ab2cfdb-4848-4e1a-b2cc-5e8fd5de0789`
+  - `underContract` → `d71ec692-9af8-44cc-bd58-5831c130ac8b`
+  - `purchased` → `23c35caa-1846-403e-86c7-a1a2ab748e58`
+  - `ghosted` → `dc8a2451-8349-4c84-8e98-2dffccd5ca9b`
+  - `notAFit` / `lost` → `b8590254-6256-4a48-831e-67d808f5125f` / `b157bae8-5e6a-4f45-94c4-02d1410a5761`
+  - `oneMonthFU` → `0f7ddf92-ff79-44cb-97e8-61bf9b8db8fe`
+  - `fourMonthFU` → `e0fbea34-7bf8-48ad-9a47-fed2dfd60b06`
+  - `oneYearFU` → `733adecd-0d2f-4312-a92d-8bbc02e02dc5`
 - **Webhook bug fixed**: `opportunity-created` events now route to `handleNewLead`; `isNewLeadStage()` checks both name AND stageId
 - **All bugs resolved**: blank address, company name, UTC timezone, global market fallback, sender phone, dry-run path
 - **Next**: LM Assistant Supervisor build, then go-live decision
@@ -435,3 +450,69 @@ New bots added Feb 24:
 
 ### Pending Extractions (known violations)
 - `already-sold-agent.ts` `auditTranscript()` → extract to `src/intelligence/call/sold-verifier.ts`
+
+---
+
+## Updates — Feb 24, 2026 (evening)
+
+### Gunner V2 Call Intelligence Architecture (LOCKED)
+
+**Unified `call-intel.ts`** — one AI call per transcript (replaces 3 separate classifiers)
+- Returns: `disposition`, `confidence`, `followUpBucket?`, `bucketReason?`, `motivationScore`, `sellerSignals[]`, `objections[]`, `appointmentDetails?`, `coachingFlags[]`, `callSummary`, `source`, `callMode`
+- `followUpBucket` returned for BOTH `not-right-now` AND `conversation-no-apt`
+- Used by: `lm-assistant.ts`, `am-assistant.ts`, `callback-capture.ts`
+- `callback-requested` disposition removed — folded into `conversation-no-apt`
+- Dead = ONLY confirmed sold, legal threat, or condemned. Low motivation = NEVER dead.
+
+**Knowledge System**
+- `config/knowledge/industry.md` — universal wholesale RE rules (no deploy needed to edit)
+- `config/playbooks/nah.md` — NAH-specific rules (no deploy needed to edit)
+- `src/intelligence/call/knowledge-loader.ts` — assembles system prompt, cached
+
+### New Agents / Supervisors (Feb 24 evening)
+- `src/supervisors/stage-change.ts` — routes GHL `stage-changed` events (UC/Purchased/Lost/Ghosted/Appointment)
+- `src/agents/callback-capture.ts` — inbound call handler, mirrors LM Assistant
+- `src/agents/contract-bot.ts` — UC trigger: AI SMS + Kyle task + 24h escalation
+- `src/agents/post-close.ts` — 3-touch DB sequence (24h/48h/7d) via `sequence_state` table
+- `src/core/inbound-call-poller.ts` — 3min poll for completed inbound calls
+
+### Follow-Up Cadence (all buckets → 6 touches)
+- `1mo`: 15-day intervals × 6 (Day 15/30/45/60/75/90 — 90 days total) → then graduates to 4mo
+- `4mo`: 60-day intervals × 6 (Day 60/120/180/240/300/360 — 12 months total) → then graduates to 1yr
+- `1yr`: 180-day intervals × 6 (Month 6/12/18/24/30/36 — 36 months total) → closes out
+- Bucket re-eval on any non-positive seller response (pending implementation in `response.ts`)
+
+### Latest Commit (Feb 24 evening)
+- `260c0de` — "fix: conversation-no-apt cancels drip + AI bucket placement"
+- Cadence change saved to organizer.ts (commit pending at session end)
+
+### Gunner Build Roadmap (locked Feb 25)
+- Full roadmap at `gunner-agents/ROADMAP.md`
+- Phase 1: Finish Acquisition (current) → Phase 2: Dispo → Phase 3: Lead Gen → Phase 4: KPIs → Phase 5: WIZARD
+- KPIs are Phase 4 (not 2) — need data from Dispo + Lead Gen to be complete
+- **Wizard is the end goal** — 10-min deploy into any GHL, generates tenant playbook via industry-specific conversation
+- Do NOT build wizard early — needs all phases represented first
+
+### Still Pending (carry to next session — Feb 24 night)
+- **AM walkthrough-no-offer path** — if AM completes walkthrough without same-day offer, create AM task "run numbers, return with offer within 24h" — playbook has it, not yet in `am-assistant.ts`
+- **CRM-agnostic final pass** — inspect `call-intel.ts:115,143` and `follow-up-router.ts:78`; replace "GHL note" → "CRM note" if inside template literal AI prompt strings
+- **Wire TC/Dispo send medium** — `sendOutbound()` in `tc-packager.ts` and `dispo-packager.ts` when Corey ready
+- **Dispo Pipeline GHL IDs** — Corey to provide Dispo Pipeline ID + first stage ID for `nah.json`
+- **Inject `coachingFlags`** into coaching AI prompt body in `call-coaching.ts`
+- **Export `resetFollowUpState`** from `organizer.ts` + wire bucket re-eval into `response.ts`
+- **Build `/playbook` page** — renders `nah.md` as formatted HTML
+- **Extract `auditTranscript()`** → `src/intelligence/call/sold-verifier.ts`
+- **Disable GHL automation workflows** for walkthroughs (`y0r0nS6fKHeypYaVAAZd`) + offer calls (`JFnptaNnUpgcHT6ptdDI`) before going live
+- **Validate call-intel** on 5–10 real GHL transcripts before go-live
+- **Flip DRY_RUN=false** — ONLY when Corey explicitly says "go live"
+
+### Latest Commits (as of Feb 24 night)
+- `22279ea` — hardcoded names removal (Kyle/Esteban/Jessica → dynamic from config)
+- `4f6526c` — visual pages fully synced with code
+- `fc83b98` — apt stage fix (Pending Apt = appointment stage ID `09016bf4`)
+- `2144c62` — LM reschedule task on no-show
+- `ec70936` — offer-rejected: bucket + 1-week task (no Jessica, no renegotiate)
+- `a2c69b9` — cadence extension to 15d/60d/180d (6 touches each bucket)
+- `37d5fb6` — org.html status badges + name cleanup
+- `d7a3161` — ROADMAP.md V3 vision added
+- `7378a87` — KPIs reordered to Phase 4
