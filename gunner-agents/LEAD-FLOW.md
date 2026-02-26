@@ -47,7 +47,7 @@ Last updated: 2026-02-17
 ## Stage 4: WORKING THE LEAD
 **Trigger:** Unanswered outbound call OR short/dismissive brush-off reply
 
-→ **Working Drip** activates:
+→ **New Lead Drip** activates:
   - 104-day SMS + email follow-up sequence
   - Source-branched first 2 days, then unified
   - Reply classifier: REAL (stop) / BRUSHOFF (continue) / DNC (stop + flag)
@@ -85,7 +85,7 @@ Last updated: 2026-02-17
 | 1 | Data Hygiene | ✅ ACTIVE |
 | 2 | Lead IQ | ✅ ACTIVE |
 | 3 | New Lead Responder | ✅ ACTIVE (chains off Lead IQ) |
-| 4 | Working Drip | ✅ ACTIVE |
+| 4 | New Lead Drip | ✅ ACTIVE |
 | 5 | Follow-Up Manager | 🔒 DRY-RUN |
 | 6 | Pipeline Signals | 🔒 DRY-RUN |
 | 7 | Nurture | 🔒 DRY-RUN |
@@ -106,5 +106,5 @@ Last updated: 2026-02-17
 - Data Hygiene ONLY on new leads (no retroactive scans)
 - SMS tone = casual, like a real person texting
 - No timing assumptions ("just got your info") — leads may enter CRM hours after engagement
-- Working Drip = contact attempt sequence, NOT nurture
+- New Lead Drip = contact attempt sequence, NOT nurture
 - All bots DRY-RUN until Corey says go live

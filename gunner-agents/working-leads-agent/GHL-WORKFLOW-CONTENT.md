@@ -283,8 +283,8 @@ After Day 2 and Trust Building Email, branches merge via "Go To" actions that ro
 
 ---
 
-### Working Drip SMS Day 4
-**Action Name:** Working Drip SMS Day 4  
+### New Lead Drip SMS Day 4
+**Action Name:** New Lead Drip SMS Day 4  
 **Message:**
 ```
 Hi {{contact.first_name}}! {{user.first_name}} here :) got the info about your property at {{contact.company_name}}, but I had a few questions before I pull together your cash offer. Is texting here easier than calling?
@@ -298,8 +298,8 @@ Hi {{contact.first_name}}! {{user.first_name}} here :) got the info about your p
 
 ---
 
-### Working Drip SMS Day 5
-**Action Name:** Working Drip SMS Day 5  
+### New Lead Drip SMS Day 5
+**Action Name:** New Lead Drip SMS Day 5  
 **Message:**
 ```
 Hi {{contact.first_name}}, I've been trying to reach you with an offer for your property at {{contact.company_name}}! Texting you in case it is more convenient. Is it ok to text or would you rather I call you?
@@ -313,8 +313,8 @@ Hi {{contact.first_name}}, I've been trying to reach you with an offer for your 
 
 ---
 
-### Working Drip SMS Day 6
-**Action Name:** Working Drip SMS Day 6  
+### New Lead Drip SMS Day 6
+**Action Name:** New Lead Drip SMS Day 6  
 **Message:**
 ```
 Hi {{contact.first_name}}! I am so ready for a vacation! How about you? I just wanted to send you a quick message to follow up with you about {{contact.company_name}}. Are you still looking to sell?
@@ -335,8 +335,8 @@ Hi {{contact.first_name}}! I am so ready for a vacation! How about you? I just w
 
 ---
 
-### Working Drip SMS Day 7
-**Action Name:** Working Drip SMS Day 7  
+### New Lead Drip SMS Day 7
+**Action Name:** New Lead Drip SMS Day 7  
 **Message:**
 ```
 Hey there {{contact.first_name}}. Were you still interested in selling your property? Not sure when a good time to chat is but my schedule is super flexible tomorrow — even if it is before or after normal business hours! When do you have time for a quick call
@@ -350,8 +350,8 @@ Hey there {{contact.first_name}}. Were you still interested in selling your prop
 
 ---
 
-### Working Drip SMS Day 8
-**Action Name:** Working Drip SMS Day 8  
+### New Lead Drip SMS Day 8
+**Action Name:** New Lead Drip SMS Day 8  
 **Message:**
 ```
 Hi {{contact.first_name}}, Did you finally sell your property at {{contact.company_name}}? If not we can buy. Let me know.
@@ -365,8 +365,8 @@ Hi {{contact.first_name}}, Did you finally sell your property at {{contact.compa
 
 ---
 
-### Working Drip SMS Day 9
-**Action Name:** Working Drip SMS Day 9  
+### New Lead Drip SMS Day 9
+**Action Name:** New Lead Drip SMS Day 9  
 **Message:**
 ```
 {{contact.first_name}}, here just taking a shot again. I've been trying to reach you for months about buying {{contact.company_name}}, you probably aren't interested?
@@ -380,8 +380,8 @@ Hi {{contact.first_name}}, Did you finally sell your property at {{contact.compa
 
 ---
 
-### Working Drip SMS Day 10
-**Action Name:** Working Drip SMS Day 10  
+### New Lead Drip SMS Day 10
+**Action Name:** New Lead Drip SMS Day 10  
 **Message:**
 ```
 Hey {{contact.first_name}}, I just realized you're the only client who I haven't been able to set up with a cash, as is offer. When is a good time for me to give you a call, I only need a few minutes to put it together? - {{user.first_name}}
@@ -395,8 +395,8 @@ Hey {{contact.first_name}}, I just realized you're the only client who I haven't
 
 ---
 
-### Working Drip SMS Day 11
-**Action Name:** Working Drip SMS Day 11  
+### New Lead Drip SMS Day 11
+**Action Name:** New Lead Drip SMS Day 11  
 **Message:**
 ```
 Hey... Sorry for bothering you, it's {{user.first_name}} here, but you probably don't want to sell any of your properties...
@@ -410,8 +410,8 @@ Hey... Sorry for bothering you, it's {{user.first_name}} here, but you probably 
 
 ---
 
-### Working Drip SMS Day 12
-**Action Name:** Working Drip SMS Day 12  
+### New Lead Drip SMS Day 12
+**Action Name:** New Lead Drip SMS Day 12  
 **Message:**
 ```
 Hey it's {{user.first_name}} again being annoying if you don't want to sell {{contact.company_name}}, please just let me know - Thanks
@@ -425,8 +425,8 @@ Hey it's {{user.first_name}} again being annoying if you don't want to sell {{co
 
 ---
 
-### Working Drip SMS Day 13
-**Action Name:** Working Drip SMS Day 13  
+### New Lead Drip SMS Day 13
+**Action Name:** New Lead Drip SMS Day 13  
 **Message:**
 ```
 Hey {{contact.first_name}}. Are you currently looking to offload your property? If so, you can text or call me. We're here to make it very easy! - {{user.first_name}}.
@@ -449,8 +449,8 @@ Hey {{contact.first_name}}. Are you currently looking to offload your property? 
 
 ---
 
-### Working Drip SMS Day 14
-**Action Name:** Working Drip SMS Day 14  
+### New Lead Drip SMS Day 14
+**Action Name:** New Lead Drip SMS Day 14  
 **Message:**
 ```
 At this point I think I have lost you... Typically this means you aren't interested in selling {{contact.company_name}}, let me know. - Thanks, {{user.first_name}}
@@ -463,7 +463,7 @@ At this point I think I have lost you... Typically this means you aren't interes
 ## EXTENDED DRIP (Day 14+)
 
 The workflow continues beyond Day 14 with additional steps:
-- Working Drip SMS Day 24
+- New Lead Drip SMS Day 24
 - Close File Email
 - Additional wait and SMS steps
 

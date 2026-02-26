@@ -124,7 +124,7 @@ Everything we've built or spec'd — checked against the definition.
 | PriceAnalyzerBot | ARV + repair + ask → price factor |
 | ReEngagementBot | Dormant contact → re-engagement strategy |
 | ObjectionHandlerBot | Objection text → suggested response |
-| WorkingDripBot | Contact ID + action → drip state change |
+| NewLeadDripBot | Contact ID + action → drip state change |
 | CampaignEnrollmentBot | Contact ID + campaign → enrolled/removed |
 | SmartListBot | Contact ID + list → added/removed |
 | DNCBot | Contact ID → quarantined + sequences stopped |
@@ -711,7 +711,7 @@ const EVENT_ROUTER: Record<StandardEventType, AgentHandler> = {
   'timer.ghosted_threshold':            GhostedAgent,
   'timer.stage_stale':                  StaleLeadAgent,
   'timer.followup_due':                 FollowUpAgent,
-  'timer.drip_step_due':                WorkingDripAgent,
+  'timer.drip_step_due':                NewLeadDripAgent,
   'timer.ppl_window_closing':           PPLRefundAgent,
   'timer.task_overdue_check':           AccountabilityAgent,
   'timer.kpi_daily':                    KPIEntryAgent,
@@ -782,7 +782,7 @@ const EVENT_ROUTER: Record<StandardEventType, AgentHandler> = {
 | PipelineBot | opportunityId, stageName | stage moved |
 | FieldWriterBot | contactId, fields | fields updated |
 | CoreFieldWriterBot | contactId, coreFields | core fields updated |
-| WorkingDripBot | contactId, action | activated/paused/stopped |
+| NewLeadDripBot | contactId, action | activated/paused/stopped |
 | AppointmentBot | contactId, slot | booked/cancelled/rescheduled |
 | CampaignEnrollmentBot | contactId, campaignId | enrolled/removed |
 | SmartListBot | contactId, listId | added/removed |
@@ -797,7 +797,7 @@ const EVENT_ROUTER: Record<StandardEventType, AgentHandler> = {
 
 ### PipelineEntryAgent
 Trigger: `opportunity.created`, `contact.created`, `form.submitted`
-Bots: ContextBot, DataHygieneBot (→ DNCChecker, DuplicateDetector, ConditionBot, TimezoneResolver, FieldWriter, CoreFieldWriter, TagBot, NoteBot), LeadScorerBot, TaskBot, PipelineBot, MessageCrafterBot, SMSBot, WorkingDripBot, NoteBot
+Bots: ContextBot, DataHygieneBot (→ DNCChecker, DuplicateDetector, ConditionBot, TimezoneResolver, FieldWriter, CoreFieldWriter, TagBot, NoteBot), LeadScorerBot, TaskBot, PipelineBot, MessageCrafterBot, SMSBot, NewLeadDripBot, NoteBot
 
 ### LMAssistantAgent
 Trigger: `call.outbound_completed`, `call.voicemail_outbound_detected`
@@ -805,11 +805,11 @@ Bots: CallRecordingBot, CallTranscriptBot, CallDurationBot, CallDispositionBot, 
 
 ### ResponseAgent
 Trigger: `message.inbound`, `message.unread_threshold`
-Bots: ConversationThreadBot, ResponseTrackerBot, UnreadMessageBot, SentimentBot, MotivationAnalyzerBot, CommunicationGapBot, WorkingDripBot (pause), TaskBot, NoteBot, PipelineBot
+Bots: ConversationThreadBot, ResponseTrackerBot, UnreadMessageBot, SentimentBot, MotivationAnalyzerBot, CommunicationGapBot, NewLeadDripBot (pause), TaskBot, NoteBot, PipelineBot
 
 ### CallbackCaptureAgent
 Trigger: `call.inbound_completed`
-Bots: CallTranscriptBot, CallDurationBot, CallDispositionBot, MotivationAnalyzerBot, WorkingDripBot, NoteBot, TaskBot
+Bots: CallTranscriptBot, CallDurationBot, CallDispositionBot, MotivationAnalyzerBot, NewLeadDripBot, NoteBot, TaskBot
 
 ### VoicemailAgent
 Trigger: `call.voicemail_inbound`
@@ -817,15 +817,15 @@ Bots: VoicemailBot, SentimentBot, MotivationAnalyzerBot, NoteBot, TaskBot
 
 ### AppointmentAgent
 Trigger: `appointment.*`
-Bots: AppointmentStatusBot, ContactActivityBot, MessageCrafterBot, SMSBot, TaskBot, NoteBot, WorkingDripBot, PipelineBot
+Bots: AppointmentStatusBot, ContactActivityBot, MessageCrafterBot, SMSBot, TaskBot, NoteBot, NewLeadDripBot, PipelineBot
 
 ### GhostedAgent
 Trigger: `timer.ghosted_threshold`
-Bots: CommunicationGapBot, ContactActivityBot, PipelineHistoryBot, WorkingDripBot, TaskBot, NoteBot
+Bots: CommunicationGapBot, ContactActivityBot, PipelineHistoryBot, NewLeadDripBot, TaskBot, NoteBot
 
 ### StaleLeadAgent
 Trigger: `opportunity.stale`, `timer.stage_stale`
-Bots: StageVelocityBot, ContactActivityBot, CommunicationGapBot, LeadAgeBot, MotivationAnalyzerBot, WorkingDripBot, TaskBot, NoteBot
+Bots: StageVelocityBot, ContactActivityBot, CommunicationGapBot, LeadAgeBot, MotivationAnalyzerBot, NewLeadDripBot, TaskBot, NoteBot
 
 ### AccountabilityAgent
 Trigger: `task.overdue`, `timer.task_overdue_check`
@@ -837,15 +837,15 @@ Bots: StageVelocityBot, ContactActivityBot, MotivationAnalyzerBot, ReEngagementB
 
 ### PostCloseAgent
 Trigger: `opportunity.won`
-Bots: ContactActivityBot, MessageCrafterBot, SMSBot, EmailBot, ReviewRequestBot, NoteBot, WorkingDripBot (stop), TagBot
+Bots: ContactActivityBot, MessageCrafterBot, SMSBot, EmailBot, ReviewRequestBot, NoteBot, NewLeadDripBot (stop), TagBot
 
 ### LeadLifecycleAgent
 Trigger: `opportunity.lost`
-Bots: DeadLeadClassifierBot, ContactActivityBot, PipelineHistoryBot, MotivationAnalyzerBot, WorkingDripBot, PipelineBot, NoteBot, TagBot
+Bots: DeadLeadClassifierBot, ContactActivityBot, PipelineHistoryBot, MotivationAnalyzerBot, NewLeadDripBot, PipelineBot, NoteBot, TagBot
 
 ### ComplianceAgent
 Trigger: `contact.opted_out`
-Bots: OptOutTrackerBot, WorkingDripBot (stop), CampaignEnrollmentBot (remove all), TagBot, NoteBot
+Bots: OptOutTrackerBot, NewLeadDripBot (stop), CampaignEnrollmentBot (remove all), TagBot, NoteBot
 
 ### DataQualityAgent
 Trigger: `contact.duplicate_detected`
@@ -1496,13 +1496,13 @@ class PredictionEngine {
   // Called by agents at runtime — "should we contact this person right now?"
   async shouldContactNow(contactId: string): Promise<{ should: boolean; reason: string; betterTime?: string }>
 
-  // Called by WorkingDripBot — optimal timing for next step
+  // Called by NewLeadDripBot — optimal timing for next step
   async predictOptimalSendTime(contactId: string, stepNumber: number): Promise<Date>
 }
 ```
 
 **Prediction feeds directly into bot decisions at runtime.**
-WorkingDripBot asks PredictionEngine for optimal send time before scheduling.
+NewLeadDripBot asks PredictionEngine for optimal send time before scheduling.
 ResponseAgent checks lead prediction before deciding urgency of LM alert.
 
 ---
@@ -1718,7 +1718,7 @@ class IntelligenceService {
 3. After coaching delivered → logs coaching points to intelligence_log
 ```
 
-**WorkingDripBot**
+**NewLeadDripBot**
 ```
 1. Reads learning.timing.optimalDripIntervals → uses learned step timing
 2. After each step → logs step number + response outcome
@@ -1776,7 +1776,7 @@ What Corey sees:
 | LeadScorerBot | Weights recalibrated vs close rates | Predicted tier vs outcome correlation | New factors researched | Full contact story informs score | Scoring drift detected | Resolves factor conflicts | Overrides feed training | Predicts close probability |
 | CallScorerBot | Coaching vs score improvement tracked | Accuracy vs human-graded calls | Model upgrades benchmarked | Rep history personalizes focus | Rep decline trend detected | Weights coaching vs data | Reps flag wrong scores | Rep burnout risk forecast |
 | CoachingBot | Which feedback changed behavior | Effectiveness vs score change | New frameworks researched | Rep profile informs coaching | Coaching gap pattern detected | Surfaces feedback conflicts | Managers confirm/override | Predicts rep trajectory |
-| WorkingDripBot | Optimal step timing from patterns | Step response rate benchmarks | Interval variants A/B tested | Prior engagement informs timing | Dead drips flagged | Timing vs prediction resolved | Team flags bad timing | Predicts optimal send time |
+| NewLeadDripBot | Optimal step timing from patterns | Step response rate benchmarks | Interval variants A/B tested | Prior engagement informs timing | Dead drips flagged | Timing vs prediction resolved | Team flags bad timing | Predicts optimal send time |
 | SentimentBot | Sentiment patterns per source | Accuracy vs labeled samples | Model drift detection | Tone shifts vs history | Tone pattern anomalies | Weights vs other signals | Corrections feed training | Predicts relationship trajectory |
 | ConditionBot | Grade vs actual repair costs | Grade vs human-appraised correlation | New vision models benchmarked | Prior grades for same address | Coverage drop detected | Grade vs price factor resolved | Appraisers override grade | Predicts ARV range |
 | MotivationAnalyzerBot | Signals vs actual conversion | Prediction accuracy vs outcomes | New signal patterns researched | Prior stated motivations surfaced | Motivation shift detected | Resolves with sentiment | Team flags wrong reads | Predicts decision timeline |

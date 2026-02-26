@@ -58,11 +58,11 @@ def assign_lead(score, available_lms):
 
 If lead doesn't answer first call:
 1. Log call attempt in GHL
-2. Trigger "Working Drip" workflow
-3. Working Drip sends SMS/email sequence
+2. Trigger "New Lead Drip" workflow
+3. New Lead Drip sends SMS/email sequence
 4. Drip stops when lead replies
 
-**Workflow Location:** CRM Drips folder → "Working Drip"
+**Workflow Location:** CRM Drips folder → "New Lead Drip"
 
 ## Weekend Handling
 

@@ -12,13 +12,13 @@
 - **Auditor**: https://gunner-v2-production.up.railway.app/audit
 - **Hub**: https://gunner-v2-production.up.railway.app/hub
 - **DRY_RUN=false** — LIVE. Data Hygiene → Lead IQ → Initial Outreach → Tasks → Stage moves all writing to GHL
-- **DRIP_ENABLED=false** — Working Drip is HELD. Not activating on new leads yet.
+- **NEW_LEAD_DRIP_ENABLED=false** — New Lead Drip is HELD. Not activating on new leads yet.
 - Manually moved leads today (Omer, Jason, Carla, Moses, Berlinda) — NOT GHL workflows. Safe.
 
 ## Pending Decision
-- [ ] **Flip DRIP_ENABLED=true** — when Corey is ready to activate working drip on new leads
-- [ ] Working Drip Agent — built, held pending Corey approval
+- [ ] **Flip NEW_LEAD_DRIP_ENABLED=true** — when Corey is ready to activate new lead drip on new leads
+- [ ] New Lead Drip Agent — built, held pending Corey approval
 
 ## Do NOT
 - Restart gunner-engine (v1)
-- Change DRIP_ENABLED without Corey explicitly saying to turn on the drip
+- Change NEW_LEAD_DRIP_ENABLED without Corey explicitly saying to turn on the drip

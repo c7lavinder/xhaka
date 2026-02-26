@@ -104,7 +104,7 @@ GHL: New Contact Created (or Opportunity Created)
 
 **Drip Logic:**
 - Drip ONLY triggers if lead doesn't answer first call
-- Workflow: "Working Drip" in CRM Drips folder
+- Workflow: "New Lead Drip" in CRM Drips folder
 - Drip = email/SMS sequence
 - Drip STOPS if lead replies
 
@@ -196,7 +196,7 @@ GHL: New Contact Created (or Opportunity Created)
       "scoreField": "lead_score",
       "factorsField": "score_factors",
       "enrichmentField": "property_data",
-      "workingDripWorkflow": "working_drip_id"
+      "newLeadDripWorkflow": "new_lead_drip_id"
     }
   }
 }
@@ -206,7 +206,7 @@ Every customer can customize these values. NAH's values are the defaults.
 
 **GHL Reference Workflows (NAH):**
 - New lead trigger: "New Lead - Entry Point" in Acquisitions folder
-- Working drip: "Working Drip" in CRM Drips folder
+- New Lead Drip: "New Lead Drip" in CRM Drips folder
 - SOPs: Dashboard (bottom of page)
 
 ---

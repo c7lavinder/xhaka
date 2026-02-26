@@ -27,16 +27,16 @@ Master routing workflow:
 - Catches leads idle in Lead Gen
 - Routes by pipeline stage (4 Month, 1 Year, Ghosted, Trash, Sold, etc.)
 - Adds tags, assigns users, manages wait periods
-- Removes from "Working Drip" on terminal stages
+- Removes from "New Lead Drip" on terminal stages
 
 ### Follow Up Automation (4,435 enrolled, 4,413 active)
 SMS drip engine for stale opportunities:
 - Triggers on stale 1-year and general stale opportunities
 - Assigns, waits, conditions by stage
 
-## Key Finding: There IS No Single "Working Drip" Workflow
+## Key Finding: There IS No Single "New Lead Drip" Workflow
 
-The "Working Drip" is a **manual process** by Daniel, guided by SOPs:
+The "New Lead Drip" is a **manual process** by Daniel, guided by SOPs:
 
 ### LM Daily SOPs (from KPI Dashboard)
 **Qualifying new leads:**

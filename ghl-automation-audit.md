@@ -261,9 +261,9 @@ AI-powered calling automations (newer, Nov 2025).
 |--------|-----------|---------|
 | **4 Month Follow Up** | Stage = 4 Month | Add Tag → Add to #1 4 Month Sheet → Months Wait → Loop |
 | **1 Year Follow Up** | Stage = 1 Year | Add Tag → Add to #2 1 Year Sheet → Months Wait → Loop |
-| **Ghosted** | Stage = Ghosted | Add Tag → Add to #3 Ghosted Sheet → Remove from Working Drip |
-| **Trash** | Stage = Trash | Add Tag → Assign User → Remove from Working Drip → Lost Opportunity |
-| **Not Closed** | Stage = Not Closed | Add Tag → Assign User → Remove from Working Drip → Lost Opportunity |
+| **Ghosted** | Stage = Ghosted | Add Tag → Add to #3 Ghosted Sheet → Remove from New Lead Drip |
+| **Trash** | Stage = Trash | Add Tag → Assign User → Remove from New Lead Drip → Lost Opportunity |
+| **Not Closed** | Stage = Not Closed | Add Tag → Assign User → Remove from New Lead Drip → Lost Opportunity |
 | **SOLD** | Stage = SOLD | Add Tag → Assign User → Abandon Opportunity |
 | **Purchased** | Stage = Purchased | Add Tag → Won Opportunity |
 | **1 Month** | Stage = 1 Month | Add Tag → Add to #4 1 Month Sheet → Months Wait → Loop |
@@ -272,7 +272,7 @@ AI-powered calling automations (newer, Nov 2025).
 **Key Actions Used:**
 - **Add Tag** — Tag contacts by follow-up cadence
 - **Assign to user** — Route to appropriate team member
-- **Remove from Working Drip** — Stop active campaigns
+- **Remove from New Lead Drip** — Stop active campaigns
 - **Add to Follow Up** — Enroll in follow-up workflow
 - **Add to Sheet** — Log to tracking sheets (#1 4 Month, #2 1 Year, #3 Ghosted, #4 1 Month)
 - **Months Wait** — Timed delays before re-checking

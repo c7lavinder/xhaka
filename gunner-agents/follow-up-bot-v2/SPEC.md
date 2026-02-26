@@ -27,17 +27,17 @@ Replaces GHL's 3 follow-up workflows with a unified, intelligent follow-up syste
 
 | Sales Process Stage | → Action |
 |---------------------|----------|
-| 1 Month Follow Up | Tag "1 month" → remove from Working Drip → move to Follow Up pipeline 1 Month stage |
-| 4 Month Follow Up | Tag "4 month" → remove from Working Drip → assign user → move to Follow Up pipeline 4 Month stage |
-| 1 Year Follow Up | Tag "1 year" → remove from Working Drip → assign user → move to Follow Up pipeline 1 Year stage |
-| Ghosted Lead | Tag "ghosted" → remove from Working Drip → mark lost → move to Follow Up pipeline |
-| DO NOT WANT | Tag "dnw" → remove from Working Drip → mark lost → abandon opportunity |
-| Agreement not closed | Tag "not closed" → remove from Working Drip → move to Follow Up pipeline |
-| SOLD | Tag "sold" → remove from Working Drip → mark won |
-| Purchased | Tag "purchased" → remove from Working Drip → move to Follow Up pipeline |
+| 1 Month Follow Up | Tag "1 month" → remove from New Lead Drip → move to Follow Up pipeline 1 Month stage |
+| 4 Month Follow Up | Tag "4 month" → remove from New Lead Drip → assign user → move to Follow Up pipeline 4 Month stage |
+| 1 Year Follow Up | Tag "1 year" → remove from New Lead Drip → assign user → move to Follow Up pipeline 1 Year stage |
+| Ghosted Lead | Tag "ghosted" → remove from New Lead Drip → mark lost → move to Follow Up pipeline |
+| DO NOT WANT | Tag "dnw" → remove from New Lead Drip → mark lost → abandon opportunity |
+| Agreement not closed | Tag "not closed" → remove from New Lead Drip → move to Follow Up pipeline |
+| SOLD | Tag "sold" → remove from New Lead Drip → mark won |
+| Purchased | Tag "purchased" → remove from New Lead Drip → move to Follow Up pipeline |
 
 **Also does:**
-- Removes from Working Drip (stops active outreach)
+- Removes from New Lead Drip (stops active outreach)
 - Logs to Google Sheets equivalent (KPI tracking)
 - Creates/moves Follow Up pipeline opportunity
 
@@ -116,7 +116,7 @@ Replaces GHL's 3 follow-up workflows with a unified, intelligent follow-up syste
 
 ```
 Lead falls out of active sales
-  → Entry Router (bucket assignment, tag, remove from Working Drip)
+  → Entry Router (bucket assignment, tag, remove from New Lead Drip)
   → Organizer (motivation score, delta, tasks)
   → Messenger (SMS drip per bucket schedule)
   → Reply comes in

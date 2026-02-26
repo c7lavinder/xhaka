@@ -218,7 +218,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 #### 4 Month Follow Up Branch:
 1. **Add Tag** — tags the contact
 2. **Assign to User** — assigns contact
-3. **Remove from Working Drip** — removes from active drip
+3. **Remove from New Lead Drip** — removes from active drip
 4. **Months Wait** — 170 (displayed on node)
 5. **#1 Add to 4 Month Sheet** — Google Sheets action
 6. **Add to Follow Up** — moves opportunity to Follow Up pipeline
@@ -229,7 +229,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 #### 1 Year Follow Up Branch:
 1. **Add Tag**
 2. **Assign to User**
-3. **Remove from Working Drip**
+3. **Remove from New Lead Drip**
 4. **Months Wait** — 121
 5. **#2 Add to 1 Year Sheet** — Google Sheets action
 6. **Add to Follow Up** — moves to Follow Up pipeline
@@ -239,7 +239,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 
 #### Ghosted Branch:
 1. **Add Tag**
-2. **Remove from Working Drip**
+2. **Remove from New Lead Drip**
 3. **Months Wait** — 99
 4. **#3 Add to Ghosted Sheet** — Google Sheets action
 5. **Lost Opportunity** — marks opportunity as lost
@@ -250,7 +250,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 
 #### Trash (DO NOT WANT) Branch:
 1. **Add Tag**
-2. **Remove from Working Drip**
+2. **Remove from New Lead Drip**
 3. **Lost Opportunity**
 4. **Abandon Opportunity**
 5. **END**
@@ -258,7 +258,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 #### Not Closed (Agreement not closed) Branch:
 1. **Add Tag**
 2. **Assign to User**
-3. **Remove from Working Drip**
+3. **Remove from New Lead Drip**
 4. **Months Wait** — 23
 5. **Add to Follow Up**
 6. **Find Opportunity** → Found/Not Found
@@ -267,13 +267,13 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 
 #### SOLD Branch:
 1. **Add Tag**
-2. **Remove from Working Drip**
+2. **Remove from New Lead Drip**
 3. **Won Opportunity** — marks as won
 4. **END**
 
 #### Purchased Branch:
 1. **Add Tag**
-2. **Remove from Working Drip**
+2. **Remove from New Lead Drip**
 3. **Months Wait** — 3
 4. **Add to Follow Up**
 5. **Find Opportunity** → Found/Not Found
@@ -282,7 +282,7 @@ Each branch follows a consistent pattern of actions. Here's the general flow per
 
 #### 1 Month Branch:
 1. **Add Tag**
-2. **Remove from Working Drip**
+2. **Remove from New Lead Drip**
 3. **Wait** — 103
 4. **#4 Add to 1 Month Sheet** — Google Sheets action
 5. **Add to Follow Up**

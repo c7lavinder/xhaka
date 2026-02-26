@@ -78,7 +78,7 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
   → 2. Lead IQ (score → tag → assign → move to Warm/Hot → task → email)
   → 3. New Lead Responder (immediate SMS)
   → 4. Team member calls
-  → 5. No answer → Working Drip (104-day sequence)
+  → 5. No answer → New Lead Drip (104-day sequence)
 ```
 - Pipeline poller is the ONLY trigger for seller processing
 - Contact poller = observation only (catches all contact types)
@@ -121,14 +121,14 @@ Sales Process → New Lead stage (SELLERS ONLY — not buyers/partners)
 - **Auditor**: https://gunner-v2-production.up.railway.app/audit
 - **Service ID**: `38646fdb-45aa-4c50-a742-ffb4540d2268`
 - **DRY_RUN**: currently `true` — Corey reviewing before going live
-- **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → Working Drip) — 8 leads processed clean
+- **Pipeline running**: Steps 2→3→4→5 (Data Hygiene → Lead IQ → Initial Outreach → New Lead Drip) — 8 leads processed clean
 - **AI model**: gemini-2.5-flash (current Railway `AI_MODEL`)
 - **GHL token**: pit-bfb34a58-a87d-4a4d-835a-5019f257a46c
 - **GHL_LOCATION_ID**: `hmD7eWGQJE7EVFpJxj4q`
 - **PIPELINE_SALES_ID**: `tOqQbembKlIoPiXbepP3` (Sales Process)
 - **PIPELINE_FOLLOW_UP_ID**: `grDjCVlwUKx4ShCiOqGi`
 - **Stage IDs (confirmed from Railway)**:
-  - `newLead` → `a977dd60-4ef9-40e1-9d8a-b62aaa6bb88f`
+  - `newLead` → `f919c1a7-17da-456f-b8f9-10c1aca62691` ← CORRECTED 2/25 (was a977dd60... which was wrong)
   - `warm` → `34b88324-9bb1-4110-8531-d4271c6c1567`
   - `hot` → `84c5583f-7b6b-494a-83b2-df9e54db3c8c`
   - `appointment` → `09016bf4-c573-4bf5-941b-2a2fb146a9af` ("Pending Apt" in GHL)
@@ -357,7 +357,7 @@ InvestorLift, Mevlo, Facebook
 - **Call Analyzer** — 6 outputs post-call: call type, summary, extracted data, prospect sentiment, LM signals, next step. Playbook-driven.
 - **Gunner Analyzer** — fires independently of CRM workflow. Scores calls, coaches LM, feeds Gunner platform. Playbook-driven (V2 refactors hardcoded wholesale logic).
 - **Ghosted Agent** — fires at day 12 (time-based). Stops LM manual calls (6c), drip (6b) continues full duration.
-- **Lead IQ task = the only task** for a new lead. Checked off on real conversation. Working Drip Agent also turns off at that point.
+- **Lead IQ task = the only task** for a new lead. Checked off on real conversation. New Lead Drip Agent also turns off at that point.
 - **Phone type detection dropped** — Corey doesn't care, NumVerify killed
 - **Working Leads Drip = contact attempt sequence** — warm/hot leads, stops on first contact (NOT nurture)
 - **Never change Source field** — source IS the lead type (PPL, dialer, sms, etc.)
@@ -514,7 +514,7 @@ New bots added Feb 24:
 - **Role views** — ✅ BUILT: `/lm` and `/am` pages live (commits `fe883fb`). Phase 1 Acquisition is COMPLETE.
 - **Auditor Agent Guide** — ✅ BUILT: "🤖 Agent Guide" tab in auditor covers all 22 agents in plain English (commit `7c2e527`)
 - **5 design mockups sent to Corey** — `/design-1.html` through `/design-5.html` for auditor rebuild. Awaiting design choice.
-- **DRY_RUN=true confirmed** on Railway. Working drip `dryRun:false` in metadata is a display artifact — no real messages sending.
+- **DRY_RUN=true confirmed** on Railway. New Lead Drip `dryRun:false` in metadata is a display artifact — no real messages sending.
 - **"Unknown Lead" fix** — Pipeline API now does batch CRM lookup for missing names; drip logs contactName going forward (commit `cce1e06`)
 - **Disable CRM automation workflows** for walkthroughs/offer calls before go-live
 
