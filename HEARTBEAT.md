@@ -1,24 +1,25 @@
 # HEARTBEAT.md
 
-## Current State (Updated Feb 23, 2026)
+## Current State (Updated Feb 26, 2026)
 
 ### V1 — FULLY PAUSED
 - gunner-engine: CRASHED (intentionally stopped)
 - All cron jobs: disabled
 - Do NOT restart or monitor v1
 
-### V2 — LIVE (as of Feb 25, 2026)
+### V2 — DRY_RUN=true (PAUSED — Feb 26, 2026)
 - **URL**: https://gunner-v2-production.up.railway.app
 - **Auditor**: https://gunner-v2-production.up.railway.app/audit
 - **Hub**: https://gunner-v2-production.up.railway.app/hub
-- **DRY_RUN=false** — LIVE. Data Hygiene → Lead IQ → Initial Outreach → Tasks → Stage moves all writing to GHL
+- **DRY_RUN=true** — SMS was hitting sellers unexpectedly. Paused until review queue is built.
 - **NEW_LEAD_DRIP_ENABLED=false** — New Lead Drip is HELD. Not activating on new leads yet.
-- Manually moved leads today (Omer, Jason, Carla, Moses, Berlinda) — NOT GHL workflows. Safe.
+- Initial outreach SMS is fine to auto-send. All other SMS needs Kyle review first.
 
 ## Pending Decision
-- [ ] **Flip NEW_LEAD_DRIP_ENABLED=true** — when Corey is ready to activate new lead drip on new leads
-- [ ] New Lead Drip Agent — built, held pending Corey approval
+- [ ] **Flip DRY_RUN=false** — ONLY after Manus ships message review queue (see MANUS-MESSAGE-REVIEW-QUEUE.md)
+- [ ] **Flip NEW_LEAD_DRIP_ENABLED=true** — when Corey is ready, after review queue is live
 
 ## Do NOT
 - Restart gunner-engine (v1)
-- Change NEW_LEAD_DRIP_ENABLED without Corey explicitly saying to turn on the drip
+- Flip DRY_RUN=false without review queue built and deployed
+- Change NEW_LEAD_DRIP_ENABLED without Corey explicitly approving
