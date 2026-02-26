@@ -526,3 +526,53 @@ New bots added Feb 24:
 - `1f13fd8` — UC Monitor added to process-map inside Closing Automation phase
 - `fa6ef83` — Offer Reply Agent + UC Monitor redesigned from Corey corrections
 - `971751f` — initial Offer Reply Agent + UC Monitor + stage-aware Response Agent
+
+---
+
+## Gunner V2 — Trigger Architecture (Feb 25 evening, locked)
+
+### Core Principles (NEVER violate these)
+1. **One poller per data source** — never per agent. `crm-sync.ts` is the only GHL event poller.
+2. **Agents don't know their triggers** — `triggers.ts` reads from playbook, agents just run
+3. **Triggers live in the playbook** — industry-specific + tenant-specific. Not in code.
+4. **Webhooks primary, polling fallback** — OAuth auto-registers, polling catches misses
+5. **Everything rate-limited through `api-throttle.ts`** — all GHL calls go through one throttle
+
+### Trigger Flow (as of latest commit `d43393e`)
+```
+GHL webhook → recordWebhookReceived() → eventBus.emit(GunnerEvent)
+           OR
+CRM sync (adaptive: 1–5 min based on webhook health) → eventBus.emit()
+           ↓
+triggers.ts: reads config.playbook().triggers[] → isFeatureEnabled() → meetsConditions() → agent-registry.ts → handler()
+```
+
+### Adding an Agent (the only correct way)
+1. Write the agent function
+2. Register `name → handler` in `src/core/agent-registry.ts`
+3. Add trigger entry to `wholesaleReTriggers()` in `config/loader.ts` OR set `TRIGGERS_JSON` env var
+Zero other files change.
+
+### Key Files
+- `src/core/event-bus.ts` — typed pub/sub
+- `src/core/crm-sync.ts` — unified GHL poller (one session/cycle)
+- `src/core/triggers.ts` — playbook-driven trigger wiring
+- `src/core/agent-registry.ts` — name → handler map
+- `src/core/api-throttle.ts` — global rate limiter (per-tenant)
+- `src/core/webhook-health.ts` — webhook liveness tracking
+- `src/core/config/loader.ts` — `wholesaleReTriggers()`, `genericTriggers()`
+- `src/setup/router.ts` — OAuth flow auto-registers webhook on connect
+
+### Rate Limit Config (all env vars, no hardcoding)
+- `API_RATE_LIMIT_RPS=5` — sustained req/sec
+- `API_RATE_LIMIT_BURST=10` — burst capacity
+- `API_RETRY_MAX=5` — retries on 429/5xx
+- `API_RETRY_BASE_MS=5000` — base backoff
+- `WEBHOOK_HEALTHY_WINDOW_MS=900000` — 15 min = healthy
+- `CRM_SYNC_INTERVAL_MS=120000` — fallback if webhook health unavailable
+
+### Current NAH State (Feb 25)
+- PIT token → polling only (no webhooks yet)
+- To activate webhooks: run /setup OAuth flow (2 min, one-time)
+- 6 leads stuck in New Lead (Connie/Daryel/Charles/James/Kent/Elizabeth) — will auto-process on next clean sync
+
