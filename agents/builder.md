@@ -141,3 +141,15 @@ git push origin main
 - [ ] Commit message is clear
 - [ ] Pushed to main
 - [ ] Report filed
+
+---
+
+## Input Contract
+- Reads: `runs/{run_id}/00_objective.md`
+- Reads: `runs/{run_id}/01_researcher_output.md`
+- Reads: `runs/{run_id}/02_architect_output.md`
+
+## Output Contract
+- Writes: `runs/{run_id}/03_builder_output.md`
+- Must include: what was built, commit SHAs, any deviations from spec, what to watch for
+- Format: markdown with ## sections
