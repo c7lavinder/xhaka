@@ -117,3 +117,18 @@ Every bug report must include:
 - Never approve something where tenantId is missing on a query
 - If unsure whether something is a bug: flag it as Medium and explain the concern
 - "It probably works" is not a pass
+
+---
+
+## Input Contract
+- Reads: ALL files in `runs/{run_id}/` (00 through 03)
+
+## Output Contract
+- Writes: `runs/{run_id}/04_auditor_report.md`
+- Must include: verdict (PASS/FAIL), issues found (if any), recommendation
+- Format:
+  ## Verdict: PASS / FAIL
+  ## Issues
+  [list or "None"]
+  ## Recommendation
+  [ship it / fix these first]
