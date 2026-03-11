@@ -3,8 +3,8 @@ import { getRecentFailureSummary } from '../lib/railway.js';
 import { generateBuilderLesson, generateOperatorLesson } from '../lib/openai.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
-const GUNNER_REPO = process.env.GUNNER_REPO ?? 'c7lavinder/Gunner';
-const RAILWAY_SERVICE_ID = process.env.RAILWAY_SERVICE_ID ?? 'b14d0504-8190-419a-80c5-7dd64dfefcc1';
+const WATCH_REPO = process.env.WATCH_REPO ?? 'c7lavinder/xhaka';
+const RAILWAY_SERVICE_ID = process.env.RAILWAY_SERVICE_ID ?? '';
 const AGENTS_PATH = 'agents';
 const FAILURE_PATTERNS_HEADING = '## Common Failure Patterns (Don\'t Repeat These)';
 const KNOWN_ISSUES_HEADING = '## Known Issues';
@@ -28,19 +28,19 @@ export async function runImprove(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// Builder improvement — scan Gunner git history for failures
+// Builder improvement — scan git history for failures
 // ---------------------------------------------------------------------------
 
 async function runBuilderImprovement(since: Date, date: string): Promise<void> {
-  console.log('[improve] Scanning Gunner git history for failures...');
+  console.log('[improve] Scanning git history for failures...');
 
-  const commits = await getRecentCommits(GUNNER_REPO, since);
+  const commits = await getRecentCommits(WATCH_REPO, since);
   const failureCommits = commits.filter((c) =>
     /^(fix:|revert:|hotfix:|fixup!)/i.test(c.message),
   );
 
   console.log(
-    `[improve] Found ${failureCommits.length} fix/revert/hotfix commit(s) in Gunner.`,
+    `[improve] Found ${failureCommits.length} fix/revert/hotfix commit(s) in ${WATCH_REPO}.`,
   );
 
   if (!failureCommits.length) {
@@ -96,6 +96,11 @@ URL: ${commit.url}`;
 
 async function runOperatorImprovement(since: Date, date: string): Promise<void> {
   console.log('[improve] Scanning Railway logs for deploy failures...');
+
+  if (!RAILWAY_SERVICE_ID) {
+    console.log('[improve] RAILWAY_SERVICE_ID not configured — skipping Railway failure log pull.');
+    return;
+  }
 
   let failureSummary: string;
   try {
