@@ -129,3 +129,14 @@ Flag immediately if found:
 - A competitor is targeting the exact niche Gunner owns (wholesale RE sales coaching)
 - A regulatory change that affects NAH's lead gen (TCPA, SMS rules, etc.)
 - A new AI capability that could 10x a Gunner feature
+
+---
+
+## Input Contract
+- Reads: `runs/{run_id}/00_objective.md`
+- Reads: any prior run files in the same folder
+
+## Output Contract
+- Writes: `runs/{run_id}/01_researcher_output.md`
+- Must include: findings (what was found), recommendations (what to do), sources (where from)
+- Format: markdown with ## headings per finding
