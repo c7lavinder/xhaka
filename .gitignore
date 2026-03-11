@@ -1,0 +1,7 @@
+node_modules/
+*.zip
+*.sql
+*.pyc
+.env
+.env.*
+!.env.example
