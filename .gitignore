@@ -61,6 +61,7 @@ skool-course-combined.md
 supabase-schema.sql
 transcript-extracts.zip
 week-goals-feb3-7.md
-package.json
-package-lock.json
+# Root-level package.json only (services/ have their own)
+/package.json
+/package-lock.json
 *.mermaid
