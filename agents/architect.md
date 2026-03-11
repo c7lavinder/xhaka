@@ -219,3 +219,14 @@ Responsive breakpoints:
 - Badge earned = confetti + toast
 - Level up = full celebration
 - Leaderboard: rank, avatar, name, score — clean, competitive feel
+
+---
+
+## Input Contract
+- Reads: `runs/{run_id}/00_objective.md`
+- Reads: `runs/{run_id}/01_researcher_output.md`
+
+## Output Contract
+- Writes: `runs/{run_id}/02_architect_output.md`
+- Must include: spec (what to build), file list (exact paths), decision rationale (why this approach)
+- Format: markdown — spec first, then file list, then rationale
