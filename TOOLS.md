@@ -44,9 +44,9 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ### GitHub
 - **Username:** c7lavinder
-- **Token:** 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
-- **Scope:** repo (full control of private repos)
-- **Token name:** xhaka-mac
+- **Token:** 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
+- **Scope:** repo + workflow + read:org
+- **Token name:** xhaka-deploy
 
 ### Google Doc - GHL Documentation
 - **Name:** Deep understanding of NAH GHL
@@ -71,6 +71,38 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - **URL:** motivatedsellers.com
 - **Login:** corey@newagainhouses.com / Belmont2026
 - **Access Level:** Disputes only
+
+### PostHog (Analytics)
+- **URL:** posthog.com
+- **Login:** corey@newagainhouses.com (Google auth)
+- **Project:** Default project
+- **Project Token:** `phc_FEpR6FvjwCN5ZqUDVn0Y9yCxdpCf7iXPQz1bUs07gcZ`
+- **Project ID:** `336916`
+- **Region:** US Cloud
+- **Purpose:** User analytics — tracks how team uses Gunner, feature usage, drop-offs
+- **Status:** Account created ✅, not yet wired into codebase
+
+### Sentry (Error Tracking)
+- **URL:** sentry.io
+- **Login:** corey@newagainhouses.com
+- **Purpose:** Error tracking for Gunner — auto-creates GitHub issues when prod breaks
+- **DSN:** `https://bf7b317b546428d656836b66e2642c6c0e4511015785988096.ingest.us.sentry.io/4511015798243328`
+- **Status:** Project created ✅
+
+### Supabase (Gunner V2 Database)
+- **Project Name:** Gunner V1.5
+- **URL:** https://tvjkgumckwapybpjyrkw.supabase.co
+- **Publishable Key:** sb_publishable_8PT5J1V1qrsIwjC3QdMudA_FeccnrgF
+- **Secret Key:** sb_secret_E58gx6PLR6y5nxEwJt6MjQ_KOlBpMXH
+- **Access Level:** Full admin
+- **Purpose:** Database backend for Gunner V2 migration
+- **Vector DB:** pgvector extension (run `create extension vector;` in Supabase SQL editor when ready)
+
+### LangSmith (AI Observability)
+- **URL:** smith.langchain.com
+- **Login:** xhakalavinder@gmail.com
+- **API Key:** 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
+- **Purpose:** Tracks every AI agent call, debug traces, and performance monitoring for Gunner
 
 ### Google Gemini API
 - **API Key:** AIzaSyChM6aVZ-l-L8dK9VkDnoeXyCLWhonbypY

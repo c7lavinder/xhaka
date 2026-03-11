@@ -1,25 +1,26 @@
-# HEARTBEAT.md
+# HEARTBEAT.md — The Pulse of the Empire
 
-## Current State (Updated Feb 26, 2026)
+## 🩺 Vital Signs Check (Every 30m)
 
-### V1 — FULLY PAUSED
-- gunner-engine: CRASHED (intentionally stopped)
-- All cron jobs: disabled
-- Do NOT restart or monitor v1
+### 1. New Again Houses (Cash Flow)
+- [ ] **Leads:** Check `gunner-v2` status. Are leads flowing? Any errors?
+- [ ] **Revenue:** (Future: Hook into KPI sheet/CRM).
+- [ ] **Alert:** If a lead is stuck > 1 hour, PING IMMEDIATELY.
 
-### V2 — DRY_RUN=true (PAUSED — Feb 26, 2026)
-- **URL**: https://gunner-v2-production.up.railway.app
-- **Auditor**: https://gunner-v2-production.up.railway.app/audit
-- **Hub**: https://gunner-v2-production.up.railway.app/hub
-- **DRY_RUN=true** — SMS was hitting sellers unexpectedly. Paused until review queue is built.
-- **NEW_LEAD_DRIP_ENABLED=false** — New Lead Drip is HELD. Not activating on new leads yet.
-- Initial outreach SMS is fine to auto-send. All other SMS needs Kyle review first.
+### 2. Gunner SaaS (Asset Value)
+- [ ] **Build Status:** Is `gunner-backend` passing tests?
+- [ ] **Agents:** Is The Builder stuck? Does The Guide have what it needs?
+- [ ] **Infrastructure:** Is `xhaka-brain` (DB) responsive?
 
-## Pending Decision
-- [ ] **Flip DRY_RUN=false** — ONLY after Manus ships message review queue (see MANUS-MESSAGE-REVIEW-QUEUE.md)
-- [ ] **Flip NEW_LEAD_DRIP_ENABLED=true** — when Corey is ready, after review queue is live
+### 3. The Office (Corey & Xhaka)
+- [ ] **Pending Decisions:** Did Corey ask for something I haven't delivered?
+- [ ] **Inbound:** Check for high-priority messages (if accessible).
 
-## Do NOT
-- Restart gunner-engine (v1)
-- Flip DRY_RUN=false without review queue built and deployed
-- Change NEW_LEAD_DRIP_ENABLED without Corey explicitly approving
+## ⚠️ Standing Orders
+- **Zero Drift:** Do not hallucinate progress. Check facts.
+- **Proactive:** Don't just report problems. Propose solutions.
+- **Sustainability:** If I (Xhaka) am broken/forgetting, STOP and fix myself.
+
+## Response Protocol
+- If **All Green**: Reply `HEARTBEAT_OK` (Silent).
+- If **Any Red**: Reply with specific alert: "🚨 NAH Alert: 2 leads stuck in New Lead stage."
