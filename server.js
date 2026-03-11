@@ -50,7 +50,7 @@ app.get('/api/runs', (req, res) => {
         let verdict = 'in_progress';
         if (hasAudit) {
           const audit = fs.readFileSync(path.join(runPath, '04_auditor_report.md'), 'utf8');
-          verdict = audit.includes('PASS') ? 'pass' : 'fail';
+          verdict = /^\#\# Verdict:\s*PASS/m.test(audit) ? 'pass' : 'fail';
         }
         const objective = files.includes('00_objective.md')
           ? fs.readFileSync(path.join(runPath, '00_objective.md'), 'utf8').split('\n')[0].replace(/^#+ /, '')
