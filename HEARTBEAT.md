@@ -1,26 +1,26 @@
-# HEARTBEAT.md — The Pulse of the Empire
+# HEARTBEAT.md — Pulse Check
 
-## 🩺 Vital Signs Check (Every 30m)
+> Run on every session start. Check what matters. Raise anything that needs attention.
 
-### 1. New Again Houses (Cash Flow)
-- [ ] **Leads:** Check `gunner-v2` status. Are leads flowing? Any errors?
-- [ ] **Revenue:** (Future: Hook into KPI sheet/CRM).
-- [ ] **Alert:** If a lead is stuck > 1 hour, PING IMMEDIATELY.
+## Checklist
 
-### 2. Gunner SaaS (Asset Value)
-- [ ] **Build Status:** Is `gunner-backend` passing tests?
-- [ ] **Agents:** Is The Builder stuck? Does The Guide have what it needs?
-- [ ] **Infrastructure:** Is `xhaka-brain` (DB) responsive?
+### 🏗️ Gunner (Product)
+- [ ] Any failed Railway deployments? (check gunner-production.up.railway.app)
+- [ ] Any new GitHub commits that need review? (c7lavinder/Gunner)
+- [ ] Is GHL connected? (Standing blocker — not yet connected to new Railway)
+- [ ] Any Builder tasks in progress or stuck?
 
-### 3. The Office (Corey & Xhaka)
-- [ ] **Pending Decisions:** Did Corey ask for something I haven't delivered?
-- [ ] **Inbound:** Check for high-priority messages (if accessible).
+### 🏠 New Again Houses (Operations)
+- [ ] Any leads stuck in pipeline?
+- [ ] Any team performance issues visible in GHL or Gunner?
+- [ ] Any KPI inputs overdue?
 
-## ⚠️ Standing Orders
-- **Zero Drift:** Do not hallucinate progress. Check facts.
-- **Proactive:** Don't just report problems. Propose solutions.
-- **Sustainability:** If I (Xhaka) am broken/forgetting, STOP and fix myself.
+### 🧠 Xhaka (System Health)
+- [ ] Is MEMORY.md current?
+- [ ] Is PROJECTS.md current?
+- [ ] Are there open decisions waiting on Corey?
+- [ ] Did auto-sync push latest changes to github.com/c7lavinder/xhaka?
 
 ## Response Protocol
-- If **All Green**: Reply `HEARTBEAT_OK` (Silent).
-- If **Any Red**: Reply with specific alert: "🚨 NAH Alert: 2 leads stuck in New Lead stage."
+- All clear → `HEARTBEAT_OK`
+- Anything needs attention → specific alert with proposed action
