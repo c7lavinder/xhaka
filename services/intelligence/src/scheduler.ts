@@ -3,6 +3,8 @@ import { runCapture } from './jobs/capture.js';
 import { runPropagate } from './jobs/propagate.js';
 import { runImprove } from './jobs/improve.js';
 import { runCleanup } from './jobs/cleanup.js';
+import { runOrganize } from './jobs/organize.js';
+import { runSynthesize } from './jobs/synthesize.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -51,16 +53,32 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Organize: daily at 11:00 PM CST ---
+  cron.schedule(
+    '0 23 * * *',
+    safeRun('organize', runOrganize),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Synthesize: every 5 days at 7:00 AM CST ---
+  cron.schedule(
+    '0 7 */5 * *',
+    safeRun('synthesize', runSynthesize),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
-  console.log('  ✓ capture    — every 5 minutes');
-  console.log('  ✓ propagate  — daily at 6:00 AM CST');
-  console.log('  ✓ improve    — every Monday at 6:00 AM CST');
-  console.log('  ✓ cleanup    — every Sunday at 6:00 AM CST');
+  console.log('  ✓ capture     — every 5 minutes');
+  console.log('  ✓ propagate   — daily at 6:00 AM CST');
+  console.log('  ✓ improve     — every Monday at 6:00 AM CST');
+  console.log('  ✓ cleanup     — every Sunday at 6:00 AM CST');
+  console.log('  ✓ organize    — daily at 11:00 PM CST');
+  console.log('  ✓ synthesize  — every 5 days at 7:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
 // Manual trigger — allows running a specific job immediately via env var
-// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup
+// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize
 // ---------------------------------------------------------------------------
 
 export async function runJobNow(jobName: string): Promise<void> {
@@ -77,7 +95,13 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'cleanup':
       await runCleanup();
       break;
+    case 'organize':
+      await runOrganize();
+      break;
+    case 'synthesize':
+      await runSynthesize();
+      break;
     default:
-      throw new Error(`Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup`);
+      throw new Error(`Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize`);
   }
 }
