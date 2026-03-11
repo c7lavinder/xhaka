@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import { runCapture } from './jobs/capture.js';
 import { runPropagate } from './jobs/propagate.js';
 import { runImprove } from './jobs/improve.js';
+import { runCleanup } from './jobs/cleanup.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -43,15 +44,23 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Cleanup: every Sunday at 6:00 AM CST ---
+  cron.schedule(
+    '0 6 * * 0',
+    safeRun('cleanup', runCleanup),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture    — every 5 minutes');
   console.log('  ✓ propagate  — daily at 6:00 AM CST');
   console.log('  ✓ improve    — every Monday at 6:00 AM CST');
+  console.log('  ✓ cleanup    — every Sunday at 6:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
 // Manual trigger — allows running a specific job immediately via env var
-// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve
+// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup
 // ---------------------------------------------------------------------------
 
 export async function runJobNow(jobName: string): Promise<void> {
@@ -65,7 +74,10 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'improve':
       await runImprove();
       break;
+    case 'cleanup':
+      await runCleanup();
+      break;
     default:
-      throw new Error(`Unknown job: ${jobName}. Valid values: capture, propagate, improve`);
+      throw new Error(`Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup`);
   }
 }
