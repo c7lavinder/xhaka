@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xhaka Command Center — Control Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0a0a;
+      --surface:     #111111;
+      --surface2:    #161616;
+      --surface3:    #1c1c1c;
+      --border:      #222222;
+      --border2:     #2a2a2a;
+      --purple:      #7c3aed;
+      --purple-dim:  #5b21b6;
+      --purple-glow: rgba(124,58,237,0.18);
+      --purple-faint:#7c3aed22;
+      --green:       #22c55e;
+      --green-dim:   #16a34a;
+      --yellow:      #eab308;
+      --red:         #ef4444;
+      --blue:        #3b82f6;
+      --cyan:        #06b6d4;
+      --text:        #f0f0f0;
+      --text-2:      #a0a0a0;
+      --text-3:      #606060;
+      --mono:        'JetBrains Mono', 'Fira Code', monospace;
+      --sans:        'Inter', sans-serif;
+      --radius:      6px;
+      --radius2:     10px;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+    /* ── TOPBAR ────────────────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 52px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--purple);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .topbar-subtitle {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.03em;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+      50%       { opacity: 0.7; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+    }
+    .clock {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-2);
+      letter-spacing: 0.05em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2px;
+    }
+    .nav-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: var(--radius);
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-link:hover { background: var(--surface3); color: var(--text-2); }
+    .nav-link.active { background: var(--purple-faint); color: var(--purple); }
+
+    /* ── LAYOUT ────────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 320px;
+      grid-template-rows: auto auto 1fr;
+      gap: 1px;
+      background: var(--border);
+      min-height: calc(100vh - 52px);
+    }
+
+    /* ── PANEL BASE ────────────────────────────────── */
+    .panel {
+      background: var(--bg);
+      padding: 20px;
+      overflow: hidden;
+    }
+    .panel.scroll { overflow-y: auto; }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .panel-title-icon {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+    .panel-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--surface3);
+      color: var(--text-3);
+    }
+
+    /* ── GRID SPANS ────────────────────────────────── */
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+
+    /* ── STATUS DOTS ───────────────────────────────── */
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.idle     { background: var(--text-3); }
+    .dot.running  { background: var(--purple); animation: pulse-purple 1.4s ease-in-out infinite; }
+    .dot.complete { background: var(--green); }
+    .dot.error    { background: var(--red); }
+    .dot.warning  { background: var(--yellow); }
+    @keyframes pulse-purple {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(124,58,237,0.5); }
+      50%       { opacity: 0.8; box-shadow: 0 0 0 5px rgba(124,58,237,0); }
+    }
+
+    /* ── AGENT CARDS ───────────────────────────────── */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+    .agent-card.status-running { border-color: var(--purple-dim); }
+    .agent-card.status-running::before { background: var(--purple); }
+    .agent-card.status-complete { border-color: var(--green-dim); }
+    .agent-card.status-complete::before { background: var(--green); }
+    .agent-card.status-error { border-color: #7f1d1d; }
+    .agent-card.status-error::before { background: var(--red); }
+    .agent-card.status-idle::before { background: var(--border2); }
+
+    .agent-emoji {
+      font-size: 20px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .agent-name {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+    }
+    .agent-status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .agent-status-text {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .agent-status-text.idle     { color: var(--text-3); }
+    .agent-status-text.running  { color: var(--purple); }
+    .agent-status-text.complete { color: var(--green); }
+    .agent-status-text.error    { color: var(--red); }
+
+    .agent-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      line-height: 1.7;
+    }
+    .agent-meta-label { color: var(--text-3); }
+    .agent-meta-value { color: var(--text-2); }
+    .agent-task-preview {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .agent-task-preview span {
+      color: var(--text-2);
+    }
+
+    /* ── PIPELINE VIEW ─────────────────────────────── */
+    .pipeline-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 12px 0;
+      overflow-x: auto;
+    }
+    .pipeline-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 110px;
+      flex-shrink: 0;
+    }
+    .pipeline-node-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      padding: 12px 16px;
+      width: 100%;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pipeline-node-inner.active {
+      border-color: var(--purple-dim);
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+    .pipeline-node-inner.done {
+      border-color: var(--green-dim);
+    }
+    .pipeline-node-inner.pending {
+      opacity: 0.5;
+    }
+    .pipeline-node-emoji { font-size: 18px; }
+    .pipeline-node-name {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+    .pipeline-node-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+    .pipeline-node-status {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    .pipeline-node-status.done    { color: var(--green); }
+    .pipeline-node-status.active  { color: var(--purple); }
+    .pipeline-node-status.pending { color: var(--text-3); }
+
+    .pipeline-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 0 6px;
+      min-width: 48px;
+      flex-shrink: 0;
+    }
+    .pipeline-arrow-line {
+      height: 1px;
+      background: linear-gradient(90deg, var(--border2), var(--border2));
+      width: 100%;
+      position: relative;
+    }
+    .pipeline-arrow-line.active {
+      background: linear-gradient(90deg, var(--purple-dim), var(--purple));
+    }
+    .pipeline-arrow-line.done {
+      background: linear-gradient(90deg, var(--green-dim), var(--green));
+    }
+    .pipeline-arrow-chevron {
+      font-size: 12px;
+      color: var(--border2);
+      line-height: 1;
+    }
+    .pipeline-arrow-chevron.active { color: var(--purple); }
+    .pipeline-arrow-chevron.done   { color: var(--green); }
+
+    .pipeline-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .pipeline-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .pipeline-stat-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .pipeline-stat-value {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .pipeline-stat-value.purple { color: var(--purple); }
+    .pipeline-stat-value.green  { color: var(--green); }
+
+    /* ── RUN HISTORY ───────────────────────────────── */
+    .run-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .run-item {
+      display: grid;
+      grid-template-columns: 90px 70px 1fr 52px;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .run-item:hover { background: var(--surface2); border-color: var(--border); }
+
+    .run-time {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .run-agent {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .run-agent-emoji { font-size: 12px; }
+    .run-agent-name {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .run-summary {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .run-summary span { color: var(--text-2); }
+    .run-outcome {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .outcome-pill {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .outcome-pill.pass { background: #14532d; color: var(--green); }
+    .outcome-pill.fail { background: #450a0a; color: var(--red); }
+    .outcome-pill.skip { background: var(--surface3); color: var(--text-3); }
+    .outcome-pill.warn { background: #422006; color: var(--yellow); }
+
+    /* ── SIDEBAR PANELS ────────────────────────────── */
+    .sidebar {
+      grid-column: 3;
+      grid-row: 1 / -1;
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+    }
+    .sidebar-panel {
+      background: var(--bg);
+      padding: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── INTELLIGENCE INBOX ────────────────────────── */
+    .inbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .inbox-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .inbox-card-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .inbox-card-count {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .inbox-card-count.has-items { color: var(--purple); }
+    .inbox-card-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+    }
+
+    .inbox-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .inbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .inbox-item-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple);
+      flex-shrink: 0;
+    }
+    .inbox-item-text {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-2);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .inbox-item-time {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    /* ── MEMORY HEALTH ─────────────────────────────── */
+    .memory-meter {
+      margin-bottom: 14px;
+    }
+    .memory-meter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .memory-meter-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+    }
+    .memory-meter-value {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .memory-meter-value em {
+      font-style: normal;
+      color: var(--text-3);
+      font-size: 11px;
+      font-weight: 400;
+    }
+    .progress-track {
+      height: 6px;
+      background: var(--surface3);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+    .progress-fill.safe    { background: var(--green); }
+    .progress-fill.warn    { background: var(--yellow); }
+    .progress-fill.danger  { background: var(--red); }
+    .progress-fill.purple  { background: var(--purple); }
+
+    .memory-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .memory-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .memory-stat-key {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+    }
+    .memory-stat-val {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-2);
+    }
+    .memory-stat-val.green  { color: var(--green); }
+    .memory-stat-val.yellow { color: var(--yellow); }
+    .memory-stat-val.red    { color: var(--red); }
+
+    .memory-subfolders {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .memory-folder {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .memory-folder-icon { font-size: 12px; }
+    .memory-folder-info { flex: 1; overflow: hidden; }
+    .memory-folder-name {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .memory-folder-count {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+    }
+
+    /* ── SYSTEM HEALTH BAR ─────────────────────────── */
+    .health-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-family: var(--mono);
+      font-size: 10px;
+      grid-column: 1 / 3;
+      overflow-x: auto;
+    }
+    .health-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .health-item-label { color: var(--text-3); }
+    .health-item-value { color: var(--text-2); font-weight: 500; }
+    .health-item-value.green  { color: var(--green); }
+    .health-item-value.purple { color: var(--purple); }
+    .health-item-value.yellow { color: var(--yellow); }
+    .health-divider {
+      width: 1px; height: 16px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* ── SECTION LABELS ────────────────────────────── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── TAGS / CHIPS ──────────────────────────────── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: var(--surface3);
+      color: var(--text-3);
+    }
+    .tag.purple { background: var(--purple-faint); color: var(--purple); }
+    .tag.green  { background: #14532d44; color: var(--green); }
+    .tag.yellow { background: #42200644; color: var(--yellow); }
+    .tag.red    { background: #450a0a44; color: var(--red); }
+
+    /* ── FEED HEADER ───────────────────────────────── */
+    .feed-header {
+      display: grid;
+      grid-template-columns: 90px 70px 1fr 52px;
+      gap: 10px;
+      padding: 0 12px 8px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 6px;
+    }
+
+    /* ── ACTIVE TASK TICKER ────────────────────────── */
+    .active-task-bar {
+      background: var(--purple-faint);
+      border: 1px solid var(--purple-dim);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .active-task-bar-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--purple);
+      animation: pulse-purple 1.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    .active-task-bar-text {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--purple);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .active-task-bar-agent {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    /* ── EMPTY STATE ───────────────────────────────── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 24px;
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .empty-state-icon { font-size: 24px; opacity: 0.4; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── TOPBAR ─────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo-mark">X</div>
+      <div>
+        <div class="topbar-title">Xhaka Command Center</div>
+        <div class="topbar-subtitle">xhaka-production.up.railway.app</div>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="/" class="nav-link">Overview</a>
+      <a href="/control-room" class="nav-link active">Control Room</a>
+      <a href="/memory" class="nav-link">Memory</a>
+      <a href="/logs" class="nav-link">Logs</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="live-badge"><span class="live-dot"></span> Live</div>
+      <div class="clock" id="clock">—</div>
+    </div>
+  </header>
+
+  <!-- ─── MAIN GRID ──────────────────────────────── -->
+  <div class="layout">
+
+    <!-- ──── ROW 1: AGENT STATUS (spans 2) ──────── -->
+    <div class="panel span-2" style="grid-column: 1/3; grid-row: 1;">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-icon">⬡</span> Agent Status
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="tag purple">1 Running</span>
+          <span class="tag green">3 Idle</span>
+          <span class="tag">1 Complete</span>
+        </div>
+      </div>
+
+      <!-- active task ticker -->
+      <div class="active-task-bar">
+        <div class="active-task-bar-dot"></div>
+        <div class="active-task-bar-text">Building control-room.html dashboard — designing agent status panels, pipeline view, run history feed</div>
+        <div class="active-task-bar-agent">🎨 Architect · now</div>
+      </div>
+
+      <div class="agent-grid">
+
+        <!-- Researcher -->
+        <div class="agent-card status-complete">
+          <span class="agent-emoji">🔬</span>
+          <div class="agent-name">Researcher</div>
+          <div class="agent-status-row">
+            <span class="dot complete"></span>
+            <span class="agent-status-text complete">Complete</span>
+          </div>
+          <div class="agent-meta">
+            <div><span class="agent-meta-label">Last run · </span><span class="agent-meta-value">2h 14m ago</span></div>
+            <div><span class="agent-meta-label">Duration · </span><span class="agent-meta-value">4m 32s</span></div>
+            <div><span class="agent-meta-label">Items · </span><span class="agent-meta-value">3 filed</span></div>
+          </div>
+          <div class="agent-task-preview"><span>Morning briefing: VC funding trends in proptech Q1 2026, BatchDialer API updates, GHL workflow triggers</span></div>
+        </div>
+
+        <!-- Architect -->
+        <div class="agent-card status-running">
+          <span class="agent-emoji">🎨</span>
+          <div class="agent-name">Architect</div>
+          <div class="agent-status-row">
+            <span class="dot running"></span>
+            <span class="agent-status-text running">Running</span>
+          </div>
+          <div class="agent-meta">
+            <div><span class="agent-meta-label">Started · </span><span class="agent-meta-value">6m ago</span></div>
+            <div><span class="agent-meta-label">Task # · </span><span class="agent-meta-value">ARC-0041</span></div>
+            <div><span class="agent-meta-label">Files · </span><span class="agent-meta-value">1 writing</span></div>
+          </div>
+          <div class="agent-task-preview"><span>Control Room dashboard — complete HTML/CSS/JS single-file build, mock data, inline styles</span></div>
+        </div>
+
+        <!-- Builder -->
+        <div class="agent-card status-idle">
+          <span class="agent-emoji">👷</span>
+          <div class="agent-name">Builder</div>
+          <div class="agent-status-row">
+            <span class="dot idle"></span>
+            <span class="agent-status-text idle">Idle</span>
+          </div>
+          <div class="agent-meta">
+            <div><span class="agent-meta-label">Last run · </span><span class="agent-meta-value">yesterday</span></div>
+            <div><span class="agent-meta-label">Duration · </span><span class="agent-meta-value">12m 08s</span></div>
+            <div><span class="agent-meta-label">Commits · </span><span class="agent-meta-value">3 pushed</span></div>
+          </div>
+          <div class="agent-task-preview"><span>GHL webhook handler: added lead source normalization, fixed duplicate contact creation on retry</span></div>
+        </div>
+
+        <!-- Auditor -->
+        <div class="agent-card status-idle">
+          <span class="agent-emoji">👮</span>
+          <div class="agent-name">Auditor</div>
+          <div class="agent-status-row">
+            <span class="dot idle"></span>
+            <span class="agent-status-text idle">Idle</span>
+          </div>
+          <div class="agent-meta">
+            <div><span class="agent-meta-label">Last run · </span><span class="agent-meta-value">4h ago</span></div>
+            <div><span class="agent-meta-label">Next · </span><span class="agent-meta-value">in 0h 12m</span></div>
+            <div><span class="agent-meta-label">Result · </span><span class="agent-meta-value">2 warnings</span></div>
+          </div>
+          <div class="agent-task-preview"><span>Code review: hardcoded strings in routes/ghl.js, missing null check in BatchDialer sync handler</span></div>
+        </div>
+
+        <!-- Operator -->
+        <div class="agent-card status-idle">
+          <span class="agent-emoji">⚙️</span>
+          <div class="agent-name">Operator</div>
+          <div class="agent-status-row">
+            <span class="dot idle"></span>
+            <span class="agent-status-text idle">Idle</span>
+          </div>
+          <div class="agent-meta">
+            <div><span class="agent-meta-label">Last run · </span><span class="agent-meta-value">2d ago</span></div>
+            <div><span class="agent-meta-label">Duration · </span><span class="agent-meta-value">1m 44s</span></div>
+            <div><span class="agent-meta-label">Service · </span><span class="agent-meta-value">GHL</span></div>
+          </div>
+          <div class="agent-task-preview"><span>Pulled GHL pipeline stage IDs for Acquisition workflow, verified Twilio webhook config matches prod</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ──── ROW 2: PIPELINE (spans 2) ──────────── -->
+    <div class="panel span-2" style="grid-column: 1/3; grid-row: 2;">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-icon">⟶</span> Job Pipeline
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="tag purple">ARC-0041 active</span>
+          <span class="tag">Pipeline #87</span>
+        </div>
+      </div>
+
+      <div class="pipeline-track">
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-inner done">
+            <span class="pipeline-node-emoji">🔬</span>
+            <div class="pipeline-node-name">Research</div>
+            <div class="pipeline-node-sub">Morning Briefing</div>
+            <div class="pipeline-node-status done">✓ done</div>
+          </div>
+        </div>
+
+        <div class="pipeline-arrow">
+          <div class="pipeline-arrow-line done"></div>
+          <div class="pipeline-arrow-chevron done">›</div>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-inner active">
+            <span class="pipeline-node-emoji">🎨</span>
+            <div class="pipeline-node-name">Architect</div>
+            <div class="pipeline-node-sub">Control Room UI</div>
+            <div class="pipeline-node-status active">● running</div>
+          </div>
+        </div>
+
+        <div class="pipeline-arrow">
+          <div class="pipeline-arrow-line active"></div>
+          <div class="pipeline-arrow-chevron active">›</div>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-inner pending">
+            <span class="pipeline-node-emoji">👷</span>
+            <div class="pipeline-node-name">Builder</div>
+            <div class="pipeline-node-sub">Wire live data</div>
+            <div class="pipeline-node-status pending">○ queued</div>
+          </div>
+        </div>
+
+        <div class="pipeline-arrow">
+          <div class="pipeline-arrow-line"></div>
+          <div class="pipeline-arrow-chevron">›</div>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-inner pending">
+            <span class="pipeline-node-emoji">👮</span>
+            <div class="pipeline-node-name">Auditor</div>
+            <div class="pipeline-node-sub">Post-build review</div>
+            <div class="pipeline-node-status pending">○ queued</div>
+          </div>
+        </div>
+
+        <div class="pipeline-arrow">
+          <div class="pipeline-arrow-line"></div>
+          <div class="pipeline-arrow-chevron">›</div>
+        </div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-node-inner pending">
+            <span class="pipeline-node-emoji">🚀</span>
+            <div class="pipeline-node-name">Deploy</div>
+            <div class="pipeline-node-sub">Railway push</div>
+            <div class="pipeline-node-status pending">○ queued</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pipeline-meta">
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Pipeline #</span>
+          <span class="pipeline-stat-value">87</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Stage</span>
+          <span class="pipeline-stat-value purple">2 / 5</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Elapsed</span>
+          <span class="pipeline-stat-value" id="elapsed">6m 22s</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Today's runs</span>
+          <span class="pipeline-stat-value green">14</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Pass rate</span>
+          <span class="pipeline-stat-value green">92%</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Avg duration</span>
+          <span class="pipeline-stat-value">8m 14s</span>
+        </div>
+        <div class="pipeline-stat">
+          <span class="pipeline-stat-label">Last deploy</span>
+          <span class="pipeline-stat-value">3h 41m ago</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──── ROW 3: RUN HISTORY (spans 2) ────────── -->
+    <div class="panel span-2 scroll" style="grid-column: 1/3; grid-row: 3; max-height: 340px;">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-icon">≡</span> Run History
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="tag green">92% pass</span>
+          <span class="panel-badge">24 entries</span>
+        </div>
+      </div>
+
+      <div class="feed-header">
+        <span>Time</span>
+        <span>Agent</span>
+        <span>Task Summary</span>
+        <span style="text-align:right;">Result</span>
+      </div>
+
+      <div class="run-feed" id="runFeed">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ──── SIDEBAR ────────────────────────────── -->
+    <div class="sidebar" style="grid-column: 3; grid-row: 1 / 4;">
+
+      <!-- Intelligence Inbox -->
+      <div class="sidebar-panel">
+        <div class="panel-header" style="margin-bottom:12px;">
+          <div class="panel-title">
+            <span class="panel-title-icon">📥</span> Intelligence Inbox
+          </div>
+        </div>
+
+        <div class="inbox-grid">
+          <div class="inbox-card">
+            <div class="inbox-card-label">Inbox</div>
+            <div class="inbox-card-count has-items">3</div>
+            <div class="inbox-card-sub">awaiting review</div>
+          </div>
+          <div class="inbox-card">
+            <div class="inbox-card-label">Processed</div>
+            <div class="inbox-card-count">47</div>
+            <div class="inbox-card-sub">filed to memory</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:8px;">
+          <div class="section-label" style="margin-bottom:6px;">Pending items</div>
+        </div>
+        <div class="inbox-items">
+          <div class="inbox-item">
+            <div class="inbox-item-dot"></div>
+            <div class="inbox-item-text">PropTech VC trends Q1 2026</div>
+            <div class="inbox-item-time">2h ago</div>
+          </div>
+          <div class="inbox-item">
+            <div class="inbox-item-dot"></div>
+            <div class="inbox-item-text">BatchDialer API changelog v3.2</div>
+            <div class="inbox-item-time">2h ago</div>
+          </div>
+          <div class="inbox-item">
+            <div class="inbox-item-dot"></div>
+            <div class="inbox-item-text">GHL workflow trigger edge cases</div>
+            <div class="inbox-item-time">2h ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Memory Health -->
+      <div class="sidebar-panel">
+        <div class="panel-header" style="margin-bottom:12px;">
+          <div class="panel-title">
+            <span class="panel-title-icon">🧠</span> Memory Health
+          </div>
+          <span class="tag green">Healthy</span>
+        </div>
+
+        <div class="memory-meter">
+          <div class="memory-meter-header">
+            <span class="memory-meter-label">MEMORY.md</span>
+            <span class="memory-meter-value">84 <em>/ 150 lines</em></span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill safe" style="width: 56%;"></div>
+          </div>
+        </div>
+
+        <div class="memory-stats">
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Last synthesis</span>
+            <span class="memory-stat-val">Mar 09, 2026</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Next due</span>
+            <span class="memory-stat-val yellow">Mar 14, 2026</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Daily logs</span>
+            <span class="memory-stat-val">8 files</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Archived</span>
+            <span class="memory-stat-val">23 files</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Headroom</span>
+            <span class="memory-stat-val green">66 lines free</span>
+          </div>
+        </div>
+
+        <div class="memory-subfolders">
+          <div class="memory-folder">
+            <span class="memory-folder-icon">📁</span>
+            <div class="memory-folder-info">
+              <div class="memory-folder-name">decisions/</div>
+              <div class="memory-folder-count">14 files</div>
+            </div>
+          </div>
+          <div class="memory-folder">
+            <span class="memory-folder-icon">📁</span>
+            <div class="memory-folder-info">
+              <div class="memory-folder-name">people/</div>
+              <div class="memory-folder-count">7 files</div>
+            </div>
+          </div>
+          <div class="memory-folder">
+            <span class="memory-folder-icon">📁</span>
+            <div class="memory-folder-info">
+              <div class="memory-folder-name">projects/</div>
+              <div class="memory-folder-count">5 files</div>
+            </div>
+          </div>
+          <div class="memory-folder">
+            <span class="memory-folder-icon">📁</span>
+            <div class="memory-folder-info">
+              <div class="memory-folder-name">context/</div>
+              <div class="memory-folder-count">9 files</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Health -->
+      <div class="sidebar-panel" style="flex:1;">
+        <div class="panel-header" style="margin-bottom:12px;">
+          <div class="panel-title">
+            <span class="panel-title-icon">◈</span> System
+          </div>
+        </div>
+        <div class="memory-stats">
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Railway</span>
+            <span class="memory-stat-val green">● Operational</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Deploy status</span>
+            <span class="memory-stat-val green">✓ Success</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Uptime</span>
+            <span class="memory-stat-val">3d 14h 22m</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">GitHub repo</span>
+            <span class="memory-stat-val">c7lavinder/xhaka</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Last commit</span>
+            <span class="memory-stat-val">3h 41m ago</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Telegram bot</span>
+            <span class="memory-stat-val green">● Connected</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">GHL webhook</span>
+            <span class="memory-stat-val green">● Verified</span>
+          </div>
+          <div class="memory-stat-row">
+            <span class="memory-stat-key">Model</span>
+            <span class="memory-stat-val">claude-sonnet-4-6</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+  </div><!-- /layout -->
+
+  <script>
+    // ── Clock ─────────────────────────────────────────
+    function updateClock() {
+      const now = new Date();
+      const opts = {
+        timeZone: 'America/Chicago',
+        hour12: false,
+        month: 'short', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      };
+      document.getElementById('clock').textContent =
+        now.toLocaleString('en-US', opts).replace(',', '');
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Elapsed timer ─────────────────────────────────
+    let elapsedSec = 6 * 60 + 22;
+    function fmtElapsed(s) {
+      const m = Math.floor(s / 60), sec = s % 60;
+      return `${m}m ${String(sec).padStart(2,'0')}s`;
+    }
+    setInterval(() => {
+      elapsedSec++;
+      const el = document.getElementById('elapsed');
+      if (el) el.textContent = fmtElapsed(elapsedSec);
+    }, 1000);
+
+    // ── Run History Data ──────────────────────────────
+    const runs = [
+      { time: 'today 18:40', agent: '🎨', name: 'Architect',   task: 'Building control-room.html — agent status panel, pipeline view',          outcome: 'pass', active: true },
+      { time: 'today 16:28', agent: '🔬', name: 'Researcher',  task: 'Morning briefing: PropTech VC Q1 2026, BatchDialer API updates, GHL triggers', outcome: 'pass' },
+      { time: 'today 16:24', agent: '🧠', name: 'Xhaka',       task: 'Memory synthesis triggered — distilled 5 daily logs into MEMORY.md',         outcome: 'pass' },
+      { time: 'today 14:02', agent: '👮', name: 'Auditor',     task: 'Code review: routes/ghl.js — 2 hardcoded strings, 1 missing null check',     outcome: 'warn' },
+      { time: 'today 13:50', agent: '👷', name: 'Builder',     task: 'GHL webhook handler: lead source normalization + duplicate contact fix',     outcome: 'pass' },
+      { time: 'today 11:33', agent: '⚙️', name: 'Operator',   task: 'GHL pipeline stage IDs extracted, Twilio webhook config verified against prod', outcome: 'pass' },
+      { time: 'today 10:15', agent: '👮', name: 'Auditor',     task: 'Scheduled 4h review — no blocking issues, 1 low-priority warning logged',   outcome: 'pass' },
+      { time: 'today 09:04', agent: '🔬', name: 'Researcher',  task: 'Sourced 3 wholesale data tools: DataTree, ATTOM, BatchLeads updates',        outcome: 'pass' },
+      { time: 'today 08:47', agent: '🎨', name: 'Architect',   task: 'KPI dashboard: added BatchDialer call volume widget, fixed mobile layout',   outcome: 'pass' },
+      { time: 'today 08:31', agent: '🧠', name: 'Xhaka',       task: 'Session startup: loaded MEMORY.md, checked Railway status, briefed Corey',   outcome: 'pass' },
+      { time: 'Mar 10 22:14', agent: '👷', name: 'Builder',    task: 'Gunner V2: Supabase schema migration — calls table, analysis_results FK',    outcome: 'pass' },
+      { time: 'Mar 10 20:03', agent: '👮', name: 'Auditor',    task: 'Post-build review: Supabase migration — schema validated, RLS policies OK',  outcome: 'pass' },
+      { time: 'Mar 10 17:45', agent: '⚙️', name: 'Operator',  task: 'Pulled Gunner GHL pipeline IDs — 6 stages mapped, 2 custom fields located',  outcome: 'pass' },
+      { time: 'Mar 10 14:22', agent: '🔬', name: 'Researcher', task: 'Researched pgvector extension setup for Supabase — documented in context/',  outcome: 'pass' },
+      { time: 'Mar 10 11:08', agent: '👷', name: 'Builder',    task: 'BatchDialer sync: rate limit backoff, deduplication by call SID',            outcome: 'fail' },
+      { time: 'Mar 10 09:30', agent: '👮', name: 'Auditor',    task: 'Flagged missing Sentry DSN in prod env — critical, immediate patch required', outcome: 'warn' },
+      { time: 'Mar 09 21:15', agent: '👷', name: 'Builder',    task: 'Sentry integration: DSN wired, test error thrown and captured successfully', outcome: 'pass' },
+      { time: 'Mar 09 19:40', agent: '🎨', name: 'Architect',  task: 'LangSmith trace viewer widget — embedded iframe placeholder, style matched', outcome: 'pass' },
+      { time: 'Mar 09 16:55', agent: '🔬', name: 'Researcher', task: 'PostHog event taxonomy designed: call_graded, playbook_opened, lead_viewed',  outcome: 'pass' },
+      { time: 'Mar 09 14:30', agent: '👷', name: 'Builder',    task: 'PostHog analytics wired into Gunner frontend — 4 events instrumented',       outcome: 'pass' },
+      { time: 'Mar 09 12:00', agent: '⚙️', name: 'Operator',  task: 'Verified CallRail API key scope — voicemail read access confirmed',           outcome: 'pass' },
+      { time: 'Mar 09 10:18', agent: '🔬', name: 'Researcher', task: 'Morning briefing: Sentry docs, Railway cron options, LangSmith tracing guide', outcome: 'pass' },
+      { time: 'Mar 08 20:44', agent: '👮', name: 'Auditor',    task: 'Full repo audit post-migration: 12 files reviewed, 3 low warnings, clean',   outcome: 'pass' },
+      { time: 'Mar 08 18:22', agent: '👷', name: 'Builder',    task: 'Express server refactor: static routes, /control-room handler, 404 fallback', outcome: 'pass' },
+    ];
+
+    function renderRuns() {
+      const feed = document.getElementById('runFeed');
+      feed.innerHTML = runs.map(r => `
+        <div class="run-item">
+          <span class="run-time">${r.time}</span>
+          <span class="run-agent">
+            <span class="run-agent-emoji">${r.agent}</span>
+            <span class="run-agent-name">${r.name}</span>
+          </span>
+          <span class="run-summary"><span>${r.task}</span></span>
+          <span class="run-outcome">
+            <span class="outcome-pill ${r.outcome}">${r.outcome}</span>
+          </span>
+        </div>
+      `).join('');
+    }
+    renderRuns();
+
+    // ── Subtle auto-refresh shimmer on running agents ─
+    // (placeholder for live polling once API is wired)
+    const cards = document.querySelectorAll('.agent-card.status-running');
+    cards.forEach(card => {
+      setInterval(() => {
+        const meta = card.querySelector('.agent-meta');
+        if (meta) {
+          // just a visual nudge — will be replaced by real data fetch
+        }
+      }, 5000);
+    });
+  </script>
+
+</body>
+</html>
