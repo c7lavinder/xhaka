@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xhaka — Command Center</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+
+    /* Header */
+    .header { margin-bottom: 48px; }
+    .header h1 { font-size: 2.4rem; font-weight: 700; color: #fff; letter-spacing: -1px; }
+    .header h1 span { color: #7c3aed; }
+    .header p { margin-top: 8px; color: #666; font-size: 0.9rem; }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #111; border: 1px solid #1f1f1f;
+      border-radius: 999px; padding: 4px 14px;
+      font-size: 0.75rem; color: #aaa; margin-top: 16px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media(max-width:600px) { .grid,.grid-3 { grid-template-columns: 1fr; } }
+
+    /* Cards */
+    .card {
+      background: #111; border: 1px solid #1f1f1f;
+      border-radius: 12px; padding: 20px;
+    }
+    .card h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 12px; }
+    .card .value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+    .card .label { font-size: 0.8rem; color: #555; margin-top: 4px; }
+
+    /* Services */
+    .service-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid #1a1a1a;
+    }
+    .service-row:last-child { border-bottom: none; }
+    .service-name { font-size: 0.95rem; color: #ddd; }
+    .service-meta { font-size: 0.75rem; color: #555; margin-top: 2px; }
+    .badge {
+      font-size: 0.7rem; padding: 3px 10px; border-radius: 999px; font-weight: 600;
+    }
+    .badge.green { background: #052e16; color: #22c55e; border: 1px solid #166534; }
+    .badge.yellow { background: #1c1500; color: #eab308; border: 1px solid #713f12; }
+    .badge.red { background: #1c0505; color: #ef4444; border: 1px solid #7f1d1d; }
+
+    /* Agents */
+    .agent-card {
+      background: #111; border: 1px solid #1f1f1f;
+      border-radius: 10px; padding: 16px;
+    }
+    .agent-emoji { font-size: 1.4rem; margin-bottom: 8px; }
+    .agent-name { font-size: 0.9rem; font-weight: 600; color: #fff; }
+    .agent-role { font-size: 0.75rem; color: #555; margin-top: 2px; }
+
+    /* Intel */
+    .intel-item {
+      padding: 12px 0; border-bottom: 1px solid #1a1a1a;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .intel-item:last-child { border-bottom: none; }
+    .intel-tag {
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 4px;
+      background: #1a0a2e; color: #a855f7; border: 1px solid #3b0764;
+      white-space: nowrap; margin-top: 2px;
+    }
+    .intel-text { font-size: 0.85rem; color: #bbb; line-height: 1.4; }
+
+    section { margin-bottom: 32px; }
+    .section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #444; margin-bottom: 14px; }
+    .full-card { background: #111; border: 1px solid #1f1f1f; border-radius: 12px; padding: 20px; }
+
+    footer { margin-top: 60px; text-align: center; font-size: 0.75rem; color: #333; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🧠 <span>Xhaka</span></h1>
+    <p>Cognitive exoskeleton. Trusted lieutenant. Ghost in the machine.</p>
+    <div class="status-pill">
+      <span class="dot"></span>
+      Systems operational — Railway Production
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <section>
+    <div class="section-title">Overview</div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Services</h3>
+        <div class="value">2</div>
+        <div class="label">Running on Railway</div>
+      </div>
+      <div class="card">
+        <h3>Agents</h3>
+        <div class="value">5</div>
+        <div class="label">Specialists on deck</div>
+      </div>
+      <div class="card">
+        <h3>Intelligence</h3>
+        <div class="value">3</div>
+        <div class="label">Scheduled jobs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section>
+    <div class="section-title">Railway Services</div>
+    <div class="full-card">
+      <div class="service-row">
+        <div>
+          <div class="service-name">xhaka</div>
+          <div class="service-meta">Command Center — this page</div>
+        </div>
+        <span class="badge green">Online</span>
+      </div>
+      <div class="service-row">
+        <div>
+          <div class="service-name">xhaka-intelligence</div>
+          <div class="service-meta">capture (5m) · propagate (daily 6AM) · improve (Mon 6AM)</div>
+        </div>
+        <span class="badge green">Online</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agents -->
+  <section>
+    <div class="section-title">The Team</div>
+    <div class="grid">
+      <div class="agent-card">
+        <div class="agent-emoji">🧠</div>
+        <div class="agent-name">Xhaka</div>
+        <div class="agent-role">COO — Strategy, memory, accountability</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji">👷‍♂️</div>
+        <div class="agent-name">The Builder</div>
+        <div class="agent-role">Engineering — Core backend, APIs, schema</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji">👮‍♂️</div>
+        <div class="agent-name">The Auditor</div>
+        <div class="agent-role">QA — Code reviews, standards enforcement</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji">🔬</div>
+        <div class="agent-name">The Researcher</div>
+        <div class="agent-role">R&D — Industry trends, tools, intel</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji">⚙️</div>
+        <div class="agent-name">The Operator</div>
+        <div class="agent-role">Systems — GHL, Twilio, Railway config</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji">🎨</div>
+        <div class="agent-name">The Architect</div>
+        <div class="agent-role">Frontend — Dashboards, UI, data viz</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intelligence Pipeline -->
+  <section>
+    <div class="section-title">Intelligence Pipeline</div>
+    <div class="full-card">
+      <div class="intel-item">
+        <span class="intel-tag">capture</span>
+        <div class="intel-text">Polls <code>intelligence/inbox/</code> every 5 minutes. Routes items to processed/.</div>
+      </div>
+      <div class="intel-item">
+        <span class="intel-tag">propagate</span>
+        <div class="intel-text">Daily at 6 AM CST. Scans processed items from last 24h, updates relevant agent files.</div>
+      </div>
+      <div class="intel-item">
+        <span class="intel-tag">improve</span>
+        <div class="intel-text">Every Monday at 6 AM CST. Pulls git history + Railway logs, extracts lessons for agents.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>Xhaka · c7lavinder/xhaka · Railway Production</footer>
+
+</div>
+</body>
+</html>
