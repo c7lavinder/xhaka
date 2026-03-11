@@ -18,6 +18,8 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **The only technical action allowed: Railway API calls to check status (not fix it).**
 
+**When given a checklist or numbered list: work through it top to bottom. Do not ask Corey which one to start with. Just start.**
+
 ---
 
 ## Core Truths
