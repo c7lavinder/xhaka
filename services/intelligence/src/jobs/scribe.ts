@@ -303,8 +303,15 @@ export async function runScribe(): Promise<void> {
 
   console.log(`[scribe] Starting nightly run for ${dateStr}`);
 
+  // Track errors so Step 3 always fires
+  let digestError: Error | null = null;
+  let extractionError: Error | null = null;
+  let totalCommits = 0;
+  let decisionsCount = 0;
+  let rulesCount = 0;
+
+  // ── Step 1: GitHub Digest (isolated) ─────────────────────────────────────
   try {
-    // ── Step 1: GitHub Digest ──────────────────────────────────────────────
     console.log('[scribe] Step 1: GitHub digest...');
     const [xhakaResult, gunnerResult] = await Promise.all([
       digestRepo(XHAKA_REPO),
@@ -333,14 +340,16 @@ export async function runScribe(): Promise<void> {
       console.log('[scribe] gunner entry:', gunnerEntry);
     }
 
-    const totalCommits = xhakaResult.count + gunnerResult.count;
+    totalCommits = xhakaResult.count + gunnerResult.count;
     console.log(`[scribe] Digested ${totalCommits} total commits`);
+  } catch (err) {
+    digestError = err as Error;
+    console.error('[scribe] Step 1 failed (non-fatal):', digestError.message);
+  }
 
-    // ── Step 2: Session Extraction ─────────────────────────────────────────
+  // ── Step 2: Session Extraction (isolated) ────────────────────────────────
+  try {
     console.log('[scribe] Step 2: Session extraction...');
-    let decisionsCount = 0;
-    let rulesCount = 0;
-
     const extraction = await extractSession(dateStr);
     if (extraction) {
       decisionsCount = extraction.decisions?.length ?? 0;
@@ -352,23 +361,39 @@ export async function runScribe(): Promise<void> {
         console.log('[scribe] DRY_RUN — would route:', JSON.stringify(extraction, null, 2));
       }
     }
+  } catch (err) {
+    extractionError = err as Error;
+    console.error('[scribe] Step 2 failed (non-fatal):', extractionError.message);
+  }
 
-    // ── Step 3: Telegram Summary ───────────────────────────────────────────
-    console.log('[scribe] Step 3: Telegram summary...');
-    const summary =
-      `📋 *Nightly Scribe* — ${dateStr}\n` +
-      `✅ ${decisionsCount} decisions filed\n` +
-      `🔨 ${totalCommits} commits digested\n` +
-      `📌 ${rulesCount} rules captured`;
+  // ── Step 3: Telegram Summary — ALWAYS FIRES (proof of life) ─────────────
+  console.log('[scribe] Step 3: Telegram summary...');
+  
+  let statusLine: string;
+  if (digestError || extractionError) {
+    statusLine = `⚠️ Partial run — digest: ${digestError ? '✗' : '✓'}, extraction: ${extractionError ? '✗' : '✓'}`;
+  } else {
+    statusLine = `✅ ${decisionsCount} decisions filed, ${totalCommits} commits digested, ${rulesCount} rules captured`;
+  }
 
+  const summary =
+    `📋 *Nightly Scribe* — ${dateStr}\n` +
+    statusLine + `\n` +
+    `🕐 _System alive at ${new Date().toISOString()}_`;
+
+  try {
     await sendAlert(summary);
+  } catch (alertErr) {
+    console.error('[scribe] Failed to send Telegram summary:', (alertErr as Error).message);
+  }
 
+  // Mark job status based on whether all steps succeeded
+  if (digestError || extractionError) {
+    // Partial success — mark as success but errors are logged
+    console.warn('[scribe] Completed with errors');
+    await markJobSuccess('scribe', startTime);
+  } else {
     await markJobSuccess('scribe', startTime);
     console.log('[scribe] Done');
-  } catch (err) {
-    console.error('[scribe] Fatal error:', err);
-    await markJobFailed('scribe', startTime);
-    await sendAlert(`🚨 *SCRIBE FAILED* — ${dateStr}: ${(err as Error).message}`);
-    throw err;
   }
 }

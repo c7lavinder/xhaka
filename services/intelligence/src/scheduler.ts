@@ -6,15 +6,21 @@ import { runCleanup } from './jobs/cleanup.js';
 import { runOrganize } from './jobs/organize.js';
 import { runSynthesize } from './jobs/synthesize.js';
 import { runToolMonitor } from './jobs/tool-monitor.js';
-import { runWatchdog } from './jobs/watchdog.js';
+import { runWatchdog, runWeeklyHeartbeat } from './jobs/watchdog.js';
 import { runScribe } from './jobs/scribe.js';
 import { runOperator } from './jobs/operator.js';
+import { runDailyLog } from './jobs/daily-log.js';
+import { getFileContent } from './lib/github.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
 // ---------------------------------------------------------------------------
 
 const TIMEZONE = 'America/Chicago';
+const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
+
+// Jobs excluded from catch-up (high-frequency or already self-recovering)
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log']);
 
 function safeRun(
   jobName: string,
@@ -64,9 +70,10 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Synthesize: every 5 days at 7:00 AM CST ---
+  // --- Synthesize: fixed dates to avoid month-boundary gaps ---
+  // FIX 4: Changed from '0 7 */5 * *' to explicit dates
   cron.schedule(
-    '0 7 */5 * *',
+    '0 7 1,6,11,16,21,26 * *',
     safeRun('synthesize', runSynthesize),
     { timezone: TIMEZONE },
   );
@@ -85,6 +92,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Weekly Heartbeat: every Monday at 8:00 AM CST ---
+  cron.schedule(
+    '0 8 * * 1',
+    safeRun('watchdog-heartbeat', runWeeklyHeartbeat),
+    { timezone: TIMEZONE },
+  );
+
   // --- Scribe: daily at midnight CST ---
   cron.schedule(
     '0 0 * * *',
@@ -99,22 +113,31 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Daily Log Writer: every 6 hours ---
+  cron.schedule(
+    '0 */6 * * *',
+    safeRun('daily-log', runDailyLog),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
-  console.log('  ✓ capture      — every 5 minutes');
-  console.log('  ✓ propagate    — daily at 6:00 AM CST');
-  console.log('  ✓ improve      — every Monday at 6:00 AM CST');
-  console.log('  ✓ cleanup      — every Sunday at 6:00 AM CST');
-  console.log('  ✓ organize     — daily at 11:00 PM CST');
-  console.log('  ✓ synthesize   — every 5 days at 7:00 AM CST');
-  console.log('  ✓ tool-monitor — daily at 6:05 AM CST');
-  console.log('  ✓ watchdog     — every 10 minutes');
-  console.log('  ✓ scribe       — daily at midnight CST');
-  console.log('  ✓ operator     — every minute (self-healing)');
+  console.log('  ✓ capture          — every 5 minutes');
+  console.log('  ✓ propagate        — daily at 6:00 AM CST');
+  console.log('  ✓ improve          — every Monday at 6:00 AM CST');
+  console.log('  ✓ cleanup          — every Sunday at 6:00 AM CST');
+  console.log('  ✓ organize         — daily at 11:00 PM CST');
+  console.log('  ✓ synthesize       — 1st,6th,11th,16th,21st,26th at 7:00 AM CST');
+  console.log('  ✓ tool-monitor     — daily at 6:05 AM CST');
+  console.log('  ✓ watchdog         — every 10 minutes');
+  console.log('  ✓ weekly-heartbeat — every Monday at 8:00 AM CST');
+  console.log('  ✓ scribe           — daily at midnight CST');
+  console.log('  ✓ operator         — every minute (self-healing)');
+  console.log('  ✓ daily-log        — every 6 hours');
 }
 
 // ---------------------------------------------------------------------------
 // Manual trigger — allows running a specific job immediately via env var
-// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize|watchdog|scribe|operator
+// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize|watchdog|scribe|operator|daily-log
 // ---------------------------------------------------------------------------
 
 export async function runJobNow(jobName: string): Promise<void> {
@@ -143,15 +166,89 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'watchdog':
       await runWatchdog();
       break;
+    case 'watchdog-heartbeat':
+      await runWeeklyHeartbeat();
+      break;
     case 'scribe':
       await runScribe();
       break;
     case 'operator':
       await runOperator();
       break;
+    case 'daily-log':
+      await runDailyLog();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, scribe, operator`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log`,
       );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Catch-up — runs missed jobs on boot (FIX 5)
+// ---------------------------------------------------------------------------
+
+type RegistryEntry = {
+  lastRun: string | null;
+  expectedIntervalHours: number;
+};
+
+export async function catchUpMissedJobs(): Promise<void> {
+  console.log('[scheduler] Checking for missed jobs...');
+
+  const file = await getFileContent(REPO, 'data/job-registry.json');
+  if (!file) {
+    console.warn('[scheduler] Could not load job-registry.json for catch-up check');
+    return;
+  }
+
+  let registry: Record<string, RegistryEntry>;
+  try {
+    registry = JSON.parse(file.content);
+  } catch {
+    console.error('[scheduler] job-registry.json parse failed during catch-up — skipping');
+    return;
+  }
+
+  const now = Date.now();
+  const missedJobs: string[] = [];
+
+  for (const [jobName, entry] of Object.entries(registry)) {
+    if (CATCHUP_EXCLUDED.has(jobName)) continue;
+
+    const thresholdMs = entry.expectedIntervalHours * 1.5 * 60 * 60 * 1000;
+    const lastRun = entry.lastRun ? new Date(entry.lastRun).getTime() : 0;
+    const overdue = !entry.lastRun || (now - lastRun) > thresholdMs;
+
+    if (overdue) {
+      missedJobs.push(jobName);
+    }
+  }
+
+  if (missedJobs.length === 0) {
+    console.log('[scheduler] No missed jobs to catch up');
+    return;
+  }
+
+  console.log(`[scheduler] Found ${missedJobs.length} missed job(s): ${missedJobs.join(', ')}`);
+
+  for (const jobName of missedJobs) {
+    const lastRun = registry[jobName]?.lastRun ?? 'never';
+    console.log(`[scheduler] 🔄 Catching up missed job: ${jobName} (last ran: ${lastRun})`);
+    
+    try {
+      await runJobNow(jobName);
+    } catch (err) {
+      console.error(`[scheduler] Catch-up failed for ${jobName}:`, (err as Error).message);
+    }
+
+    // 30-second delay between jobs to avoid hammering APIs
+    if (missedJobs.indexOf(jobName) < missedJobs.length - 1) {
+      console.log('[scheduler] Waiting 30s before next catch-up job...');
+      await new Promise((resolve) => setTimeout(resolve, 30_000));
+    }
+  }
+
+  console.log('[scheduler] Catch-up check complete');
 }

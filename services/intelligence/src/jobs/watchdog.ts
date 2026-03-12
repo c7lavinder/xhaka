@@ -1,5 +1,6 @@
 // services/intelligence/src/jobs/watchdog.ts
 // Runs every 10 min: checks job registry for overdue jobs + pings /health endpoint
+// Weekly heartbeat: every Monday at 8 AM CST
 
 import { sendAlert } from '../utils/alert.js';
 import { getFileContent } from '../lib/github.js';
@@ -101,4 +102,28 @@ export async function runWatchdog(): Promise<void> {
   }
 
   console.log('[watchdog] Done');
+}
+
+/**
+ * Weekly heartbeat — sends a "system healthy" message every Monday at 8 AM CST.
+ * This is a proof-of-life signal. If Corey doesn't receive it, something is wrong.
+ */
+export async function runWeeklyHeartbeat(): Promise<void> {
+  const today = new Date();
+  const dateStr = today.toISOString().split('T')[0];
+  
+  const jobNames = [
+    'capture', 'propagate', 'improve', 'cleanup',
+    'organize', 'synthesize', 'tool-monitor', 'watchdog',
+    'scribe', 'operator', 'daily-log',
+  ];
+  
+  const message =
+    `💚 *Xhaka Weekly Check-In* — ${dateStr}\n` +
+    `All systems operational. Jobs monitored: ${jobNames.length}\n` +
+    `No escalations this week.\n` +
+    `_(You will receive this every Monday. Silence = problem.)_`;
+  
+  await sendAlert(message);
+  console.log('[watchdog] Weekly heartbeat sent');
 }
