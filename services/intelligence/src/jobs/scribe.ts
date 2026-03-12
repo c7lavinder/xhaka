@@ -186,7 +186,25 @@ Be thorough but concise. Omit categories with no content. Return valid JSON only
         content: `Daily session log for ${dateStr}:\n\n${sessionContent.slice(0, 8000)}\n\nExtract and return JSON matching this schema exactly:\n{\n  "decisions": [{"summary": "", "date": "${dateStr}", "context": "", "outcome": ""}],\n  "tasks": [{"action": "", "owner": "", "status": ""}],\n  "rules": [{"rule": ""}],\n  "people": [{"name": "", "role": "", "notes": ""}],\n  "project_updates": [{"project": "", "status": "", "notes": ""}]\n}`,
       },
     ],
-    response_format: { type: 'json_object' },
+    response_format: {
+      type: 'json_schema',
+      json_schema: {
+        name: 'session_extraction',
+        strict: true,
+        schema: {
+          type: 'object',
+          properties: {
+            decisions: { type: 'array', items: { type: 'object', properties: { summary: { type: 'string' }, date: { type: 'string' }, context: { type: 'string' }, outcome: { type: 'string' } }, required: ['summary','date','context','outcome'], additionalProperties: false } },
+            tasks: { type: 'array', items: { type: 'object', properties: { action: { type: 'string' }, owner: { type: 'string' }, status: { type: 'string' } }, required: ['action','owner','status'], additionalProperties: false } },
+            rules: { type: 'array', items: { type: 'object', properties: { rule: { type: 'string' } }, required: ['rule'], additionalProperties: false } },
+            people: { type: 'array', items: { type: 'object', properties: { name: { type: 'string' }, role: { type: 'string' }, notes: { type: 'string' } }, required: ['name','role','notes'], additionalProperties: false } },
+            project_updates: { type: 'array', items: { type: 'object', properties: { project: { type: 'string' }, status: { type: 'string' }, notes: { type: 'string' } }, required: ['project','status','notes'], additionalProperties: false } }
+          },
+          required: ['decisions','tasks','rules','people','project_updates'],
+          additionalProperties: false
+        }
+      }
+    },
     temperature: 0.1,
   });
 
