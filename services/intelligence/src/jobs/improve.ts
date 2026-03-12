@@ -1,6 +1,7 @@
 import { getRecentCommits, getFileContent, updateFile } from '../lib/github.js';
 import { getRecentFailureSummary } from '../lib/railway.js';
 import { generateBuilderLesson, generateOperatorLesson } from '../lib/openai.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const WATCH_REPO = process.env.WATCH_REPO ?? 'c7lavinder/xhaka';
@@ -16,15 +17,24 @@ const LESSONS_HEADING = '## Lessons Learned';
 // ---------------------------------------------------------------------------
 
 export async function runImprove(): Promise<void> {
-  console.log('[improve] Starting weekly improvement run...');
+  const _startTime = markJobStart('improve');
+  try {
+    console.log('[improve] Starting weekly improvement run...');
 
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const date = new Date().toISOString().split('T')[0];
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const date = new Date().toISOString().split('T')[0];
 
-  await runBuilderImprovement(since, date);
-  await runOperatorImprovement(since, date);
+    await runBuilderImprovement(since, date);
+    await runOperatorImprovement(since, date);
 
-  console.log('[improve] Done.');
+    console.log('[improve] Done.');
+
+    await markJobSuccess('improve', _startTime);
+  } catch (err) {
+    console.error('[improve] Fatal error:', err);
+    await markJobFailed('improve', _startTime);
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
