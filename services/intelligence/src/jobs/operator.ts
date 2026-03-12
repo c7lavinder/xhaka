@@ -1,0 +1,385 @@
+// services/intelligence/src/jobs/operator.ts
+// Autonomous self-healing agent — monitors job-registry, remediates Railway failures
+
+import {
+  getLatestDeployment,
+  getDeploymentLogs,
+  redeployService,
+  rollbackDeployment,
+} from '../lib/railway-api.js';
+import { getFileContent, updateFile, createFile } from '../lib/github.js';
+import { sendAlert } from '../utils/alert.js';
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+export type FailureType =
+  | 'code_bug'
+  | 'network_transient'
+  | 'missing_env'
+  | 'rate_limit'
+  | 'railway_infra'
+  | 'unknown';
+
+export type RemediationAction =
+  | 'restart'
+  | 'redeploy'
+  | 'rollback'
+  | 'escalate'
+  | 'wait_retry';
+
+export interface JobEntry {
+  id: string;
+  name: string;
+  serviceId: string;
+  environmentId: string;
+  lastStatus: 'success' | 'failed' | 'running' | 'unknown';
+  lastRun: string;
+}
+
+export interface RemediationState {
+  jobId: string;
+  attempt: number;
+  startedAt: string;
+  failureType: FailureType;
+  lastAction: RemediationAction;
+  waitUntil: string;
+}
+
+export interface OperatorLogEntry {
+  timestamp: string;
+  job: string;
+  action: RemediationAction | 'classify' | 'alert';
+  outcome: 'success' | 'failed' | 'pending' | 'escalated';
+  attempt: number;
+  detail?: string;
+}
+
+// ─── Globals ─────────────────────────────────────────────────────────────────
+
+let isRunning = false; // Debounce flag — prevents overlapping runs
+
+const activeRemediations = new Map<string, RemediationState>();
+const attemptTracker = new Map<string, { count: number; windowStart: number }>();
+
+const WAIT_BETWEEN_ATTEMPTS_MS = 3 * 60 * 1000; // 3 minutes
+const MAX_ATTEMPTS_PER_24H = 3;
+const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
+const REGISTRY_PATH = 'data/job-registry.json';
+const OPERATOR_LOG_PATH = 'memory/context/operator-log.md';
+
+// ─── Failure Classification ───────────────────────────────────────────────────
+
+export const FAILURE_PATTERNS: Record<
+  Exclude<FailureType, 'railway_infra' | 'unknown'>,
+  RegExp
+> = {
+  missing_env:
+    /missing env|undefined.*process\.env|environment variable.*not (set|found)|is not defined|Cannot read propert(y|ies) .* undefined/i,
+  code_bug:
+    /TypeError|ReferenceError|SyntaxError|at\s+\S+\s+\(.*:\d+:\d+\)|UnhandledPromiseRejection|Error: Cannot/i,
+  rate_limit: /429|rate.?limit|too many requests|Retry-After/i,
+  network_transient: /ETIMEDOUT|ECONNRESET|ECONNREFUSED|ENOTFOUND|socket hang up|network timeout/i,
+};
+
+export function classifyFailure(logs: string[]): FailureType {
+  if (logs.length === 0) return 'railway_infra';
+  const logText = logs.join('\n');
+  if (FAILURE_PATTERNS.missing_env.test(logText)) return 'missing_env';
+  if (FAILURE_PATTERNS.code_bug.test(logText)) return 'code_bug';
+  if (FAILURE_PATTERNS.rate_limit.test(logText)) return 'rate_limit';
+  if (FAILURE_PATTERNS.network_transient.test(logText)) return 'network_transient';
+  return 'unknown';
+}
+
+// ─── 24h Attempt Guard ────────────────────────────────────────────────────────
+
+function canAttemptRemediation(jobId: string): boolean {
+  const now = Date.now();
+  const tracker = attemptTracker.get(jobId);
+  if (!tracker || now - tracker.windowStart > 24 * 60 * 60 * 1000) {
+    attemptTracker.set(jobId, { count: 0, windowStart: now });
+    return true;
+  }
+  return tracker.count < MAX_ATTEMPTS_PER_24H;
+}
+
+function incrementAttemptCount(jobId: string): void {
+  const tracker = attemptTracker.get(jobId) ?? { count: 0, windowStart: Date.now() };
+  tracker.count += 1;
+  attemptTracker.set(jobId, tracker);
+}
+
+// ─── Operator Log (appends to memory/context/operator-log.md via GitHub) ─────
+
+async function appendOperatorLog(entry: OperatorLogEntry): Promise<void> {
+  try {
+    const line =
+      `| ${entry.timestamp} | ${entry.job} | ${entry.action} | ` +
+      `${entry.outcome} | ${entry.attempt} | ${entry.detail ?? ''} |\n`;
+
+    const file = await getFileContent(REPO, OPERATOR_LOG_PATH);
+
+    if (file) {
+      const updated = file.content + line;
+      await updateFile(
+        REPO,
+        OPERATOR_LOG_PATH,
+        updated,
+        `chore: operator-log [${entry.job}=${entry.action}]`,
+        file.sha,
+      );
+    } else {
+      const header =
+        `# Operator Log\n\n` +
+        `| Timestamp | Job | Action | Outcome | Attempt | Detail |\n` +
+        `|-----------|-----|--------|---------|---------|--------|\n` +
+        line;
+      await createFile(
+        REPO,
+        OPERATOR_LOG_PATH,
+        header,
+        `chore: operator-log init [${entry.job}=${entry.action}]`,
+      );
+    }
+  } catch (err) {
+    console.error('[operator] Failed to append operator log:', (err as Error).message);
+  }
+}
+
+// ─── Alert Message Builders ───────────────────────────────────────────────────
+
+function buildTier3Alert(
+  job: string,
+  failureType: FailureType,
+  lastLogLine: string,
+): string {
+  return (
+    `🚨 *Operator Escalation* — ${job}\n` +
+    `Failed after 3 attempts.\n` +
+    `Diagnosis: ${failureType}\n` +
+    `Last error: ${lastLogLine}\n` +
+    `Actions tried: restart → redeploy → rollback\n` +
+    `Needs: human intervention`
+  );
+}
+
+function buildImmediateEscalationAlert(
+  job: string,
+  failureType: 'missing_env' | 'code_bug',
+  lastLogLine: string,
+): string {
+  return (
+    `🚨 *Operator Escalation* — IMMEDIATE\n` +
+    `${job} has a ${failureType} failure.\n` +
+    `Cannot auto-remediate.\n` +
+    `Last error: ${lastLogLine}\n` +
+    `Needs: human intervention now`
+  );
+}
+
+function buildInfraAlert(failedJobs: string[]): string {
+  return (
+    `🚨 *Operator Escalation* — RAILWAY INFRA\n` +
+    `${failedJobs.length} jobs failed simultaneously: ${failedJobs.join(', ')}\n` +
+    `Likely Railway infrastructure issue.\n` +
+    `No auto-remediation attempted.\n` +
+    `Check: https://status.railway.app`
+  );
+}
+
+// ─── Job Registry Reader ──────────────────────────────────────────────────────
+
+type RegistryEntry = {
+  lastStatus: string | null;
+  lastRun: string | null;
+  durationMs: number;
+  expectedIntervalHours: number;
+  gracePeriodMinutes: number;
+};
+
+async function readFailedJobs(): Promise<JobEntry[]> {
+  const file = await getFileContent(REPO, REGISTRY_PATH);
+  if (!file) return [];
+
+  const registry = JSON.parse(file.content) as Record<string, RegistryEntry>;
+  const serviceId = process.env.RAILWAY_SERVICE_ID ?? '';
+  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID ?? '';
+
+  return Object.entries(registry)
+    .filter(([, entry]) => entry.lastStatus === 'failed')
+    .map(([name, entry]) => ({
+      id: name,
+      name,
+      serviceId,
+      environmentId,
+      lastStatus: 'failed' as const,
+      lastRun: entry.lastRun ?? new Date().toISOString(),
+    }));
+}
+
+// ─── Core Remediation Logic ───────────────────────────────────────────────────
+
+async function remediateJob(
+  job: JobEntry,
+  existing: RemediationState | undefined,
+): Promise<void> {
+  const serviceId = job.serviceId || process.env.RAILWAY_SERVICE_ID || '';
+  const environmentId = job.environmentId || process.env.RAILWAY_ENVIRONMENT_ID || '';
+
+  // Fetch current deployment info + logs
+  const deployment = await getLatestDeployment(serviceId, environmentId);
+  if (!deployment.current) {
+    console.warn(`[operator] No deployment found for job: ${job.name}`);
+    return;
+  }
+
+  const logs = await getDeploymentLogs(deployment.current.id, 50);
+  const failureType = classifyFailure(logs);
+  const lastLogLine = logs[logs.length - 1] ?? 'No logs available';
+
+  // Immediate escalation — missing_env or code_bug
+  if (failureType === 'missing_env' || failureType === 'code_bug') {
+    await sendAlert(buildImmediateEscalationAlert(job.name, failureType, lastLogLine));
+    await appendOperatorLog({
+      timestamp: new Date().toISOString(),
+      job: job.name,
+      action: 'alert',
+      outcome: 'escalated',
+      attempt: existing?.attempt ?? 0,
+      detail: `Immediate escalation: ${failureType}`,
+    });
+    activeRemediations.delete(job.id);
+    return;
+  }
+
+  const attempt = existing ? existing.attempt + 1 : 1;
+  incrementAttemptCount(job.id);
+
+  let action: RemediationAction;
+  let actionSuccess = false;
+
+  if (attempt === 1) {
+    // Attempt 1: restart via serviceInstanceRedeploy
+    action = 'restart';
+    actionSuccess = await redeployService(serviceId, environmentId);
+  } else if (attempt === 2) {
+    // Attempt 2: full redeploy
+    action = 'redeploy';
+    actionSuccess = await redeployService(serviceId, environmentId);
+  } else if (attempt === 3) {
+    // Attempt 3: rollback to prior stable deployment
+    action = 'rollback';
+    const priorId = deployment.prior?.id;
+    actionSuccess = priorId ? await rollbackDeployment(priorId) : false;
+  } else {
+    // All attempts exhausted — Tier 3 escalation
+    await sendAlert(buildTier3Alert(job.name, failureType, lastLogLine));
+    await appendOperatorLog({
+      timestamp: new Date().toISOString(),
+      job: job.name,
+      action: 'alert',
+      outcome: 'escalated',
+      attempt,
+      detail: `All 3 attempts exhausted. failureType=${failureType}`,
+    });
+    activeRemediations.delete(job.id);
+    return;
+  }
+
+  const waitUntil = new Date(Date.now() + WAIT_BETWEEN_ATTEMPTS_MS).toISOString();
+
+  activeRemediations.set(job.id, {
+    jobId: job.id,
+    attempt,
+    startedAt: new Date().toISOString(),
+    failureType,
+    lastAction: action,
+    waitUntil,
+  });
+
+  await appendOperatorLog({
+    timestamp: new Date().toISOString(),
+    job: job.name,
+    action,
+    outcome: actionSuccess ? 'pending' : 'failed',
+    attempt,
+    detail: `failureType=${failureType}, waitUntil=${waitUntil}`,
+  });
+
+  // Tier 2 — after 2nd attempt fails, log warning for Xhaka
+  if (attempt === 2) {
+    await appendOperatorLog({
+      timestamp: new Date().toISOString(),
+      job: job.name,
+      action: 'alert',
+      outcome: 'pending',
+      attempt,
+      detail: `⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=${failureType}`,
+    });
+  }
+
+  console.log(
+    `[operator] Job=${job.name} attempt=${attempt} action=${action} success=${actionSuccess} waitUntil=${waitUntil}`,
+  );
+}
+
+// ─── Main Operator Run ────────────────────────────────────────────────────────
+
+export async function runOperator(): Promise<void> {
+  if (isRunning) {
+    console.log('[operator] Already running — skipping tick');
+    return;
+  }
+  isRunning = true;
+
+  try {
+    const failedJobs = await readFailedJobs();
+
+    if (failedJobs.length === 0) {
+      console.log('[operator] All jobs healthy — no action needed');
+      return;
+    }
+
+    // Hard boundary: 3+ simultaneous failures = Railway infra issue
+    if (failedJobs.length >= 3) {
+      const alert = buildInfraAlert(failedJobs.map((j) => j.name));
+      await sendAlert(alert);
+      await appendOperatorLog({
+        timestamp: new Date().toISOString(),
+        job: 'SYSTEM',
+        action: 'alert',
+        outcome: 'escalated',
+        attempt: 0,
+        detail: `${failedJobs.length} jobs down simultaneously — infra suspected`,
+      });
+      console.warn(`[operator] ${failedJobs.length} jobs failed — Railway infra alert sent`);
+      return;
+    }
+
+    console.log(`[operator] ${failedJobs.length} failed job(s) detected — remediating`);
+
+    for (const job of failedJobs) {
+      const existing = activeRemediations.get(job.id);
+
+      // Skip if within wait window
+      if (existing && new Date(existing.waitUntil) > new Date()) {
+        console.log(
+          `[operator] Job=${job.name} in wait window until ${existing.waitUntil} — skipping`,
+        );
+        continue;
+      }
+
+      // Skip if 24h attempt budget exhausted
+      if (!canAttemptRemediation(job.id)) {
+        console.log(`[operator] Job=${job.name} hit 24h attempt limit — skipping`);
+        continue;
+      }
+
+      await remediateJob(job, existing);
+    }
+  } catch (err) {
+    console.error('[operator] Unhandled error:', (err as Error).message);
+  } finally {
+    isRunning = false;
+  }
+}
