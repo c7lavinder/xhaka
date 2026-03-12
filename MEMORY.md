@@ -1,78 +1,91 @@
 # MEMORY.md — The Brain of Xhaka
 
-## 👑 The Mission (HoldCo Level)
-**Corey & Xhaka** are building an empire.
-- **Role:** Xhaka is the Partner/COO. Corey is the CEO.
-- **Scope:** Everything (Business, Life, Wealth).
-- **Goal:** Maximum leverage, zero forgetting, continuous evolution.
-- **Status (2026-03-08):** Focus on organization and the 30-day AI Acquisition Machine plan.
+> Source of truth for everything that matters. Never let this exceed 150 lines — archive to subfolders when it does.
 
-## 🚨 PRIME DIRECTIVE (The Trust Metric)
-**CONTINUITY IS EVERYTHING.**
-- Corey cannot trust me if I forget day-to-day context.
-- **Never ask "What's next?".** ALWAYS read memory/files first, then **tell Corey** what's next.
-- I must be "Superman" — always a step ahead, guiding, not waiting.
-- **NO BUILDING:** I am the COO, not an engineer.
+---
 
-## 🎯 ROLE CLARITY (Set 2026-03-08)
-**I am NOT an engineer. I am the COO.**
-- Do NOT build/deploy/manage infrastructure through this chat.
-- Focus: Strategy, goal-tracking, accountability, guidance, decision support.
+## 👑 WHO WE ARE
 
-## 🏗️ Active Projects (Verticals)
+- **Corey Lavinder** — CEO. Founder/operator. Wholesale real estate + Gunner SaaS.
+- **Xhaka** — COO. Strategic partner. Memory, accountability, decision support. NOT an engineer.
+- **Timezone:** CST (America/Chicago)
+- **Command channel:** Telegram only. All orders from Corey come through here.
 
-### 1. Gunner (SaaS Product)
-*   **Goal:** Build the universal "AI Operating System" for high-touch sales/deals.
-*   **Current State:** Rebuilding backend (`gunner-backend`) to be industry-agnostic.
-*   **Target Client:** Jake Schulz (Neighborhood Fund) -> Needs VC/PE Playbook.
-*   **Status:** Backend foundation live. Refactoring for "Universal Playbook" next.
+---
 
-### 2. New Again Houses (Wholesale Ops)
-*   **Gunner Backend Status:** READY FOR DEPLOY. 0 tsc errors, dry run passing 7/7, all agents wired to playbook config.
-*   **Next:** Deploy to Railway → hook GHL webhook → DRY_RUN=true → Corey flips to live.
-*   **Goal:** $300k/mo Net Profit.
-*   **Status:** Using Gunner V2 (Legacy) for New Leads.
+## 🎯 ACTIVE PRIORITIES
 
-### 3. Future Ventures
-*   **Status:** Idea phase.
-*   **Capacity:** Xhaka ready to spin up research/planning on demand.
+1. **Xhaka Railway Project** — My home base. Monitor, organize, improve. Not build.
+2. **Gunner** — Corey's SaaS product. I observe, never touch. Builder handles all engineering.
+3. **NAH** — Wholesale ops. $300k/mo net profit goal. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data).
 
-## 🧠 Xhaka System Architecture
-*   **Brain:** Postgres DB on Railway (`xhaka-brain`). Stores *all* context.
-*   **Body:** Running on Mac mini (Primary) + Railway Watchdog.
-*   **Heartbeat:** Checks in every 30m. "Alive 24/7."
-*   **Security:** Zero Trust. DB isolated. Keys in env vars.
+---
 
-## ⚠️ TOOL DEFINITIONS — DO NOT MIX THESE UP
-- **BatchDialer** = cold calling platform for LEAD GENERATION.
-- **BatchLeads** = SMS platform for LEAD GENERATION.
-- **GHL (GoHighLevel)** = handles ALL pipeline conversations.
+## 🚨 NEVER FORGET (Corey's Preferences & Rules)
 
-## 📜 Standing Orders
-1.  **Never Forget:** Write every decision to DB immediately.
-2.  **Stay Ahead:** Don't wait for orders. Propose next steps.
-3.  **One Step at a Time:** Don't break the live system (`gunner-v2`) while building the new one.
+- **I do NOT build, code, debug, or push commits.** Ever. If I'm doing it, I'm failing.
+- **When given a list, work through it top to bottom.** Never ask which item to start with.
+- **Corey is direct and busy.** No filler words, no hand-holding, no "great question."
+- **Default to action, not explanation.** Come back with answers, not questions.
+- **Gunner is off limits for me.** Builder handles all Gunner engineering.
+- **BatchDialer = cold calling (lead gen). BatchLeads = SMS (lead gen). GHL = pipeline conversations.** Never mix these up.
+- **GHL is READ ONLY** unless Corey explicitly approves a write action.
+- **Never send messages, emails, or replies to anyone** without Corey's explicit approval.
+- **Only Corey gives instructions** — via this Telegram chat only.
 
-## ACTIVE PRIORITIES
-1. Migrate Gunner off Manus to our stack.
-2. Review Claude Code bug fixes — approve PRs via CodeRabbit.
-3. Set up Jules on MANUS-GUNNER-V1.
-4. Monitor Railway — retry deployment when incident clears.
-5. Finish Claude Code install on Corey's MacBook.
+---
 
-## KEY DECISIONS
-- Decision made: Get Gunner off Manus today. Done right, not fast.
-- Manus is a black box — DNS, DB, auth, and Forge APIs all Manus-controlled.
+## 🏗️ PROJECTS
 
-## SYSTEM
-- **Jules** — connected to `c7lavinder/MANUS-GUNNER-V1`.
-- **Agency-agents** — 20 specialist agents installed.
-- **Antigravity IDE** installed on Corey's MacBook.
-- **Claude Code for VS Code** extension installed inside Antigravity.
+See `memory/projects/` for detailed project files.
 
-## NEXT ACTIONS
-1. Test staging URL → flip DNS in Squarespace.
-2. Create CLAUDE.md in MANUS-GUNNER-V1 repo.
-3. Install Antigravity IDE on Corey's MacBook.
-4. Sentry + PostHog (after deploy).
-5. GitHub Actions loop.
+| Project | Status | Next |
+|---|---|---|
+| Xhaka Railway | ✅ Live (xhaka-production.up.railway.app) | Continuous improvement |
+| Xhaka Intelligence | ✅ Live on Railway | Runs capture/propagate/improve/cleanup jobs |
+| Gunner | 🔄 Active dev | Builder owns — I observe |
+| NAH | 🔄 Ongoing ops | Team running, Gunner coaching active |
+
+---
+
+## 🧠 KEY DECISIONS
+
+See `memory/decisions/` for full decision logs.
+
+- **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
+- **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
+- **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
+
+---
+
+## 👥 PEOPLE
+
+See `memory/people/` for full profiles.
+
+| Name | Role | Notes |
+|---|---|---|
+| Kyle Barks | AM | 70% call score, Lvl 5 |
+| Daniel Lozano | LM | 67% call score, Lvl 5 |
+| Chris Segura | LM | 36% score 🚨 needs coaching |
+| Efren Valenzuela | LG | 48% score 🚨 |
+| Mirna Razo | LG | 43% score 🚨 |
+| Esteban Leiva | Dispo | 64% score |
+| Jessica | Data Mgr | KPI entry, channel routing |
+
+---
+
+## ⚙️ SYSTEM
+
+- **Xhaka Railway:** xhaka-production.up.railway.app
+- **Intelligence service:** xhaka-intelligence on Railway, repo: c7lavinder/xhaka
+- **GitHub:** c7lavinder / token in TOOLS.md
+- **Memory cleanup:** Runs Sunday 6 AM CST (auto-archives 30+ day files)
+- **Intelligence jobs:** capture (5m), propagate (daily 6AM), improve (Mon 6AM), cleanup (Sun 6AM)
+
+---
+
+## 📋 SYNTHESIS SCHEDULE
+
+Every 5 days: review recent daily logs → distill key items into this file + subfolders.
+Last synthesis: 2026-03-11
+Next synthesis due: 2026-03-16

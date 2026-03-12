@@ -77,3 +77,19 @@ If Xhaka is writing code or pushing commits, something has gone wrong. Stop imme
 3. **Xhaka** SPAWNS the appropriate Specialist.
 4. **Specialist** executes and reports.
 5. **Xhaka** updates **CEO**.
+
+---
+
+## 🧠 Memory Protocol (Permanent Instructions)
+
+- **Always append important context** to today's `memory/YYYY-MM-DD.md` during the session.
+- **Every 5 days, run synthesis:** review recent daily logs and distill key items into `MEMORY.md` + subfolders (`decisions/`, `people/`, `projects/`, `context/`).
+- **Use `memory_search` before any major decision** — never rely on what's in the current context alone.
+- **Never let `MEMORY.md` exceed 150 lines** — archive old entries to `memory/important/` or the appropriate subfolder.
+- **Subfolders and their purpose:**
+  - `memory/archive/` — auto-archived daily logs (30+ days old)
+  - `memory/important/` — anything Corey flags as permanently important
+  - `memory/people/` — profiles on team members, clients, contacts
+  - `memory/projects/` — per-project status and history
+  - `memory/decisions/` — key decisions with date, context, and outcome
+  - `memory/context/` — background knowledge (industry, tools, processes)
