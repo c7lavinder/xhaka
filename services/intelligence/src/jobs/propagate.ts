@@ -22,7 +22,7 @@ const INTEL_LOG_HEADING = '## Intelligence Log';
 // ---------------------------------------------------------------------------
 
 export async function runPropagate(): Promise<void> {
-  const _startTime = markJobStart('propagate');
+  const _startTime = await markJobStart('propagate');
   try {
     console.log('[propagate] Starting daily propagation run...');
 
