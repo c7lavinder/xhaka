@@ -410,5 +410,17 @@ app.get('/api/tools/research/stream/:jobId', (req, res) => {
   req.on('close', () => clearInterval(interval));
 });
 
+// GET /api/health — liveness + uptime check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    uptime: Math.round(process.uptime()),
+    timestamp: new Date().toISOString(),
+    pid: process.pid,
+    env: process.env.NODE_ENV || 'production',
+    url: 'https://xhaka-production.up.railway.app'
+  });
+});
+
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.listen(PORT, () => console.log(`Xhaka Command Center running on port ${PORT}`));
