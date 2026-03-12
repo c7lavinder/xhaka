@@ -10,6 +10,12 @@ import {
 import { getFileContent, updateFile, createFile } from '../lib/github.js';
 import { sendAlert } from '../utils/alert.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import {
+  loadRemediationState,
+  saveRemediationState,
+  type RemediationStateFile,
+  type ActiveRemediationRecord,
+} from '../utils/remediation-state.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -59,8 +65,10 @@ export interface OperatorLogEntry {
 
 let isRunning = false; // Debounce flag — prevents overlapping runs
 
-const activeRemediations = new Map<string, RemediationState>();
-const attemptTracker = new Map<string, { count: number; windowStart: number }>();
+// These Maps are hydrated from persisted state on each run
+let activeRemediations = new Map<string, RemediationState>();
+let attemptTracker = new Map<string, { count: number; windowStart: number }>();
+let persistedState: RemediationStateFile = { attempts: {}, activeRemediations: {} };
 
 const WAIT_BETWEEN_ATTEMPTS_MS = 3 * 60 * 1000; // 3 minutes
 const MAX_ATTEMPTS_PER_24H = 3;
@@ -108,6 +116,30 @@ function incrementAttemptCount(jobId: string): void {
   const tracker = attemptTracker.get(jobId) ?? { count: 0, windowStart: Date.now() };
   tracker.count += 1;
   attemptTracker.set(jobId, tracker);
+}
+
+// ─── State Persistence Helpers ────────────────────────────────────────────────
+
+async function persistCurrentState(): Promise<void> {
+  const state: RemediationStateFile = {
+    attempts: Object.fromEntries(
+      [...attemptTracker.entries()].map(([k, v]) => [k, {
+        count: v.count,
+        firstAttemptAt: new Date(v.windowStart).toISOString(),
+        lastAttemptAt: new Date().toISOString(),
+      }])
+    ),
+    activeRemediations: Object.fromEntries(
+      [...activeRemediations.entries()].map(([k, v]) => [k, {
+        attempt: v.attempt,
+        startedAt: v.startedAt,
+        failureType: v.failureType,
+        lastAction: v.lastAction,
+        waitUntil: v.waitUntil,
+      } as ActiveRemediationRecord])
+    ),
+  };
+  await saveRemediationState(state);
 }
 
 // ─── Operator Log (appends to memory/context/operator-log.md via GitHub) ─────
@@ -276,6 +308,7 @@ async function remediateJob(
         detail: `Immediate escalation: ${failureType}`,
       });
       activeRemediations.delete(job.id);
+      await persistCurrentState();
       return;
     }
 
@@ -310,6 +343,7 @@ async function remediateJob(
         detail: `All 3 attempts exhausted. failureType=${failureType}`,
       });
       activeRemediations.delete(job.id);
+      await persistCurrentState();
       return;
     }
 
@@ -323,6 +357,9 @@ async function remediateJob(
       lastAction: action,
       waitUntil,
     });
+
+    // Persist state after every change
+    await persistCurrentState();
 
     await appendOperatorLog({
       timestamp: new Date().toISOString(),
@@ -369,6 +406,31 @@ export async function runOperator(): Promise<void> {
   isRunning = true;
 
   try {
+    // Load persisted state from GitHub on every run
+    persistedState = await loadRemediationState();
+    
+    // Hydrate Maps from persisted state
+    activeRemediations = new Map();
+    attemptTracker = new Map();
+    
+    for (const [jobId, record] of Object.entries(persistedState.activeRemediations)) {
+      activeRemediations.set(jobId, {
+        jobId,
+        attempt: record.attempt,
+        startedAt: record.startedAt,
+        failureType: record.failureType as FailureType,
+        lastAction: record.lastAction as RemediationAction,
+        waitUntil: record.waitUntil,
+      });
+    }
+    
+    for (const [jobId, record] of Object.entries(persistedState.attempts)) {
+      attemptTracker.set(jobId, {
+        count: record.count,
+        windowStart: new Date(record.firstAttemptAt).getTime(),
+      });
+    }
+
     const failedJobs = await readFailedJobs();
 
     if (failedJobs.length === 0) {
