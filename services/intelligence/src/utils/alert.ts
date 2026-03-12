@@ -44,3 +44,25 @@ export async function sendAlert(message: string): Promise<void> {
     console.error('[alert] fetch failed:', (err as Error).message);
   }
 }
+
+/**
+ * Classify OpenAI errors for better alerting.
+ * Detects quota exhaustion and rate limiting.
+ */
+export function classifyOpenAIError(err: Error): string {
+  const msg = err.message.toLowerCase();
+  
+  if (msg.includes('insufficient_quota') || msg.includes('quota')) {
+    return '🚨 OpenAI credits exhausted — top up at platform.openai.com/billing';
+  }
+  
+  if (msg.includes('429') || msg.includes('rate limit') || msg.includes('too many requests')) {
+    return '🚨 OpenAI rate limit hit — back off and retry';
+  }
+  
+  if (msg.includes('401') || msg.includes('invalid api key') || msg.includes('unauthorized')) {
+    return '🚨 OpenAI API key invalid or revoked';
+  }
+  
+  return `🚨 OpenAI error: ${err.message}`;
+}

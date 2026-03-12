@@ -2,11 +2,13 @@ import {
   listDirectory,
   getFileContent,
   createFile,
+  updateFile,
   deleteFile,
   getFileLastCommitDate,
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const MEMORY_PATH = 'memory';
@@ -28,6 +30,38 @@ const EXEMPT_DIRS = new Set(['important', 'archive', 'daily']);
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const DAYS_30_MS = 30 * MS_PER_DAY;
 const DAYS_180_MS = 180 * MS_PER_DAY;
+
+// FIX 7: Log rotation targets
+interface RotateTarget {
+  path: string;
+  archivePath: (yearMonth: string) => string;
+  sizeLimit: number;
+  freshHeader: string;
+}
+
+const ROTATE_TARGETS: RotateTarget[] = [
+  {
+    path: 'memory/context/operator-log.md',
+    archivePath: (ym) => `memory/archive/${ym}/operator-log.md`,
+    sizeLimit: 50 * 1024,  // 50KB
+    freshHeader:
+      '# Operator Log\n\n' +
+      '| Timestamp | Job | Action | Outcome | Attempt | Detail |\n' +
+      '|-----------|-----|--------|---------|---------|--------|\n',
+  },
+  {
+    path: 'memory/projects/xhaka-changelog.md',
+    archivePath: (ym) => `memory/archive/${ym}/xhaka-changelog.md`,
+    sizeLimit: 100 * 1024,  // 100KB
+    freshHeader: '# Xhaka Changelog\n\n',
+  },
+  {
+    path: 'memory/projects/gunner-changelog.md',
+    archivePath: (ym) => `memory/archive/${ym}/gunner-changelog.md`,
+    sizeLimit: 100 * 1024,  // 100KB
+    freshHeader: '# Gunner Changelog\n\n',
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Cleanup job — archives and prunes stale memory files
@@ -128,13 +162,91 @@ export async function runCleanup(): Promise<void> {
       await maybeGenerateSummary(monthKey, archivedFiles);
     }
 
+    // FIX 7: Rotate large log files
+    await rotateLogFiles();
+
     console.log('[cleanup] Done.');
 
     await markJobSuccess('cleanup', _startTime);
   } catch (err) {
     console.error('[cleanup] Fatal error:', err);
     await markJobFailed('cleanup', _startTime);
+    // FIX 6: Send alert for failures
+    const alertMsg = (err instanceof Error)
+      ? `🚨 *Cleanup failed*\n${classifyOpenAIError(err)}`
+      : '🚨 *Cleanup failed* — unknown error';
+    await sendAlert(alertMsg);
     throw err;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// FIX 7: Log Rotation
+// ---------------------------------------------------------------------------
+
+async function rotateLogFiles(): Promise<void> {
+  const yearMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+
+  for (const target of ROTATE_TARGETS) {
+    try {
+      const file = await getFileContent(XHAKA_REPO, target.path);
+      if (!file) {
+        console.log(`[cleanup] ${target.path} not found — skipping rotation`);
+        continue;
+      }
+
+      const byteSize = Buffer.byteLength(file.content, 'utf8');
+      if (byteSize < target.sizeLimit) {
+        console.log(`[cleanup] ${target.path} is ${byteSize} bytes — no rotation needed`);
+        continue;
+      }
+
+      console.log(`[cleanup] Rotating ${target.path} (${byteSize} bytes > ${target.sizeLimit})`);
+
+      if (DRY_RUN) {
+        console.log(`[cleanup] DRY RUN — would rotate ${target.path}`);
+        continue;
+      }
+
+      // 1. Archive current to memory/archive/YYYY-MM/
+      const archivePath = target.archivePath(yearMonth);
+      try {
+        const existingArchive = await getFileContent(XHAKA_REPO, archivePath);
+        if (existingArchive) {
+          await updateFile(
+            XHAKA_REPO,
+            archivePath,
+            existingArchive.content + '\n\n---\n\n' + file.content,
+            `chore(cleanup): archive rotation — append to ${archivePath}`,
+            existingArchive.sha,
+          );
+        } else {
+          await createFile(
+            XHAKA_REPO,
+            archivePath,
+            file.content,
+            `chore(cleanup): archive rotation — ${target.path} → ${archivePath}`,
+          );
+        }
+      } catch (err) {
+        console.error(`[cleanup] Failed to archive ${target.path}:`, (err as Error).message);
+        continue; // Don't truncate if archive failed
+      }
+
+      // 2. Write fresh file with header only
+      const today = new Date().toISOString().split('T')[0];
+      await updateFile(
+        XHAKA_REPO,
+        target.path,
+        target.freshHeader + `_Rotated ${today}. Previous entries archived to ${archivePath}_\n\n`,
+        `chore(cleanup): rotate ${target.path} — archived to ${archivePath}`,
+        file.sha,
+      );
+
+      console.log(`[cleanup] ✓ Rotated ${target.path} → ${archivePath}`);
+    } catch (err) {
+      console.error(`[cleanup] Rotation check failed for ${target.path}:`, (err as Error).message);
+    }
   }
 }
 
@@ -173,12 +285,7 @@ async function maybeGenerateSummary(
     if (entry.type !== 'file' || !entry.name.endsWith('.md')) continue;
     const data = await getFileContent(XHAKA_REPO, entry.path);
     if (data) {
-      combinedContent += `
-
----
-## ${entry.name}
-
-${data.content}`;
+      combinedContent += `\n\n---\n## ${entry.name}\n\n${data.content}`;
     }
   }
 
@@ -211,8 +318,7 @@ Format your response EXACTLY as follows (use the exact headers, no extra text be
 
 ## Open Items Carried Forward
 - [bullet list of things still in progress or unresolved]`,
-    `Here are the memory files from ${monthLabel}:
-${combinedContent.slice(0, 20000)}`,
+    `Here are the memory files from ${monthLabel}:\n${combinedContent.slice(0, 20000)}`,
     1500,
   );
 

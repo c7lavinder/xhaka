@@ -6,6 +6,7 @@ import {
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const DRY_RUN = process.env.DRY_RUN === 'true';
@@ -58,6 +59,7 @@ export async function runOrganize(): Promise<void> {
 
     if (!logFile || !logFile.content.trim()) {
       console.log(`[organize] No daily log found at ${logPath} — nothing to organize.`);
+      await markJobSuccess('organize', _startTime);
       return;
     }
 
@@ -92,6 +94,11 @@ export async function runOrganize(): Promise<void> {
   } catch (err) {
     console.error('[organize] Fatal error:', err);
     await markJobFailed('organize', _startTime);
+    // FIX 6: Send alert for failures
+    const alertMsg = (err instanceof Error)
+      ? `🚨 *Organize failed*\n${classifyOpenAIError(err)}`
+      : '🚨 *Organize failed* — unknown error';
+    await sendAlert(alertMsg);
     throw err;
   }
 }
@@ -130,9 +137,7 @@ ${logContent.slice(0, 8000)}`;
 
   try {
     // Strip any accidental markdown fences
-    const cleaned = raw.replace(/^```(?:json)?
-?/, '').replace(/
-?```$/, '').trim();
+    const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
     return JSON.parse(cleaned) as ExtractedData;
   } catch (err) {
     console.error('[organize] Failed to parse OpenAI response as JSON:', err);
@@ -217,19 +222,15 @@ async function processDecisions(decisions: DecisionEntry[], date: string): Promi
   const newEntries = decisions.map((d) => {
     const entryDate = d.date ?? date;
     return [
-      `
-## ${entryDate} — ${d.decision}`,
+      `\n## ${entryDate} — ${d.decision}`,
       d.context ? `**Context:** ${d.context}` : null,
       d.outcome ? `**Outcome:** ${d.outcome}` : null,
     ]
       .filter(Boolean)
-      .join('
-') + '
-';
+      .join('\n') + '\n';
   });
 
-  const appended = newEntries.join('
-');
+  const appended = newEntries.join('\n');
 
   if (DRY_RUN) {
     console.log(`[organize] DRY RUN — would append ${decisions.length} decision(s) to ${decisionsPath}`);
@@ -280,18 +281,13 @@ async function processProjectUpdate(update: ProjectUpdateEntry, date: string): P
   }
 
   // Append to ## Updates section (or add it if missing)
-  const updateEntry = `
-### ${date}
-${update.update}
-`;
+  const updateEntry = `\n### ${date}\n${update.update}\n`;
 
   let updatedContent: string;
   if (existing.content.includes('## Updates')) {
     updatedContent = existing.content + updateEntry;
   } else {
-    updatedContent = existing.content + `
-## Updates
-${updateEntry}`;
+    updatedContent = existing.content + `\n## Updates\n${updateEntry}`;
   }
 
   if (DRY_RUN) {

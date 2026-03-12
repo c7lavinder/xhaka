@@ -6,6 +6,7 @@ import {
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const DRY_RUN = process.env.DRY_RUN === 'true';
@@ -58,6 +59,11 @@ export async function runSynthesize(): Promise<void> {
   } catch (err) {
     console.error('[synthesize] Fatal error:', err);
     await markJobFailed('synthesize', _startTime);
+    // FIX 6: Send alert for failures
+    const alertMsg = (err instanceof Error)
+      ? `🚨 *Synthesize failed*\n${classifyOpenAIError(err)}`
+      : '🚨 *Synthesize failed* — unknown error';
+    await sendAlert(alertMsg);
     throw err;
   }
 }
@@ -95,14 +101,8 @@ async function updateMemoryFile(
   const fiveDaysAgo = dateNDaysAgo(5);
 
   const combinedLogs = recentLogs
-    .map((l) => `## Daily Log — ${l.date}
-
-${l.content}`)
-    .join('
-
----
-
-');
+    .map((l) => `## Daily Log — ${l.date}\n\n${l.content}`)
+    .join('\n\n---\n\n');
 
   const systemPrompt = `You are Xhaka's memory synthesizer. You maintain MEMORY.md — the central context file for an AI COO assistant serving a wholesale real estate business.
 
@@ -139,16 +139,13 @@ Synthesize the above into an updated MEMORY.md. Keep it under 150 lines. Return 
     return;
   }
 
-  const lineCount = updatedMemory.split('
-').length;
+  const lineCount = updatedMemory.split('\n').length;
   console.log(`[synthesize] Updated MEMORY.md: ${lineCount} lines.`);
 
   if (DRY_RUN) {
     console.log('[synthesize] DRY RUN — would write MEMORY.md');
     console.log('[synthesize] Preview (first 20 lines):');
-    console.log(updatedMemory.split('
-').slice(0, 20).join('
-'));
+    console.log(updatedMemory.split('\n').slice(0, 20).join('\n'));
     return;
   }
 
@@ -192,11 +189,8 @@ async function updateProjectFiles(
   console.log(`[synthesize] Updating ${projectFiles.length} project file(s)...`);
 
   const combinedLogs = recentLogs
-    .map((l) => `### ${l.date}
-${l.content.slice(0, 1000)}`)
-    .join('
-
-');
+    .map((l) => `### ${l.date}\n${l.content.slice(0, 1000)}`)
+    .join('\n\n');
 
   const today = todayDateStr();
 

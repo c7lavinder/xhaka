@@ -2,6 +2,7 @@ import { getRecentCommits, getFileContent, updateFile } from '../lib/github.js';
 import { getRecentFailureSummary } from '../lib/railway.js';
 import { generateBuilderLesson, generateOperatorLesson } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const WATCH_REPO = process.env.WATCH_REPO ?? 'c7lavinder/xhaka';
@@ -33,6 +34,11 @@ export async function runImprove(): Promise<void> {
   } catch (err) {
     console.error('[improve] Fatal error:', err);
     await markJobFailed('improve', _startTime);
+    // FIX 6: Send alert for OpenAI failures
+    const alertMsg = (err instanceof Error)
+      ? `🚨 *Improve failed*\n${classifyOpenAIError(err)}`
+      : '🚨 *Improve failed* — unknown error';
+    await sendAlert(alertMsg);
     throw err;
   }
 }
@@ -67,6 +73,7 @@ async function runBuilderImprovement(since: Date, date: string): Promise<void> {
 
   const newRows: string[] = [];
 
+  // FIX 6: Removed inner try/catch — let OpenAI errors propagate to outer catch
   for (const commit of failureCommits.slice(0, 10)) {
     // Cap at 10 to manage tokens
     const context = `Commit SHA: ${commit.sha.slice(0, 8)}
@@ -75,14 +82,10 @@ Author: ${commit.author}
 Date: ${commit.date.toISOString()}
 URL: ${commit.url}`;
 
-    try {
-      const row = await generateBuilderLesson(context);
-      if (row.trim()) {
-        newRows.push(row.trim());
-        console.log(`[improve] ✓ Generated lesson from: ${commit.message.slice(0, 60)}`);
-      }
-    } catch (err) {
-      console.error('[improve] OpenAI failed for commit lesson:', err);
+    const row = await generateBuilderLesson(context);
+    if (row.trim()) {
+      newRows.push(row.trim());
+      console.log(`[improve] ✓ Generated lesson from: ${commit.message.slice(0, 60)}`);
     }
   }
 
@@ -132,13 +135,8 @@ async function runOperatorImprovement(since: Date, date: string): Promise<void> 
     return;
   }
 
-  let lesson: string;
-  try {
-    lesson = await generateOperatorLesson(failureSummary);
-  } catch (err) {
-    console.error('[improve] OpenAI failed for operator lesson:', err);
-    return;
-  }
+  // FIX 6: Let OpenAI errors propagate to outer catch
+  const lesson = await generateOperatorLesson(failureSummary);
 
   if (!lesson.trim()) return;
 
