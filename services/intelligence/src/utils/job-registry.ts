@@ -19,11 +19,12 @@ interface JobEntry {
 type JobRegistry = Record<string, JobEntry>;
 
 /**
- * Mark a job as started — returns startTime for duration tracking.
- * Does NOT write to registry (avoids extra commit on every start).
+ * Mark a job as started — writes running status to registry and returns startTime for duration tracking.
  */
-export function markJobStart(_jobName: string): number {
-  return Date.now();
+export async function markJobStart(jobName: string): Promise<number> {
+  const startTime = Date.now();
+  await writeJobStatus(jobName, 'running');
+  return startTime;
 }
 
 /**
