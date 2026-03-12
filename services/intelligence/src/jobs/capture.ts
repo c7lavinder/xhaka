@@ -8,6 +8,7 @@ import {
   parseIntelFile,
   getProcessedPath,
 } from '../lib/router.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
@@ -17,25 +18,34 @@ const INBOX_PATH = 'intelligence/inbox';
 // ---------------------------------------------------------------------------
 
 export async function runCapture(): Promise<void> {
-  console.log('[capture] Scanning inbox...');
+  const _startTime = markJobStart('capture');
+  try {
+    console.log('[capture] Scanning inbox...');
 
-  const files = await listDirectory(XHAKA_REPO, INBOX_PATH);
-  const markdownFiles = files.filter(
-    (f) => f.type === 'file' && f.name.endsWith('.md'),
-  );
+    const files = await listDirectory(XHAKA_REPO, INBOX_PATH);
+    const markdownFiles = files.filter(
+      (f) => f.type === 'file' && f.name.endsWith('.md'),
+    );
 
-  if (!markdownFiles.length) {
-    console.log('[capture] Inbox is empty — nothing to process.');
-    return;
+    if (!markdownFiles.length) {
+      console.log('[capture] Inbox is empty — nothing to process.');
+      return;
+    }
+
+    console.log(`[capture] Found ${markdownFiles.length} file(s) to process.`);
+
+    for (const file of markdownFiles) {
+      await processInboxFile(file.path, file.name, file.sha);
+    }
+
+    console.log('[capture] Done.');
+
+    await markJobSuccess('capture', _startTime);
+  } catch (err) {
+    console.error('[capture] Fatal error:', err);
+    await markJobFailed('capture', _startTime);
+    throw err;
   }
-
-  console.log(`[capture] Found ${markdownFiles.length} file(s) to process.`);
-
-  for (const file of markdownFiles) {
-    await processInboxFile(file.path, file.name, file.sha);
-  }
-
-  console.log('[capture] Done.');
 }
 
 async function processInboxFile(
