@@ -6,6 +6,7 @@ import {
   getFileLastCommitDate,
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const MEMORY_PATH = 'memory';
@@ -33,99 +34,108 @@ const DAYS_180_MS = 180 * MS_PER_DAY;
 // ---------------------------------------------------------------------------
 
 export async function runCleanup(): Promise<void> {
-  console.log(`[cleanup] Starting memory cleanup${DRY_RUN ? ' (DRY RUN)' : ''}...`);
+  const _startTime = markJobStart('cleanup');
+  try {
+    console.log(`[cleanup] Starting memory cleanup${DRY_RUN ? ' (DRY RUN)' : ''}...`);
 
-  const now = new Date();
-  const entries = await listDirectory(XHAKA_REPO, MEMORY_PATH);
+    const now = new Date();
+    const entries = await listDirectory(XHAKA_REPO, MEMORY_PATH);
 
-  // Only top-level files; skip exempt dirs and exempt filenames
-  const eligible = entries.filter((f) => {
-    if (f.type === 'dir') return false;
-    if (EXEMPT_FILES.has(f.name)) return false;
-    return true;
-  });
+    // Only top-level files; skip exempt dirs and exempt filenames
+    const eligible = entries.filter((f) => {
+      if (f.type === 'dir') return false;
+      if (EXEMPT_FILES.has(f.name)) return false;
+      return true;
+    });
 
-  // Also skip anything whose path contains an exempt dir segment
-  const toProcess = eligible.filter((f) => {
-    const segments = f.path.split('/');
-    return !segments.some((seg) => EXEMPT_DIRS.has(seg));
-  });
+    // Also skip anything whose path contains an exempt dir segment
+    const toProcess = eligible.filter((f) => {
+      const segments = f.path.split('/');
+      return !segments.some((seg) => EXEMPT_DIRS.has(seg));
+    });
 
-  console.log(`[cleanup] ${toProcess.length} eligible file(s) to evaluate.`);
+    console.log(`[cleanup] ${toProcess.length} eligible file(s) to evaluate.`);
 
-  const archivedByMonth = new Map<string, string[]>();
+    const archivedByMonth = new Map<string, string[]>();
 
-  for (const file of toProcess) {
-    // Determine file age — prefer filename date, fall back to last commit date
-    const fileDate =
-      parseDateFromName(file.name) ??
-      (await getFileLastCommitDate(XHAKA_REPO, file.path));
+    for (const file of toProcess) {
+      // Determine file age — prefer filename date, fall back to last commit date
+      const fileDate =
+        parseDateFromName(file.name) ??
+        (await getFileLastCommitDate(XHAKA_REPO, file.path));
 
-    if (!fileDate) {
-      console.warn(`[cleanup] Cannot determine date for ${file.name} — skipping.`);
-      continue;
-    }
+      if (!fileDate) {
+        console.warn(`[cleanup] Cannot determine date for ${file.name} — skipping.`);
+        continue;
+      }
 
-    const ageMs = now.getTime() - fileDate.getTime();
-    const ageDays = Math.floor(ageMs / MS_PER_DAY);
+      const ageMs = now.getTime() - fileDate.getTime();
+      const ageDays = Math.floor(ageMs / MS_PER_DAY);
 
-    if (ageMs < DAYS_30_MS) {
-      console.log(`[cleanup] KEEP    ${file.name} (${ageDays}d old)`);
-      continue;
-    }
+      if (ageMs < DAYS_30_MS) {
+        console.log(`[cleanup] KEEP    ${file.name} (${ageDays}d old)`);
+        continue;
+      }
 
-    const monthKey = toMonthKey(fileDate); // YYYY-MM
+      const monthKey = toMonthKey(fileDate); // YYYY-MM
 
-    if (ageMs <= DAYS_180_MS) {
-      // Archive: move to memory/archive/YYYY-MM/
-      const archivePath = `${MEMORY_PATH}/archive/${monthKey}/${file.name}`;
-      console.log(`[cleanup] ARCHIVE ${file.name} → archive/${monthKey}/ (${ageDays}d old)`);
+      if (ageMs <= DAYS_180_MS) {
+        // Archive: move to memory/archive/YYYY-MM/
+        const archivePath = `${MEMORY_PATH}/archive/${monthKey}/${file.name}`;
+        console.log(`[cleanup] ARCHIVE ${file.name} → archive/${monthKey}/ (${ageDays}d old)`);
 
-      if (!DRY_RUN) {
-        const fileData = await getFileContent(XHAKA_REPO, file.path);
-        if (!fileData) {
-          console.warn(`[cleanup] Could not read ${file.path} — skipping.`);
-          continue;
+        if (!DRY_RUN) {
+          const fileData = await getFileContent(XHAKA_REPO, file.path);
+          if (!fileData) {
+            console.warn(`[cleanup] Could not read ${file.path} — skipping.`);
+            continue;
+          }
+
+          await createFile(
+            XHAKA_REPO,
+            archivePath,
+            fileData.content,
+            `memory: archive ${file.name} → archive/${monthKey}/`,
+          );
+
+          await deleteFile(
+            XHAKA_REPO,
+            file.path,
+            `memory: remove ${file.name} from memory/ (archived to ${monthKey})`,
+            file.sha,
+          );
         }
 
-        await createFile(
-          XHAKA_REPO,
-          archivePath,
-          fileData.content,
-          `memory: archive ${file.name} → archive/${monthKey}/`,
-        );
+        const bucket = archivedByMonth.get(monthKey) ?? [];
+        archivedByMonth.set(monthKey, [...bucket, file.name]);
+      } else {
+        // Delete: >180 days — still in git history if ever needed
+        console.log(`[cleanup] DELETE  ${file.name} (${ageDays}d old)`);
 
-        await deleteFile(
-          XHAKA_REPO,
-          file.path,
-          `memory: remove ${file.name} from memory/ (archived to ${monthKey})`,
-          file.sha,
-        );
-      }
-
-      const bucket = archivedByMonth.get(monthKey) ?? [];
-      archivedByMonth.set(monthKey, [...bucket, file.name]);
-    } else {
-      // Delete: >180 days — still in git history if ever needed
-      console.log(`[cleanup] DELETE  ${file.name} (${ageDays}d old)`);
-
-      if (!DRY_RUN) {
-        await deleteFile(
-          XHAKA_REPO,
-          file.path,
-          `memory: delete ${file.name} (${ageDays}d old, >180d threshold)`,
-          file.sha,
-        );
+        if (!DRY_RUN) {
+          await deleteFile(
+            XHAKA_REPO,
+            file.path,
+            `memory: delete ${file.name} (${ageDays}d old, >180d threshold)`,
+            file.sha,
+          );
+        }
       }
     }
-  }
 
-  // After all moves, generate summaries for newly-archived months (if none exists yet)
-  for (const [monthKey, archivedFiles] of archivedByMonth.entries()) {
-    await maybeGenerateSummary(monthKey, archivedFiles);
-  }
+    // After all moves, generate summaries for newly-archived months (if none exists yet)
+    for (const [monthKey, archivedFiles] of archivedByMonth.entries()) {
+      await maybeGenerateSummary(monthKey, archivedFiles);
+    }
 
-  console.log('[cleanup] Done.');
+    console.log('[cleanup] Done.');
+
+    await markJobSuccess('cleanup', _startTime);
+  } catch (err) {
+    console.error('[cleanup] Fatal error:', err);
+    await markJobFailed('cleanup', _startTime);
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
