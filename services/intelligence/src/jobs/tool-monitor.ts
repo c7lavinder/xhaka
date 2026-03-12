@@ -47,7 +47,7 @@ const CHANGELOG_SOURCES = [
 
 // ── Main entry ──────────────────────────────────────────────────────
 export async function runToolMonitor(): Promise<void> {
-  const _startTime = markJobStart('tool-monitor');
+  const _startTime = await markJobStart('tool-monitor');
   try {
     console.log('[tool-monitor] Starting daily tool scan...');
 
