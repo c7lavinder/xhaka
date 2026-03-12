@@ -4,6 +4,7 @@
 
 import { getFileContent, updateFile, createFile, listDirectory, deleteFile } from '../lib/github.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendAlert } from '../utils/alert.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
@@ -118,6 +119,7 @@ export async function runDailyLog(): Promise<void> {
     await markJobSuccess('daily-log', startTime);
   } catch (err) {
     console.error('[daily-log] Fatal error:', err);
+    await sendAlert(`🚨 daily-log failed: ${(err as Error).message}`);
     await markJobFailed('daily-log', startTime);
     throw err;
   }
