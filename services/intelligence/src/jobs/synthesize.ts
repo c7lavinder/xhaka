@@ -5,6 +5,7 @@ import {
   createFile,
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const DRY_RUN = process.env.DRY_RUN === 'true';
@@ -28,28 +29,37 @@ function toSlug(name: string): string {
 }
 
 export async function runSynthesize(): Promise<void> {
-  console.log(`[synthesize] Starting synthesis${DRY_RUN ? ' (DRY RUN)' : ''}...`);
+  const _startTime = markJobStart('synthesize');
+  try {
+    console.log(`[synthesize] Starting synthesis${DRY_RUN ? ' (DRY RUN)' : ''}...`);
 
-  // 1. Collect last 5 days of daily logs
-  const recentLogs = await collectRecentLogs(5);
-  console.log(`[synthesize] Collected ${recentLogs.length} daily log(s) from last 5 days.`);
+    // 1. Collect last 5 days of daily logs
+    const recentLogs = await collectRecentLogs(5);
+    console.log(`[synthesize] Collected ${recentLogs.length} daily log(s) from last 5 days.`);
 
-  if (recentLogs.length === 0) {
-    console.log('[synthesize] No recent logs found — nothing to synthesize.');
+    if (recentLogs.length === 0) {
+      console.log('[synthesize] No recent logs found — nothing to synthesize.');
+    }
+
+    // 2. Read current MEMORY.md
+    const memoryFile = await getFileContent(XHAKA_REPO, 'MEMORY.md');
+    const currentMemory = memoryFile?.content ?? '';
+    console.log(`[synthesize] Current MEMORY.md: ${currentMemory.length} chars.`);
+
+    // 3. Update MEMORY.md via gpt-4o
+    await updateMemoryFile(recentLogs, currentMemory, memoryFile?.sha ?? null);
+
+    // 4. Update project files via gpt-4o-mini
+    await updateProjectFiles(recentLogs);
+
+    console.log('[synthesize] Done.');
+
+    await markJobSuccess('synthesize', _startTime);
+  } catch (err) {
+    console.error('[synthesize] Fatal error:', err);
+    await markJobFailed('synthesize', _startTime);
+    throw err;
   }
-
-  // 2. Read current MEMORY.md
-  const memoryFile = await getFileContent(XHAKA_REPO, 'MEMORY.md');
-  const currentMemory = memoryFile?.content ?? '';
-  console.log(`[synthesize] Current MEMORY.md: ${currentMemory.length} chars.`);
-
-  // 3. Update MEMORY.md via gpt-4o
-  await updateMemoryFile(recentLogs, currentMemory, memoryFile?.sha ?? null);
-
-  // 4. Update project files via gpt-4o-mini
-  await updateProjectFiles(recentLogs);
-
-  console.log('[synthesize] Done.');
 }
 
 // ---------------------------------------------------------------------------
