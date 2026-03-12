@@ -801,6 +801,177 @@
       font-size: 11px;
     }
     .empty-state-icon { font-size: 24px; opacity: 0.4; }
+
+    /* ── TOOL INTELLIGENCE PANEL ─────────────────────────── */
+    .tools-section { margin-top: 24px; }
+    .tools-section .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .tools-section .section-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+    .tools-last-scan {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+    }
+    .tools-pending-banner {
+      background: var(--purple-faint);
+      border: 1px solid var(--purple-dim);
+      color: var(--purple);
+      font-size: 11px;
+      font-family: var(--mono);
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      display: none;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .tool-category-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .tool-category-card:hover { border-color: var(--border2); }
+    .tool-category-name {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      margin-bottom: 2px;
+    }
+    .tool-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .tool-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .tool-name { color: var(--text); font-family: var(--mono); }
+    .tool-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tool-date { color: var(--text-3); font-size: 10px; font-family: var(--mono); }
+    .tool-update-badge {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+      flex-shrink: 0;
+    }
+    .tool-research-btn {
+      margin-top: 4px;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text-2);
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .tool-research-btn:hover {
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+    .tool-research-btn.loading {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      cursor: default;
+    }
+
+    /* ── RESEARCH STREAM PANEL ───────────────────────────── */
+    .research-stream-panel {
+      margin-top: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      overflow: hidden;
+      display: none;
+    }
+    .research-stream-panel.active { display: block; }
+    .research-stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-2);
+    }
+    .research-stream-close {
+      cursor: pointer;
+      color: var(--text-3);
+      font-size: 13px;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .research-stream-close:hover { color: var(--text); }
+    .research-stream-body {
+      padding: 12px 14px;
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .stream-progress-bar-wrap {
+      height: 2px;
+      background: var(--surface3);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 2px 0 6px;
+    }
+    .stream-progress-bar {
+      height: 100%;
+      background: var(--purple);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .stream-event {
+      font-size: 11px;
+      font-family: var(--mono);
+      line-height: 1.5;
+    }
+    .stream-event.progress { color: var(--text-2); }
+    .stream-event.finding-info { color: var(--cyan); }
+    .stream-event.finding-warning { color: var(--yellow); }
+    .stream-event.finding-action { color: var(--purple); }
+    .stream-event.done { color: var(--green); }
+    .stream-event.error { color: var(--red); }
+    .stream-event-detail {
+      color: var(--text-3);
+      margin-left: 16px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
@@ -1238,6 +1409,32 @@
 
   </div><!-- /layout -->
 
+  <!-- ── TOOL INTELLIGENCE ─────────────────────────────────────── -->
+  <div style="padding: 0 24px 24px;">
+    <div class="tools-section">
+      <div class="section-header">
+        <span class="section-title">🔧 Tool Intelligence</span>
+        <span class="tools-last-scan" id="tools-last-scan">—</span>
+      </div>
+      <div class="tools-pending-banner" id="tools-pending-banner"></div>
+      <div class="tools-grid" id="tools-grid">
+        <div style="color:var(--text-3);font-size:12px;font-family:var(--mono);">Loading tool profiles...</div>
+      </div>
+      <!-- Research stream panel (slides in on Deep Research click) -->
+      <div class="research-stream-panel" id="research-stream-panel">
+        <div class="research-stream-header">
+          <span id="research-stream-title">🔬 RESEARCH STREAM</span>
+          <button class="research-stream-close" onclick="closeResearchPanel()">×</button>
+        </div>
+        <div class="research-stream-body" id="research-stream-body">
+          <div class="stream-progress-bar-wrap">
+            <div class="stream-progress-bar" id="research-progress-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ── Clock ─────────────────────────────────────────
     function updateClock() {
@@ -1322,6 +1519,201 @@
           // just a visual nudge — will be replaced by real data fetch
         }
       }, 5000);
+    });
+
+    // ── TOOL INTELLIGENCE ────────────────────────────────────────────
+
+    const CATEGORY_ICONS = {
+      'ai-llm': '🤖',
+      'database-storage': '🗄️',
+      'api-layer': '🔗',
+      'observability': '👁️',
+      'auth-security': '🔐',
+      'crm-external': '📞',
+      'payments': '💳',
+      'email': '✉️',
+      'audio-media': '🎵',
+      'document-processing': '📄',
+      'ui-frontend': '🎨',
+      'infra-deployment': '🚀',
+      'dev-infrastructure': '🚀',
+    };
+
+    let activeResearchES = null; // current EventSource
+
+    async function loadToolsPanel() {
+      try {
+        const res = await fetch('/api/tools');
+        const data = await res.json();
+
+        // Last scan timestamp
+        const scanEl = document.getElementById('tools-last-scan');
+        if (data.lastScan) {
+          const ago = timeAgo(new Date(data.lastScan));
+          scanEl.textContent = `Last scan: ${ago}`;
+        } else {
+          scanEl.textContent = 'Last scan: never';
+        }
+
+        // Pending updates banner
+        const banner = document.getElementById('tools-pending-banner');
+        if (data.pendingUpdates > 0) {
+          banner.style.display = 'block';
+          banner.textContent = `⚡ ${data.pendingUpdates} pending update report(s) in intelligence/inbox — review recommended`;
+        }
+
+        // Build tool grid
+        const grid = document.getElementById('tools-grid');
+        grid.innerHTML = '';
+
+        const categories = Object.entries(data.categories);
+        if (!categories.length) {
+          grid.innerHTML = '<div style="color:var(--text-3);font-size:12px;font-family:var(--mono);">No tool profiles found in memory/context/tools/</div>';
+          return;
+        }
+
+        for (const [cat, tools] of categories) {
+          const icon = CATEGORY_ICONS[cat] ?? '🔧';
+          const label = cat.replace(/-/g, '/');
+
+          const card = document.createElement('div');
+          card.className = 'tool-category-card';
+          card.innerHTML = `
+            <div class="tool-category-name">${icon} ${label}</div>
+            <ul class="tool-list">
+              ${tools.map(t => `
+                <li class="tool-item">
+                  <span class="tool-name">${(t.name || '').toLowerCase()}</span>
+                  <span class="tool-meta">
+                    <span class="tool-date">${t.last_reviewed || '—'}</span>
+                    ${(Array.isArray(t.known_issues) && t.known_issues.length) ? '<span class="tool-update-badge" title="Has known issues"></span>' : ''}
+                  </span>
+                </li>
+              `).join('')}
+            </ul>
+            <button class="tool-research-btn" onclick="startDeepResearch('${cat}', this)">
+              🔬 Deep Research
+            </button>
+          `;
+          grid.appendChild(card);
+        }
+      } catch (e) {
+        console.error('[tools] Failed to load tool profiles:', e);
+      }
+    }
+
+    async function startDeepResearch(category, btn) {
+      if (btn.classList.contains('loading')) return;
+      btn.classList.add('loading');
+      btn.textContent = '⏳ Researching...';
+
+      // Open stream panel
+      const panel = document.getElementById('research-stream-panel');
+      const body = document.getElementById('research-stream-body');
+      const title = document.getElementById('research-stream-title');
+
+      title.textContent = `🔬 RESEARCH STREAM — ${category}`;
+      body.innerHTML = `<div class="stream-progress-bar-wrap"><div class="stream-progress-bar" id="research-progress-bar" style="width:0%"></div></div>`;
+      panel.classList.add('active');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      // Start job
+      let jobId;
+      try {
+        const res = await fetch('/api/tools/research', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category }),
+        });
+        const data = await res.json();
+        jobId = data.jobId;
+      } catch (e) {
+        appendStreamEvent('error', `Failed to start research job: ${e.message}`);
+        btn.classList.remove('loading');
+        btn.textContent = '🔬 Deep Research';
+        return;
+      }
+
+      // Connect SSE stream
+      if (activeResearchES) activeResearchES.close();
+      const es = new EventSource(`/api/tools/research/stream/${jobId}`);
+      activeResearchES = es;
+
+      es.addEventListener('progress', e => {
+        const ev = JSON.parse(e.data);
+        const bar = document.getElementById('research-progress-bar');
+        if (bar) bar.style.width = `${ev.pct}%`;
+        appendStreamEvent('progress', `● ${ev.message}`);
+      });
+
+      es.addEventListener('finding', e => {
+        const ev = JSON.parse(e.data);
+        const cls = `finding-${ev.severity}`;
+        const icon = ev.severity === 'action' ? '⚡' : ev.severity === 'warning' ? '⚠️' : 'ℹ️';
+        appendStreamEvent(cls, `${icon} ${ev.tool} — ${ev.summary}`, ev.detail);
+      });
+
+      es.addEventListener('done', e => {
+        const ev = JSON.parse(e.data);
+        const duration = ev.durationMs ? Math.round(ev.durationMs / 1000) : '?';
+        const findings = ev.findingsCount ?? '?';
+        appendStreamEvent('done', `✓ Done — ${findings} finding(s) in ${duration}s`);
+        es.close();
+        btn.classList.remove('loading');
+        btn.textContent = '🔬 Deep Research';
+      });
+
+      es.addEventListener('error', e => {
+        let msg = 'Stream error';
+        try { msg = JSON.parse(e.data).message; } catch {}
+        appendStreamEvent('error', `✗ ${msg}`);
+        es.close();
+        btn.classList.remove('loading');
+        btn.textContent = '🔬 Deep Research';
+      });
+
+      es.onerror = () => {
+        appendStreamEvent('error', '✗ Connection lost');
+        es.close();
+        btn.classList.remove('loading');
+        btn.textContent = '🔬 Deep Research';
+      };
+    }
+
+    function appendStreamEvent(cls, text, detail) {
+      const body = document.getElementById('research-stream-body');
+      if (!body) return;
+      const el = document.createElement('div');
+      el.className = `stream-event ${cls}`;
+      el.textContent = text;
+      if (detail) {
+        const d = document.createElement('div');
+        d.className = 'stream-event-detail';
+        d.textContent = detail;
+        el.appendChild(d);
+      }
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function closeResearchPanel() {
+      document.getElementById('research-stream-panel').classList.remove('active');
+      if (activeResearchES) { activeResearchES.close(); activeResearchES = null; }
+    }
+
+    function timeAgo(date) {
+      const s = Math.round((Date.now() - date.getTime()) / 1000);
+      if (s < 60) return `${s}s ago`;
+      if (s < 3600) return `${Math.round(s/60)}m ago`;
+      if (s < 86400) return `${Math.round(s/3600)}h ago`;
+      return `${Math.round(s/86400)}d ago`;
+    }
+
+    // Load on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      loadToolsPanel();
+      // Refresh every 5 minutes
+      setInterval(loadToolsPanel, 5 * 60 * 1000);
     });
   </script>
 
