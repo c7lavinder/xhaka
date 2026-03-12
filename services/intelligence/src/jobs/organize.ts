@@ -47,7 +47,7 @@ function todayDateStr(): string {
 }
 
 export async function runOrganize(): Promise<void> {
-  const _startTime = markJobStart('organize');
+  const _startTime = await markJobStart('organize');
   try {
     const today = todayDateStr();
     console.log(`[organize] Starting nightly organize for ${today}${DRY_RUN ? ' (DRY RUN)' : ''}...`);
