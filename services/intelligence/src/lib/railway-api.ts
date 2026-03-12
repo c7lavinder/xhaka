@@ -7,7 +7,7 @@ const RAILWAY_API_URL = 'https://backboard.railway.app/graphql/v2';
 
 export interface DeploymentInfo {
   id: string;
-  status: 'SUCCESS' | 'FAILED' | 'DEPLOYING' | 'CRASHED' | 'REMOVED' | 'SLEEPING';
+  status: 'SUCCESS' | 'FAILED' | 'DEPLOYING' | 'BUILDING' | 'CRASHED' | 'REMOVED' | 'SLEEPING';
   canRollback: boolean;
   createdAt: string;
   url?: string;

@@ -1,6 +1,5 @@
 import {
   getFileContent,
-  listDirectory,
   createFile,
   updateFile,
 } from '../lib/github.js';

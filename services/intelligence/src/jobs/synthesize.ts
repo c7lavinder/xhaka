@@ -201,7 +201,7 @@ async function updateProjectFiles(
 
 async function updateProjectFile(
   filePath: string,
-  fileSha: string,
+  _fileSha: string,
   combinedLogs: string,
   today: string,
 ): Promise<void> {
