@@ -3,7 +3,8 @@
 // ---------------------------------------------------------------------------
 
 import http from 'http';
-import { startScheduler, runJobNow } from './scheduler.js';
+import { startScheduler, runJobNow, catchUpMissedJobs } from './scheduler.js';
+import { runStartupChecks } from './utils/startup-checks.js';
 
 // ---------------------------------------------------------------------------
 // Env validation
@@ -57,6 +58,9 @@ async function main(): Promise<void> {
 
   validateEnv();
 
+  // Validate external API credentials before starting
+  await runStartupChecks();
+
   // Support immediate job run via RUN_JOB env var (for testing / one-shots)
   const runJob = process.env.RUN_JOB;
   if (runJob) {
@@ -70,6 +74,9 @@ async function main(): Promise<void> {
 
   // Register all scheduled jobs
   startScheduler();
+
+  // Catch up any jobs that were missed during downtime
+  await catchUpMissedJobs();
 
   console.log('[startup] Service is running. Waiting for scheduled jobs...');
 }
