@@ -18,7 +18,7 @@ const INBOX_PATH = 'intelligence/inbox';
 // ---------------------------------------------------------------------------
 
 export async function runCapture(): Promise<void> {
-  const _startTime = markJobStart('capture');
+  const _startTime = await markJobStart('capture');
   try {
     console.log('[capture] Scanning inbox...');
 
