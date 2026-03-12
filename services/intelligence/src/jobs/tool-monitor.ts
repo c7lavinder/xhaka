@@ -4,6 +4,7 @@
 
 import { getFileContent, createFile, updateFile, listDirectory } from '../lib/github.js';
 import { fetchText } from '../lib/http.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const GUNNER_REPO = process.env.GUNNER_REPO ?? 'c7lavinder/Gunner';
@@ -46,114 +47,123 @@ const CHANGELOG_SOURCES = [
 
 // ── Main entry ──────────────────────────────────────────────────────
 export async function runToolMonitor(): Promise<void> {
-  console.log('[tool-monitor] Starting daily tool scan...');
+  const _startTime = markJobStart('tool-monitor');
+  try {
+    console.log('[tool-monitor] Starting daily tool scan...');
 
-  // 1. Load last-scan state
-  const stateFile = await getFileContent(XHAKA_REPO, TOOLS_STATE_PATH);
-  const state: LastScanState = stateFile
-    ? JSON.parse(stateFile.content)
-    : { lastRunAt: null, versions: {}, changelogChecked: {} };
-  const stateSha = stateFile?.sha ?? null;
+    // 1. Load last-scan state
+    const stateFile = await getFileContent(XHAKA_REPO, TOOLS_STATE_PATH);
+    const state: LastScanState = stateFile
+      ? JSON.parse(stateFile.content)
+      : { lastRunAt: null, versions: {}, changelogChecked: {} };
+    const stateSha = stateFile?.sha ?? null;
 
-  const findings: Finding[] = [];
+    const findings: Finding[] = [];
 
-  // 2. Scan package.json deps in both repos
-  const xhakaDeps = await getPackageJsonDeps(XHAKA_REPO);
-  const gunnerDeps = await getPackageJsonDeps(GUNNER_REPO);
-  const allDeps = mergeDeps(xhakaDeps, gunnerDeps);
+    // 2. Scan package.json deps in both repos
+    const xhakaDeps = await getPackageJsonDeps(XHAKA_REPO);
+    const gunnerDeps = await getPackageJsonDeps(GUNNER_REPO);
+    const allDeps = mergeDeps(xhakaDeps, gunnerDeps);
 
-  console.log(`[tool-monitor] Found ${Object.keys(allDeps).length} total deps across both repos.`);
+    console.log(`[tool-monitor] Found ${Object.keys(allDeps).length} total deps across both repos.`);
 
-  // 3. For each dep, check GitHub Releases RSS for new version
-  for (const [pkg, currentVersion] of Object.entries(allDeps)) {
-    const knownVersion = state.versions[pkg];
-    const repoSlug = npmPkgToGitHubRepo(pkg);
-    if (!repoSlug) continue;
+    // 3. For each dep, check GitHub Releases RSS for new version
+    for (const [pkg, currentVersion] of Object.entries(allDeps)) {
+      const knownVersion = state.versions[pkg];
+      const repoSlug = npmPkgToGitHubRepo(pkg);
+      if (!repoSlug) continue;
 
-    const latestVersion = await getLatestVersionFromRSS(repoSlug);
-    if (!latestVersion) continue;
+      const latestVersion = await getLatestVersionFromRSS(repoSlug);
+      if (!latestVersion) continue;
 
-    if (knownVersion && latestVersion !== knownVersion) {
-      findings.push({
-        type: 'dep-update',
-        package: pkg,
-        fromVersion: knownVersion,
-        toVersion: latestVersion,
-        rssUrl: `https://github.com/${repoSlug}/releases.atom`,
-      });
-      console.log(`[tool-monitor] Update detected: ${pkg} ${knownVersion} → ${latestVersion}`);
+      if (knownVersion && latestVersion !== knownVersion) {
+        findings.push({
+          type: 'dep-update',
+          package: pkg,
+          fromVersion: knownVersion,
+          toVersion: latestVersion,
+          rssUrl: `https://github.com/${repoSlug}/releases.atom`,
+        });
+        console.log(`[tool-monitor] Update detected: ${pkg} ${knownVersion} → ${latestVersion}`);
+      }
+
+      // Update state with current latest
+      state.versions[pkg] = latestVersion;
     }
 
-    // Update state with current latest
-    state.versions[pkg] = latestVersion;
-  }
+    // 4. Check changelog URLs for service tools
+    for (const source of CHANGELOG_SOURCES) {
+      const lastChecked = state.changelogChecked[source.id]
+        ? new Date(state.changelogChecked[source.id])
+        : null;
 
-  // 4. Check changelog URLs for service tools
-  for (const source of CHANGELOG_SOURCES) {
-    const lastChecked = state.changelogChecked[source.id]
-      ? new Date(state.changelogChecked[source.id])
-      : null;
+      const content = await fetchText(source.url);
+      if (!content) {
+        console.warn(`[tool-monitor] Could not fetch changelog for ${source.name}`);
+        continue;
+      }
 
-    const content = await fetchText(source.url);
-    if (!content) {
-      console.warn(`[tool-monitor] Could not fetch changelog for ${source.name}`);
-      continue;
+      // Heuristic: look for date strings newer than lastChecked in the page content
+      const hasNewContent = detectNewChangelogContent(content, lastChecked);
+      if (hasNewContent) {
+        findings.push({
+          type: 'changelog-update',
+          service: source.name,
+          url: source.url,
+          detectedAt: new Date().toISOString(),
+        });
+        console.log(`[tool-monitor] Changelog activity detected: ${source.name}`);
+      }
+
+      state.changelogChecked[source.id] = new Date().toISOString();
     }
 
-    // Heuristic: look for date strings newer than lastChecked in the page content
-    const hasNewContent = detectNewChangelogContent(content, lastChecked);
-    if (hasNewContent) {
-      findings.push({
-        type: 'changelog-update',
-        service: source.name,
-        url: source.url,
-        detectedAt: new Date().toISOString(),
-      });
-      console.log(`[tool-monitor] Changelog activity detected: ${source.name}`);
+    // 5. Write findings to intelligence/inbox/
+    if (findings.length > 0) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+      const fileName = `tool-monitor-${timestamp}.md`;
+      const filePath = `${INBOX_PATH}/${fileName}`;
+      const content = buildInboxFile(findings, timestamp);
+
+      await createFile(
+        XHAKA_REPO,
+        filePath,
+        content,
+        `tool-monitor: ${findings.length} update(s) detected`,
+      );
+      console.log(`[tool-monitor] Dropped ${findings.length} finding(s) → ${filePath}`);
+    } else {
+      console.log('[tool-monitor] No updates detected.');
     }
 
-    state.changelogChecked[source.id] = new Date().toISOString();
+    // 6. Save updated state
+    state.lastRunAt = new Date().toISOString();
+    const stateContent = JSON.stringify(state, null, 2);
+    if (stateSha) {
+      await updateFile(
+        XHAKA_REPO,
+        TOOLS_STATE_PATH,
+        stateContent,
+        'tool-monitor: update last-scan state',
+        stateSha,
+      );
+    } else {
+      await createFile(
+        XHAKA_REPO,
+        TOOLS_STATE_PATH,
+        stateContent,
+        'tool-monitor: initialize last-scan state',
+      );
+    }
+
+    console.log('[tool-monitor] Done.');
+
+    await markJobSuccess('tool-monitor', _startTime);
+  } catch (err) {
+    console.error('[tool-monitor] Fatal error:', err);
+    await markJobFailed('tool-monitor', _startTime);
+    throw err;
   }
-
-  // 5. Write findings to intelligence/inbox/
-  if (findings.length > 0) {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const fileName = `tool-monitor-${timestamp}.md`;
-    const filePath = `${INBOX_PATH}/${fileName}`;
-    const content = buildInboxFile(findings, timestamp);
-
-    await createFile(
-      XHAKA_REPO,
-      filePath,
-      content,
-      `tool-monitor: ${findings.length} update(s) detected`,
-    );
-    console.log(`[tool-monitor] Dropped ${findings.length} finding(s) → ${filePath}`);
-  } else {
-    console.log('[tool-monitor] No updates detected.');
-  }
-
-  // 6. Save updated state
-  state.lastRunAt = new Date().toISOString();
-  const stateContent = JSON.stringify(state, null, 2);
-  if (stateSha) {
-    await updateFile(
-      XHAKA_REPO,
-      TOOLS_STATE_PATH,
-      stateContent,
-      'tool-monitor: update last-scan state',
-      stateSha,
-    );
-  } else {
-    await createFile(
-      XHAKA_REPO,
-      TOOLS_STATE_PATH,
-      stateContent,
-      'tool-monitor: initialize last-scan state',
-    );
-  }
-
-  console.log('[tool-monitor] Done.');
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────
