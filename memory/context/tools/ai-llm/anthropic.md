@@ -1,36 +1,24 @@
----
-name: Anthropic
-category: ai-llm
-projects:
-  - xhaka
-role: Intelligence jobs, synthesis, and strategic reasoning via Claude
-auth_type: api_key
-api_base_url: https://api.anthropic.com/v1
-rate_limits:
-  requests_per_minute: 1000
-  tokens_per_minute: 80000
-pricing_tier: pay-per-use
-free_tier_limits: null
-key_features:
-  - claude-sonnet-4-6 for Xhaka intelligence subagents
-  - 200k context window for large document analysis
-  - Tool use / function calling
-power_user_features:
-  - Extended thinking for complex reasoning tasks
-  - Computer use (beta) for browser automation
-known_issues:
-  - Slower TTFT vs OpenAI on short completions
-integration_hooks:
-  - Xhaka: OpenClaw default model (anthropic/claude-sonnet-4-6)
-alternatives:
-  - openai/gpt-4o (already in stack)
-  - google/gemini-1.5-flash (already in stack)
-docs_url: https://docs.anthropic.com
-changelog_url: https://www.anthropic.com/news
-last_reviewed: 2026-03-11
-notes: ""
----
+# Anthropic Claude
+
+**Category:** AI & LLM
+**Status:** 🟢 Active
+
+## Purpose
+Primary AI model powering Xhaka — the COO agent. Handles all reasoning, strategy, memory management, and agent orchestration.
+
+## Usage in Stack
+- Model: `anthropic/claude-sonnet-4-6` (default)
+- Runs via OpenClaw runtime on Mac mini
+- Every Xhaka session uses this model
+
+## Configuration
+- API Key: Managed by OpenClaw ✓
+- Docs: https://docs.anthropic.com
 
 ## Notes
+- Thinking/reasoning mode available (`/reasoning` toggle)
+- Adaptive thinking enabled by default
+- Model aliases: `sonnet` = claude-sonnet-4-6, `opus` = claude-opus-4-5/4-6
 
-Current default model for Xhaka OpenClaw runtime. 200k context window makes it ideal for large memory synthesis tasks. Monitor for claude-sonnet-5 release.
+## Last Updated
+2026-03-12
