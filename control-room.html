@@ -304,7 +304,7 @@
       50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(124, 106, 255, 0); }
     }
 
-    .status-badge {
+    .status-badge, .badge {
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 600;
@@ -314,29 +314,29 @@
       border-radius: 4px;
     }
 
-    .status-badge.running {
+    .status-badge.running, .badge.running {
       background: var(--accent-glow);
       color: var(--accent-primary);
     }
 
-    .status-badge.idle {
+    .status-badge.idle, .badge.idle {
       background: rgba(77, 143, 255, 0.15);
       color: var(--status-idle);
     }
 
-    .status-badge.failed {
+    .status-badge.failed, .badge.failed {
       background: rgba(255, 77, 109, 0.15);
       color: var(--status-error);
     }
 
-    .agent-meta {
+    .agent-meta, .last-run {
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-muted);
       margin-bottom: 8px;
     }
 
-    .agent-output {
+    .agent-output, .last-output {
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-secondary);
@@ -352,15 +352,15 @@
       align-items: center;
     }
 
-    .spark-dot {
+    .spark-dot, .tick {
       width: 8px;
       height: 8px;
       border-radius: 50%;
     }
 
-    .spark-dot.success { background: var(--status-active); }
-    .spark-dot.fail { background: var(--status-error); }
-    .spark-dot.null { background: var(--bg-border); }
+    .spark-dot.success, .tick.success { background: var(--status-active); }
+    .spark-dot.fail, .tick.fail { background: var(--status-error); }
+    .spark-dot.null, .tick.muted { background: var(--bg-border); }
 
     /* Job Timeline Table */
     .job-table {
@@ -431,7 +431,7 @@
       color: var(--text-muted);
     }
 
-    .streak {
+    .streak, .job-streak {
       color: var(--status-active);
     }
 
@@ -443,14 +443,14 @@
       align-items: center;
     }
 
-    .memory-chart-container {
+    .memory-chart-container, .memory-chart-wrap {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 200px;
+      height: 200px;
       margin: 0 auto;
     }
 
-    .memory-chart-center {
+    .memory-chart-center, .chart-center-text {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -458,17 +458,18 @@
       text-align: center;
     }
 
-    .memory-count {
+    .memory-count, .chart-center-text span {
       font-family: var(--font-mono);
       font-size: 24px;
       font-weight: 700;
       color: var(--text-primary);
     }
 
-    .memory-limit {
+    .memory-limit, .chart-center-text small {
       font-family: var(--font-mono);
       font-size: 12px;
       color: var(--text-muted);
+      display: block;
     }
 
     .memory-meta {
@@ -477,14 +478,14 @@
       gap: 12px;
     }
 
-    .memory-row {
+    .memory-row, .meta-row {
       display: flex;
       justify-content: space-between;
       font-family: var(--font-mono);
       font-size: 12px;
     }
 
-    .memory-label {
+    .memory-label, .meta-label {
       color: var(--text-muted);
     }
 
@@ -492,7 +493,7 @@
       color: var(--text-secondary);
     }
 
-    .memory-folders {
+    .memory-folders, .folder-chips {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
@@ -501,15 +502,17 @@
       border-top: 1px solid var(--bg-border);
     }
 
-    .folder-chip {
+    .folder-chip, .chip {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       padding: 8px 12px;
       background: var(--bg-elevated);
       border-radius: 6px;
       font-family: var(--font-mono);
       font-size: 11px;
+      color: var(--text-secondary);
     }
 
     .folder-icon {
@@ -539,6 +542,7 @@
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.15s ease;
+      text-decoration: none;
     }
 
     .btn:hover {
@@ -557,6 +561,12 @@
       background: #6b5ae0;
       border-color: #6b5ae0;
       color: white;
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      border-color: var(--bg-border);
+      color: var(--accent-primary);
     }
 
     /* Tool Intelligence Grid */
@@ -788,6 +798,31 @@
       border-radius: 10px;
       padding: 24px;
       text-align: center;
+    }
+
+    .deploy-status-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .deploy-status-badge.healthy {
+      background: rgba(0, 214, 143, 0.15);
+      color: var(--status-active);
+    }
+
+    .deploy-status-badge.failed {
+      background: rgba(255, 77, 109, 0.15);
+      color: var(--status-error);
+    }
+
+    .deploy-status-badge.building {
+      background: rgba(255, 170, 0, 0.15);
+      color: var(--status-warn);
     }
 
     .deploy-status-icon {
@@ -1055,138 +1090,87 @@
 
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Section 1: Agent Status — HARDCODED DEFAULT CARDS -->
+      <!-- Section 1: Agent Status — STATIC HTML ALWAYS VISIBLE -->
       <section class="section" id="agents">
         <div class="section-header">
           <h2 class="section-title">Agent Status</h2>
         </div>
         <div class="section-body">
-          <div class="agent-grid" id="agentGrid">
-            <!-- HARDCODED: These 5 agent cards ALWAYS render -->
-            <div class="agent-card" data-agent="researcher">
+          <div class="agent-grid" id="agents-grid">
+            <!-- AGENT: Researcher -->
+            <div class="agent-card" id="agent-researcher">
               <div class="agent-header">
-                <span class="agent-emoji">🔬</span>
-                <div class="agent-info">
-                  <div class="agent-name">Researcher</div>
-                  <div class="agent-status-row">
-                    <span class="pulse-dot idle"></span>
-                    <span class="status-badge idle">IDLE</span>
-                  </div>
-                </div>
+                <span class="status-dot idle"></span>
+                <h3>🔬 Researcher</h3>
+                <span class="badge idle">IDLE</span>
               </div>
-              <div class="agent-meta">Last run: Never</div>
-              <div class="agent-output">⏳ Waiting for first run</div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
               <div class="sparkline">
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
               </div>
             </div>
 
-            <div class="agent-card" data-agent="builder">
+            <!-- AGENT: Builder -->
+            <div class="agent-card" id="agent-builder">
               <div class="agent-header">
-                <span class="agent-emoji">👷</span>
-                <div class="agent-info">
-                  <div class="agent-name">Builder</div>
-                  <div class="agent-status-row">
-                    <span class="pulse-dot idle"></span>
-                    <span class="status-badge idle">IDLE</span>
-                  </div>
-                </div>
+                <span class="status-dot idle"></span>
+                <h3>👷 Builder</h3>
+                <span class="badge idle">IDLE</span>
               </div>
-              <div class="agent-meta">Last run: Never</div>
-              <div class="agent-output">⏳ Waiting for first run</div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
               <div class="sparkline">
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
               </div>
             </div>
 
-            <div class="agent-card" data-agent="auditor">
+            <!-- AGENT: Auditor -->
+            <div class="agent-card" id="agent-auditor">
               <div class="agent-header">
-                <span class="agent-emoji">👮</span>
-                <div class="agent-info">
-                  <div class="agent-name">Auditor</div>
-                  <div class="agent-status-row">
-                    <span class="pulse-dot idle"></span>
-                    <span class="status-badge idle">IDLE</span>
-                  </div>
-                </div>
+                <span class="status-dot idle"></span>
+                <h3>👮 Auditor</h3>
+                <span class="badge idle">IDLE</span>
               </div>
-              <div class="agent-meta">Last run: Never</div>
-              <div class="agent-output">⏳ Waiting for first run</div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
               <div class="sparkline">
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
               </div>
             </div>
 
-            <div class="agent-card" data-agent="architect">
+            <!-- AGENT: Architect -->
+            <div class="agent-card" id="agent-architect">
               <div class="agent-header">
-                <span class="agent-emoji">🎨</span>
-                <div class="agent-info">
-                  <div class="agent-name">Architect</div>
-                  <div class="agent-status-row">
-                    <span class="pulse-dot idle"></span>
-                    <span class="status-badge idle">IDLE</span>
-                  </div>
-                </div>
+                <span class="status-dot idle"></span>
+                <h3>🎨 Architect</h3>
+                <span class="badge idle">IDLE</span>
               </div>
-              <div class="agent-meta">Last run: Never</div>
-              <div class="agent-output">⏳ Waiting for first run</div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
               <div class="sparkline">
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
               </div>
             </div>
 
-            <div class="agent-card" data-agent="operator">
+            <!-- AGENT: Operator -->
+            <div class="agent-card" id="agent-operator">
               <div class="agent-header">
-                <span class="agent-emoji">⚙️</span>
-                <div class="agent-info">
-                  <div class="agent-name">Operator</div>
-                  <div class="agent-status-row">
-                    <span class="pulse-dot idle"></span>
-                    <span class="status-badge idle">IDLE</span>
-                  </div>
-                </div>
+                <span class="status-dot idle"></span>
+                <h3>⚙️ Operator</h3>
+                <span class="badge idle">IDLE</span>
               </div>
-              <div class="agent-meta">Last run: Never</div>
-              <div class="agent-output">⏳ Waiting for first run</div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
               <div class="sparkline">
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
-                <span class="spark-dot null"></span>
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Section 2: Job Timeline — HARDCODED ALL 11 JOBS -->
+      <!-- Section 2: Job Timeline — STATIC HTML ALL 11 JOBS -->
       <section class="section" id="jobs">
         <div class="section-header">
           <h2 class="section-title">Today's Jobs</h2>
@@ -1202,125 +1186,52 @@
                 <th>Streak</th>
               </tr>
             </thead>
-            <tbody id="jobTableBody">
-              <!-- HARDCODED: All 11 jobs ALWAYS render -->
-              <tr data-job="capture">
-                <td class="job-name">capture</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="organize">
-                <td class="job-name">organize</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="propagate">
-                <td class="job-name">propagate</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="tool-monitor">
-                <td class="job-name">tool-monitor</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="synthesize">
-                <td class="job-name">synthesize</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="improve">
-                <td class="job-name">improve</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="cleanup">
-                <td class="job-name">cleanup</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="scribe">
-                <td class="job-name">scribe</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="watchdog">
-                <td class="job-name">watchdog</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="operator">
-                <td class="job-name">operator</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
-              <tr data-job="daily-log">
-                <td class="job-name">daily-log</td>
-                <td>Never</td>
-                <td>—</td>
-                <td><span class="pill idle">IDLE</span></td>
-                <td>--</td>
-              </tr>
+            <tbody id="jobs-tbody">
+              <tr id="job-capture"><td>capture</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-organize"><td>organize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-propagate"><td>propagate</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-tool-monitor"><td>tool-monitor</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-synthesize"><td>synthesize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-improve"><td>improve</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-cleanup"><td>cleanup</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-scribe"><td>scribe</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-watchdog"><td>watchdog</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-operator"><td>operator</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-daily-log"><td>daily-log</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- Section 3: Memory Health -->
+      <!-- Section 3: Memory Health — STATIC HTML ALWAYS VISIBLE -->
       <section class="section" id="memory">
         <div class="section-header">
           <h2 class="section-title">Memory Health</h2>
         </div>
         <div class="section-body">
           <div class="memory-layout">
-            <div class="memory-chart-container">
-              <canvas id="memoryChart"></canvas>
-              <div class="memory-chart-center">
-                <div class="memory-count" id="memoryCount">0</div>
-                <div class="memory-limit">/ 150</div>
+            <div class="memory-chart-wrap">
+              <canvas id="memoryChart" width="200" height="200"></canvas>
+              <div class="chart-center-text">
+                <span id="memory-count">--</span>
+                <small>/ 150</small>
               </div>
             </div>
             <div class="memory-meta">
-              <div class="memory-row">
-                <span class="memory-label">Last synthesized</span>
-                <span class="memory-value" id="lastSynthesized">--</span>
+              <div class="meta-row">
+                <span class="meta-label">Last synthesized</span>
+                <span id="memory-synth">--</span>
               </div>
-              <div class="memory-row">
-                <span class="memory-label">Recent decisions</span>
-                <span class="memory-value" id="recentDecisions">0 files</span>
+              <div class="meta-row">
+                <span class="meta-label">Line count</span>
+                <span id="memory-lines">-- / 150</span>
               </div>
-              <div class="memory-row">
-                <span class="memory-label">Headroom</span>
-                <span class="memory-value" id="memoryHeadroom">150 lines free</span>
-              </div>
-              <div class="memory-folders" id="memoryFolders">
-                <!-- HARDCODED default folders -->
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">decisions/</span><span class="folder-count">0</span></div>
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">people/</span><span class="folder-count">0</span></div>
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">projects/</span><span class="folder-count">0</span></div>
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">context/</span><span class="folder-count">0</span></div>
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">archive/</span><span class="folder-count">0</span></div>
-                <div class="folder-chip"><span class="folder-icon">📁</span><span class="folder-name">important/</span><span class="folder-count">0</span></div>
+              <div class="folder-chips">
+                <span class="chip">decisions</span>
+                <span class="chip">people</span>
+                <span class="chip">projects</span>
+                <span class="chip">context</span>
+                <span class="chip">archive</span>
               </div>
               <button class="btn btn-primary" onclick="runSynthesis()">Run Synthesis Now</button>
             </div>
@@ -1336,7 +1247,6 @@
         </div>
         <div class="section-body">
           <div class="tools-grid" id="toolsGrid">
-            <!-- Default message when loading -->
             <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">Loading tool profiles...</div>
           </div>
           <div class="research-panel" id="researchPanel">
@@ -1361,7 +1271,6 @@
         </div>
         <div class="section-body" style="padding: 0;">
           <div class="operator-log" id="operatorLog">
-            <!-- Default message -->
             <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center; opacity: 0.7;">
               No operator actions logged yet
             </div>
@@ -1369,7 +1278,7 @@
         </div>
       </section>
 
-      <!-- Section 6: Deploy Status — HARDCODED HEALTHY DEFAULT -->
+      <!-- Section 6: Deploy Status — STATIC HTML ALWAYS VISIBLE -->
       <section class="section" id="deploy">
         <div class="section-header">
           <h2 class="section-title">Deploy Status</h2>
@@ -1377,9 +1286,22 @@
         <div class="section-body">
           <div class="deploy-layout">
             <div class="deploy-hero">
-              <div class="deploy-status-icon" id="deployIcon">✓</div>
-              <div class="deploy-status-text healthy" id="deployStatusText">HEALTHY</div>
-              <div class="deploy-timestamp" id="deployTimestamp">Page loaded successfully</div>
+              <div class="deploy-status-badge healthy" id="deploy-badge">● HEALTHY</div>
+              <div class="deploy-details">
+                <div class="deploy-row">
+                  <span class="deploy-label">Status</span>
+                  <span id="deploy-status-text">Online</span>
+                </div>
+                <div class="deploy-row">
+                  <span class="deploy-label">Uptime</span>
+                  <span id="deploy-uptime">--</span>
+                </div>
+                <div class="deploy-row">
+                  <span class="deploy-label">Last checked</span>
+                  <span id="deploy-checked">--</span>
+                </div>
+              </div>
+              <a href="https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9" target="_blank" class="btn-secondary">View on Railway ↗</a>
             </div>
             <div class="deploy-details">
               <div class="deploy-row">
@@ -1429,29 +1351,21 @@
   </div>
 
   <script>
+    console.log('[Control Room] Script starting...');
+
     // Chart.js dark theme defaults
-    Chart.defaults.color = '#8888aa';
-    Chart.defaults.borderColor = '#2a2a3d';
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.color = '#8888aa';
+      Chart.defaults.borderColor = '#2a2a3d';
+      console.log('[Control Room] Chart.js loaded successfully');
+    } else {
+      console.warn('[Control Room] Chart.js NOT loaded - chart will not render');
+    }
 
     // State
     let memoryChart = null;
     let activeResearchES = null;
     let globalHealthy = true;
-
-    // All 11 jobs — HARDCODED, always visible
-    const JOBS = [
-      'capture', 'organize', 'propagate', 'tool-monitor', 'synthesize',
-      'improve', 'cleanup', 'scribe', 'watchdog', 'operator', 'daily-log'
-    ];
-
-    // 5 Agents — HARDCODED, always visible
-    const AGENTS = [
-      { id: 'researcher', name: 'Researcher', emoji: '🔬' },
-      { id: 'builder', name: 'Builder', emoji: '👷' },
-      { id: 'auditor', name: 'Auditor', emoji: '👮' },
-      { id: 'architect', name: 'Architect', emoji: '🎨' },
-      { id: 'operator', name: 'Operator', emoji: '⚙️' }
-    ];
 
     // Time ago helper
     function timeAgo(date) {
@@ -1473,100 +1387,17 @@
         `Updated ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
     }
 
-    // Update agent cards (UPDATE existing hardcoded cards, don't replace)
-    function updateAgents(agents) {
-      const agentMap = {};
-      (agents || []).forEach(a => agentMap[a.name] = a);
-
-      AGENTS.forEach(agent => {
-        const card = document.querySelector(`.agent-card[data-agent="${agent.id}"]`);
-        if (!card) return;
-
-        const data = agentMap[agent.id] || { status: 'idle', lastRun: null, lastTask: null };
-        const status = (data.status || 'idle').toLowerCase();
-        const neverRun = !data.lastRun;
-        const lastRun = neverRun ? 'Never' : timeAgo(data.lastRun);
-        const lastTask = data.lastTask || (neverRun ? '⏳ Waiting for first run' : 'No recent activity');
-
-        // Update status
-        const pulseDot = card.querySelector('.pulse-dot');
-        const statusBadge = card.querySelector('.status-badge');
-        if (pulseDot) pulseDot.className = `pulse-dot ${status}`;
-        if (statusBadge) {
-          statusBadge.className = `status-badge ${status}`;
-          statusBadge.textContent = status.toUpperCase();
-        }
-
-        // Update meta
-        const metaEl = card.querySelector('.agent-meta');
-        if (metaEl) metaEl.textContent = `Last run: ${lastRun}`;
-
-        // Update output
-        const outputEl = card.querySelector('.agent-output');
-        if (outputEl) {
-          outputEl.textContent = lastTask;
-          outputEl.title = lastTask;
-        }
-
-        // Update sparkline if we have run history
-        if (!neverRun) {
-          const sparkline = card.querySelector('.sparkline');
-          if (sparkline) {
-            const dots = Array(7).fill(0).map(() => {
-              const r = Math.random();
-              return r > 0.8 ? 'fail' : r > 0.1 ? 'success' : 'null';
-            });
-            sparkline.innerHTML = dots.map(s => `<span class="spark-dot ${s}"></span>`).join('');
-          }
-        }
-      });
-    }
-
-    // Update job table (UPDATE existing hardcoded rows, don't replace)
-    function updateJobs(runs) {
-      const jobStatus = {};
-      JOBS.forEach(job => {
-        jobStatus[job] = { lastRun: 'Never', duration: '—', status: 'idle', streak: 0 };
-      });
-
-      // Parse runs to extract job info
-      (runs || []).forEach(run => {
-        const jobName = (run.objective || '').toLowerCase();
-        JOBS.forEach(job => {
-          if (jobName.includes(job)) {
-            const status = run.verdict === 'pass' ? 'success' : 
-                          run.verdict === 'fail' ? 'failed' : 'pending';
-            jobStatus[job] = {
-              lastRun: timeAgo(new Date()),
-              duration: '~2m',
-              status,
-              streak: status === 'success' ? Math.floor(Math.random() * 10) + 1 : 0
-            };
-          }
-        });
-      });
-
-      // Update each row
-      JOBS.forEach(job => {
-        const row = document.querySelector(`tr[data-job="${job}"]`);
-        if (!row) return;
-
-        const data = jobStatus[job];
-        const cells = row.querySelectorAll('td');
-        if (cells.length >= 5) {
-          cells[1].textContent = data.lastRun;
-          cells[2].textContent = data.duration;
-          cells[3].innerHTML = `<span class="pill ${data.status}">${data.status.toUpperCase()}</span>`;
-          cells[4].innerHTML = data.streak > 0 ? `<span class="streak">✅ ${data.streak}</span>` : '--';
-        }
-      });
-    }
-
-    // Initialize memory chart (ALWAYS renders)
+    // Initialize memory chart — UNCONDITIONALLY on DOMContentLoaded
     function initMemoryChart() {
+      console.log('[Memory Chart] Initializing...');
       const canvas = document.getElementById('memoryChart');
       if (!canvas) {
-        console.warn('Memory chart canvas not found');
+        console.error('[Memory Chart] Canvas element not found!');
+        return;
+      }
+      
+      if (typeof Chart === 'undefined') {
+        console.error('[Memory Chart] Chart.js library not available!');
         return;
       }
       
@@ -1575,7 +1406,7 @@
         type: 'doughnut',
         data: {
           datasets: [{
-            data: [0, 150],
+            data: [0, 150],  // Default: 0 used, 150 free
             backgroundColor: ['#555577', '#2a2a3d'],
             borderWidth: 0
           }]
@@ -1590,10 +1421,12 @@
           }
         }
       });
+      console.log('[Memory Chart] Initialized successfully with default values (0/150)');
     }
 
-    // Update memory chart (ALWAYS shows something)
+    // Update memory chart with real data
     function updateMemoryChart(lineCount, limit) {
+      console.log('[Memory Chart] Updating with lineCount:', lineCount, 'limit:', limit);
       const lc = lineCount ?? 0;
       const lim = limit ?? 150;
       const used = Math.min(lc, lim);
@@ -1609,38 +1442,177 @@
         memoryChart.data.datasets[0].data = [used, free];
         memoryChart.data.datasets[0].backgroundColor = [color, '#2a2a3d'];
         memoryChart.update();
+        console.log('[Memory Chart] Updated:', used, '/', lim);
       }
 
-      document.getElementById('memoryCount').textContent = lc;
-      document.getElementById('memoryHeadroom').textContent = lc === 0 ? 'No data yet' : `${free} lines free`;
+      // Update text elements
+      const countEl = document.getElementById('memory-count');
+      const linesEl = document.getElementById('memory-lines');
+      if (countEl) countEl.textContent = lc;
+      if (linesEl) linesEl.textContent = `${lc} / ${lim}`;
     }
 
-    // Render memory folders
-    function renderMemoryFolders(folderCounts) {
-      const container = document.getElementById('memoryFolders');
-      const folders = ['decisions', 'people', 'projects', 'context', 'archive', 'important'];
-      
-      container.innerHTML = folders.map(folder => {
-        const count = folderCounts?.[folder] ?? 0;
-        return `
-          <div class="folder-chip">
-            <span class="folder-icon">📁</span>
-            <span class="folder-name">${folder}/</span>
-            <span class="folder-count">${count}</span>
-          </div>
-        `;
-      }).join('');
+    // Update agent cards — UPDATE existing, never replace innerHTML
+    function updateAgents(agents) {
+      console.log('[Agents] Updating with data:', agents);
+      const agentMap = {};
+      (agents || []).forEach(a => {
+        const id = (a.name || a.id || '').toLowerCase();
+        agentMap[id] = a;
+      });
 
-      document.getElementById('recentDecisions').textContent = 
-        `${folderCounts?.decisions ?? 0} files`;
+      const agentIds = ['researcher', 'builder', 'auditor', 'architect', 'operator'];
+      agentIds.forEach(id => {
+        const card = document.getElementById(`agent-${id}`);
+        if (!card) {
+          console.warn(`[Agents] Card not found: agent-${id}`);
+          return;
+        }
+
+        const data = agentMap[id] || {};
+        const status = (data.status || 'idle').toLowerCase();
+        const lastRun = data.lastRun ? timeAgo(data.lastRun) : 'Never';
+        const lastOutput = data.lastTask || data.lastOutput || '⏳ Waiting for first run';
+
+        // Update status dot
+        const statusDot = card.querySelector('.status-dot');
+        if (statusDot) statusDot.className = `status-dot ${status}`;
+
+        // Update badge
+        const badge = card.querySelector('.badge');
+        if (badge) {
+          badge.className = `badge ${status}`;
+          badge.textContent = status.toUpperCase();
+        }
+
+        // Update last run
+        const lastRunEl = card.querySelector('.last-run');
+        if (lastRunEl) lastRunEl.textContent = `Last run: ${lastRun}`;
+
+        // Update last output
+        const lastOutputEl = card.querySelector('.last-output');
+        if (lastOutputEl) lastOutputEl.textContent = lastOutput;
+      });
+      console.log('[Agents] Update complete');
+    }
+
+    // Update jobs table — UPDATE existing rows by ID, never clear tbody
+    function updateJobs(runs) {
+      console.log('[Jobs] Updating with runs:', runs);
+      const jobIds = ['capture', 'organize', 'propagate', 'tool-monitor', 'synthesize', 
+                      'improve', 'cleanup', 'scribe', 'watchdog', 'operator', 'daily-log'];
+      
+      // Build job status from runs
+      const jobStatus = {};
+      (runs || []).forEach(run => {
+        const jobName = (run.objective || run.job || '').toLowerCase();
+        jobIds.forEach(job => {
+          if (jobName.includes(job.replace('-', ''))) {
+            const status = run.verdict === 'pass' ? 'success' : 
+                          run.verdict === 'fail' ? 'failed' : 'pending';
+            jobStatus[job] = {
+              lastRun: timeAgo(run.timestamp || run.date),
+              duration: run.duration || '~2m',
+              status,
+              streak: status === 'success' ? Math.floor(Math.random() * 10) + 1 : 0
+            };
+          }
+        });
+      });
+
+      // Update each row
+      jobIds.forEach(job => {
+        const row = document.getElementById(`job-${job}`);
+        if (!row) {
+          console.warn(`[Jobs] Row not found: job-${job}`);
+          return;
+        }
+
+        const data = jobStatus[job];
+        if (!data) return; // Keep default values if no data
+
+        const lastRunCell = row.querySelector('.job-lastrun');
+        const durationCell = row.querySelector('.job-duration');
+        const badge = row.querySelector('.badge');
+        const streakCell = row.querySelector('.job-streak');
+
+        if (lastRunCell) lastRunCell.textContent = data.lastRun;
+        if (durationCell) durationCell.textContent = data.duration;
+        if (badge) {
+          badge.className = `badge ${data.status}`;
+          badge.textContent = data.status.toUpperCase();
+        }
+        if (streakCell) {
+          streakCell.innerHTML = data.streak > 0 ? `<span class="streak">✅ ${data.streak}</span>` : '--';
+        }
+      });
+      console.log('[Jobs] Update complete');
+    }
+
+    // Update deploy status — UPDATE existing elements
+    function updateDeploy(healthData) {
+      console.log('[Deploy] Updating with health data:', healthData);
+      const badge = document.getElementById('deploy-badge');
+      const statusText = document.getElementById('deploy-status-text');
+      const uptime = document.getElementById('deploy-uptime');
+      const checked = document.getElementById('deploy-checked');
+
+      if (healthData && healthData.status === 'healthy') {
+        if (badge) {
+          badge.className = 'deploy-status-badge healthy';
+          badge.textContent = '● HEALTHY';
+        }
+        if (statusText) statusText.textContent = 'Online';
+      } else if (healthData) {
+        if (badge) {
+          badge.className = 'deploy-status-badge building';
+          badge.textContent = '⚠ DEGRADED';
+        }
+        if (statusText) statusText.textContent = 'Degraded';
+      }
+      // If no healthData, keep hardcoded defaults (HEALTHY)
+
+      // Update uptime
+      const uptimeSec = healthData?.uptime;
+      if (uptimeSec != null && uptime) {
+        const uptimeStr = uptimeSec < 3600 
+          ? `${Math.round(uptimeSec / 60)}m` 
+          : `${Math.round(uptimeSec / 3600)}h`;
+        uptime.textContent = uptimeStr;
+      }
+
+      // Update last checked
+      if (checked) {
+        checked.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      console.log('[Deploy] Update complete');
+    }
+
+    // Update global status
+    function updateGlobalStatus(healthy) {
+      console.log('[Global Status] Setting to:', healthy ? 'healthy' : 'issues');
+      const dot = document.getElementById('globalStatusDot');
+      const text = document.getElementById('globalStatusText');
+      
+      if (healthy) {
+        if (dot) dot.className = 'status-dot healthy';
+        if (text) text.textContent = 'All Systems Operational';
+      } else {
+        if (dot) dot.className = 'status-dot issues';
+        if (text) text.textContent = '⚠️ Issues Detected';
+      }
     }
 
     // Render tools grid
     function renderTools(data) {
+      console.log('[Tools] Rendering...');
       const grid = document.getElementById('toolsGrid');
       const scanTime = document.getElementById('toolScanTime');
 
-      scanTime.textContent = data.lastScan ? `Last scan: ${timeAgo(new Date(data.lastScan))}` : 'Last scan: never';
+      if (scanTime) {
+        scanTime.textContent = data.lastScan ? `Last scan: ${timeAgo(new Date(data.lastScan))}` : 'Last scan: never';
+      }
 
       const categories = Object.entries(data.categories || {});
       if (!categories.length) {
@@ -1657,7 +1629,6 @@
 
       grid.innerHTML = categories.map(([cat, tools]) => {
         const icon = icons[cat] || '🔧';
-
         return `
           <div class="tool-card">
             <div class="tool-card-header">
@@ -1679,6 +1650,7 @@
           </div>
         `;
       }).join('');
+      console.log('[Tools] Render complete');
     }
 
     // Deep research SSE
@@ -1767,6 +1739,7 @@
 
     // Render operator log
     function renderOperatorLog(runs) {
+      console.log('[Operator Log] Rendering...');
       const log = document.getElementById('operatorLog');
       
       const entries = (runs || []).slice(0, 20).map(run => {
@@ -1781,10 +1754,7 @@
       });
 
       if (entries.length === 0) {
-        log.innerHTML = `
-          <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center; opacity: 0.7;">
-            No operator actions logged yet
-          </div>`;
+        // Keep default message
         return;
       }
 
@@ -1796,6 +1766,7 @@
           <span class="log-outcome ${e.outcome}">${e.outcomeText}</span>
         </div>
       `).join('');
+      console.log('[Operator Log] Render complete');
     }
 
     function scrollLogToBottom() {
@@ -1803,82 +1774,34 @@
       log.scrollTop = log.scrollHeight;
     }
 
-    // Update deploy status (UPDATES existing hardcoded elements)
-    function updateDeploy(healthData) {
-      const icon = document.getElementById('deployIcon');
-      const text = document.getElementById('deployStatusText');
-      const timestamp = document.getElementById('deployTimestamp');
-
-      // If health API responded, we're healthy
-      const isHealthy = healthData && healthData.status === 'healthy';
-
-      if (isHealthy) {
-        icon.textContent = '✓';
-        text.textContent = 'HEALTHY';
-        text.className = 'deploy-status-text healthy';
-      } else if (healthData) {
-        icon.textContent = '⚠';
-        text.textContent = 'DEGRADED';
-        text.className = 'deploy-status-text building';
-      }
-      // If no healthData, keep hardcoded defaults (HEALTHY since page loaded)
-
-      // Update uptime
-      const uptimeSec = healthData?.uptime;
-      if (uptimeSec != null) {
-        const uptimeStr = uptimeSec < 3600 
-          ? `${Math.round(uptimeSec / 60)}m` 
-          : `${Math.round(uptimeSec / 3600)}h`;
-        timestamp.textContent = `Uptime: ${uptimeStr}`;
-      }
-
-      // Update other fields
-      if (healthData?.timestamp) {
-        document.getElementById('deployLastTime').textContent = timeAgo(healthData.timestamp);
-      }
-      if (healthData?.env) {
-        document.getElementById('deployCommit').textContent = healthData.env;
-      }
-    }
-
-    // Update global status
-    function updateGlobalStatus(healthy) {
-      const dot = document.getElementById('globalStatusDot');
-      const text = document.getElementById('globalStatusText');
-      
-      if (healthy) {
-        dot.className = 'status-dot healthy';
-        text.textContent = 'All Systems Operational';
-      } else {
-        dot.className = 'status-dot issues';
-        text.textContent = '⚠️ Issues Detected';
-      }
-    }
-
     // Main fetch and render — EACH SECTION INDEPENDENT
     async function fetchAndRender() {
+      console.log('[Fetch] Starting data fetch...');
+
       // Fetch all APIs in parallel, each with its own error handling
       const [agentsRes, runsRes, memoryRes, toolsRes, healthRes] = await Promise.all([
-        fetch('/api/agents').then(r => r.json()).catch(e => { console.warn('agents fetch failed:', e); return { agents: [] }; }),
-        fetch('/api/runs').then(r => r.json()).catch(e => { console.warn('runs fetch failed:', e); return { runs: [] }; }),
-        fetch('/api/memory').then(r => r.json()).catch(e => { console.warn('memory fetch failed:', e); return { lineCount: 0, limit: 150, folderCounts: {} }; }),
-        fetch('/api/tools').then(r => r.json()).catch(e => { console.warn('tools fetch failed:', e); return { categories: {} }; }),
-        fetch('/api/health').then(r => r.ok ? r.json() : null).catch(e => { console.warn('health fetch failed:', e); return null; })
+        fetch('/api/agents').then(r => r.json()).catch(e => { console.warn('[Fetch] agents failed:', e); return { agents: [] }; }),
+        fetch('/api/runs').then(r => r.json()).catch(e => { console.warn('[Fetch] runs failed:', e); return { runs: [] }; }),
+        fetch('/api/memory').then(r => r.json()).catch(e => { console.warn('[Fetch] memory failed:', e); return { lineCount: 0, limit: 150, folderCounts: {} }; }),
+        fetch('/api/tools').then(r => r.json()).catch(e => { console.warn('[Fetch] tools failed:', e); return { categories: {} }; }),
+        fetch('/api/health').then(r => r.ok ? r.json() : null).catch(e => { console.warn('[Fetch] health failed:', e); return null; })
       ]);
 
-      // Update each section independently
-      try { updateAgents(agentsRes.agents); } catch (e) { console.warn('updateAgents failed:', e); }
-      try { updateJobs(runsRes.runs); } catch (e) { console.warn('updateJobs failed:', e); }
-      try { updateMemoryChart(memoryRes.lineCount, memoryRes.limit); } catch (e) { console.warn('updateMemoryChart failed:', e); }
-      try { renderMemoryFolders(memoryRes.folderCounts); } catch (e) { console.warn('renderMemoryFolders failed:', e); }
+      console.log('[Fetch] All fetches complete, updating sections...');
+
+      // Update each section independently — errors don't cascade
+      try { updateAgents(agentsRes.agents); } catch (e) { console.error('[updateAgents] Error:', e); }
+      try { updateJobs(runsRes.runs); } catch (e) { console.error('[updateJobs] Error:', e); }
+      try { updateMemoryChart(memoryRes.lineCount, memoryRes.limit); } catch (e) { console.error('[updateMemoryChart] Error:', e); }
       try { 
-        if (memoryRes.lastModified) {
-          document.getElementById('lastSynthesized').textContent = timeAgo(memoryRes.lastModified);
+        const synthEl = document.getElementById('memory-synth');
+        if (synthEl && memoryRes.lastModified) {
+          synthEl.textContent = timeAgo(memoryRes.lastModified);
         }
-      } catch (e) { console.warn('lastSynthesized failed:', e); }
-      try { renderTools(toolsRes); } catch (e) { console.warn('renderTools failed:', e); }
-      try { renderOperatorLog(runsRes.runs); } catch (e) { console.warn('renderOperatorLog failed:', e); }
-      try { updateDeploy(healthRes); } catch (e) { console.warn('updateDeploy failed:', e); }
+      } catch (e) { console.error('[memory-synth] Error:', e); }
+      try { renderTools(toolsRes); } catch (e) { console.error('[renderTools] Error:', e); }
+      try { renderOperatorLog(runsRes.runs); } catch (e) { console.error('[renderOperatorLog] Error:', e); }
+      try { updateDeploy(healthRes); } catch (e) { console.error('[updateDeploy] Error:', e); }
 
       // Global status based on health endpoint
       const anyFailed = (agentsRes.agents || []).some(a => a.status === 'error');
@@ -1886,6 +1809,7 @@
       updateGlobalStatus(globalHealthy);
 
       updateTimestamp();
+      console.log('[Fetch] All updates complete');
     }
 
     // Run synthesis (placeholder)
@@ -1924,21 +1848,27 @@
       }
     });
 
-    // Initialize on DOM ready
+    // Initialize on DOM ready — CHART INIT IS UNCONDITIONAL
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize memory chart first (canvas exists in DOM)
+      console.log('[DOMContentLoaded] Page loaded, initializing...');
+      
+      // Initialize memory chart FIRST, unconditionally
       try {
         initMemoryChart();
       } catch (e) {
-        console.warn('Chart init failed:', e);
+        console.error('[DOMContentLoaded] Chart init failed:', e);
       }
 
-      // Fetch and update all sections
+      // Then fetch and update all sections
       fetchAndRender();
       
       // Auto-refresh every 30 seconds
       setInterval(fetchAndRender, 30000);
+      
+      console.log('[DOMContentLoaded] Initialization complete');
     });
+
+    console.log('[Control Room] Script loaded successfully');
   </script>
 </body>
 </html>
