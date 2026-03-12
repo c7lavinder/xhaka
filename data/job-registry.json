@@ -1,0 +1,51 @@
+{
+  "capture": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  },
+  "organize": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  },
+  "propagate": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  },
+  "tool-monitor": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  },
+  "synthesize": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 168,
+    "gracePeriodMinutes": 120
+  },
+  "improve": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  },
+  "cleanup": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": 0,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
+  }
+}
