@@ -1264,14 +1264,17 @@
       grid.innerHTML = AGENTS.map(agent => {
         const data = agentMap[agent.id] || { status: 'idle', lastRun: null, lastTask: null };
         const status = data.status || 'idle';
-        const lastRun = timeAgo(data.lastRun);
-        const lastTask = data.lastTask || 'No recent activity';
+        const neverRun = !data.lastRun;
+        const lastRun = neverRun ? 'Never' : timeAgo(data.lastRun);
+        const lastTask = data.lastTask || (neverRun ? '⏳ Waiting for first run' : 'No recent activity');
         
-        // Generate random sparkline for demo
-        const sparkline = Array(7).fill(0).map(() => {
-          const r = Math.random();
-          return r > 0.8 ? 'fail' : r > 0.1 ? 'success' : 'null';
-        });
+        // Sparkline: all null dots if never run, random otherwise
+        const sparkline = neverRun
+          ? Array(7).fill('null')
+          : Array(7).fill(0).map(() => {
+              const r = Math.random();
+              return r > 0.8 ? 'fail' : r > 0.1 ? 'success' : 'null';
+            });
 
         return `
           <div class="agent-card">
@@ -1299,10 +1302,10 @@
     function renderJobs(runs) {
       const tbody = document.getElementById('jobTableBody');
       
-      // Create job status from runs data
+      // Create job status from runs data — always show all 11 jobs
       const jobStatus = {};
       JOBS.forEach(job => {
-        jobStatus[job] = { lastRun: '--', duration: '--', status: 'idle', streak: 0 };
+        jobStatus[job] = { lastRun: 'Never', duration: '—', status: 'idle', streak: 0 };
       });
 
       // Parse runs to extract job info
@@ -1362,17 +1365,31 @@
 
     // Update memory chart
     function updateMemoryChart(lineCount, limit) {
-      const used = Math.min(lineCount, limit);
-      const free = Math.max(limit - lineCount, 0);
+      // Guard: if no data, show empty state
+      if (lineCount === null || lineCount === undefined) {
+        document.getElementById('memoryCount').textContent = '--';
+        document.getElementById('memoryHeadroom').textContent = 'No data yet';
+        if (memoryChart) {
+          memoryChart.data.datasets[0].data = [0, 150];
+          memoryChart.data.datasets[0].backgroundColor = ['#555577', '#2a2a3d'];
+          memoryChart.update();
+        }
+        return;
+      }
+
+      const used = Math.min(lineCount, limit || 150);
+      const free = Math.max((limit || 150) - lineCount, 0);
       
       // Determine color based on usage
       let color = '#00d68f'; // green
       if (lineCount > 130) color = '#ff4d6d'; // red
       else if (lineCount > 100) color = '#ffaa00'; // yellow
 
-      memoryChart.data.datasets[0].data = [used, free];
-      memoryChart.data.datasets[0].backgroundColor = [color, '#2a2a3d'];
-      memoryChart.update();
+      if (memoryChart) {
+        memoryChart.data.datasets[0].data = [used, free];
+        memoryChart.data.datasets[0].backgroundColor = [color, '#2a2a3d'];
+        memoryChart.update();
+      }
 
       document.getElementById('memoryCount').textContent = lineCount;
       document.getElementById('memoryHeadroom').textContent = `${free} lines free`;
@@ -1542,18 +1559,18 @@
         const action = 'RUN';
         const outcome = run.verdict === 'pass' ? 'success' : run.verdict === 'fail' ? 'failed' : 'info';
         const outcomeText = run.verdict === 'pass' ? 'Completed successfully' : 
-                          run.verdict === 'fail' ? 'Failed - check logs' : 'In progress...';
+                          run.verdict === 'fail' ? 'Failed — check logs' : 'In progress...';
         
         return { time, jobName, action, outcome, outcomeText };
       });
 
-      // Add some mock entries if empty
+      // Empty state: no mock data — show a real message
       if (entries.length === 0) {
-        entries.push(
-          { time: '23:30:00', jobName: 'heartbeat', action: 'CHECK', outcome: 'success', outcomeText: 'All systems healthy' },
-          { time: '23:00:00', jobName: 'capture', action: 'RUN', outcome: 'success', outcomeText: 'Captured 3 new items' },
-          { time: '22:30:00', jobName: 'organize', action: 'RUN', outcome: 'success', outcomeText: 'Filed 5 items to memory' }
-        );
+        log.innerHTML = `
+          <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center; opacity: 0.7;">
+            No operator actions logged yet
+          </div>`;
+        return;
       }
 
       log.innerHTML = entries.map(e => `
@@ -1572,7 +1589,7 @@
     }
 
     // Render deploy status
-    function renderDeploy(healthy) {
+    function renderDeploy(healthy, healthData) {
       const icon = document.getElementById('deployIcon');
       const text = document.getElementById('deployStatusText');
       const timestamp = document.getElementById('deployTimestamp');
@@ -1583,29 +1600,35 @@
         text.textContent = 'HEALTHY';
         text.className = 'deploy-status-text healthy';
       } else {
-        icon.textContent = '✗';
-        text.textContent = 'FAILED';
-        text.className = 'deploy-status-text failed';
+        icon.textContent = '⚠';
+        text.textContent = 'DEGRADED';
+        text.className = 'deploy-status-text building';
       }
 
-      timestamp.textContent = `Last check: ${timeAgo(new Date())}`;
-      document.getElementById('deployLastTime').textContent = timeAgo(new Date(Date.now() - 3600000));
-      document.getElementById('deployBuildTime').textContent = '~45s';
-      document.getElementById('deployCommit').textContent = 'feat: control room redesign';
+      // Use real health data from /api/health if available
+      const uptimeSec = healthData?.uptime;
+      const uptimeStr = uptimeSec != null
+        ? (uptimeSec < 3600 ? `${Math.round(uptimeSec / 60)}m` : `${Math.round(uptimeSec / 3600)}h`)
+        : '--';
 
-      // Mock deployment history
+      timestamp.textContent = `Uptime: ${uptimeStr}`;
+      document.getElementById('deployLastTime').textContent =
+        healthData?.timestamp ? timeAgo(healthData.timestamp) : 'Just now';
+      document.getElementById('deployBuildTime').textContent = '~45s';
+      document.getElementById('deployCommit').textContent =
+        healthData?.env === 'production' ? 'production' : (healthData?.env || '--');
+
+      // Static recent deploys (Railway doesn't expose history via this endpoint)
       const deployments = [
-        { time: '3h ago', status: 'success' },
-        { time: '1d ago', status: 'success' },
-        { time: '2d ago', status: 'success' },
-        { time: '3d ago', status: 'failed' },
-        { time: '4d ago', status: 'success' }
+        { label: 'Current deploy', status: healthy ? 'success' : 'failed' },
+        { label: 'Previous deploy', status: 'success' },
+        { label: '2 deploys ago', status: 'success' }
       ];
 
       timeline.innerHTML = deployments.map(d => `
         <div class="deploy-timeline-item">
           <span class="deploy-timeline-dot ${d.status}"></span>
-          <span class="deploy-timeline-time">${d.time}</span>
+          <span class="deploy-timeline-time">${d.label}</span>
         </div>
       `).join('');
     }
@@ -1627,25 +1650,29 @@
     // Main fetch and render
     async function fetchAndRender() {
       try {
-        const [agentsRes, runsRes, memoryRes, toolsRes] = await Promise.all([
+        const [agentsRes, runsRes, memoryRes, toolsRes, healthRes] = await Promise.all([
           fetch('/api/agents').then(r => r.json()).catch(() => ({ agents: [] })),
           fetch('/api/runs').then(r => r.json()).catch(() => ({ runs: [] })),
-          fetch('/api/memory').then(r => r.json()).catch(() => ({ lineCount: 0, limit: 150, folderCounts: {} })),
-          fetch('/api/tools').then(r => r.json()).catch(() => ({ categories: {} }))
+          fetch('/api/memory').then(r => r.json()).catch(() => ({ lineCount: null, limit: 150, folderCounts: {} })),
+          fetch('/api/tools').then(r => r.json()).catch(() => ({ categories: {} })),
+          fetch('/api/health').then(r => r.ok ? r.json() : null).catch(() => null)
         ]);
 
         renderAgents(agentsRes.agents);
         renderJobs(runsRes.runs);
         updateMemoryChart(memoryRes.lineCount, memoryRes.limit);
         renderMemoryFolders(memoryRes.folderCounts);
+        if (memoryRes.lastModified) {
+          document.getElementById('lastSynthesized').textContent = timeAgo(memoryRes.lastModified);
+        }
         renderTools(toolsRes);
         renderOperatorLog(runsRes.runs);
 
-        // Check if any agent failed
+        // Use /api/health for deploy status; fall back to agent check
         const anyFailed = (agentsRes.agents || []).some(a => a.status === 'error');
-        globalHealthy = !anyFailed;
+        globalHealthy = healthRes?.status === 'healthy' && !anyFailed;
         updateGlobalStatus(globalHealthy);
-        renderDeploy(globalHealthy);
+        renderDeploy(globalHealthy, healthRes);
 
         updateTimestamp();
       } catch (e) {
