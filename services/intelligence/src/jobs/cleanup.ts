@@ -34,7 +34,7 @@ const DAYS_180_MS = 180 * MS_PER_DAY;
 // ---------------------------------------------------------------------------
 
 export async function runCleanup(): Promise<void> {
-  const _startTime = markJobStart('cleanup');
+  const _startTime = await markJobStart('cleanup');
   try {
     console.log(`[cleanup] Starting memory cleanup${DRY_RUN ? ' (DRY RUN)' : ''}...`);
 
