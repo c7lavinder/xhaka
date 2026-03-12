@@ -5,6 +5,7 @@ import {
   updateFile,
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const DRY_RUN = process.env.DRY_RUN === 'true';
@@ -46,44 +47,53 @@ function todayDateStr(): string {
 }
 
 export async function runOrganize(): Promise<void> {
-  const today = todayDateStr();
-  console.log(`[organize] Starting nightly organize for ${today}${DRY_RUN ? ' (DRY RUN)' : ''}...`);
+  const _startTime = markJobStart('organize');
+  try {
+    const today = todayDateStr();
+    console.log(`[organize] Starting nightly organize for ${today}${DRY_RUN ? ' (DRY RUN)' : ''}...`);
 
-  // 1. Read today's daily log
-  const logPath = `memory/${today}.md`;
-  const logFile = await getFileContent(XHAKA_REPO, logPath);
+    // 1. Read today's daily log
+    const logPath = `memory/${today}.md`;
+    const logFile = await getFileContent(XHAKA_REPO, logPath);
 
-  if (!logFile || !logFile.content.trim()) {
-    console.log(`[organize] No daily log found at ${logPath} — nothing to organize.`);
-    return;
+    if (!logFile || !logFile.content.trim()) {
+      console.log(`[organize] No daily log found at ${logPath} — nothing to organize.`);
+      return;
+    }
+
+    console.log(`[organize] Found daily log at ${logPath} (${logFile.content.length} chars).`);
+
+    // 2. Extract structured info via OpenAI
+    const extracted = await extractFromLog(logFile.content, today);
+    console.log(
+      `[organize] Extracted: ${extracted.people.length} people, ` +
+      `${extracted.decisions.length} decisions, ` +
+      `${extracted.projectUpdates.length} project updates.`,
+    );
+
+    // 3. Process people
+    for (const person of extracted.people) {
+      await processPerson(person, today);
+    }
+
+    // 4. Process decisions
+    if (extracted.decisions.length > 0) {
+      await processDecisions(extracted.decisions, today);
+    }
+
+    // 5. Process project updates
+    for (const update of extracted.projectUpdates) {
+      await processProjectUpdate(update, today);
+    }
+
+    console.log('[organize] Done.');
+
+    await markJobSuccess('organize', _startTime);
+  } catch (err) {
+    console.error('[organize] Fatal error:', err);
+    await markJobFailed('organize', _startTime);
+    throw err;
   }
-
-  console.log(`[organize] Found daily log at ${logPath} (${logFile.content.length} chars).`);
-
-  // 2. Extract structured info via OpenAI
-  const extracted = await extractFromLog(logFile.content, today);
-  console.log(
-    `[organize] Extracted: ${extracted.people.length} people, ` +
-    `${extracted.decisions.length} decisions, ` +
-    `${extracted.projectUpdates.length} project updates.`,
-  );
-
-  // 3. Process people
-  for (const person of extracted.people) {
-    await processPerson(person, today);
-  }
-
-  // 4. Process decisions
-  if (extracted.decisions.length > 0) {
-    await processDecisions(extracted.decisions, today);
-  }
-
-  // 5. Process project updates
-  for (const update of extracted.projectUpdates) {
-    await processProjectUpdate(update, today);
-  }
-
-  console.log('[organize] Done.');
 }
 
 // ---------------------------------------------------------------------------
