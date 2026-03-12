@@ -9,6 +9,7 @@ import {
 } from '../lib/railway-api.js';
 import { getFileContent, updateFile, createFile } from '../lib/github.js';
 import { sendAlert } from '../utils/alert.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -223,104 +224,139 @@ async function remediateJob(
   job: JobEntry,
   existing: RemediationState | undefined,
 ): Promise<void> {
-  const serviceId = job.serviceId || process.env.RAILWAY_SERVICE_ID || '';
-  const environmentId = job.environmentId || process.env.RAILWAY_ENVIRONMENT_ID || '';
+  // Mark operator as running in the job registry — prevents watchdog double-trigger
+  const startTime = await markJobStart('operator');
 
-  // Fetch current deployment info + logs
-  const deployment = await getLatestDeployment(serviceId, environmentId);
-  if (!deployment.current) {
-    console.warn(`[operator] No deployment found for job: ${job.name}`);
-    return;
-  }
+  let jobFailed = false;
+  try {
+    const serviceId = job.serviceId || process.env.RAILWAY_SERVICE_ID || '';
+    const environmentId = job.environmentId || process.env.RAILWAY_ENVIRONMENT_ID || '';
 
-  const logs = await getDeploymentLogs(deployment.current.id, 50);
-  const failureType = classifyFailure(logs);
-  const lastLogLine = logs[logs.length - 1] ?? 'No logs available';
+    // Fetch current deployment info — isolated so one Railway failure won't abort the full run
+    let deployment: Awaited<ReturnType<typeof getLatestDeployment>>;
+    try {
+      deployment = await getLatestDeployment(serviceId, environmentId);
+    } catch (err) {
+      console.error(
+        `[operator] Railway error fetching deployment for job=${job.name}:`,
+        (err as Error).message,
+      );
+      return;
+    }
 
-  // Immediate escalation — missing_env or code_bug
-  if (failureType === 'missing_env' || failureType === 'code_bug') {
-    await sendAlert(buildImmediateEscalationAlert(job.name, failureType, lastLogLine));
-    await appendOperatorLog({
-      timestamp: new Date().toISOString(),
-      job: job.name,
-      action: 'alert',
-      outcome: 'escalated',
-      attempt: existing?.attempt ?? 0,
-      detail: `Immediate escalation: ${failureType}`,
-    });
-    activeRemediations.delete(job.id);
-    return;
-  }
+    if (!deployment.current) {
+      console.warn(`[operator] No deployment found for job: ${job.name}`);
+      return;
+    }
 
-  const attempt = existing ? existing.attempt + 1 : 1;
-  incrementAttemptCount(job.id);
+    // Fetch deployment logs — isolated so a log-fetch failure falls back to empty
+    let logs: string[];
+    try {
+      logs = await getDeploymentLogs(deployment.current.id, 50);
+    } catch (err) {
+      console.error(
+        `[operator] Railway error fetching logs for job=${job.name}:`,
+        (err as Error).message,
+      );
+      logs = [];
+    }
 
-  let action: RemediationAction;
-  let actionSuccess = false;
+    const failureType = classifyFailure(logs);
+    const lastLogLine = logs[logs.length - 1] ?? 'No logs available';
 
-  if (attempt === 1) {
-    // Attempt 1: restart via serviceInstanceRedeploy
-    action = 'restart';
-    actionSuccess = await redeployService(serviceId, environmentId);
-  } else if (attempt === 2) {
-    // Attempt 2: full redeploy
-    action = 'redeploy';
-    actionSuccess = await redeployService(serviceId, environmentId);
-  } else if (attempt === 3) {
-    // Attempt 3: rollback to prior stable deployment
-    action = 'rollback';
-    const priorId = deployment.prior?.id;
-    actionSuccess = priorId ? await rollbackDeployment(priorId) : false;
-  } else {
-    // All attempts exhausted — Tier 3 escalation
-    await sendAlert(buildTier3Alert(job.name, failureType, lastLogLine));
-    await appendOperatorLog({
-      timestamp: new Date().toISOString(),
-      job: job.name,
-      action: 'alert',
-      outcome: 'escalated',
+    // Immediate escalation — missing_env or code_bug
+    if (failureType === 'missing_env' || failureType === 'code_bug') {
+      await sendAlert(buildImmediateEscalationAlert(job.name, failureType, lastLogLine));
+      await appendOperatorLog({
+        timestamp: new Date().toISOString(),
+        job: job.name,
+        action: 'alert',
+        outcome: 'escalated',
+        attempt: existing?.attempt ?? 0,
+        detail: `Immediate escalation: ${failureType}`,
+      });
+      activeRemediations.delete(job.id);
+      return;
+    }
+
+    const attempt = existing ? existing.attempt + 1 : 1;
+    incrementAttemptCount(job.id);
+
+    let action: RemediationAction;
+    let actionSuccess = false;
+
+    if (attempt === 1) {
+      // Attempt 1: restart via serviceInstanceRedeploy
+      action = 'restart';
+      actionSuccess = await redeployService(serviceId, environmentId);
+    } else if (attempt === 2) {
+      // Attempt 2: full redeploy
+      action = 'redeploy';
+      actionSuccess = await redeployService(serviceId, environmentId);
+    } else if (attempt === 3) {
+      // Attempt 3: rollback to prior stable deployment
+      action = 'rollback';
+      const priorId = deployment.prior?.id;
+      actionSuccess = priorId ? await rollbackDeployment(priorId) : false;
+    } else {
+      // All attempts exhausted — Tier 3 escalation
+      await sendAlert(buildTier3Alert(job.name, failureType, lastLogLine));
+      await appendOperatorLog({
+        timestamp: new Date().toISOString(),
+        job: job.name,
+        action: 'alert',
+        outcome: 'escalated',
+        attempt,
+        detail: `All 3 attempts exhausted. failureType=${failureType}`,
+      });
+      activeRemediations.delete(job.id);
+      return;
+    }
+
+    const waitUntil = new Date(Date.now() + WAIT_BETWEEN_ATTEMPTS_MS).toISOString();
+
+    activeRemediations.set(job.id, {
+      jobId: job.id,
       attempt,
-      detail: `All 3 attempts exhausted. failureType=${failureType}`,
+      startedAt: new Date().toISOString(),
+      failureType,
+      lastAction: action,
+      waitUntil,
     });
-    activeRemediations.delete(job.id);
-    return;
-  }
 
-  const waitUntil = new Date(Date.now() + WAIT_BETWEEN_ATTEMPTS_MS).toISOString();
-
-  activeRemediations.set(job.id, {
-    jobId: job.id,
-    attempt,
-    startedAt: new Date().toISOString(),
-    failureType,
-    lastAction: action,
-    waitUntil,
-  });
-
-  await appendOperatorLog({
-    timestamp: new Date().toISOString(),
-    job: job.name,
-    action,
-    outcome: actionSuccess ? 'pending' : 'failed',
-    attempt,
-    detail: `failureType=${failureType}, waitUntil=${waitUntil}`,
-  });
-
-  // Tier 2 — after 2nd attempt fails, log warning for Xhaka
-  if (attempt === 2) {
     await appendOperatorLog({
       timestamp: new Date().toISOString(),
       job: job.name,
-      action: 'alert',
-      outcome: 'pending',
+      action,
+      outcome: actionSuccess ? 'pending' : 'failed',
       attempt,
-      detail: `⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=${failureType}`,
+      detail: `failureType=${failureType}, waitUntil=${waitUntil}`,
     });
-  }
 
-  console.log(
-    `[operator] Job=${job.name} attempt=${attempt} action=${action} success=${actionSuccess} waitUntil=${waitUntil}`,
-  );
+    // Tier 2 — after 2nd attempt fails, log warning for Xhaka
+    if (attempt === 2) {
+      await appendOperatorLog({
+        timestamp: new Date().toISOString(),
+        job: job.name,
+        action: 'alert',
+        outcome: 'pending',
+        attempt,
+        detail: `⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=${failureType}`,
+      });
+    }
+
+    console.log(
+      `[operator] Job=${job.name} attempt=${attempt} action=${action} success=${actionSuccess} waitUntil=${waitUntil}`,
+    );
+  } catch (err) {
+    jobFailed = true;
+    await markJobFailed('operator', startTime);
+    throw err;
+  } finally {
+    if (!jobFailed) {
+      await markJobSuccess('operator', startTime);
+    }
+  }
 }
 
 // ─── Main Operator Run ────────────────────────────────────────────────────────
