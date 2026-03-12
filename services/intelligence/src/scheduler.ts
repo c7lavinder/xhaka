@@ -6,6 +6,8 @@ import { runCleanup } from './jobs/cleanup.js';
 import { runOrganize } from './jobs/organize.js';
 import { runSynthesize } from './jobs/synthesize.js';
 import { runToolMonitor } from './jobs/tool-monitor.js';
+import { runWatchdog } from './jobs/watchdog.js';
+import { runScribe } from './jobs/scribe.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -75,6 +77,20 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Watchdog: every 10 minutes ---
+  cron.schedule(
+    '*/10 * * * *',
+    safeRun('watchdog', runWatchdog),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Scribe: daily at midnight CST ---
+  cron.schedule(
+    '0 0 * * *',
+    safeRun('scribe', runScribe),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture      — every 5 minutes');
   console.log('  ✓ propagate    — daily at 6:00 AM CST');
@@ -83,11 +99,13 @@ export function startScheduler(): void {
   console.log('  ✓ organize     — daily at 11:00 PM CST');
   console.log('  ✓ synthesize   — every 5 days at 7:00 AM CST');
   console.log('  ✓ tool-monitor — daily at 6:05 AM CST');
+  console.log('  ✓ watchdog     — every 10 minutes');
+  console.log('  ✓ scribe       — daily at midnight CST');
 }
 
 // ---------------------------------------------------------------------------
 // Manual trigger — allows running a specific job immediately via env var
-// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize
+// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize|watchdog|scribe
 // ---------------------------------------------------------------------------
 
 export async function runJobNow(jobName: string): Promise<void> {
@@ -113,7 +131,15 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'tool-monitor':
       await runToolMonitor();
       break;
+    case 'watchdog':
+      await runWatchdog();
+      break;
+    case 'scribe':
+      await runScribe();
+      break;
     default:
-      throw new Error(`Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor`);
+      throw new Error(
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, scribe`,
+      );
   }
 }
