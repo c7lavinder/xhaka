@@ -47,5 +47,12 @@
     "durationMs": 0,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
+  },
+  "scribe": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": null,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 120
   }
 }
