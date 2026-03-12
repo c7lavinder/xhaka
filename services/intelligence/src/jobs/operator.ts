@@ -431,6 +431,49 @@ export async function runOperator(): Promise<void> {
       });
     }
 
+    // ─── Railway Deployment Health Check ─────────────────────────────────────
+    // Check the deployment status BEFORE touching the job registry.
+    // If the service itself is FAILED/CRASHED, there's no point running jobs —
+    // alert immediately and bail out.
+    const railwayServiceId = process.env.RAILWAY_SERVICE_ID ?? '';
+    const railwayEnvironmentId = process.env.RAILWAY_ENVIRONMENT_ID ?? '';
+
+    try {
+      const deploymentHealth = await getLatestDeployment(railwayServiceId, railwayEnvironmentId);
+      const deployStatus = deploymentHealth.current?.status;
+      const deployId = deploymentHealth.current?.id ?? 'unknown';
+
+      if (deployStatus === 'FAILED' || deployStatus === 'CRASHED') {
+        const alertMsg =
+          `🚨 *Railway Deploy Failed* — xhaka-intelligence\n` +
+          `Status: ${deployStatus}\n` +
+          `Deployment ID: ${deployId}\n` +
+          `This is a build/code failure — manual intervention needed.\n` +
+          `Check: https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9`;
+        await sendAlert(alertMsg);
+        await appendOperatorLog({
+          timestamp: new Date().toISOString(),
+          job: 'railway-deploy',
+          action: 'alert',
+          outcome: 'escalated',
+          attempt: 0,
+          detail: `status=${deployStatus}, deploymentId=${deployId}`,
+        });
+        console.error(`[operator] Railway deployment ${deployStatus} (id=${deployId}) — returning early`);
+        return;
+      } else if (deployStatus === 'SLEEPING' || deployStatus === 'BUILDING') {
+        console.log(`[operator] Railway deployment status: ${deployStatus} — normal state, continuing`);
+      } else if (deployStatus === 'SUCCESS') {
+        console.log(`[operator] Railway deployment healthy (${deployStatus}) — proceeding to job registry check`);
+      }
+    } catch (err) {
+      console.warn(
+        '[operator] Railway health check failed — skipping, continuing with job registry:',
+        (err as Error).message,
+      );
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     const failedJobs = await readFailedJobs();
 
     if (failedJobs.length === 0) {
