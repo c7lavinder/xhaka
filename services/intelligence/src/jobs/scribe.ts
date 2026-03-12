@@ -298,7 +298,7 @@ async function routeExtraction(extraction: SessionExtraction, dateStr: string): 
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function runScribe(): Promise<void> {
-  const startTime = markJobStart('scribe');
+  const startTime = await markJobStart('scribe');
   const dateStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (Railway uses TZ=America/Chicago)
 
   console.log(`[scribe] Starting nightly run for ${dateStr}`);
