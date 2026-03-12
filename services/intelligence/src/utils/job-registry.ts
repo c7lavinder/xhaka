@@ -84,9 +84,10 @@ async function writeJobStatus(
         registry = JSON.parse(file.content) as JobRegistry;
 
         // FIX 9: Schema validation — verify expected keys exist
-        const hasValidStructure = typeof registry === 'object' && 
-                                  registry !== null && 
-                                  Object.keys(registry).length > 0;
+        const hasValidStructure = typeof registry === 'object' &&
+          registry !== null &&
+          Object.keys(registry).length > 0 &&
+          EXPECTED_KEYS.every(k => k in registry);
         
         if (!hasValidStructure) {
           console.error('[job-registry] Registry missing expected structure — schema invalid');
