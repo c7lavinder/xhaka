@@ -9,6 +9,7 @@ import {
   determineTargetAgents,
 } from '../lib/router.js';
 import { generateAgentEntry } from '../lib/openai.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const PROCESSED_PATH = 'intelligence/processed';
@@ -21,47 +22,56 @@ const INTEL_LOG_HEADING = '## Intelligence Log';
 // ---------------------------------------------------------------------------
 
 export async function runPropagate(): Promise<void> {
-  console.log('[propagate] Starting daily propagation run...');
+  const _startTime = markJobStart('propagate');
+  try {
+    console.log('[propagate] Starting daily propagation run...');
 
-  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const recentItems = await getRecentProcessedItems(cutoff);
+    const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const recentItems = await getRecentProcessedItems(cutoff);
 
-  if (!recentItems.length) {
-    console.log('[propagate] No new processed items in last 24h — nothing to propagate.');
-    return;
-  }
-
-  console.log(`[propagate] Found ${recentItems.length} recent item(s) to propagate.`);
-
-  // Group updates by agent to batch commits
-  const agentUpdates = new Map<string, string[]>();
-
-  for (const item of recentItems) {
-    let parsed;
-    try {
-      parsed = parseIntelFile(item.content);
-    } catch (err) {
-      console.warn(`[propagate] Could not parse ${item.path} — skipping.`, err);
-      continue;
+    if (!recentItems.length) {
+      console.log('[propagate] No new processed items in last 24h — nothing to propagate.');
+      return;
     }
 
-    const targetAgents = determineTargetAgents(parsed);
-    console.log(
-      `[propagate] ${item.name} → agents: ${targetAgents.join(', ')}`,
-    );
+    console.log(`[propagate] Found ${recentItems.length} recent item(s) to propagate.`);
 
-    for (const agentFile of targetAgents) {
-      if (!agentUpdates.has(agentFile)) agentUpdates.set(agentFile, []);
-      agentUpdates.get(agentFile)!.push(item.content);
+    // Group updates by agent to batch commits
+    const agentUpdates = new Map<string, string[]>();
+
+    for (const item of recentItems) {
+      let parsed;
+      try {
+        parsed = parseIntelFile(item.content);
+      } catch (err) {
+        console.warn(`[propagate] Could not parse ${item.path} — skipping.`, err);
+        continue;
+      }
+
+      const targetAgents = determineTargetAgents(parsed);
+      console.log(
+        `[propagate] ${item.name} → agents: ${targetAgents.join(', ')}`,
+      );
+
+      for (const agentFile of targetAgents) {
+        if (!agentUpdates.has(agentFile)) agentUpdates.set(agentFile, []);
+        agentUpdates.get(agentFile)!.push(item.content);
+      }
     }
-  }
 
-  // Apply updates agent by agent
-  for (const [agentFile, intelItems] of agentUpdates) {
-    await updateAgentFile(agentFile, intelItems);
-  }
+    // Apply updates agent by agent
+    for (const [agentFile, intelItems] of agentUpdates) {
+      await updateAgentFile(agentFile, intelItems);
+    }
 
-  console.log('[propagate] Done.');
+    console.log('[propagate] Done.');
+
+    await markJobSuccess('propagate', _startTime);
+  } catch (err) {
+    console.error('[propagate] Fatal error:', err);
+    await markJobFailed('propagate', _startTime);
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
