@@ -17,7 +17,7 @@ const LESSONS_HEADING = '## Lessons Learned';
 // ---------------------------------------------------------------------------
 
 export async function runImprove(): Promise<void> {
-  const _startTime = markJobStart('improve');
+  const _startTime = await markJobStart('improve');
   try {
     console.log('[improve] Starting weekly improvement run...');
 
