@@ -11,12 +11,34 @@ type JobStatus = 'success' | 'failed' | 'running';
 interface JobEntry {
   lastRun: string | null;
   lastStatus: JobStatus | null;
-  durationMs: number;
+  durationMs: number | null;
   expectedIntervalHours: number;
   gracePeriodMinutes: number;
 }
 
 type JobRegistry = Record<string, JobEntry>;
+
+// FIX 9: Expected keys for schema validation
+const EXPECTED_KEYS = [
+  'capture', 'organize', 'propagate', 'tool-monitor',
+  'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
+  'watchdog', 'daily-log',
+];
+
+// FIX 9: Default registry for corruption recovery
+const DEFAULT_REGISTRY: JobRegistry = {
+  capture: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  organize: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  propagate: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  'tool-monitor': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  synthesize: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 130, gracePeriodMinutes: 120 },
+  improve: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  cleanup: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  scribe: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
+  operator: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 10 },
+  watchdog: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 30 },
+  'daily-log': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 7, gracePeriodMinutes: 120 },
+};
 
 /**
  * Mark a job as started — writes running status to registry and returns startTime for duration tracking.
@@ -54,16 +76,63 @@ async function writeJobStatus(
     const file = await getFileContent(REPO, REGISTRY_PATH);
 
     let registry: JobRegistry;
+    let parseCorrupted = false;
+    
     if (file) {
-      registry = JSON.parse(file.content);
+      // FIX 9: Wrap JSON.parse in try/catch
+      try {
+        registry = JSON.parse(file.content) as JobRegistry;
+
+        // FIX 9: Schema validation — verify expected keys exist
+        const hasValidStructure = typeof registry === 'object' && 
+                                  registry !== null && 
+                                  Object.keys(registry).length > 0;
+        
+        if (!hasValidStructure) {
+          console.error('[job-registry] Registry missing expected structure — schema invalid');
+          parseCorrupted = true;
+          // Alert but don't crash. Use default registry for this operation.
+          try {
+            const { sendAlert } = await import('./alert.js');
+            await sendAlert('⚠️ job-registry.json schema invalid — expected keys missing');
+          } catch { /* ignore */ }
+          registry = { ...DEFAULT_REGISTRY };
+        }
+      } catch (parseErr) {
+        console.error('[job-registry] ⚠️ CORRUPTED — JSON.parse failed:', (parseErr as Error).message);
+        parseCorrupted = true;
+        
+        // Alert Corey
+        try {
+          const { sendAlert } = await import('./alert.js');
+          await sendAlert('🚨 job-registry.json is corrupted — JSON parse failed. Manual fix required.');
+        } catch { /* ignore */ }
+        
+        // Return without writing — don't overwrite the corrupt file
+        // Let a human fix it
+        return;
+      }
     } else {
       console.warn('[job-registry] Registry file not found — skipping write');
       return;
     }
 
-    if (!registry[jobName]) {
-      console.warn(`[job-registry] Unknown job: ${jobName} — skipping`);
+    // If parse was corrupted, don't write back
+    if (parseCorrupted) {
+      console.warn('[job-registry] Skipping write due to corruption');
       return;
+    }
+
+    if (!registry[jobName]) {
+      // Unknown job — add it with defaults
+      console.warn(`[job-registry] Unknown job: ${jobName} — adding with defaults`);
+      registry[jobName] = { 
+        lastRun: null, 
+        lastStatus: null, 
+        durationMs: null, 
+        expectedIntervalHours: 24, 
+        gracePeriodMinutes: 60 
+      };
     }
 
     const now = new Date().toISOString();
