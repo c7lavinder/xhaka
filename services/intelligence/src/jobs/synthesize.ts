@@ -29,7 +29,7 @@ function toSlug(name: string): string {
 }
 
 export async function runSynthesize(): Promise<void> {
-  const _startTime = markJobStart('synthesize');
+  const _startTime = await markJobStart('synthesize');
   try {
     console.log(`[synthesize] Starting synthesis${DRY_RUN ? ' (DRY RUN)' : ''}...`);
 
