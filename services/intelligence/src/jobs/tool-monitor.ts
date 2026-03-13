@@ -57,6 +57,9 @@ export async function runToolMonitor(): Promise<void> {
       ? JSON.parse(stateFile.content)
       : { lastRunAt: null, versions: {}, changelogChecked: {} };
     const stateSha = stateFile?.sha ?? null;
+    // Defensive defaults — guard against schema mismatch in persisted state
+    state.versions = state.versions ?? {};
+    state.changelogChecked = state.changelogChecked ?? {};
 
     const findings: Finding[] = [];
 
