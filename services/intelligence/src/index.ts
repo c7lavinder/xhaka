@@ -58,6 +58,9 @@ async function main(): Promise<void> {
 
   validateEnv();
 
+  // Start health check server FIRST so Railway can always reach the container
+  startHealthServer();
+
   // Validate external API credentials before starting
   await runStartupChecks();
 
@@ -68,9 +71,6 @@ async function main(): Promise<void> {
     await runJobNow(runJob);
     process.exit(0);
   }
-
-  // Start health check server so Railway doesn't kill the container
-  startHealthServer();
 
   // Reset any jobs that were stuck "running" when the service last crashed
   await recoverStuckJobs();
