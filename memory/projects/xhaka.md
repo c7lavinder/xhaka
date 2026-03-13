@@ -3,18 +3,22 @@
 ## What It Is
 My home base. The Xhaka Railway project is the system that runs me — my memory, my intelligence jobs, my command center.
 
-## Status: Active ✅
+## Status: Active — Foundation Hardening 🔧
 
 ## Infrastructure
-- **Repo:** c7lavinder/xhaka (GitHub)
+- **Repo:** c7lavinder/xhaka (GitHub — single source of truth)
 - **Railway Project:** Xhaka (ID: 84c0d035-cf53-4edd-b29c-31aeb42caac9)
-- **Environment:** production (ID: 7dba9cea-edc6-4d8c-8ebd-29c20bf11a2e)
+- **Environment:** production
 
 ## Services
 | Service | ID | URL | Status |
 |---|---|---|---|
 | xhaka | e6f2c6d7-75a4-4573-b142-63869d0e1b4c | xhaka-production.up.railway.app | ✅ Online |
-| xhaka-intelligence | e6a33162-f5ff-4916-a875-0a4fb86c934c | (no public URL — background service) | ✅ Online |
+| xhaka-intelligence | e6a33162-f5ff-4916-a875-0a4fb86c934c | (background service) | ✅ Online |
+| xhaka-control-room | 629682d3-c8d4-4907-9845-304587be36b2 | (control room dashboard) | ✅ Online |
+| Links and Docs | 0498adcb-0b20-477e-b1a5-83c3673e79cf | — | ✅ Online |
+
+> **Note:** `xhaka-brain` in the Gunner project is a wrongly-named Postgres DB — it is NOT the intelligence service. Ignore it.
 
 ## Intelligence Jobs
 | Job | Schedule | Purpose |
@@ -23,6 +27,16 @@ My home base. The Xhaka Railway project is the system that runs me — my memory
 | propagate | Daily 6 AM CST | Updates agent files from processed intel |
 | improve | Monday 6 AM CST | Pulls git history + Railway logs, extracts lessons |
 | cleanup | Sunday 6 AM CST | Archives 30+ day memory files, summarizes months |
+
+## OpenClaw Crons (native)
+| Cron | Schedule | Purpose | Status |
+|---|---|---|---|
+| session-capture | Every 4h | Captures session state to memory | Added 2026-03-13 — needs verification |
+| workspace-sync | TBD | Syncs local workspace → GitHub | Pending build |
+
+## GitHub = Single Source of Truth
+All workspace files should stay synced to c7lavinder/xhaka main branch.
+workspace-sync cron pending build to automate this.
 
 ## Repo Structure
 ```
@@ -54,13 +68,14 @@ My home base. The Xhaka Railway project is the system that runs me — my memory
 - 2026-03-11: Inbox/processed folders created, capture job now functional
 - 2026-03-11: Command Center (showcase) live at xhaka-production.up.railway.app
 - 2026-03-11: Memory system structured with subfolders
-- 2026-03-11: Cleanup job added (Sunday 6 AM CST)
-- 2026-03-11: improve job decoupled from Gunner
+- 2026-03-13: xhaka-control-room and Links and Docs services confirmed
+- 2026-03-13: Session-capture cron added (OpenClaw native, every 4h)
+- 2026-03-13: Foundation hardening phase begins
 
 ## Next Steps
-- Add custom domain (if Corey wants one)
-- Populate intelligence/inbox with first real intel items
+- Verify session-capture cron is running cleanly (openclaw cron list)
+- Build workspace-sync cron
 - First synthesis run: 2026-03-16
 
 ---
-Last updated: 2026-03-11
+Last updated: 2026-03-13
