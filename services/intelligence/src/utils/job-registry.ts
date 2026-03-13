@@ -37,7 +37,7 @@ const DEFAULT_REGISTRY: JobRegistry = {
   scribe: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
   operator: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 10 },
   watchdog: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 30 },
-  'daily-log': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 7, gracePeriodMinutes: 120 },
+  'daily-log': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 6, gracePeriodMinutes: 120 },
 };
 
 /**

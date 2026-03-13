@@ -10,6 +10,7 @@ import {
 } from '../lib/router.js';
 import { generateAgentEntry } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { checkEnv, warnMissingEnv } from '../utils/env-check.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const PROCESSED_PATH = 'intelligence/processed';
@@ -22,6 +23,13 @@ const INTEL_LOG_HEADING = '## Intelligence Log';
 // ---------------------------------------------------------------------------
 
 export async function runPropagate(): Promise<void> {
+  // Pre-flight: OPENAI_API_KEY is required for generating agent entries
+  const { ok, missing } = checkEnv(['OPENAI_API_KEY']);
+  if (!ok) {
+    warnMissingEnv('propagate', missing);
+    return; // Skip cleanly — not a job failure
+  }
+
   const _startTime = await markJobStart('propagate');
   try {
     console.log('[propagate] Starting daily propagation run...');
