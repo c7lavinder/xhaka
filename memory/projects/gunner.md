@@ -3,32 +3,35 @@
 ## What It Is
 AI-powered call coaching SaaS. Grades sales calls, tracks team performance, gamifies improvement. Built by Corey. Currently used by NAH team.
 
-## My Role: OBSERVE ONLY
-Xhaka does not touch Gunner engineering. All code/deploy work goes to the Builder.
+## My Role: OBSERVE + PROMPT ONLY
+Xhaka does NOT touch Gunner engineering. All code/deploy work goes to the Builder.
+Gunner Railway project (f379b683) is **OFF LIMITS** — never touch without explicit Corey authorization.
 
-## Status: Active Development 🔄
+## Status: Active Rebuild 🔄
 
 ## Infrastructure
 - **Repo:** c7lavinder/Gunner (GitHub, main branch)
-- **Railway Project:** Gunner (ID: f379b683-e34d-4e0e-a91a-f64d0ab499ea)
-- **Live URL:** gunner-v2-production.up.railway.app
+- **Railway Project:** Gunner (ID: f379b683-e34d-4e0e-a91a-f64d0ab499ea) — OFF LIMITS
+- **Live URL:** gunner-production.up.railway.app
 - **Target domain:** getgunner.ai (DNS flip pending — held until app stable)
 - **Database:** gunner-postgres on Railway (Postgres)
+- **xhaka-brain:** Postgres DB in Gunner project — wrongly named, ignore it
 
-## Current State (as of 2026-03-11)
+## Current State (as of 2026-03-13)
 - App is live and deployed ✅
-- Manus dependencies fully eliminated ✅
-- `crmStatus: "degraded"` — GHL webhooks not pointing to Railway URL
-- Calls ingesting: 0 (GHL webhook not configured)
-- Opps ingesting: 20 (NAH) + 5 (tenant 450029) ✅
-- DNS flip to getgunner.ai: on hold
+- **crmStatus: connected** ✅ (fixed 2026-03-13 via GHL OAuth fixes)
+- GHL OAuth working — calls ingesting ✅
+- Corey is rebuilding Gunner visuals + functionality (migrating away from Manus-built UI)
+- Build workflow: Xhaka writes Claude Code prompts → Corey pastes to terminal
+- Cursor chat retired as planning middleman
 
 ## Pending (Builder Tasks)
-- Wire GHL webhook URL to Railway domain
-- Set REAL_GHL_API_KEY and REAL_GHL_LOCATION_ID env vars
+- Visual rebuild (migrating from Manus-built UI)
+- Functionality improvements
+- Sentry wiring (DSN configured, not yet in codebase)
+- PostHog wiring (project token configured, not yet in codebase)
+- LangSmith wiring (API key configured, not yet in codebase)
 - DNS flip: getgunner.ai → Railway
-- Revert Builder's unauthorized merge of manus-migration → main
-- Sentry, PostHog, LangSmith wiring
 
 ## Team Using It
 - NAH team (Kyle, Daniel, Chris, Efren, Alex, Mirna, Esteban)
@@ -38,4 +41,4 @@ Xhaka does not touch Gunner engineering. All code/deploy work goes to the Builde
 - Jake Schulz (Neighborhood Fund) — target enterprise client
 
 ---
-Last updated: 2026-03-11
+Last updated: 2026-03-13
