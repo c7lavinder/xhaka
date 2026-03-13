@@ -159,14 +159,32 @@ export async function updateFile(
 ): Promise<void> {
   const { owner, repo } = parseRepo(repoEnv);
   const encoded = Buffer.from(content, 'utf-8').toString('base64');
-  await octokit.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    path,
-    message,
-    content: encoded,
-    sha,
-  });
+  try {
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content: encoded,
+      sha,
+    });
+  } catch (err: any) {
+    if (err?.status === 422) {
+      // SHA is stale — re-fetch and retry once
+      const current = await octokit.repos.getContent({ owner, repo, path });
+      const freshSha = (current.data as any).sha;
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        path,
+        message,
+        content: encoded,
+        sha: freshSha,
+      });
+    } else {
+      throw err;
+    }
+  }
 }
 
 export async function deleteFile(
