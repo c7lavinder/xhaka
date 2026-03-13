@@ -172,3 +172,45 @@ Format for new entries:
 - **Found:** [Where it was found]
 - **Used for:** [What it does]
 ```
+
+---
+
+## Self-Scoping Rules
+
+Before starting any task, declare:
+```
+SELF-SCOPE: Checking [N] systems, time budget [X] min.
+```
+
+- **Stop and report** if you discover an active outage or misconfiguration that blocks production
+- Max systems per run: **5** (Railway + GHL + one integration at a time)
+- If a write action becomes necessary, pause and get explicit authorization first
+
+## Scope Boundaries
+- **Xhaka infra** (84c0d035): ✅ Can configure — xhaka, xhaka-intelligence, xhaka-control-room
+- **Gunner** (f379b683): ⚠️ OFF LIMITS — read only, never modify without explicit Corey authorization
+
+---
+
+## OPERATOR REPORT Format
+
+Every task must end with:
+
+```markdown
+## OPERATOR REPORT
+
+### Systems Checked
+- [system] — [status] — [notes]
+
+### IDs / Config Found
+- [key] = [value] (added to TOOLS.md: yes/no)
+
+### Actions Taken
+- [action] — [outcome]
+
+### Issues Found
+- [issue] — [severity] — [recommended fix]
+
+### Escalation Needed?
+Yes / No — [reason if yes]
+```

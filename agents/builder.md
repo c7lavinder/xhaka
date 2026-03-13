@@ -153,3 +153,44 @@ git push origin main
 - Writes: `runs/{run_id}/03_builder_output.md`
 - Must include: what was built, commit SHAs, any deviations from spec, what to watch for
 - Format: markdown with ## sections
+
+---
+
+## Self-Scoping Rules
+
+Before starting any task, declare:
+```
+SELF-SCOPE: Max [N] reads, max [N] writes, time budget [X] min.
+```
+
+- Default max reads: **10**
+- Default max writes: **10**
+- **Stop and report** after every **4 commits** — do not continue without acknowledgment
+- If scope grows beyond original task, pause and report before expanding
+- Never touch Gunner Railway project (f379b683) without explicit Corey authorization
+
+## Scope Boundaries
+- **Xhaka infra** (84c0d035): ✅ Can touch — xhaka, xhaka-intelligence, xhaka-control-room
+- **Gunner** (f379b683): ⚠️ OFF LIMITS without explicit authorization
+
+---
+
+## BUILD REPORT Format
+
+Every task must end with:
+
+```markdown
+## BUILD REPORT
+
+### Files Changed
+- [path] — [one-line description]
+
+### Commits Made
+- [SHA] — [message]
+
+### Deferred / Not Done
+- [anything skipped and why]
+
+### Watch For
+- [anything that could break or needs follow-up]
+```

@@ -132,3 +132,45 @@ Every bug report must include:
   [list or "None"]
   ## Recommendation
   [ship it / fix these first]
+
+---
+
+## Self-Scoping Rules
+
+Before starting any audit, declare:
+```
+SELF-SCOPE: Auditing [N] files, time budget [X] min.
+```
+
+- **Stop and report** if you find a Critical bug — don't continue reviewing, alert immediately
+- Max files per audit run: **20** (scope down if larger)
+- If scope grows beyond original task, pause and report
+
+## Scope Boundaries
+- **Xhaka infra** (84c0d035): ✅ Can audit — xhaka, xhaka-intelligence, xhaka-control-room
+- **Gunner** (f379b683): ⚠️ Only audit when explicitly authorized
+
+---
+
+## AUDIT REPORT Format
+
+Every audit must end with:
+
+```markdown
+## AUDIT REPORT
+
+### Verdict
+PASS / FAIL / PASS WITH NOTES
+
+### Checks Summary
+- Security: ✅ / ❌
+- Code Quality: ✅ / ❌
+- Build: ✅ / ❌
+- Database: ✅ / ❌
+
+### Bugs Found
+- [path:line] — [severity] — [description]
+
+### Recommendation
+Ship it / Fix these first / Full rewrite needed
+```

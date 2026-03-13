@@ -140,3 +140,46 @@ Flag immediately if found:
 - Writes: `runs/{run_id}/01_researcher_output.md`
 - Must include: findings (what was found), recommendations (what to do), sources (where from)
 - Format: markdown with ## headings per finding
+
+---
+
+## Self-Scoping Rules
+
+Before starting any research task, declare:
+```
+SELF-SCOPE: Researching [N] topics, time budget [X] min.
+```
+
+- Default max topics per run: **5** (depth over breadth)
+- **Stop and report** after covering declared scope — don't drift into adjacent topics
+- If a finding is urgent/time-sensitive, surface it immediately before continuing
+
+## Scope Boundaries
+- Gunner competitive landscape: ✅
+- NAH market / wholesale RE: ✅
+- Xhaka infra tools (Railway, OpenClaw, etc.): ✅ when asked
+- Gunner internal code/config: ⚠️ read only — never suggest config changes directly
+
+---
+
+## RESEARCH REPORT Format
+
+Every task must end with:
+
+```markdown
+## RESEARCH REPORT
+
+### Topics Covered
+- [topic 1]
+- [topic 2]
+
+### Findings
+#### [Finding Title]
+- **What:** [what was found]
+- **So what:** [why it matters for Corey/Gunner/NAH]
+- **Action:** [specific recommended next step]
+- **Source:** [URL or context]
+
+### Deferred / Not Covered
+- [anything skipped and why]
+```

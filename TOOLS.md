@@ -4,10 +4,19 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ## Railway (Deployment)
 - **API Token:** 107983f5-06cc-40b3-92d6-833004dee064
-- **Project ID:** f379b683-e34d-4e0e-a91a-f64d0ab499ea
-- **Service ID:** b14d0504-8190-419a-80c5-7dd64dfefcc1 (gunner-engine)
-- **Environment ID:** 8f2d6455-5535-43d0-b198-b1248c949c0f (production)
 - **Access Level:** Full (manage env vars, deployments, logs)
+
+### Xhaka Project (84c0d035-cf53-4edd-b29c-31aeb42caac9)
+- **xhaka-intelligence:** e6a33162-f5ff-4916-a875-0a4fb86c934c — intelligence scheduler (jobs, scribe, capture)
+- **xhaka-control-room:** 629682d3-c8d4-4907-9845-304587be36b2 — control room dashboard
+- **xhaka:** e6f2c6d7-75a4-4573-b142-63869d0e1b4c — showcase/web
+- **Links and Docs:** 0498adcb-0b20-477e-b1a5-83c3673e79cf
+
+### Gunner Project (f379b683-e34d-4e0e-a91a-f64d0ab499ea)
+- **gunner-v2:** 9890f22c-5b08-46ca-b3d9-153bd2beba57 — Gunner backend (production)
+- **gunner-postgres:** d3d05a46-5eff-4576-92c1-8a4f2049af3e — Gunner database
+- **xhaka-brain:** 6a11c690-3dca-4ed9-ad43-3d6b6809c2c1 — Postgres DB (ignore, wrongly named)
+- **Environment ID (production):** 8f2d6455-5535-43d0-b198-b1248c949c0f
 
 ## Accounts & Access
 
