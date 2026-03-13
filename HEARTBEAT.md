@@ -7,7 +7,7 @@
 ### 🏗️ Gunner (Product)
 - [ ] Any failed Railway deployments? (check gunner-production.up.railway.app and xhaka-brain-production.up.railway.app)
 - [ ] Any new GitHub commits that need review? (c7lavinder/Gunner)
-- [ ] Is GHL connected? (Standing blocker — not yet connected to new Railway)
+- [ ] Is GHL connected? (crmStatus should be `connected` — fixed 2026-03-13)
 - [ ] Any Builder tasks in progress or stuck?
 
 ### 🏠 New Again Houses (Operations)
