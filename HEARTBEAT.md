@@ -5,7 +5,7 @@
 ## Checklist
 
 ### 🏗️ Gunner (Product)
-- [ ] Any failed Railway deployments? (check gunner-production.up.railway.app)
+- [ ] Any failed Railway deployments? (check gunner-production.up.railway.app and xhaka-brain-production.up.railway.app)
 - [ ] Any new GitHub commits that need review? (c7lavinder/Gunner)
 - [ ] Is GHL connected? (Standing blocker — not yet connected to new Railway)
 - [ ] Any Builder tasks in progress or stuck?
@@ -20,6 +20,10 @@
 - [ ] Is PROJECTS.md current?
 - [ ] Are there open decisions waiting on Corey?
 - [ ] Did auto-sync push latest changes to github.com/c7lavinder/xhaka?
+- [ ] Session-capture cron healthy? (openclaw cron list — check for error status)
+- [ ] Intelligence jobs healthy? (check data/job-registry.json for failed/stuck jobs)
+- [ ] MEMORY.md under 150 lines?
+- [ ] Local workspace synced to GitHub?
 
 ## Response Protocol
 - All clear → `HEARTBEAT_OK`
