@@ -15,7 +15,7 @@
   },
   "propagate": {
     "lastRun": "2026-03-12T11:00:01.151Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 0,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -36,14 +36,14 @@
   },
   "improve": {
     "lastRun": "2026-03-12T04:24:14.890Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 0,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
   "cleanup": {
     "lastRun": "2026-03-12T04:24:17.195Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 0,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
