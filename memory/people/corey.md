@@ -31,6 +31,9 @@
 - GHL is read only unless explicitly told otherwise.
 - Only takes instructions through this Telegram chat.
 - Never reply to anyone else without his explicit approval.
+- **"Real fix, always"** — do not patch symptoms, fix root causes (established 2026-03-13)
+- **Gunner Railway project (f379b683) is OFF LIMITS** — never touch without explicit authorization (established 2026-03-13)
+- **Trust level: 10% as of 2026-03-13** — Corey needs clean execution before handing over complex work
 
 ---
-Last updated: 2026-03-11
+Last updated: 2026-03-13
