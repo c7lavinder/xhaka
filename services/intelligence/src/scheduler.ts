@@ -186,6 +186,62 @@ export async function runJobNow(jobName: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Stale job recovery — resets "running" jobs that exceeded their grace period
+// Run this on boot before startScheduler() to unblock crash-stuck jobs
+// ---------------------------------------------------------------------------
+
+export async function recoverStuckJobs(): Promise<void> {
+  console.log('[scheduler] Checking for stuck jobs...');
+
+  const file = await getFileContent(REPO, 'data/job-registry.json');
+  if (!file) {
+    console.warn('[scheduler] Could not load job-registry.json for stuck-job recovery');
+    return;
+  }
+
+  let registry: Record<string, { lastRun: string | null; lastStatus: string | null; gracePeriodMinutes?: number }>;
+  try {
+    registry = JSON.parse(file.content);
+  } catch {
+    console.error('[scheduler] job-registry.json parse failed during stuck-job recovery — skipping');
+    return;
+  }
+
+  const now = Date.now();
+  const stuckJobs: string[] = [];
+
+  for (const [jobName, entry] of Object.entries(registry)) {
+    if (entry.lastStatus !== 'running') continue;
+
+    const gracePeriodMs = (entry.gracePeriodMinutes ?? 60) * 60 * 1000;
+    const lastRun = entry.lastRun ? new Date(entry.lastRun).getTime() : 0;
+
+    if ((now - lastRun) > gracePeriodMs) {
+      stuckJobs.push(jobName);
+      entry.lastStatus = 'failed';
+    }
+  }
+
+  if (stuckJobs.length === 0) {
+    console.log('[scheduler] No stuck jobs found');
+    return;
+  }
+
+  console.log(`[scheduler] Resetting ${stuckJobs.length} stuck job(s) to "failed": ${stuckJobs.join(', ')}`);
+
+  const { updateFile } = await import('./lib/github.js');
+  await updateFile(
+    REPO,
+    'data/job-registry.json',
+    JSON.stringify(registry, null, 2),
+    `chore: reset stuck jobs to failed on boot [${stuckJobs.join(', ')}]`,
+    file.sha,
+  );
+
+  console.log('[scheduler] Stuck job recovery complete');
+}
+
+// ---------------------------------------------------------------------------
 // Catch-up — runs missed jobs on boot (FIX 5)
 // ---------------------------------------------------------------------------
 
