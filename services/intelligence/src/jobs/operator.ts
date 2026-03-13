@@ -74,6 +74,10 @@ let persistedState: RemediationStateFile = { attempts: {}, activeRemediations: {
 const STATE_PERSIST_COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 let lastStatePersistAt = 0; // epoch ms — hydrated from persisted state on each run
 
+// 1-hour cooldown for Railway infra alerts — persisted to GitHub so it survives restarts
+const INFRA_ALERT_COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
+let lastInfraAlertAt = 0; // epoch ms — hydrated from persisted state on each run
+
 const WAIT_BETWEEN_ATTEMPTS_MS = 3 * 60 * 1000; // 3 minutes
 const MAX_ATTEMPTS_PER_24H = 3;
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -138,6 +142,7 @@ async function persistCurrentState(): Promise<void> {
 
   const state = {
     lastPersistedAt: new Date(now).toISOString(),
+    lastInfraAlertAt,
     attempts: Object.fromEntries(
       [...attemptTracker.entries()].map(([k, v]) => [k, {
         count: v.count,
@@ -454,6 +459,12 @@ export async function runOperator(): Promise<void> {
       if (!isNaN(savedAt)) lastStatePersistAt = savedAt;
     }
 
+    // Hydrate infra-alert cooldown — persisted so it survives Railway restarts
+    if (persistedStateRaw.lastInfraAlertAt) {
+      const savedInfraAt = Number(persistedStateRaw.lastInfraAlertAt);
+      if (!isNaN(savedInfraAt)) lastInfraAlertAt = savedInfraAt;
+    }
+
     // ─── Railway Deployment Health Check ─────────────────────────────────────
     // Check the deployment status BEFORE touching the job registry.
     // If the service itself is FAILED/CRASHED, there's no point running jobs —
@@ -506,6 +517,18 @@ export async function runOperator(): Promise<void> {
 
     // Hard boundary: 3+ simultaneous failures = Railway infra issue
     if (failedJobs.length >= 3) {
+      const now = Date.now();
+      if (now - lastInfraAlertAt < INFRA_ALERT_COOLDOWN_MS) {
+        console.log(
+          `[operator] Infra alert within 1h cooldown — skipping ` +
+          `(next eligible: ${new Date(lastInfraAlertAt + INFRA_ALERT_COOLDOWN_MS).toISOString()})`,
+        );
+        return;
+      }
+      // Persist before alerting so cooldown survives a restart
+      lastInfraAlertAt = now;
+      lastStatePersistAt = 0; // bypass persist cooldown — infra alerts must be saved immediately
+      await persistCurrentState();
       const alert = buildInfraAlert(failedJobs.map((j) => j.name));
       await sendAlert(alert);
       await appendOperatorLog({
@@ -547,3 +570,5 @@ export async function runOperator(): Promise<void> {
     isRunning = false;
   }
 }
+
+
