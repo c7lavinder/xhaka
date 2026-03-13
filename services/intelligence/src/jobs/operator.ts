@@ -64,6 +64,7 @@ export interface OperatorLogEntry {
 // ─── Globals ─────────────────────────────────────────────────────────────────
 
 let isRunning = false; // Debounce flag — prevents overlapping runs
+let lastInfraAlertAt: string | null = null; // Cooldown: suppress SYSTEM infra alert to once per hour
 
 // These Maps are hydrated from persisted state on each run
 let activeRemediations = new Map<string, RemediationState>();
@@ -139,6 +140,8 @@ async function persistCurrentState(): Promise<void> {
       } as ActiveRemediationRecord])
     ),
   };
+  // Persist infra alert cooldown alongside the rest of the state
+  (state as any).lastInfraAlertAt = lastInfraAlertAt;
   await saveRemediationState(state);
 }
 
@@ -431,6 +434,9 @@ export async function runOperator(): Promise<void> {
       });
     }
 
+    // Hydrate infra alert cooldown from persisted state
+    lastInfraAlertAt = (persistedState as any).lastInfraAlertAt ?? null;
+
     // ─── Railway Deployment Health Check ─────────────────────────────────────
     // Check the deployment status BEFORE touching the job registry.
     // If the service itself is FAILED/CRASHED, there's no point running jobs —
@@ -483,6 +489,17 @@ export async function runOperator(): Promise<void> {
 
     // Hard boundary: 3+ simultaneous failures = Railway infra issue
     if (failedJobs.length >= 3) {
+      // Cooldown: only send the SYSTEM infra alert once per hour to avoid commit-log flooding
+      const oneHourMs = 60 * 60 * 1000;
+      const lastAlertMs = lastInfraAlertAt ? new Date(lastInfraAlertAt).getTime() : 0;
+      if (Date.now() - lastAlertMs < oneHourMs) {
+        console.log(
+          `[operator] Infra alert suppressed by cooldown — last sent at ${lastInfraAlertAt}`,
+        );
+        return;
+      }
+      lastInfraAlertAt = new Date().toISOString();
+      await persistCurrentState();
       const alert = buildInfraAlert(failedJobs.map((j) => j.name));
       await sendAlert(alert);
       await appendOperatorLog({
