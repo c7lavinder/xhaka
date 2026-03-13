@@ -448,8 +448,9 @@ export async function runOperator(): Promise<void> {
     }
 
     // Hydrate persist cooldown from saved state — prevents commit flood after restarts
-    if ((persistedState as Record<string, unknown>).lastPersistedAt) {
-      const savedAt = new Date((persistedState as Record<string, unknown>).lastPersistedAt as string).getTime();
+    const persistedStateRaw = persistedState as unknown as Record<string, unknown>;
+    if (persistedStateRaw.lastPersistedAt) {
+      const savedAt = new Date(persistedStateRaw.lastPersistedAt as string).getTime();
       if (!isNaN(savedAt)) lastStatePersistAt = savedAt;
     }
 
