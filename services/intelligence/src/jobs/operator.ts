@@ -64,12 +64,15 @@ export interface OperatorLogEntry {
 // ─── Globals ─────────────────────────────────────────────────────────────────
 
 let isRunning = false; // Debounce flag — prevents overlapping runs
-let lastInfraAlertAt: string | null = null; // Cooldown: suppress SYSTEM infra alert to once per hour
 
 // These Maps are hydrated from persisted state on each run
 let activeRemediations = new Map<string, RemediationState>();
 let attemptTracker = new Map<string, { count: number; windowStart: number }>();
 let persistedState: RemediationStateFile = { attempts: {}, activeRemediations: {} };
+
+// 1-hour cooldown for remediation-state GitHub commits — prevents commit flood
+const STATE_PERSIST_COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
+let lastStatePersistAt = 0; // epoch ms — hydrated from persisted state on each run
 
 const WAIT_BETWEEN_ATTEMPTS_MS = 3 * 60 * 1000; // 3 minutes
 const MAX_ATTEMPTS_PER_24H = 3;
@@ -122,7 +125,19 @@ function incrementAttemptCount(jobId: string): void {
 // ─── State Persistence Helpers ────────────────────────────────────────────────
 
 async function persistCurrentState(): Promise<void> {
-  const state: RemediationStateFile = {
+  const now = Date.now();
+  if (now - lastStatePersistAt < STATE_PERSIST_COOLDOWN_MS) {
+    console.log(
+      `[operator] Skipping remediation-state commit — within 1h cooldown ` +
+      `(next eligible: ${new Date(lastStatePersistAt + STATE_PERSIST_COOLDOWN_MS).toISOString()})`,
+    );
+    return;
+  }
+
+  lastStatePersistAt = now;
+
+  const state = {
+    lastPersistedAt: new Date(now).toISOString(),
     attempts: Object.fromEntries(
       [...attemptTracker.entries()].map(([k, v]) => [k, {
         count: v.count,
@@ -139,9 +154,7 @@ async function persistCurrentState(): Promise<void> {
         waitUntil: v.waitUntil,
       } as ActiveRemediationRecord])
     ),
-  };
-  // Persist infra alert cooldown alongside the rest of the state
-  (state as any).lastInfraAlertAt = lastInfraAlertAt;
+  } as RemediationStateFile;
   await saveRemediationState(state);
 }
 
@@ -434,8 +447,11 @@ export async function runOperator(): Promise<void> {
       });
     }
 
-    // Hydrate infra alert cooldown from persisted state
-    lastInfraAlertAt = (persistedState as any).lastInfraAlertAt ?? null;
+    // Hydrate persist cooldown from saved state — prevents commit flood after restarts
+    if ((persistedState as Record<string, unknown>).lastPersistedAt) {
+      const savedAt = new Date((persistedState as Record<string, unknown>).lastPersistedAt as string).getTime();
+      if (!isNaN(savedAt)) lastStatePersistAt = savedAt;
+    }
 
     // ─── Railway Deployment Health Check ─────────────────────────────────────
     // Check the deployment status BEFORE touching the job registry.
@@ -489,17 +505,6 @@ export async function runOperator(): Promise<void> {
 
     // Hard boundary: 3+ simultaneous failures = Railway infra issue
     if (failedJobs.length >= 3) {
-      // Cooldown: only send the SYSTEM infra alert once per hour to avoid commit-log flooding
-      const oneHourMs = 60 * 60 * 1000;
-      const lastAlertMs = lastInfraAlertAt ? new Date(lastInfraAlertAt).getTime() : 0;
-      if (Date.now() - lastAlertMs < oneHourMs) {
-        console.log(
-          `[operator] Infra alert suppressed by cooldown — last sent at ${lastInfraAlertAt}`,
-        );
-        return;
-      }
-      lastInfraAlertAt = new Date().toISOString();
-      await persistCurrentState();
       const alert = buildInfraAlert(failedJobs.map((j) => j.name));
       await sendAlert(alert);
       await appendOperatorLog({
