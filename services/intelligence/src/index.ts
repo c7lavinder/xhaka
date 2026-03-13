@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 
 import http from 'http';
-import { startScheduler, runJobNow, catchUpMissedJobs } from './scheduler.js';
+import { startScheduler, runJobNow, catchUpMissedJobs, recoverStuckJobs } from './scheduler.js';
 import { runStartupChecks } from './utils/startup-checks.js';
 
 // ---------------------------------------------------------------------------
@@ -58,6 +58,9 @@ async function main(): Promise<void> {
 
   validateEnv();
 
+  // Start health check server FIRST so Railway can always reach the container
+  startHealthServer();
+
   // Validate external API credentials before starting
   await runStartupChecks();
 
@@ -69,8 +72,8 @@ async function main(): Promise<void> {
     process.exit(0);
   }
 
-  // Start health check server so Railway doesn't kill the container
-  startHealthServer();
+  // Reset any jobs that were stuck "running" when the service last crashed
+  await recoverStuckJobs();
 
   // Register all scheduled jobs
   startScheduler();

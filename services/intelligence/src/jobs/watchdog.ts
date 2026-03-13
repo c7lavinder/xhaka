@@ -4,6 +4,7 @@
 
 import { sendAlert } from '../utils/alert.js';
 import { getFileContent } from '../lib/github.js';
+import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 
 const HEALTH_URL = 'https://xhaka-production.up.railway.app/health';
 const REGISTRY_PATH = 'data/job-registry.json';
@@ -68,6 +69,8 @@ async function checkHealth(): Promise<void> {
  * Main watchdog job. Called by scheduler every 10 minutes.
  */
 export async function runWatchdog(): Promise<void> {
+  const _startTime = await markJobStart('watchdog');
+  try {
   console.log('[watchdog] Running at', new Date().toISOString());
 
   // 1. Health check
@@ -77,6 +80,7 @@ export async function runWatchdog(): Promise<void> {
   const file = await getFileContent(REPO, REGISTRY_PATH);
   if (!file) {
     await sendAlert(`🚨 *WATCHDOG ERROR* — Could not read job-registry.json`);
+    await markJobFailed('watchdog', _startTime);
     return;
   }
 
@@ -85,6 +89,7 @@ export async function runWatchdog(): Promise<void> {
     registry = JSON.parse(file.content);
   } catch (err) {
     await sendAlert(`🚨 *WATCHDOG ERROR* — Could not parse job-registry.json: ${(err as Error).message}`);
+    await markJobFailed('watchdog', _startTime);
     return;
   }
 
@@ -102,6 +107,11 @@ export async function runWatchdog(): Promise<void> {
   }
 
   console.log('[watchdog] Done');
+  await markJobSuccess('watchdog', _startTime);
+  } catch (err) {
+    console.error('[watchdog] Unexpected error:', (err as Error).message);
+    await markJobFailed('watchdog', _startTime);
+  }
 }
 
 /**

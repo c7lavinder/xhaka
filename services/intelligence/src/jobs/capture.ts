@@ -29,6 +29,7 @@ export async function runCapture(): Promise<void> {
 
     if (!markdownFiles.length) {
       console.log('[capture] Inbox is empty — nothing to process.');
+      await markJobSuccess('capture', _startTime);
       return;
     }
 

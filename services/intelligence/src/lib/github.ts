@@ -135,12 +135,18 @@ export async function createFile(
 ): Promise<void> {
   const { owner, repo } = parseRepo(repoEnv);
   const encoded = Buffer.from(content, 'utf-8').toString('base64');
+
+  // Check for an existing file to get its SHA — if found, this becomes an update
+  const existing = await getFileContent(repoEnv, path);
+  const sha = existing?.sha;
+
   await octokit.repos.createOrUpdateFileContents({
     owner,
     repo,
     path,
     message,
     content: encoded,
+    ...(sha ? { sha } : {}),
   });
 }
 

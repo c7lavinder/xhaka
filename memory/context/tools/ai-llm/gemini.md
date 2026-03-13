@@ -1,37 +1,24 @@
----
-name: Google Gemini
-category: ai-llm
-projects:
-  - gunner
-  - xhaka
-role: Free-tier LLM for Gunner V2 timeline and motivation analysis
-auth_type: api_key
-api_base_url: https://generativelanguage.googleapis.com/v1beta
-rate_limits:
-  requests_per_minute: 1500
-  tokens_per_minute: null
-pricing_tier: free-tier
-free_tier_limits: 1500 requests/day (gemini-1.5-flash)
-key_features:
-  - gemini-1.5-flash for high-volume, cost-sensitive tasks
-  - 1M token context window
-  - Multimodal (text + vision)
-power_user_features:
-  - Grounding with Google Search
-  - Code execution
-known_issues:
-  - Free tier quota resets daily — no burst handling beyond 1500 RPD
-integration_hooks:
-  - Gunner: services/intelligence (timeline + motivation analyzers)
-  - API key: AIzaSyChM6aVZ-l-L8dK9VkDnoeXyCLWhonbypY
-alternatives:
-  - openai/gpt-4o-mini (cheaper paid tier)
-docs_url: https://ai.google.dev/docs
-changelog_url: https://ai.google.dev/gemini-api/docs/changelog
-last_reviewed: 2026-03-11
-notes: ""
----
+# Google Gemini
+
+**Category:** AI & LLM
+**Status:** 🔵 Configured
+
+## Purpose
+Google's LLM used for Gunner V2 intelligence services — specifically the Timeline and Motivation analyzers that score wholesale real estate leads.
+
+## Usage in Stack
+- Model: `gemini-1.5-flash` (default)
+- Used in Gunner's AI scoring pipeline
+- Free tier: 1,500 requests/day (covers NAH volume)
+
+## Configuration
+- API Key: Configured ✓ (Railway env vars)
+- Source: Google AI Studio (aistudio.google.com)
+- Docs: https://ai.google.dev/docs
 
 ## Notes
+- Free tier is sufficient for current NAH call volume
+- Model aliases: `gemini-flash`, `gemini-lite`, `gemini-pro` in OpenClaw
 
-Using free tier (1,500 req/day) — covers current NAH volume. If Gunner scales to multi-tenant, move to paid tier. API key sourced from Google AI Studio.
+## Last Updated
+2026-03-12

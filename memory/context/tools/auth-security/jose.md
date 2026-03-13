@@ -1,37 +1,23 @@
----
-name: jose
-category: auth-security
-projects:
-  - gunner
-  - xhaka
-role: JWT signing and verification — auth tokens for API access
-auth_type: none
-api_base_url: null
-rate_limits:
-  requests_per_minute: null
-  tokens_per_minute: null
-pricing_tier: open-source
-free_tier_limits: unlimited
-key_features:
-  - JWS, JWE, JWK, JWA support
-  - Edge runtime compatible (no Node.js crypto dependency)
-  - Async API with Web Crypto
-  - RS256, HS256, ES256 algorithm support
-power_user_features:
-  - JWKS (JSON Web Key Set) for rotating keys
-  - Compact serialization for short tokens
-known_issues:
-  - jsonwebtoken package ALSO in stack — duplicate JWT library, consolidate to jose
-integration_hooks:
-  - Gunner/Xhaka: JWT verify and sign
-alternatives:
-  - jsonwebtoken (deprecated in this stack — remove)
-docs_url: https://github.com/panva/jose
-changelog_url: https://github.com/panva/jose/releases
-last_reviewed: 2026-03-11
-notes: ""
----
+# Jose (JWT)
+
+**Category:** Auth & Security
+**Status:** 🟢 Active
+
+## Purpose
+JWT token creation and verification in Gunner. Handles auth tokens for the session management system.
+
+## Usage in Stack
+- Used alongside jsonwebtoken (consolidation to jose-only is a pending task)
+- Auth flow in `server/_core/context.ts`
+- Token verification on every tRPC request
+
+## Configuration
+- No API key needed
+- Docs: https://github.com/panva/jose
 
 ## Notes
+- ⚠️ Duplicate: both `jose` AND `jsonwebtoken` are installed in Gunner — should consolidate to `jose` only
+- jose is the modern standard; jsonwebtoken is legacy
 
-Preferred JWT library — edge-compatible, modern async API. **Action required:** Remove `jsonwebtoken` from package.json and migrate all `verify`/`sign` calls to `jose`. Duplicate libraries increase bundle size and create inconsistency.
+## Last Updated
+2026-03-12

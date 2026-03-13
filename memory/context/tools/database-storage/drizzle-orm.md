@@ -1,39 +1,25 @@
----
-name: Drizzle ORM
-category: database-storage
-projects:
-  - gunner
-role: TypeScript ORM for Supabase/PostgreSQL — type-safe queries and schema migrations
-auth_type: none
-api_base_url: null
-rate_limits:
-  requests_per_minute: null
-  tokens_per_minute: null
-pricing_tier: open-source
-free_tier_limits: unlimited
-key_features:
-  - SQL-like TypeScript query builder
-  - Schema-first migrations with drizzle-kit
-  - Lightweight (no heavy abstractions)
-  - Supabase/neon/postgres compatible
-power_user_features:
-  - drizzle-kit push for rapid schema sync in development
-  - Prepared statements for performance
-  - JSON column support for flexible schemas
-known_issues:
-  - Complex joins verbose compared to Prisma
-  - Smaller ecosystem than Prisma
-integration_hooks:
-  - Gunner: database schema and queries
-alternatives:
-  - prisma (more mature, heavier)
-  - knex (lower-level query builder)
-docs_url: https://orm.drizzle.team/docs
-changelog_url: https://github.com/drizzle-team/drizzle-orm/releases
-last_reviewed: 2026-03-11
-notes: ""
----
+# Drizzle ORM
+
+**Category:** Database & Storage
+**Status:** 🟢 Active
+
+## Purpose
+Type-safe ORM for Gunner's PostgreSQL database. Defines and manages 76 tables across the Gunner schema.
+
+## Usage in Stack
+- Version: Drizzle ORM v0.44
+- Schema source of truth: `drizzle/schema.ts`
+- Migrations via `pnpm run db:push`
+- Every query MUST include `tenantId` for multi-tenant isolation
+
+## Configuration
+- No API key needed
+- Docs: https://orm.drizzle.team/docs
 
 ## Notes
+- ⚠️ Rule: ALL queries scoped to `ctx.user.tenantId` — no exceptions
+- 76 tables total (migrations 0000-0077, MySQL legacy ignored)
+- Migrations 0000-0077 are legacy MySQL — use Postgres only
 
-Preferred ORM for Gunner V2 due to lightweight nature and strong Supabase/postgres compatibility. Schema migrations managed via drizzle-kit. Type safety prevents schema drift at query level.
+## Last Updated
+2026-03-12

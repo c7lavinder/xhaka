@@ -1,44 +1,31 @@
----
-name: Railway
-category: dev-infrastructure
-projects:
-  - gunner
-  - xhaka
-role: Deployment platform — hosts Xhaka intelligence service and Gunner backend
-auth_type: api_key
-api_base_url: https://backboard.railway.app/graphql/v2
-rate_limits:
-  requests_per_minute: 60
-  tokens_per_minute: null
-pricing_tier: subscription
-free_tier_limits: $5/month hobby credit
-key_features:
-  - Auto-deploy from GitHub on push
-  - Environment variable management
-  - Persistent volumes
-  - Cron job scheduling via railway.toml
-power_user_features:
-  - TCP proxy for database connections
-  - Metrics and log streaming
-  - Private networking between services
-known_issues:
-  - nginx buffering must be disabled for SSE (X-Accel-Buffering no header required)
-  - Cron expressions in railway.toml override app-level schedulers
-integration_hooks:
-  - API token: 107983f5-06cc-40b3-92d6-833004dee064
-  - Project ID: f379b683-e34d-4e0e-a91a-f64d0ab499ea
-  - Service ID: b14d0504-8190-419a-80c5-7dd64dfefcc1 (gunner-engine)
-  - Environment ID: 8f2d6455-5535-43d0-b198-b1248c949c0f (production)
-alternatives:
-  - render (comparable, better free tier)
-  - fly.io (more control, more complexity)
-  - heroku (legacy, more expensive)
-docs_url: https://docs.railway.app
-changelog_url: https://railway.app/changelog
-last_reviewed: 2026-03-11
-notes: ""
----
+# Railway
+
+**Category:** Dev Infrastructure
+**Status:** 🟢 Active
+
+## Purpose
+Cloud hosting platform for all Xhaka and Gunner services. Auto-deploys on GitHub push with watch path filtering.
+
+## Usage in Stack
+**Xhaka Project** (`84c0d035`):
+- `xhaka` — showcase/control room (Express + HTML)
+- `xhaka-intelligence` — intelligence pipeline (Node.js cron jobs)
+- `xhaka-control-room` — Next.js mission control dashboard
+- `Links and Docs` — URL bookmark service
+
+**Gunner Project** (`f379b683`):
+- `gunner-v2` — main app (Express + React)
+- `gunner-postgres` — PostgreSQL database
+- `xhaka-brain` — Xhaka's memory database
+
+## Configuration
+- API Token: Configured ✓
+- Docs: https://docs.railway.com
 
 ## Notes
+- Watch paths configured: xhaka-intelligence only rebuilds on `services/intelligence/**`
+- Every Railway push triggers a build email on failure — watch path discipline critical
+- Service Groups are UI-only (not API-configurable)
 
-Full API access. Intelligence service runs here. SSE streaming requires X-Accel-Buffering: no header to prevent Railway/nginx from buffering the response. railway.toml present in services/intelligence/.
+## Last Updated
+2026-03-12
