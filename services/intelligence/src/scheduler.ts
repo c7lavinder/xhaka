@@ -25,6 +25,8 @@ import { runBehaviorSync } from './jobs/behavior-sync.js';
 import { runChangeEvaluator } from './jobs/change-evaluator.js';
 import { runBenchmark } from './jobs/benchmark.js';
 import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
+import { runBenchmark } from './jobs/benchmark.js';
+import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -36,7 +38,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', benchmark, pre-deploy-test', 'benchmark', 'pre-deploy-test']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -230,6 +232,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Benchmark: every Wednesday at 6:00 AM CST ---
+  cron.schedule(
+    '0 6 * * 3',
+    safeRun('benchmark', runBenchmark),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -253,6 +262,8 @@ export function startScheduler(): void {
   console.log('  ✓ heartbeat-check  — every 30 minutes');
   console.log('  ✓ behavior-sync    — daily at 5:50 AM CST');
   console.log('  ✓ change-evaluator — daily at 9:00 AM CST (15:00 UTC)');
+  console.log('  ✓ benchmark         — every Wednesday at 6:00 AM CST');
+  console.log('  ✓ pre-deploy-test   — manual via RUN_JOB');
   console.log('  ✓ benchmark        — every Wednesday at 6:00 AM CST');
 }
 
