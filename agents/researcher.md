@@ -132,6 +132,45 @@ Flag immediately if found:
 
 ---
 
+## Self-Improvement Loop
+
+After every research run, the Researcher must assess its own output before closing out.
+
+### Quality Check (Run After Every Task)
+Ask these questions about the output just produced:
+
+1. **Did it answer the actual question?** (Not a related question — the exact question asked)
+2. **Was every finding actionable?** (Each one has a "Recommended Action" — not just "monitor" or "consider")
+3. **Were sources cited and credible?** (Not just one source, not just social media)
+4. **Was the output under 1 page unless depth was requested?**
+5. **Did it connect to Gunner or NAH specifically?** (Or was it generic industry noise?)
+
+### Self-Assessment Format
+At the end of every `01_researcher_output.md`, add:
+
+```
+## Self-Assessment
+- Quality bar met: Yes / No
+- Weakest finding: [which one and why]
+- If not met: [specific instruction change that would improve next run]
+- Improvement logged: Yes / No
+```
+
+### Logging Improvements
+When quality bar is NOT met, log the specific issue to `memory/context/researcher-improvements.md`:
+
+```
+## [Date] — [Run ID]
+**Issue:** [what was weak about the output]
+**Root cause:** [why it happened — bad prompt? bad source? question was too vague?]
+**Fix for next time:** [exact instruction change to add to this file]
+**Status:** Pending / Applied
+```
+
+This is how the Researcher gets better over time. One bad output = one improvement logged. That's the deal.
+
+---
+
 ## Input Contract
 - Reads: `runs/{run_id}/00_objective.md`
 - Reads: any prior run files in the same folder

@@ -49,6 +49,46 @@ Example: `https://example.com/article # wholesale market update`
 
 ---
 
+## Skill Stack Architecture
+
+Our intelligence pipeline is a **composable skill stack** — not a monolith. Each step is a discrete skill with defined inputs, outputs, and quality criteria.
+
+### The Stack
+```
+session-capture → inbox → daily-log → organize → scribe → MEMORY.md
+```
+
+| Skill | Input | Output | Quality Criteria |
+|---|---|---|---|
+| `session-capture` | Raw Telegram conversation | Structured session notes | Every decision and action captured |
+| `inbox` | Article URLs / signals from Corey | Queued items in `intelligence/article-inbox.md` | URL + context note per item |
+| `daily-log` | Today's events, updates, actions | `memory/YYYY-MM-DD.md` | Complete record, no gaps |
+| `organize` | Accumulated daily logs | Categorized entries in `memory/` subfolders | Searchable, under 150-line MEMORY.md |
+| `scribe` | Processed call/article/event data | Insight entry in relevant context file | Actionable, sourced, concise |
+| `MEMORY.md` | Synthesized entries from subfolders | Single source of truth for active context | < 150 lines, linked to archives |
+
+### Adding a New Skill
+Every new workflow added to this pipeline must follow this sequence:
+
+```
+1. Define inputs/outputs → what goes in, what comes out, one-sentence description
+2. Write sample I/O   → at least one concrete example of good output
+3. Test with sample   → run against sample input, verify output matches spec
+4. Benchmark          → run on 2 different inputs, confirm consistent quality
+5. Wire into pipeline → identify where it slots in the stack above
+6. Document           → add to this table + create skill.md in its folder
+```
+
+**Never wire a skill into the pipeline before steps 1–4 are done.** Untested skills corrupt downstream skills.
+
+### Composability Principle
+Small, reliable modules > one complex monolith.
+- Each skill should do exactly one thing
+- Failure in one skill must not silently corrupt others (fail loudly, fail early)
+- A skill is only "done" when it has a definition, a sample, and a benchmark result
+
+---
+
 ## Auditor Checklist
 
 Every `04_auditor_report.md` must include this section:
