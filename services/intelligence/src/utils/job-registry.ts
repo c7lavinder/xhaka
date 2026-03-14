@@ -45,6 +45,38 @@ const DEFAULT_REGISTRY: JobRegistry = {
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
 };
 
+// ---------------------------------------------------------------------------
+// Time-bounded execution — max runtime per job in milliseconds
+// ---------------------------------------------------------------------------
+
+const JOB_TIMEOUTS: Record<string, number> = {
+  'researcher': 120000,      // 2 min
+  'organize': 60000,         // 1 min
+  'scribe': 90000,           // 90 sec
+  'daily-log': 30000,        // 30 sec
+  'propagate': 60000,        // 1 min
+  'tool-monitor': 180000,    // 3 min
+  'feedback': 30000,         // 30 sec
+  'inspect': 180000,         // 3 min
+  'routing-review': 120000,  // 2 min
+};
+
+/**
+ * Returns the max runtime in ms for a given job.
+ * Defaults to 60000 (1 min) if the job is not in the map.
+ */
+export function getJobTimeout(jobName: string): number {
+  try {
+    return JOB_TIMEOUTS[jobName] ?? 60000;
+  } catch {
+    return 60000;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
 /**
  * Mark a job as started — writes running status to registry and returns startTime for duration tracking.
  */
