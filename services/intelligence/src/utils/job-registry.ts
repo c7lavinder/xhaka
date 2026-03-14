@@ -27,7 +27,7 @@ const EXPECTED_KEYS = [
   'feedback', 'inspect', 'routing-review', 'morning-brief',
   'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
   'proactive-scan', 'agent-scorecard', 'change-evaluator',
-  'pattern-miner',
+  'pattern-miner', 'dispatcher', 'auditor', 'architect',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -56,6 +56,9 @@ const DEFAULT_REGISTRY: JobRegistry = {
   'agent-scorecard': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'change-evaluator': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
   'pattern-miner': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  'dispatcher': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 5 },
+  'auditor': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  'architect': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
 };
 
 // ---------------------------------------------------------------------------
@@ -76,6 +79,7 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'proactive-scan': 120000,  // 2 min
   'agent-scorecard': 60000,  // 1 min
   'pattern-miner': 180000,   // 3 min
+  'dispatcher': 300000,      // 5 min (may chain into researcher runs)
 };
 
 /**

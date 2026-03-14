@@ -26,6 +26,7 @@ import { runChangeEvaluator } from './jobs/change-evaluator.js';
 import { runBenchmark } from './jobs/benchmark.js';
 import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { runPatternMiner } from './jobs/pattern-miner.js';
+import { runDispatcher } from './jobs/dispatcher.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -37,7 +38,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'researcher']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'dispatcher', 'researcher', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -147,6 +148,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Dispatcher: every minute — task-queue event consumer ---
+  cron.schedule(
+    '* * * * *',
+    safeRun('dispatcher', runDispatcher),
+    { timezone: TIMEZONE },
+  );
+
   // --- Daily Log Writer: every 6 hours ---
   cron.schedule(
     '0 */6 * * *',
@@ -250,6 +258,7 @@ export function startScheduler(): void {
   console.log('  ✓ weekly-heartbeat — every Monday at 8:00 AM CST');
   console.log('  ✓ scribe           — daily at midnight CST');
   console.log('  ✓ operator         — every minute (self-healing)');
+  console.log('  ✓ dispatcher       — every minute (task-queue consumer)');
   console.log('  ✓ daily-log        — every 6 hours');
   console.log('  ✓ researcher       — 3x daily at 7:00 AM, 1:00 PM, 7:00 PM CST');
   console.log('  ✓ feedback         — daily at 8:00 AM CST');
@@ -348,9 +357,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'pattern-miner':
       await runPatternMiner();
       break;
+    case 'dispatcher':
+      await runDispatcher();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner, dispatcher`,
       );
   }
 }
