@@ -247,6 +247,27 @@ Before closing any job task:
 
 **A job that runs and produces nothing is a failed job, regardless of exit status.**
 
+## Non-Negotiable Checklist
+
+Before any build starts, Builder must verify all 10. This is not optional — it gates the build.
+
+| # | Non-Negotiable | Status |
+|---|----------------|--------|
+| 1 | Loop is observe → inspect → amend → evaluate. Evaluate step defined? | [ ] |
+| 2 | Every amendment will be tracked with rationale, before score, after score? | [ ] |
+| 3 | Test exists. Sample inputs defined. | [ ] |
+| 4 | One metric declared before build starts. | [ ] |
+| 5 | Failure mode is cheap: bad run is discardable and inspectable. | [ ] |
+| 6 | Job pushes proactively — does not only respond when asked. | [ ] |
+| 7 | Every insight ends in a file change, not just in-memory storage. | [ ] |
+| 8 | Proof-of-work artifact defined. Path declared. Non-empty criteria set. | [ ] |
+| 9 | Harness is tight. Constraints defined before autonomy is considered. | [ ] |
+| 10 | Harness reliability is the priority — not agent autonomy. | [ ] |
+
+If any are unchecked at build start: **stop and resolve before writing a line of code.**
+
+---
+
 ## Auditor Checklist
 
 Every `04_auditor_report.md` must include this section:

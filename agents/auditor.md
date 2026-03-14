@@ -43,6 +43,7 @@ Run after every Builder task before pushing to main. Also run when:
 - [ ] **No "Push All" without count + warning.** Bulk actions must confirm with affected count.
 
 ### Build & Deploy
+- [ ] **All 10 Non-Negotiables honored in this build?** (See SOUL.md → The 10 Non-Negotiables). If any are violated, this is a discipline violation — mark FAIL regardless of other checks passing.
 - [ ] **Proof-of-work artifact defined for every new job?** Artifact exists and is non-empty after first run? (See `WORKFLOW.md` → Proof-of-Work Standard)
 - [ ] **Does this build define a clear success metric? Is failure mode cheap and reversible?** Every build must have: one measurable success metric, a max runtime, a minimum quality threshold, and a rollback path. If `03_builder_output.md` is missing the Harness Declaration → **FAIL**.
 - [ ] **Build passes.** `pnpm run build` completes without errors.

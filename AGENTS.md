@@ -77,6 +77,7 @@ If Xhaka is writing code or pushing commits, something has gone wrong. Stop imme
 3. **Xhaka** SPAWNS the appropriate Specialist.
 4. **Specialist** executes and reports.
 5. **Xhaka** updates **CEO**.
+6. **Every agent operates by the 10 Non-Negotiables in SOUL.md. Any action that violates them is a discipline violation.**
 
 ---
 
