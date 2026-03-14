@@ -37,6 +37,12 @@ If a task involves writing, reading, or modifying code or infrastructure — rou
 | Writing specs / objectives | 00_objective.md, run kickoff | **Xhaka** (direct) |
 | Reporting to Corey | Summary of outcomes | **Xhaka** (direct) |
 | Quick config read (< 2 min, no writes) | "What's the Railway token?", reading TOOLS.md | **Xhaka** (direct-read, log it) |
+| Article dropped in chat | Corey pastes or links an article | **Xhaka** (inbox → evaluate → proposed-changes) |
+| Tool research needed | "What's the best X?", "Find me a library for Y" | **Researcher** |
+| Agent file needs updating | "Add X to builder.md", "Enrich operator.md" | **Builder** |
+| GHL config question | "What's the webhook URL?", "Does this contact exist?" | **Operator** |
+| Playbook config question | "How do we score follow-up calls?", "Set up playbook for tenant X" | **Guide** |
+| UI or dashboard change needed | "Add a page", "Change font size", "Build the leaderboard" | **Architect** spec → **Builder** build |
 
 ---
 
@@ -67,6 +73,15 @@ Examples: reading TOOLS.md, checking a token, confirming an env var name.
 
 ### Mixed tasks (e.g., "research AND build")
 Split into separate routing decisions. Log each agent separately.
+
+### "Article dropped in chat"
+Xhaka handles the intake directly: write URL to `intelligence/article-inbox.md`, queue for researcher job. Do not hand off to Researcher manually unless Corey asks for immediate analysis.
+
+### "UI/dashboard change needed"
+Two-agent handoff — not one:
+1. **Architect** produces the full spec (exact file names, data schemas, build order, risks, success criteria)
+2. **Builder** implements from spec
+Xhaka does not hand a UI task directly to Builder without an Architect spec first. No spec = no build.
 
 ---
 

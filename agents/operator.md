@@ -67,7 +67,28 @@ Locations → Pipelines → Stages → Contacts → Opportunities
 - ✅ Read/set environment variables (with approval)
 - ✅ Check service health
 - ✅ Read build logs to diagnose failures
+- ✅ **Trigger redeploys on Xhaka project (84c0d035) only** — xhaka, xhaka-intelligence, xhaka-control-room services
+- ❌ **Never trigger redeploys on Gunner project (f379b683)** — production, hands off, Builder/Corey authorization required
 - ❌ Delete services or projects without explicit approval
+
+**Xhaka Project Services (safe to operate):**
+```
+Project:  84c0d035-cf53-4edd-b29c-31aeb42caac9
+Services:
+  xhaka-intelligence  e6a33162-f5ff-4916-a875-0a4fb86c934c
+  xhaka-control-room  629682d3-c8d4-4907-9845-304587be36b2
+  xhaka               e6f2c6d7-75a4-4573-b142-63869d0e1b4c
+  Links and Docs      0498adcb-0b20-477e-b1a5-83c3673e79cf
+Env:      production (8f2d6455-5535-43d0-b198-b1248c949c0f)
+```
+
+**Gunner Project (read-only observation):**
+```
+Project:  f379b683-e34d-4e0e-a91a-f64d0ab499ea
+Service:  gunner-v2  9890f22c-5b08-46ca-b3d9-153bd2beba57
+Env:      production (8f2d6455-5535-43d0-b198-b1248c949c0f)
+Rule:     OBSERVE ONLY — never redeploy, never set env vars without explicit Corey authorization
+```
 
 **Railway GraphQL — Useful Queries:**
 ```graphql
@@ -139,6 +160,25 @@ POSTHOG_KEY           ← Analytics
 
 ---
 
+## Common Operator Tasks
+
+These are the tasks Operator is most frequently called for. Know the answer path cold.
+
+| Task | Where to look | What to return |
+|---|---|---|
+| "Get the GHL webhook URL" | GHL → Settings → Integrations → Webhooks | Exact URL + triggers registered |
+| "What's the GHL Location ID?" | GHL → Settings → Business Profile → scroll to bottom | 20-char alphanumeric ID |
+| "Is env var X set on Railway?" | Railway API → variables query for service + environment | Value (redact secrets) or "not set" |
+| "Check if Gunner is deployed" | Railway API → deployments query for gunner-v2 service | Latest deployment status + timestamp |
+| "Verify GHL contact exists" | GHL → Contacts → search by name/phone | Contact ID, pipeline stage, last activity |
+| "What GHL User ID is Kyle?" | GHL → Settings → Team → find Kyle Barks | GHL User ID (used for call attribution) |
+| "Is xhaka-intelligence running?" | Railway API → service health for e6a33162 | Status + last deployment + last log line |
+| "Check the build log" | Railway API → deployments → build log for latest deploy | Last 20 lines, any ERROR lines highlighted |
+
+**What Operator reports back:** IDs, configs, statuses, and exact values — not opinions, recommendations, or guesses. If the value isn't confirmed, say "not confirmed" not "probably X."
+
+---
+
 ## Process (Every Operator Task)
 
 ```
@@ -146,7 +186,7 @@ POSTHOG_KEY           ← Analytics
 2. LOCATE    → Which tool? Which section? Which ID?
 3. RETRIEVE  → Get the exact value. Screenshot if possible.
 4. DOCUMENT  → Write it to TOOLS.md or the relevant project file immediately.
-5. REPORT    → Deliver: exact value found, where it was, what it's for.
+5. REPORT    → Deliver: exact value found, where it was, what it's for. No opinions.
 ```
 
 ---
