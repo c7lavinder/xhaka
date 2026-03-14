@@ -29,3 +29,32 @@ Step 6: Xhaka reads 04 → writes 05_xhaka_summary.md → reports to Corey
 - No agent skips to execution without reading prior context
 - Auditor must explicitly PASS before Xhaka reports success to Corey
 - Runs are never deleted — they are the audit trail
+
+---
+
+## Intelligence Jobs
+
+| Job | Schedule | Purpose |
+|-----|----------|---------|
+| researcher | Daily 7:30 AM CST | Fetch + analyze article URLs from intelligence/article-inbox.md |
+
+### Article Intake Protocol
+When Corey sends an article URL or pasted content, Xhaka writes it to `intelligence/articles/inbox/` on GitHub.
+
+To queue an article for research, add its URL to `intelligence/article-inbox.md`.
+Format: one URL per line, optional `# note` after the URL.
+Example: `https://example.com/article # wholesale market update`
+
+> ⚠️ Note: JavaScript-rendered pages (e.g., some news sites) may fail extraction — the researcher job will keep them in inbox for retry. Paywalled URLs (WSJ, Bloomberg) will also fail gracefully.
+
+---
+
+## Auditor Checklist
+
+Every `04_auditor_report.md` must include this section:
+
+### Routing Compliance Check
+- [ ] Does `runs/routing-log.md` have an entry for this task?
+- [ ] Was the correct agent assigned per ROUTING.md decision table?
+- [ ] Did Xhaka write any code directly? (FAIL if yes)
+- [ ] Did Xhaka do any visual/UI work directly? (FAIL if yes)
