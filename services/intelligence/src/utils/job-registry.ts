@@ -2,6 +2,7 @@
 // Shared helper for all jobs to report their run status to data/job-registry.json
 
 import { getFileContent, updateFile, createFile } from '../lib/github.js';
+import { appendResult } from './results-log.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const REGISTRY_PATH = 'data/job-registry.json';
@@ -91,14 +92,18 @@ export async function markJobStart(jobName: string): Promise<number> {
  * Mark a job as successfully completed.
  */
 export async function markJobSuccess(jobName: string, startTime: number): Promise<void> {
+  const durationMs = Date.now() - startTime;
   await writeJobStatus(jobName, 'success', startTime);
+  await appendResult({ jobName, status: 'success', durationMs });
 }
 
 /**
  * Mark a job as failed.
  */
 export async function markJobFailed(jobName: string, startTime: number): Promise<void> {
+  const durationMs = Date.now() - startTime;
   await writeJobStatus(jobName, 'failed', startTime);
+  await appendResult({ jobName, status: 'failed', durationMs });
 }
 
 /**
