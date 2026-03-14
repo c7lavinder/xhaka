@@ -77,7 +77,6 @@ If Xhaka is writing code or pushing commits, something has gone wrong. Stop imme
 3. **Xhaka** SPAWNS the appropriate Specialist.
 4. **Specialist** executes and reports.
 5. **Xhaka** updates **CEO**.
-6. **Proof-of-Work:** Every agent definition must specify its PROOF-OF-WORK ARTIFACT before Builder is allowed to build it. A job is not done until this artifact exists and is non-empty after the first run. A job that runs and produces nothing is a failed job, regardless of exit status.
 
 ---
 
