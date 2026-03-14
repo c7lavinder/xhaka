@@ -32,3 +32,16 @@
 ### 🔄 Changed
 - clean index.ts — strip all debug instrumentation, move /health before middleware
 - remove debug instrumentation from index.ts
+## 2026-03-14 (10 commits)
+### ✅ Built
+- add Sync Now button and auto-sync after CRM OAuth connect
+### 🐛 Fixed
+- run triggerSync in background to prevent HTTP timeout
+- add diagnostic logging to GHL call ingestion
+- rewrite getCallRecordings to use GHL messages/export endpoint
+- saveGhlTokens now merges into existing crmConfig instead of replacing
+- CRM Layer 2 save no longer wipes OAuth, show token last 4 chars
+- update hardcoded GHL install link client ID
+- use correct Railway domain (gunner-production) for OAuth redirect
+- use GHL Marketplace install link for OAuth connect button
+- startup crash — wrong column name in KPI index, opp ingestion conflict
