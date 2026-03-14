@@ -32,6 +32,21 @@ interface ArticleAnalysis {
   tags: string[];          // 3-5 lowercase topic tags
 }
 
+interface BehavioralProposal {
+  targetFile: string;          // e.g. "SOUL.md", "ROUTING.md", "agents/builder.md"
+  changeType: 'addition' | 'edit' | 'new-section';
+  currentState: string;        // What the file currently says, or "doesn't exist"
+  proposedChange: string;      // Exact text to add or modify
+  why: string;                 // One sentence — what behavior this improves
+  confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+  insightSource: string;       // The insight text that triggered this proposal
+}
+
+interface BehavioralEvaluationResult {
+  proposals: BehavioralProposal[];
+  evaluatedAt: string;         // ISO timestamp
+}
+
 interface ProcessedArticle {
   url: string;
   fetchedAt: string;       // ISO timestamp
@@ -161,6 +176,145 @@ Schema:
   return parsed;
 }
 
+// ---------------------------------------------------------------------------
+// Behavioral impact evaluation
+// ---------------------------------------------------------------------------
+
+async function evaluateForBehavioralImpact(
+  articleTitle: string,
+  keyInsights: string[],
+  articleUrl: string,
+): Promise<BehavioralEvaluationResult> {
+  const systemPrompt = `You are a behavioral systems analyst for an AI COO named Xhaka.
+Xhaka operates via a set of core files that define identity, routing, agent roles, and daily behavior:
+- SOUL.md — core identity, rules, vibe, what Xhaka is/isn't
+- ROUTING.md — who handles what task (never skip routing)
+- AGENTS.md — agent roster and responsibilities
+- HEARTBEAT.md — daily morning routine and review checklist
+- agents/builder.md, agents/auditor.md, agents/researcher.md, WORKFLOW.md — per-agent instructions
+
+Your job: for each insight provided, decide if it suggests a BETTER WAY to prompt, route, build, audit, or organize that Xhaka is NOT currently doing.
+
+Return ONLY valid JSON (no markdown fences). Schema:
+{
+  "proposals": [
+    {
+      "targetFile": "string — e.g. SOUL.md or ROUTING.md",
+      "changeType": "addition | edit | new-section",
+      "currentState": "string — what the file currently says, or 'doesn't exist'",
+      "proposedChange": "string — exact text to add or modify",
+      "why": "string — one sentence, what behavior this improves",
+      "confidence": "HIGH | MEDIUM | LOW",
+      "insightSource": "string — the insight that triggered this"
+    }
+  ]
+}
+
+Confidence guidelines:
+- HIGH: The insight directly and unambiguously maps to a missing rule, protocol, or behavior in a core file. The change is specific and low-risk.
+- MEDIUM: The insight is relevant but the mapping is interpretive or the change is large/uncertain.
+- LOW: Loosely related, speculative, or the file already handles this well enough.
+
+If no proposals are warranted, return { "proposals": [] }.
+Do NOT invent proposals for their own sake. Fewer, better proposals beat many weak ones.`;
+
+  const userPrompt = `Article: "${articleTitle}"
+URL: ${articleUrl}
+
+Key Insights:
+${keyInsights.map((ins, i) => `${i + 1}. ${ins}`).join('\n')}
+
+Evaluate each insight. Return only proposals where confidence is HIGH, MEDIUM, or LOW.
+Include all three tiers in the JSON — the caller will filter by confidence.`;
+
+  let raw: string;
+  try {
+    raw = await synthesize(systemPrompt, userPrompt, 2000);
+  } catch (err) {
+    console.warn('[researcher] evaluateForBehavioralImpact: OpenAI call failed — skipping proposals:', (err as Error).message);
+    return { proposals: [], evaluatedAt: new Date().toISOString() };
+  }
+
+  const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+
+  let parsed: BehavioralEvaluationResult;
+  try {
+    parsed = JSON.parse(cleaned) as BehavioralEvaluationResult;
+  } catch (_err) {
+    console.warn('[researcher] evaluateForBehavioralImpact: JSON parse failed — skipping proposals');
+    return { proposals: [], evaluatedAt: new Date().toISOString() };
+  }
+
+  if (!Array.isArray(parsed.proposals)) {
+    return { proposals: [], evaluatedAt: new Date().toISOString() };
+  }
+
+  parsed.evaluatedAt = new Date().toISOString();
+  return parsed;
+}
+
+function buildProposedChangeMarkdown(
+  proposal: BehavioralProposal,
+  articleTitle: string,
+  today: string,
+): string {
+  return `# Proposed Change — ${today}
+Source: ${articleTitle}
+Target File: ${proposal.targetFile}
+Type: ${proposal.changeType}
+
+## Current State
+${proposal.currentState}
+
+## Proposed Change
+${proposal.proposedChange}
+
+## Why
+${proposal.why}
+
+## Confidence
+${proposal.confidence}
+`;
+}
+
+async function writeProposedChanges(
+  proposals: BehavioralProposal[],
+  articleTitle: string,
+  articleSlug: string,
+  today: string,
+): Promise<number> {
+  const highConfidence = proposals.filter((p) => p.confidence === 'HIGH');
+
+  // Log MEDIUM/LOW inline (do not write files)
+  const skipped = proposals.filter((p) => p.confidence !== 'HIGH');
+  if (skipped.length > 0) {
+    console.log(`[researcher] Skipped ${skipped.length} MEDIUM/LOW proposals for "${articleTitle}":`);
+    skipped.forEach((p) => console.log(`  - [${p.confidence}] ${p.targetFile}: ${p.why}`));
+  }
+
+  let written = 0;
+  for (const proposal of highConfidence) {
+    const targetSlug = proposal.targetFile.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    const filePath = `intelligence/proposed-changes/${today}-${articleSlug}-${targetSlug}.md`;
+    const content = buildProposedChangeMarkdown(proposal, articleTitle, today);
+
+    try {
+      await createFile(
+        XHAKA_REPO,
+        filePath,
+        content,
+        `researcher: propose change to ${proposal.targetFile} from "${articleTitle}"`,
+      );
+      console.log(`[researcher] ✓ Proposed change written: ${filePath}`);
+      written++;
+    } catch (err) {
+      console.warn(`[researcher] Failed to write proposal ${filePath}:`, (err as Error).message);
+    }
+  }
+
+  return written;
+}
+
 function buildArticleMarkdown(item: InboxItem, processed: ProcessedArticle): string {
   const { analysis } = processed;
   return `# ${analysis.title}
@@ -284,6 +438,24 @@ export async function runResearcher(): Promise<void> {
         digestContent,
         `researcher: append digest entry for ${slug} (${today})`,
       );
+
+      // Evaluate insights for behavioral impact
+      const behaviorEval = await evaluateForBehavioralImpact(
+        analysis.title,
+        analysis.keyInsights,
+        item.url,
+      );
+
+      const proposalCount = await writeProposedChanges(
+        behaviorEval.proposals,
+        analysis.title,
+        slug,
+        today,
+      );
+
+      if (proposalCount > 0) {
+        console.log(`[researcher] → ${proposalCount} HIGH-confidence proposal(s) written for "${analysis.title}"`);
+      }
 
       processed.push(item);
       console.log(`[researcher] ✓ Processed: ${item.url} (score: ${analysis.relevanceScore})`);
