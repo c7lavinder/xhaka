@@ -128,3 +128,27 @@ AI is the biggest wealth-creation moment in history — bigger than internet, mo
 - The skill gap IS the wealth opportunity
 
 **Corey context:** He's already on the right side of this. Building Gunner (AI SaaS), running AI-powered ops (Xhaka), investing in AI infrastructure. He's not watching — he's building. The article validates his direction.
+---
+# Karpathy's Autoresearch — Autonomous Improvement Harness
+Source: pasted (manthanguptaa.in)
+Submitted: 2026-03-14
+Tags: #ai-systems #autonomous-agents #harness-design #self-improvement
+
+## Content
+Autoresearch treats AI research as a bounded optimization problem, not open-ended exploration.
+Loop: edit one file → run experiment for fixed time → measure result → keep if better, revert if not → repeat.
+
+**5 core lessons for agent builders:**
+1. Constraints make agents better. One file, one metric, one harness. More freedom = larger error surface. Most agents fail because they maximize freedom too early.
+2. Prompts are architecture. program.md defines workflow, boundaries, persistence, logging, recovery, selection criteria. That IS system design.
+3. Optimize the harness, not just the model. How work is launched, failures handled, progress measured, bad paths rolled back, state recorded — this matters as much as model intelligence.
+4. Time-bounded evaluation is underrated. Fixed wall-clock budget forces optimization for real-world usefulness, not idealized performance.
+5. Reversibility and observability are non-negotiable. Losers must be cheap to discard. Every run must be inspectable. If a bad run leaves the system unrecoverable, the agent can't explore aggressively.
+
+**Key principle:** "The best autonomous systems are not the ones with the most freedom. They are the ones with the clearest objective, the strongest harness, and the cheapest failure mode."
+
+**Direct application to Xhaka:**
+- Our harness equivalent = job-registry + evaluation-log + proposed-changes pipeline
+- We need: one clear metric per job, time-bounded runs, cheap rollback when a change makes things worse
+- The "keep or reset" mechanism maps directly to: proposed change → evaluate → approve/reject
+- program.md equivalent = SOUL.md + ROUTING.md + agent definitions — this IS the architecture
