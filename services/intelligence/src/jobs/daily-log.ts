@@ -4,6 +4,7 @@
 
 import { getFileContent, updateFile, createFile, listDirectory, deleteFile } from '../lib/github.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { evaluateJobOutput } from '../utils/evaluator.js';
 import { sendAlert } from '../utils/alert.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -116,6 +117,16 @@ export async function runDailyLog(): Promise<void> {
     }
 
     console.log(`[daily-log] ✓ Wrote to ${logPath}`);
+
+    // Evaluate daily-log output quality
+    try {
+      const logContent = appendContent || `timestamp entry for ${dateStr}`;
+      const evalResult = await evaluateJobOutput('daily-log', logContent);
+      console.log(`[daily-log] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+    } catch (evalErr) {
+      console.warn('[daily-log] Evaluation step failed (non-fatal):', (evalErr as Error).message);
+    }
+
     await markJobSuccess('daily-log', startTime);
   } catch (err) {
     console.error('[daily-log] Fatal error:', err);

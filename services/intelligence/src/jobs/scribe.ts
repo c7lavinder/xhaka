@@ -4,6 +4,7 @@
 import OpenAI from 'openai';
 import { sendAlert } from '../utils/alert.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { evaluateJobOutput } from '../utils/evaluator.js';
 import {
   getFileContent,
   getRecentCommits,
@@ -391,8 +392,30 @@ export async function runScribe(): Promise<void> {
   if (digestError || extractionError) {
     // Partial success — mark as success but errors are logged
     console.warn('[scribe] Completed with errors');
+    // Evaluate scribe output quality
+    try {
+      const scribeOutput =
+        `Scribe: ${decisionsCount} decisions filed, ${totalCommits} commits digested, ${rulesCount} rules captured.` +
+        (digestError ? ` digestError: ${digestError.message}` : '') +
+        (extractionError ? ` extractionError: ${extractionError.message}` : '');
+      const evalResult = await evaluateJobOutput('scribe', scribeOutput);
+      console.log(`[scribe] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+    } catch (evalErr) {
+      console.warn('[scribe] Evaluation step failed (non-fatal):', (evalErr as Error).message);
+    }
     await markJobSuccess('scribe', startTime);
   } else {
+    // Evaluate even on partial success
+    try {
+      const scribeOutput =
+        `Scribe partial: ${decisionsCount} decisions, ${totalCommits} commits.` +
+        (digestError ? ` digestError: ${digestError.message}` : '') +
+        (extractionError ? ` extractionError: ${extractionError.message}` : '');
+      const evalResult = await evaluateJobOutput('scribe', scribeOutput);
+      console.log(`[scribe] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+    } catch (evalErr) {
+      console.warn('[scribe] Evaluation step failed (non-fatal):', (evalErr as Error).message);
+    }
     await markJobSuccess('scribe', startTime);
     console.log('[scribe] Done');
   }

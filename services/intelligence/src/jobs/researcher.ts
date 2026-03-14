@@ -7,6 +7,8 @@ import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 import { checkEnv, warnMissingEnv } from '../utils/env-check.js';
+import { evaluateJobOutput } from '../utils/evaluator.js';
+import { sendTelegram } from '../utils/notifier.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
@@ -455,10 +457,25 @@ export async function runResearcher(): Promise<void> {
 
       if (proposalCount > 0) {
         console.log(`[researcher] → ${proposalCount} HIGH-confidence proposal(s) written for "${analysis.title}"`);
+        // Notify Corey for each proposed change
+        const highProposals = behaviorEval.proposals.filter((p) => p.confidence === 'HIGH');
+        for (const proposal of highProposals) {
+          await sendTelegram(
+            `🔬 *Proposed change ready for review:*\n"${analysis.title}" → \`${proposal.targetFile}\`\n_${proposal.why}_`,
+          );
+        }
       }
 
       processed.push(item);
       console.log(`[researcher] ✓ Processed: ${item.url} (score: ${analysis.relevanceScore})`);
+
+      // Evaluate digest output quality
+      try {
+        const evalResult = await evaluateJobOutput('researcher', articleContent);
+        console.log(`[researcher] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+      } catch (evalErr) {
+        console.warn('[researcher] Evaluation step failed (non-fatal):', (evalErr as Error).message);
+      };
     }
 
     // 4. Rebuild inbox with only failed items

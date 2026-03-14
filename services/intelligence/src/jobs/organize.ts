@@ -5,6 +5,7 @@ import {
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { evaluateJobOutput } from '../utils/evaluator.js';
 import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -98,6 +99,18 @@ export async function runOrganize(): Promise<void> {
     }
 
     console.log('[organize] Done.');
+
+    // Evaluate organize output quality
+    try {
+      const organizeOutput =
+        `Organized: ${extracted.people.length} people, ` +
+        `${extracted.decisions.length} decisions, ` +
+        `${extracted.projectUpdates.length} project updates from log (${logFile.content.length} chars)`;
+      const evalResult = await evaluateJobOutput('organize', organizeOutput);
+      console.log(`[organize] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+    } catch (evalErr) {
+      console.warn('[organize] Evaluation step failed (non-fatal):', (evalErr as Error).message);
+    }
 
     await markJobSuccess('organize', _startTime);
   } catch (err) {
