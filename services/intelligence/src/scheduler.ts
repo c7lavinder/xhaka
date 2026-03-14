@@ -16,6 +16,8 @@ import { runInspect } from './jobs/inspect.js';
 import { runRoutingReview } from './jobs/routing-review.js';
 import { runMorningBrief } from './jobs/morning-brief.js';
 import { runHeartbeatCheck } from './jobs/heartbeat-check.js';
+import { runPatternMiner } from './jobs/pattern-miner.js';
+import { runChangeEvaluator } from './jobs/change-evaluator.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -27,7 +29,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'change-evaluator']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -186,6 +188,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Change Evaluator: daily at 9:00 AM CST (15:00 UTC) ---
+  cron.schedule(
+    '0 15 * * *',
+    safeRun('change-evaluator', runChangeEvaluator),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -205,6 +214,7 @@ export function startScheduler(): void {
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
   console.log('  ✓ morning-brief    — daily at 6:00 AM CST');
   console.log('  ✓ heartbeat-check  — every 30 minutes');
+  console.log('  ✓ change-evaluator — daily at 9:00 AM CST (15:00 UTC)');
 }
 
 // ---------------------------------------------------------------------------
@@ -268,9 +278,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'heartbeat-check':
       await runHeartbeatCheck();
       break;
+    case 'change-evaluator':
+      await runChangeEvaluator();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, change-evaluator`,
       );
   }
 }
