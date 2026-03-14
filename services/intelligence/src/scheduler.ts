@@ -230,6 +230,7 @@ export function startScheduler(): void {
   console.log('  ✓ proactive-scan   — every Friday at 6:00 AM CST');
   console.log('  ✓ agent-scorecard  — every Sunday at 8:00 AM CST');
   console.log('  ✓ heartbeat-check  — every 30 minutes');
+  console.log('  ✓ behavior-sync    — daily at 5:50 AM CST');
 }
 
 // ---------------------------------------------------------------------------
@@ -299,9 +300,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'heartbeat-check':
       await runHeartbeatCheck();
       break;
+    case 'behavior-sync':
+      await runBehaviorSync();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync`,
       );
   }
 }
