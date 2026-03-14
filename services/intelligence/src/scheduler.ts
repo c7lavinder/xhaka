@@ -10,12 +10,14 @@ import { runWatchdog, runWeeklyHeartbeat } from './jobs/watchdog.js';
 import { runScribe } from './jobs/scribe.js';
 import { runOperator } from './jobs/operator.js';
 import { runDailyLog } from './jobs/daily-log.js';
-import { runResearcher } from './jobs/researcher.js';
+import { runResearcher, proactiveScan } from './jobs/researcher.js';
 import { runFeedback } from './jobs/feedback.js';
 import { runInspect } from './jobs/inspect.js';
 import { runRoutingReview } from './jobs/routing-review.js';
 import { runMorningBrief } from './jobs/morning-brief.js';
+import { runAgentScorecard } from './jobs/agent-scorecard.js';
 import { runHeartbeatCheck } from './jobs/heartbeat-check.js';
+import { runBehaviorSync } from './jobs/behavior-sync.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -27,7 +29,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -179,10 +181,31 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Proactive Scan: every Friday at 6:00 AM CST ---
+  cron.schedule(
+    '0 6 * * 5',
+    safeRun('proactive-scan', proactiveScan),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Agent Scorecard: every Sunday at 8:00 AM CST ---
+  cron.schedule(
+    '0 8 * * 0',
+    safeRun('agent-scorecard', runAgentScorecard),
+    { timezone: TIMEZONE },
+  );
+
   // --- Heartbeat Check: every 30 minutes — active system monitor ---
   cron.schedule(
     '*/30 * * * *',
     safeRun('heartbeat-check', runHeartbeatCheck),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Behavior Sync: daily at 5:50 AM CST (10 min before morning brief) ---
+  cron.schedule(
+    '50 5 * * *',
+    safeRun('behavior-sync', runBehaviorSync),
     { timezone: TIMEZONE },
   );
 
@@ -204,6 +227,8 @@ export function startScheduler(): void {
   console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
   console.log('  ✓ morning-brief    — daily at 6:00 AM CST');
+  console.log('  ✓ proactive-scan   — every Friday at 6:00 AM CST');
+  console.log('  ✓ agent-scorecard  — every Sunday at 8:00 AM CST');
   console.log('  ✓ heartbeat-check  — every 30 minutes');
 }
 
@@ -265,12 +290,18 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'morning-brief':
       await runMorningBrief();
       break;
+    case 'proactive-scan':
+      await proactiveScan();
+      break;
+    case 'agent-scorecard':
+      await runAgentScorecard();
+      break;
     case 'heartbeat-check':
       await runHeartbeatCheck();
       break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard`,
       );
   }
 }

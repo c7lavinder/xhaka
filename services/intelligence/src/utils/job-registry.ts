@@ -25,7 +25,8 @@ const EXPECTED_KEYS = [
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
   'feedback', 'inspect', 'routing-review', 'morning-brief',
-  'heartbeat-check',
+  'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
+  'proactive-scan', 'agent-scorecard',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -47,6 +48,11 @@ const DEFAULT_REGISTRY: JobRegistry = {
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'morning-brief': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'heartbeat-check': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 0.5, gracePeriodMinutes: 10 },
+  benchmark: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  'pre-deploy-test': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  'behavior-sync': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  'proactive-scan': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  'agent-scorecard': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
 };
 
 // ---------------------------------------------------------------------------
@@ -63,6 +69,9 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'feedback': 30000,         // 30 sec
   'inspect': 180000,         // 3 min
   'routing-review': 120000,  // 2 min
+  'behavior-sync': 120000,   // 2 min
+  'proactive-scan': 120000,   // 2 min
+  'agent-scorecard': 60000,    // 1 min
 };
 
 /**
