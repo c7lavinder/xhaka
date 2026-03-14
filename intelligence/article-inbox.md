@@ -55,3 +55,28 @@ Tags: #seo #local-seo #google-business-profile #ai-systems #prompt-engineering
 
 Key principle: AI does the research in minutes. Human makes the strategic decisions. Load context once, every prompt gets sharper.
 Execution order: Week 1 (categories + attributes) → Week 2 (services + description) → Week 3 (reviews) → Week 4+ (posts + photos, ongoing).
+---
+# Claude Skills 2.0 — Reusable AI Workflows (Article 1)
+Source: pasted (Julian Goldie SEO)
+Submitted: 2026-03-14
+Tags: #ai-systems #automation #workflow-design #skill-building
+
+## Content
+Claude Skills 2.0 converts prompts into reusable workflow modules via skill.md files.
+skill.md structure: description → numbered steps → examples → rules/constraints.
+Composability: skills stack into pipelines. One input triggers multiple automated steps.
+Evaluation system: test with sample inputs before going live.
+Auto-refinement: Claude modifies its own skill.md when evaluation finds problems — self-improving feedback loop.
+Benchmarking: run same workflow multiple times, compare outputs for consistency. High variance = instructions need improvement.
+Key shift: from one-off prompts to structured, reusable, testable automation systems.
+Application: our intelligence pipeline (session-capture → daily-log → organize → scribe) IS a skill stack. Missing: evaluation layer and benchmarking.
+
+---
+# Claude Skills 2.0 — Reusable AI Workflows (Article 2, expanded version)
+Source: pasted (Julian Goldie SEO)
+Submitted: 2026-03-14
+Tags: #ai-systems #automation #workflow-design #skill-building
+
+## Content
+Same core framework. Additional emphasis on: self-improving workflows reduce maintenance burden at scale. Teams building tested workflows move faster than competitors. Early adoption of composable skill systems creates compounding advantage.
+Key quote: "Instead of guessing whether the instructions work, the system verifies them through evaluation."
