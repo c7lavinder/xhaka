@@ -34,11 +34,80 @@ Step 6: Xhaka reads 04 → writes 05_xhaka_summary.md → reports to Corey
 
 ## Intelligence Jobs
 
-| Job | Schedule | Purpose |
-|-----|----------|---------|
-| researcher | Daily 7:30 AM CST | Fetch + analyze article URLs from intelligence/article-inbox.md |
+The xhaka-intelligence service runs on Railway (service ID: e6a33162). It executes scheduled jobs from `services/intelligence` on the `main` branch. Jobs are composable — each reads specific inputs and writes specific outputs.
 
-### Article Intake Protocol
+| Job | Schedule | Purpose | Input | Output |
+|-----|----------|---------|-------|--------|
+| `capture` | Every 5 min | Polls for new Telegram signals and writes session notes | Telegram webhook / message queue | `memory/YYYY-MM-DD.md` session entries |
+| `daily-log` | Daily 6 AM CST | Compiles today's session notes into a clean daily log | Today's session entries | `memory/YYYY-MM-DD.md` (finalized) |
+| `organize` | Daily 6 AM CST | Synthesizes daily logs into MEMORY.md and subfolders | Recent `memory/YYYY-MM-DD.md` files | Updated `MEMORY.md` + subfolder entries |
+| `scribe` | On-demand | Writes processed insights to the relevant context file | Processed event data (call, article, decision) | Entry in `memory/context/` relevant file |
+| `propagate` | Daily 6 AM CST | Pushes intelligence outputs to downstream systems | `intelligence/` outputs | GitHub commits to repo |
+| `researcher` | Daily 7:30 AM CST | Fetches and analyzes article URLs from article-inbox | `intelligence/article-inbox.md` | Insights written to `memory/context/insights/` |
+| `tool-monitor` | Weekly Mon 6 AM CST | Checks Railway services, job health, log anomalies | Railway API (project 84c0d035) | Status report in `intelligence/tool-reports/` |
+| `improve` | Weekly Mon 6 AM CST | Reviews improvement logs and applies approved changes | `memory/context/researcher-improvements.md` | Updated skill files (pending Corey approval) |
+| `cleanup` | Weekly Sun 6 AM CST | Archives daily logs older than 30 days | `memory/YYYY-MM-DD.md` files (30+ days old) | Moved to `memory/archive/` |
+| `watchdog` | Every 15 min | Monitors job failures and alerts Corey via Telegram | Railway service health + last job run timestamps | Telegram alert if any job fails or goes stale |
+
+### Job Details
+
+#### `capture`
+- Watches for new signals from Corey (Telegram)
+- Writes structured session notes: decisions made, actions taken, context added
+- Does NOT finalize or synthesize — just records
+
+#### `daily-log`
+- Runs at 6 AM CST, after the day's capture window closes
+- Merges session notes into a single coherent daily log
+- Preserves chronological order
+
+#### `organize`
+- The synthesis engine — turns raw logs into searchable memory
+- Updates `MEMORY.md` (must stay under 150 lines)
+- Routes entries to subfolders: `decisions/`, `people/`, `projects/`, `context/`
+- Archives anything >30 days old to `memory/archive/`
+
+#### `scribe`
+- Triggered when there's new processed data to log (a call was graded, an article was read, a decision was made)
+- Writes to the right context file based on content type
+- Format: actionable, sourced, concise
+
+#### `propagate`
+- Ensures the repo stays in sync with what xhaka-intelligence has processed
+- Commits any new `memory/` or `intelligence/` files to GitHub
+- One commit per propagation run (not per file)
+
+#### `researcher`
+- Reads `intelligence/article-inbox.md` for queued URLs
+- Fetches and extracts article content
+- Evaluates for behavioral impact (does this change how we should operate?)
+- Writes insights to `memory/context/insights/`
+- Writes proposed changes to `intelligence/proposed-changes/` if behavioral impact is detected
+- Removes processed URLs from inbox (or marks them processed)
+
+#### `tool-monitor`
+- Calls Railway API to check health of all Xhaka project services
+- Looks for: failed deployments, stale jobs, log errors
+- Does NOT touch Gunner project (f379b683) — read-only observation only
+
+#### `improve`
+- Reviews `memory/context/researcher-improvements.md` for pending improvements
+- Drafts skill file updates for Builder review
+- Does NOT auto-apply — surfaces them as proposed changes
+
+#### `cleanup`
+- Auto-archives `memory/YYYY-MM-DD.md` files older than 30 days
+- Moves to `memory/archive/YYYY/MM/` folder structure
+- Runs Sunday 6 AM CST
+
+#### `watchdog`
+- Polls job health every 15 minutes
+- Alerts Corey on Telegram if any critical job hasn't run in its expected window
+- Escalates to Corey if same job fails 3 times in a row
+
+---
+
+## Article Intake Protocol
 When Corey sends an article URL or pasted content, Xhaka writes it to `intelligence/articles/inbox/` on GitHub.
 
 To queue an article for research, add its URL to `intelligence/article-inbox.md`.
@@ -49,6 +118,40 @@ Example: `https://example.com/article # wholesale market update`
 
 ---
 
+## Self-Improvement Loop (The Target Architecture)
+
+The pipeline is evolving toward a fully self-improving system. The four-stage loop:
+
+```
+OBSERVE → INSPECT → AMEND → EVALUATE
+```
+
+| Stage | Status | What It Does |
+|---|---|---|
+| **OBSERVE** | ✅ Built | `capture` + `researcher` jobs notice what's happening |
+| **INSPECT** | 🔲 Not built yet | Analyze patterns across observations — what's working, what's degrading |
+| **AMEND** | 🟡 Partial | `improve` job drafts changes; `proposed-changes/` holds them |
+| **EVALUATE** | 🔲 Not built yet | Run amended skill against benchmark — accept if better, roll back if not |
+
+### How It Will Work (When Complete)
+1. `researcher` finds an insight that suggests a behavior change
+2. `researcher` writes it to `intelligence/proposed-changes/`
+3. `inspect` (future job) patterns-matches across recent proposed changes — groups related ones
+4. `improve` drafts an updated skill file
+5. `evaluate` (future job) runs the updated skill against 2 benchmark inputs
+6. If benchmark passes: update the skill file, commit, notify Corey
+7. If benchmark fails: discard the amendment, log failure as evidence for next cycle
+
+**Key principle:** Amendments must prove improvement or roll back. Failures are evidence, not noise.
+
+### Current Gap
+The `inspect` and `evaluate` jobs are not yet built. Until they are:
+- Proposed changes accumulate in `intelligence/proposed-changes/`
+- Builder reviews them on manual request
+- Improvements require Corey or Builder to manually approve and apply
+
+---
+
 ## Skill Stack Architecture
 
 Our intelligence pipeline is a **composable skill stack** — not a monolith. Each step is a discrete skill with defined inputs, outputs, and quality criteria.
@@ -56,6 +159,8 @@ Our intelligence pipeline is a **composable skill stack** — not a monolith. Ea
 ### The Stack
 ```
 session-capture → inbox → daily-log → organize → scribe → MEMORY.md
+                                                    ↓
+                                             researcher → proposed-changes → (future: inspect → evaluate)
 ```
 
 | Skill | Input | Output | Quality Criteria |
@@ -65,6 +170,7 @@ session-capture → inbox → daily-log → organize → scribe → MEMORY.md
 | `daily-log` | Today's events, updates, actions | `memory/YYYY-MM-DD.md` | Complete record, no gaps |
 | `organize` | Accumulated daily logs | Categorized entries in `memory/` subfolders | Searchable, under 150-line MEMORY.md |
 | `scribe` | Processed call/article/event data | Insight entry in relevant context file | Actionable, sourced, concise |
+| `researcher` | Article URL + context note | Insight entry + (if behavioral) proposed change | Connected to Gunner/NAH, has recommended action |
 | `MEMORY.md` | Synthesized entries from subfolders | Single source of truth for active context | < 150 lines, linked to archives |
 
 ### Adding a New Skill
