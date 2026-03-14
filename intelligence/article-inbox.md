@@ -100,3 +100,31 @@ The self-improvement loop: **ingest → observe → inspect → amend → evalua
 Key principle: the loop must be observe → inspect → amend → **evaluate**. Self-improvement without evaluation is uncontrolled modification. Every amendment must prove it worked or get reverted.
 
 Our current state: have ingest ✅, basic observe ✅ (job-registry), amend in progress ✅ (proposed-changes). Missing: inspect (linking failures to specific instructions) + evaluate (did the amendment improve outcomes?).
+---
+# How to Invest in the AI Gold Rush
+Source: pasted (@aiedge_)
+Submitted: 2026-03-14
+Tags: #ai-investing #wealth-building #strategy #career
+
+## Content
+AI is the biggest wealth-creation moment in history — bigger than internet, mobile, crypto combined. Two groups: those who act vs those who watch.
+
+**Framework: Pick-and-Shovels vs Second-Order Beneficiaries**
+- Pick-and-shovels: win as AI is BUILT (NVIDIA, cloud infra, semiconductors, copper/metals)
+- Second-order: win as AI is USED (companies whose revenue grows from AI adoption)
+- Key question: "Does this make more money because AI is being built OR because AI is being used?"
+
+**Investment vehicles (low → high risk):**
+1. ETFs — diversified exposure, no stock-picking required
+2. Individual stocks — concentration risk, direct upside
+3. Early-stage startups — most fail, a few become the next NVIDIA
+4. VC funds — diversified startup exposure, requires accreditation
+5. Crypto x AI — AI agent tokens, decentralised compute networks
+
+**The highest ROI investment: your own skills**
+- $10k in AI ETF → $1,500-2,000/yr return
+- $10k in AI education → potentially $50-100k/yr if packaged correctly
+- Downside is zero — you can't lose skills you build
+- The skill gap IS the wealth opportunity
+
+**Corey context:** He's already on the right side of this. Building Gunner (AI SaaS), running AI-powered ops (Xhaka), investing in AI infrastructure. He's not watching — he's building. The article validates his direction.
