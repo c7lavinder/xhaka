@@ -110,6 +110,45 @@ Every bug report must include:
 
 ---
 
+## Benchmarking Protocol
+
+Auditing once tells you if something works. Auditing twice tells you if it works **reliably**.
+
+### The Consistency Check
+For every workflow audited, ask: **does this produce the same quality output on different inputs?**
+
+**How to run it:**
+1. Identify 2 distinct sample inputs (edge case + typical case)
+2. Run (or simulate) the workflow against both
+3. Compare outputs — structure, quality, completeness
+4. Flag any workflow where output quality degrades on different inputs
+
+### Consistency Scoring
+| Result | Flag |
+|---|---|
+| Same structure, same quality on both inputs | ✅ Consistent |
+| Correct output on one, degraded on the other | ⚠️ Inconsistent — flag in audit report |
+| Fails on either input | ❌ Broken — blocks deploy |
+
+### What "Inconsistent" Looks Like
+- Researcher writes a full report for one article URL but returns an empty output for another
+- Builder's commit message is detailed on complex tasks but missing on simple ones
+- A job that works with 10 records but silently skips with 0 records
+
+### Audit Report Addition
+Every `04_auditor_report.md` must include:
+```
+### Consistency Check
+- Inputs tested: [describe 2 sample inputs used]
+- Output on input A: [pass/fail + notes]
+- Output on input B: [pass/fail + notes]
+- Verdict: Consistent ✅ / Inconsistent ⚠️ / Broken ❌
+```
+
+If testing live is not possible, flag it: `Consistency check: NOT RUN — requires live environment. Recommend staging test before next deploy.`
+
+---
+
 ## Standing Rules
 
 - Never approve something with a Critical or High bug

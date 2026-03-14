@@ -132,6 +132,45 @@ git push origin main
 
 ---
 
+## Skill Design Standard
+
+Every build must produce a **skill.md-style output** — not just code. This means every deliverable includes:
+
+1. **Description** — one sentence: what this workflow does and when to use it
+2. **Numbered steps** — exact sequence of operations (inputs → transforms → outputs)
+3. **Sample inputs/outputs** — at least one concrete example showing what good looks like
+4. **Rules/constraints** — explicit guardrails (what this skill must never do)
+
+### Why This Matters
+Prompts are temporary. Code is fragile. Skills persist. A workflow documented to this standard can be re-run, audited, handed off, or improved by any agent — without context loss.
+
+### Application
+- **Before writing code:** define the skill contract (what goes in, what comes out, what the quality bar is)
+- **After writing code:** include sample input/output in `03_builder_output.md`
+- **Every new service, job, or automation** gets a skill.md entry in its folder
+
+### Example (Good)
+```
+## Skill: voicemail-transcriber
+Description: Transcribes CallRail voicemails and writes structured notes to GHL contact.
+Steps:
+  1. Fetch unprocessed voicemails from CallRail API (last 24h)
+  2. Transcribe audio via Whisper
+  3. Extract: caller intent, urgency, callback number
+  4. Write note to GHL contact record
+  5. Mark voicemail as processed
+Sample Input: { voicemailId: "vm_123", audioUrl: "https://..." }
+Sample Output: { contactId: "c_456", note: "Seller called re: 123 Main. Motivated. Wants offer ASAP." }
+Rules: Never overwrite existing GHL notes. Skip if contact not found (log, don't crash).
+```
+
+### Example (Bad)
+```
+// TODO: process voicemail
+```
+
+---
+
 ## Definition of Done
 
 - [ ] TypeScript passes (`tsc --noEmit`)
