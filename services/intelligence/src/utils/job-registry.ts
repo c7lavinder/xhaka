@@ -80,6 +80,8 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'agent-scorecard': 60000,  // 1 min
   'pattern-miner': 180000,   // 3 min
   'dispatcher': 300000,      // 5 min (may chain into researcher runs)
+  'auditor': 120000,         // 2 min
+  'architect': 120000,       // 2 min
 };
 
 /**

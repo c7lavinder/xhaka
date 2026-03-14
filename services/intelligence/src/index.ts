@@ -5,6 +5,8 @@
 import http from 'http';
 import { startScheduler, runJobNow, catchUpMissedJobs, recoverStuckJobs } from './scheduler.js';
 import { runStartupChecks } from './utils/startup-checks.js';
+import { enqueue } from './utils/task-queue.js';
+import { getRecentCommits } from './lib/github.js';
 
 // ---------------------------------------------------------------------------
 // Env validation
@@ -81,7 +83,46 @@ async function main(): Promise<void> {
   // Catch up any jobs that were missed during downtime
   await catchUpMissedJobs();
 
+  // ── On-Call: Enqueue Auditor for any recent code changes ──────────────────
+  // This runs on every deploy — if code changed in the last 2 hours, the Auditor
+  // picks it up from the queue and verifies the build.
+  await enqueueAuditorForRecentCommits();
+
   console.log('[startup] Service is running. Waiting for scheduled jobs...');
+}
+
+// ---------------------------------------------------------------------------
+// Post-deploy auditor trigger
+// Enqueues an Auditor task for the most recent commit on startup.
+// The Dispatcher will pick it up within 1 minute of boot.
+// ---------------------------------------------------------------------------
+
+async function enqueueAuditorForRecentCommits(): Promise<void> {
+  try {
+    const repo = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
+    const since = new Date(Date.now() - 2 * 60 * 60 * 1000); // last 2 hours
+    const commits = await getRecentCommits(repo, since);
+
+    if (commits.length === 0) {
+      console.log('[startup] No recent commits — Auditor not triggered.');
+      return;
+    }
+
+    const latest = commits[0];
+    console.log(`[startup] Code change detected: ${latest.sha.slice(0, 8)} — "${latest.message}"`);
+
+    await enqueue('auditor', 'verify-build', {
+      commitSha: latest.sha.slice(0, 8),
+      commitMessage: latest.message,
+      author: latest.author,
+      triggeredAt: new Date().toISOString(),
+    });
+
+    console.log('[startup] ✅ Auditor task enqueued for recent commit.');
+  } catch (err) {
+    // Non-fatal — don't block startup
+    console.warn('[startup] Could not enqueue Auditor task:', err);
+  }
 }
 
 main().catch((err) => {
