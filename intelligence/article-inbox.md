@@ -35,3 +35,23 @@ Task: Build RAG system into Gunner AI platform (MANUS-Gunner-AI repo).
 Technical: TiDB/MySQL (no pgvector), store embeddings as JSON text, cosine similarity in JS, OpenAI text-embedding-3-small (1536 dims), everything tenant-scoped.
 
 Success: AI coach auto-retrieves 3 similar past calls + 2 prior answers when responding, conversion patterns visible in coaching system, backfill script for historical calls.
+---
+# Claude as Chief of SEO — 8-Part Local SEO Prompt System
+Source: pasted (Sarvesh / Alventramarketing.com)
+Submitted: 2026-03-14
+Tags: #seo #local-seo #google-business-profile #ai-systems #prompt-engineering
+
+## Content
+8-part local SEO system using AI as Chief of SEO. Load business context once, never repeat. Key prompts:
+
+1. GBP Category Audit — competitors' primary/secondary categories vs yours. Adding one category can unlock new map pack rankings.
+2. GBP Attributes Audit — extract every attribute (veteran-owned, 24/7, free estimates) competitors have that you're missing.
+3. Competitor Review Teardown — review velocity matters more than total count. Track reviews/month and what customers mention (keywords + neighborhoods).
+4. Review Response Strategy — keyword-rich responses are free SEO real estate. Template system: 5-star, 4-star, 3-star, 1-2 star variants.
+5. GBP Posts Strategy — competitors aren't posting. 2-3x/week with neighborhood-specific content builds local authority.
+6. Services Section Optimization — service descriptions are the only copy you control on GBP. Cross-reference site vs GBP for gaps.
+7. GBP Description Optimization — 750 chars of prime real estate. Test 3 versions: keyword-focused, conversion-focused, balanced.
+8. GBP Photo Audit — consistency beats volume. 3-5 quality photos/week signals active business. Before-afters, team, trucks in neighborhoods.
+
+Key principle: AI does the research in minutes. Human makes the strategic decisions. Load context once, every prompt gets sharper.
+Execution order: Week 1 (categories + attributes) → Week 2 (services + description) → Week 3 (reviews) → Week 4+ (posts + photos, ongoing).
