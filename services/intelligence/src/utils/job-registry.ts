@@ -25,6 +25,7 @@ const EXPECTED_KEYS = [
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
   'feedback', 'inspect', 'routing-review', 'morning-brief',
+  'heartbeat-check',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -45,6 +46,7 @@ const DEFAULT_REGISTRY: JobRegistry = {
   inspect: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'morning-brief': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  'heartbeat-check': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 0.5, gracePeriodMinutes: 10 },
 };
 
 // ---------------------------------------------------------------------------

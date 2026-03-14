@@ -15,6 +15,7 @@ import { runFeedback } from './jobs/feedback.js';
 import { runInspect } from './jobs/inspect.js';
 import { runRoutingReview } from './jobs/routing-review.js';
 import { runMorningBrief } from './jobs/morning-brief.js';
+import { runHeartbeatCheck } from './jobs/heartbeat-check.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -26,7 +27,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -178,6 +179,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Heartbeat Check: every 30 minutes — active system monitor ---
+  cron.schedule(
+    '*/30 * * * *',
+    safeRun('heartbeat-check', runHeartbeatCheck),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -196,6 +204,7 @@ export function startScheduler(): void {
   console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
   console.log('  ✓ morning-brief    — daily at 6:00 AM CST');
+  console.log('  ✓ heartbeat-check  — every 30 minutes');
 }
 
 // ---------------------------------------------------------------------------
@@ -256,9 +265,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'morning-brief':
       await runMorningBrief();
       break;
+    case 'heartbeat-check':
+      await runHeartbeatCheck();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check`,
       );
   }
 }
