@@ -490,3 +490,183 @@ import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 5. **`synthesize()` signature** — Verify the exact signature of `synthesize` in `lib/openai.ts` before writing the call. Based on `organize.ts` usage: `synthesize(systemPrompt, userPrompt, maxTokens)`. Confirm this matches.
 6. **Article filename collisions** — If two URLs produce the same slug (unlikely but possible), `createFile` will upsert and overwrite. Acceptable behavior.
 7. **`EXPECTED_KEYS` in job-registry.ts** — Must add `'researcher'` or the watchdog will flag it as schema invalid after first run.
+
+---
+
+# ADDENDUM — ROUTING.md System
+**Added:** 2026-03-14 (same run, Corey addition)  
+**Purpose:** Force Xhaka to route every task through the org chart before acting — no cowboy solo work.
+
+---
+
+## A. New File: `ROUTING.md` (workspace root)
+
+Builder creates this file at `ROUTING.md` in the repo root. Full content below — write it verbatim:
+
+```markdown
+# ROUTING.md — Agent Decision Table
+
+> Xhaka reads this at the start of every task.
+> Step 0 is non-negotiable: identify task type → assign agent → log it → spawn.
+
+---
+
+## Decision Table
+
+| Task Type | Keywords / Signals | Agent | Notes |
+|-----------|-------------------|-------|-------|
+| Code / Build | "write code", "create file", "fix bug", "implement", "refactor", "deploy", "schema", "endpoint", "PR", "commit", any .ts/.py/.js/.sql change | **Builder** | Even "small" changes. No exceptions. |
+| Code Review / QA | "review", "check code", "audit", "lint", "test", "verify build", "post-build", "does this follow RULES" | **Auditor** | Always post-build. Also on-demand. |
+| Research / Intel | "find", "research", "what tools", "industry news", "trends", "look up", "competitor", "best practice", "benchmark" | **Researcher** | Don't Google it yourself. Spawn Researcher. |
+| UI / Dashboard | "dashboard", "front end", "HTML", "CSS", "chart", "graph", "font", "layout", "page", "visual", "display", "UI" | **Architect** | All visual output goes through Architect. |
+| GHL / Config | "GHL", "go high level", "twilio", "webhook", "pipeline stage", "workflow trigger", "contact field", "get the ID", "check the setting" | **Operator** | Read-only unless Corey explicitly approves write. |
+| Onboarding / Playbook | "onboard", "playbook", "configure", "wizard", "new team member", "setup guide", "JSON config" | **Guide** | Playbook JSON and onboarding flows. |
+| Strategy / Planning | "what should we do", "priority", "roadmap", "decision", "tradeoff", "options", "recommend", "think through" | **Xhaka (self)** | This is Xhaka's lane. No spawning needed. |
+| Memory / Logging | "remember", "log this", "save to memory", "update MEMORY.md", "daily log", "what did we decide" | **Xhaka (self)** | Direct file writes. No specialist needed. |
+| Comms / Messaging | "send this", "draft a message", "reply to", "email", "Telegram", "text", "what should I say" | **Xhaka (self)** | Draft only. Corey approves before sending. |
+| Unknown / Ambiguous | Doesn't fit a clear category | **Xhaka (self)** | Clarify with Corey before routing. Ask one question. |
+
+---
+
+## Routing Protocol (Mandatory — Step 0)
+
+Before any action on any task:
+
+1. **Read this table.** Identify the task type.
+2. **Assign the agent.** If ambiguous, default to clarifying with Corey.
+3. **Log it.** Write one line to `runs/routing-log.md`:
+   ```
+   | YYYY-MM-DD HH:MM | <task description, ≤15 words> | <Agent> | <one-sentence reason> |
+   ```
+4. **Spawn or act.** Execute the routing decision.
+
+---
+
+## Hard Rules
+
+- **Xhaka never codes.** If the task involves writing, modifying, or debugging code → Builder. Every time.
+- **Xhaka never does visual work.** If the task involves HTML/CSS/charts → Architect. Every time.
+- **Logging is not optional.** A task without a routing-log entry didn't happen correctly.
+- **Multi-step tasks get one routing entry** at the start — not one per sub-step.
+- **Routing log is append-only.** Never delete entries.
+
+---
+
+## Escalation
+
+If a task spans multiple agents (e.g., "build a dashboard that pulls from GHL"):
+- Break it into sub-tasks.
+- Route each sub-task separately.
+- Log each routing decision.
+- Example:
+  - Sub-task 1: Operator → pull GHL field IDs
+  - Sub-task 2: Builder → wire API endpoint
+  - Sub-task 3: Architect → build dashboard page
+```
+
+---
+
+## B. New File: `runs/routing-log.md`
+
+Builder creates this file as the initial routing log. Full content:
+
+```markdown
+# Routing Log
+
+> Auto-maintained by Xhaka. One entry per task, written before spawning any agent.
+> Format: | Date | Task | Agent | Reason |
+> Never delete entries. Append only.
+
+| Date | Task Description | Agent Assigned | Reason |
+|------|-----------------|---------------|--------|
+| 2026-03-14 | Build article intelligence pipeline researcher job | Builder | Code implementation task — new TypeScript job file |
+| 2026-03-14 | Design article pipeline + ROUTING.md system spec | Architect (self) | Architecture/design task — producing spec, no code written |
+```
+
+---
+
+## C. Changes to `SOUL.md`
+
+Add the following block immediately after the `## 🚨 THE ONE RULE THAT CANNOT BE BROKEN` section and before `## Core Truths`:
+
+```diff
++## 🗺️ STEP 0 — ROUTING (MANDATORY, EVERY TASK)
++
++**Before doing anything on any task:**
++1. Open ROUTING.md
++2. Identify the task type from the decision table
++3. Assign the correct agent
++4. Write one line to `runs/routing-log.md`
++5. Then act
++
++**Never skip Step 0. Not for "quick" tasks. Not for "obvious" tasks. Not ever.**
++Routing log = proof the org chart is being respected.
++If it's not logged, it didn't happen right.
+```
+
+Show the exact insertion point to Builder:
+- File: `SOUL.md` in the workspace root
+- Find the line: `**When given a checklist or numbered list: work through it top to bottom. Do not ask Corey which one to start with. Just start.**`
+- Insert the new `## 🗺️ STEP 0` block on the NEXT blank line after that line, before `---` and `## Core Truths`
+
+---
+
+## D. Changes to `HEARTBEAT.md`
+
+In the `### 🧠 Xhaka (System Health)` section, add after the intelligence jobs lines:
+
+```diff
+ - [ ] Intelligence jobs healthy? (check data/job-registry.json for failed/stuck jobs)
++- [ ] Routing log current? (check runs/routing-log.md — last entry should be recent)
+```
+
+---
+
+## E. Auditor Integration
+
+The Auditor's post-build review checklist (to be enforced in every `04_auditor_report.md`) must include:
+
+```markdown
+### Routing Compliance Check
+- [ ] Does `runs/routing-log.md` have an entry for this task?
+- [ ] Was the correct agent assigned per ROUTING.md decision table?
+- [ ] Did Xhaka write any code directly? (FAIL if yes)
+- [ ] Did Xhaka do any visual/UI work directly? (FAIL if yes)
+```
+
+> Builder: add this checklist block to `WORKFLOW.md` under a new `## Auditor Checklist` section so future Auditor spawns know what's expected.
+
+---
+
+## F. Summary of All Files Builder Must Touch (ROUTING addendum)
+
+| File | Action | Notes |
+|------|--------|-------|
+| `ROUTING.md` | CREATE | Full content in Section A above — write verbatim |
+| `runs/routing-log.md` | CREATE | Full content in Section B above — write verbatim |
+| `SOUL.md` | MODIFY | Insert Step 0 block per Section C — exact insertion point specified |
+| `HEARTBEAT.md` | MODIFY | Add routing log check per Section D |
+| `WORKFLOW.md` | MODIFY | Add Auditor Checklist section per Section E |
+
+---
+
+## G. Edge Cases for Routing System
+
+### If Xhaka forgets to log before acting
+- No automated enforcement exists — this is a behavioral rule
+- The Auditor catches it post-build and marks FAIL on routing compliance
+- A FAIL here means the run's `04_auditor_report.md` includes a routing violation notice
+
+### If a task genuinely doesn't fit the table
+- Route to "Unknown / Ambiguous" → Xhaka handles directly
+- Still requires a routing-log entry: `| date | task | Xhaka (self) | Ambiguous — clarified with Corey |`
+
+### If `runs/routing-log.md` doesn't exist yet
+- First task of the system creates it
+- Builder seeds it with the entries in Section B
+- All future entries are appended by Xhaka directly (no agent spawn needed for logging)
+
+### If routing-log.md grows very large
+- No auto-archive needed — it's a flat table, GitHub handles large files fine
+- After 500 entries (~6 months), Xhaka can archive to `runs/routing-log-archive-YYYY.md` and start fresh
+
