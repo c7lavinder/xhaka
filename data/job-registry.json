@@ -75,5 +75,12 @@
     "durationMs": 1721,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
+  },
+  "researcher": {
+    "lastRun": null,
+    "lastStatus": null,
+    "durationMs": null,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 90
   }
 }
