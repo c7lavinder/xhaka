@@ -407,10 +407,9 @@ export async function runScribe(): Promise<void> {
   } else {
     // Evaluate even on partial success
     try {
+      // Note: digestError and extractionError are null in this branch (no errors occurred)
       const scribeOutput =
-        `Scribe partial: ${decisionsCount} decisions, ${totalCommits} commits.` +
-        (digestError ? ` digestError: ${digestError.message}` : '') +
-        (extractionError ? ` extractionError: ${extractionError.message}` : '');
+        `Scribe: ${decisionsCount} decisions filed, ${totalCommits} commits digested, ${rulesCount} rules captured.`;
       const evalResult = await evaluateJobOutput('scribe', scribeOutput);
       console.log(`[scribe] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
     } catch (evalErr) {

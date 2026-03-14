@@ -25,8 +25,9 @@ const EXPECTED_KEYS = [
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
   'feedback', 'inspect', 'routing-review', 'morning-brief',
-  'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
+'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
   'proactive-scan', 'agent-scorecard',
+'heartbeat-check', 'change-evaluator',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -48,11 +49,12 @@ const DEFAULT_REGISTRY: JobRegistry = {
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'morning-brief': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'heartbeat-check': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 0.5, gracePeriodMinutes: 10 },
-  benchmark: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+benchmark: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'pre-deploy-test': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'behavior-sync': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'proactive-scan': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'agent-scorecard': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+'change-evaluator': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
 };
 
 // ---------------------------------------------------------------------------
