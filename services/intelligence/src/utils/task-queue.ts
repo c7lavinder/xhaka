@@ -17,6 +17,9 @@ export interface Task {
   payload: unknown;
   status: TaskStatus;
   createdAt: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
+  proofOfWork?: string | null;   // Artifact summary logged after task completion
 }
 
 interface QueueFile {
@@ -135,6 +138,8 @@ export async function updateTaskStatus(
   }
 
   task.status = status;
+  if (status === 'running') task.startedAt = new Date().toISOString();
+  if (status === 'completed' || status === 'failed') task.completedAt = new Date().toISOString();
 
   await writeQueueFile(
     queue,
@@ -143,6 +148,36 @@ export async function updateTaskStatus(
   );
 
   console.log(`[task-queue] Task ${taskId} (${task.agent}/${task.task}) -> ${status}`);
+}
+
+/**
+ * Mark a task complete and log the proof-of-work artifact.
+ * Call this after an agent successfully finishes its work.
+ */
+export async function completeTask(
+  taskId: string,
+  proofOfWork: string,
+  status: 'completed' | 'failed' = 'completed',
+): Promise<void> {
+  const { queue, sha } = await readQueueFile();
+
+  const task = queue.tasks.find((t) => t.id === taskId);
+  if (!task) {
+    console.warn(`[task-queue] completeTask: task ${taskId} not found`);
+    return;
+  }
+
+  task.status = status;
+  task.completedAt = new Date().toISOString();
+  task.proofOfWork = proofOfWork;
+
+  await writeQueueFile(
+    queue,
+    sha,
+    `task-queue: ${status} ${task.agent}/${task.task} [${taskId}] — ${proofOfWork.slice(0, 60)}`,
+  );
+
+  console.log(`[task-queue] ✓ ${status}: ${task.agent}/${task.task} [${taskId}] — ${proofOfWork.slice(0, 80)}`);
 }
 
 /**

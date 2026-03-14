@@ -1,40 +1,15 @@
 // services/intelligence/src/jobs/dispatcher.ts
-// Event-driven task dispatcher — reads pending tasks from the queue and
-// routes them to the appropriate job function. Runs every 1 minute.
+// On-Call Dispatcher — reads pending tasks from the queue and routes them
+// to the appropriate specialist agent. Runs every minute.
+//
+// Supported agents: researcher | auditor | architect
+// All agents log a proof-of-work artifact back to the task entry on completion.
 
-import { getPendingTasks, updateTaskStatus, pruneOldTasks, type Task } from '../utils/task-queue.js';
+import { getPendingTasks, updateTaskStatus, completeTask, pruneOldTasks, type Task } from '../utils/task-queue.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 import { runResearcher } from './researcher.js';
-
-// ---------------------------------------------------------------------------
-// Agent -> job function registry
-// Add new agents here as they are implemented.
-// ---------------------------------------------------------------------------
-
-type JobFn = (payload: unknown) => Promise<void>;
-
-/**
- * Maps "agent/task" strings to job functions.
- * Key format: "<agent>/<task>" or just "<agent>" for a catch-all.
- */
-const DISPATCH_MAP: Record<string, JobFn> = {
-  // researcher: process-article
-  'researcher/process-article': async (payload: unknown) => {
-    const p = payload as { path?: string };
-    console.log(`[dispatcher] researcher/process-article -> path: ${p?.path ?? '(none)'}`);
-    await runResearcher();
-  },
-
-  // researcher (catch-all)
-  'researcher': async (_payload: unknown) => {
-    await runResearcher();
-  },
-
-  // auditor placeholder
-  'auditor': async (_payload: unknown) => {
-    console.warn('[dispatcher] auditor job not yet implemented -- skipping');
-  },
-};
+import { runAuditor } from './auditor.js';
+import { runArchitect } from './architect.js';
 
 // ---------------------------------------------------------------------------
 // Dispatcher
@@ -44,23 +19,27 @@ export async function runDispatcher(): Promise<void> {
   const _startTime = await markJobStart('dispatcher');
 
   try {
-    console.log('[dispatcher] Reading pending tasks...');
+    console.log('[dispatcher] Checking task queue...');
 
     const pending = await getPendingTasks();
 
     if (pending.length === 0) {
-      console.log('[dispatcher] No pending tasks -- nothing to do.');
+      console.log('[dispatcher] Queue empty — all agents idle.');
       await markJobSuccess('dispatcher', _startTime);
       return;
     }
 
     console.log(`[dispatcher] Found ${pending.length} pending task(s).`);
 
-    for (const task of pending) {
+    // Process tasks one at a time — serialized to avoid GitHub rate limits
+    const MAX_PER_RUN = 5;
+    const toProcess = pending.slice(0, MAX_PER_RUN);
+
+    for (const task of toProcess) {
       await dispatchTask(task);
     }
 
-    // Prune old completed/failed tasks to avoid queue bloat
+    // Prune old completed/failed tasks to keep queue file tidy
     await pruneOldTasks();
 
     await markJobSuccess('dispatcher', _startTime);
@@ -72,34 +51,65 @@ export async function runDispatcher(): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// Individual task dispatch
+// Route a single task to the correct agent
 // ---------------------------------------------------------------------------
 
 async function dispatchTask(task: Task): Promise<void> {
-  const specificKey = `${task.agent}/${task.task}`;
-  const catchAllKey = task.agent;
+  console.log(`[dispatcher] ▶️ Routing task ${task.id}: ${task.agent}/${task.task}`);
 
-  const handler = DISPATCH_MAP[specificKey] ?? DISPATCH_MAP[catchAllKey];
-
-  if (!handler) {
-    console.warn(
-      `[dispatcher] No handler for agent="${task.agent}" task="${task.task}" (id=${task.id}) -- marking failed`,
-    );
-    await updateTaskStatus(task.id, 'failed');
-    return;
-  }
-
-  console.log(`[dispatcher] Running task ${task.id}: ${specificKey}`);
-
-  // Mark as running BEFORE executing to prevent double-dispatch
+  // Mark as running BEFORE executing — prevents double-dispatch if dispatcher reruns
   await updateTaskStatus(task.id, 'running');
 
   try {
-    await handler(task.payload);
-    await updateTaskStatus(task.id, 'completed');
-    console.log(`[dispatcher] Task ${task.id} completed.`);
+    const proof = await routeToAgent(task);
+    await completeTask(task.id, proof, 'completed');
+    console.log(`[dispatcher] ✅ Task ${task.id} completed.`);
   } catch (err) {
-    console.error(`[dispatcher] Task ${task.id} failed:`, (err as Error).message);
-    await updateTaskStatus(task.id, 'failed');
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.error(`[dispatcher] ❌ Task ${task.id} failed:`, errMsg);
+    await completeTask(task.id, `FAILED: ${errMsg}`, 'failed');
   }
+}
+
+// ---------------------------------------------------------------------------
+// Agent routing table
+// ---------------------------------------------------------------------------
+
+async function routeToAgent(task: Task): Promise<string> {
+  const key = `${task.agent}/${task.task}`;
+  const payload = task.payload as Record<string, unknown>;
+
+  switch (task.agent) {
+
+    // ── Researcher ─────────────────────────────────────────────────────────
+    case 'researcher': {
+      console.log(`[dispatcher] → Researcher: ${task.task}`);
+      await runResearcher();
+      return `Researcher processed article-inbox.md at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+    // ── Auditor ────────────────────────────────────────────────────────────
+    case 'auditor': {
+      console.log(`[dispatcher] → Auditor: ${task.task}`);
+      const result = await runAuditor(payload);
+      return result;
+    }
+
+    // ── Architect ──────────────────────────────────────────────────────────
+    case 'architect': {
+      console.log(`[dispatcher] → Architect: ${task.task}`);
+      const result = await runArchitect(payload);
+      return result;
+    }
+
+    // ── Unknown ────────────────────────────────────────────────────────────
+    default: {
+      const msg = `No handler for agent="${task.agent}" task="${task.task}" — skipped`;
+      console.warn(`[dispatcher] ⚠️ ${msg}`);
+      throw new Error(msg);
+    }
+  }
+
+  // TypeScript needs this (unreachable but satisfies return type)
+  void key;
 }
