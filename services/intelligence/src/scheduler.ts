@@ -16,6 +16,7 @@ import { runInspect } from './jobs/inspect.js';
 import { runRoutingReview } from './jobs/routing-review.js';
 import { runMorningBrief } from './jobs/morning-brief.js';
 import { getFileContent } from './lib/github.js';
+import { getJobTimeout } from './utils/job-registry.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -27,13 +28,30 @@ const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
 const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief']);
 
+// ---------------------------------------------------------------------------
+// Hard runtime kill switch — races job fn against a deadline timer
+// ---------------------------------------------------------------------------
+
+async function runWithTimeout<T>(fn: () => Promise<T>, jobName: string): Promise<T> {
+  const timeout = getJobTimeout(jobName);
+  return Promise.race([
+    fn(),
+    new Promise<never>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`Job ${jobName} exceeded timeout of ${timeout}ms`)),
+        timeout,
+      )
+    ),
+  ]);
+}
+
 function safeRun(
   jobName: string,
   fn: () => Promise<void>,
 ): () => void {
   return () => {
     console.log(`[scheduler] Triggering job: ${jobName}`);
-    fn().catch((err) => {
+    runWithTimeout(fn, jobName).catch((err) => {
       console.error(`[scheduler] Job ${jobName} failed:`, err);
     });
   };
