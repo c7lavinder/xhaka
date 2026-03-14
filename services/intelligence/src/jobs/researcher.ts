@@ -6,6 +6,7 @@ import {
 import { synthesize } from '../lib/openai.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
+import { checkEnv, warnMissingEnv } from '../utils/env-check.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
@@ -112,7 +113,7 @@ function extractText(html: string): string {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
+    .replace(/&#39;/g, "\'")
     .replace(/&nbsp;/g, ' ');
   // Collapse whitespace
   text = text.replace(/\s+/g, ' ').trim();
@@ -194,6 +195,12 @@ function buildDigestLine(item: InboxItem, analysis: ArticleAnalysis, date: strin
 // ---------------------------------------------------------------------------
 
 export async function runResearcher(): Promise<void> {
+  const { ok, missing } = checkEnv(['OPENAI_API_KEY']);
+  if (!ok) {
+    warnMissingEnv('researcher', missing);
+    return; // Skip cleanly — not a job failure
+  }
+
   const _startTime = await markJobStart('researcher');
   try {
     console.log('[researcher] Starting article research job...');
