@@ -25,8 +25,7 @@ import { runBehaviorSync } from './jobs/behavior-sync.js';
 import { runChangeEvaluator } from './jobs/change-evaluator.js';
 import { runBenchmark } from './jobs/benchmark.js';
 import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
-import { runBenchmark } from './jobs/benchmark.js';
-import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
+import { runPatternMiner } from './jobs/pattern-miner.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -38,7 +37,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', benchmark, pre-deploy-test', 'benchmark', 'pre-deploy-test']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -232,10 +231,10 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Benchmark: every Wednesday at 6:00 AM CST ---
+  // --- Pattern Miner: every Thursday at 6:00 AM CST ---
   cron.schedule(
-    '0 6 * * 3',
-    safeRun('benchmark', runBenchmark),
+    '0 6 * * 4',
+    safeRun('pattern-miner', runPatternMiner),
     { timezone: TIMEZONE },
   );
 
@@ -264,7 +263,7 @@ export function startScheduler(): void {
   console.log('  ✓ change-evaluator — daily at 9:00 AM CST (15:00 UTC)');
   console.log('  ✓ benchmark         — every Wednesday at 6:00 AM CST');
   console.log('  ✓ pre-deploy-test   — manual via RUN_JOB');
-  console.log('  ✓ benchmark        — every Wednesday at 6:00 AM CST');
+  console.log('  ✓ pattern-miner     — every Thursday at 6:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
@@ -346,9 +345,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'pre-deploy-test':
       await runPreDeployTestJob();
       break;
+    case 'pattern-miner':
+      await runPatternMiner();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner`,
       );
   }
 }

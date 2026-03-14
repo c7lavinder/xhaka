@@ -159,7 +159,15 @@ export async function runToolMonitor(): Promise<void> {
       );
     }
 
-    console.log('[tool-monitor] Done.');
+    // 7. Write latest-update.md for each category
+    const depUpdateCount = findings.filter(f => f.type === 'dep-update').length;
+    await writeLatestUpdateFile('packages', `Last scanned: ${new Date().toISOString()}\nDeps checked: ${Object.keys(allDeps).length}\nUpdates found: ${depUpdateCount}\n`);
+    for (const source of CHANGELOG_SOURCES) {
+      const hasActivity = findings.some(f => f.type === 'changelog-update' && (f as ChangelogFinding).service === source.name);
+      await writeLatestUpdateFile(source.id, `Last scanned: ${new Date().toISOString()}\nService: ${source.name}\nChangelog activity: ${hasActivity ? 'YES — new content detected' : 'none detected'}\n`);
+    }
+
+        console.log('[tool-monitor] Done.');
 
     await markJobSuccess('tool-monitor', _startTime);
   } catch (err) {
@@ -317,6 +325,24 @@ function buildInboxFile(findings: Finding[], timestamp: string): string {
   lines.push(`_Run the "Deep Research" button in the Control Room Tools panel for full analysis._`);
 
   return lines.join('\n');
+}
+
+
+// ── Latest-Update Writers ────────────────────────────────────────────
+
+async function writeLatestUpdateFile(category: string, content: string): Promise<void> {
+  try {
+    const path = `memory/context/tools/${category}/latest-update.md`;
+    const existing = await getFileContent(XHAKA_REPO, path);
+    if (existing) {
+      await updateFile(XHAKA_REPO, path, content, `tool-monitor: update ${category} latest-update`, existing.sha);
+    } else {
+      await createFile(XHAKA_REPO, path, content, `tool-monitor: init ${category} latest-update`);
+    }
+    console.log(`[tool-monitor] Wrote latest-update.md for category: ${category}`);
+  } catch (err) {
+    console.warn(`[tool-monitor] Failed to write latest-update for ${category}:`, (err as Error).message);
+  }
 }
 
 // ── Types ────────────────────────────────────────────────────────────
