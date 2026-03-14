@@ -25,9 +25,9 @@ const EXPECTED_KEYS = [
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
   'feedback', 'inspect', 'routing-review', 'morning-brief',
-'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
-  'proactive-scan', 'agent-scorecard',
-'heartbeat-check', 'change-evaluator',
+  'heartbeat-check', 'benchmark', 'pre-deploy-test', 'behavior-sync',
+  'proactive-scan', 'agent-scorecard', 'change-evaluator',
+  'pattern-miner',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -49,12 +49,13 @@ const DEFAULT_REGISTRY: JobRegistry = {
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'morning-brief': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'heartbeat-check': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 0.5, gracePeriodMinutes: 10 },
-benchmark: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  benchmark: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'pre-deploy-test': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'behavior-sync': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   'proactive-scan': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'agent-scorecard': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
-'change-evaluator': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
+  'change-evaluator': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 120 },
+  'pattern-miner': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
 };
 
 // ---------------------------------------------------------------------------
@@ -72,8 +73,9 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'inspect': 180000,         // 3 min
   'routing-review': 120000,  // 2 min
   'behavior-sync': 120000,   // 2 min
-  'proactive-scan': 120000,   // 2 min
-  'agent-scorecard': 60000,    // 1 min
+  'proactive-scan': 120000,  // 2 min
+  'agent-scorecard': 60000,  // 1 min
+  'pattern-miner': 180000,   // 3 min
 };
 
 /**
@@ -174,7 +176,6 @@ async function writeJobStatus(
         } catch { /* ignore */ }
         
         // Return without writing — don't overwrite the corrupt file
-        // Let a human fix it
         return;
       }
     } else {
@@ -231,4 +232,3 @@ async function writeJobStatus(
     console.error('[job-registry] Failed to write status:', (err as Error).message);
   }
 }
-
