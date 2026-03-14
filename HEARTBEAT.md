@@ -1,20 +1,30 @@
-# HEARTBEAT.md — Active System Monitor
+# HEARTBEAT.md — Pulse Check
 
-> Runs automatically every 30 minutes. Sends Telegram alert only when something needs attention. Silent otherwise.
+> Run on every session start. Check what matters. Raise anything that needs attention.
 
-## Automated Checks (every 30 min)
-- [ ] Railway xhaka-intelligence deploy status
-- [ ] Gunner health endpoint
-- [ ] Any fresh job failures (< 2h old)
-- [ ] Pending proposed changes (> 3 = reminder)
-- [ ] Morning brief confirmation (6:15-7 AM window)
+## Checklist
 
-## Manual Heartbeat (Xhaka session start)
-Run when Corey opens a session:
-- [ ] Any proposed changes in intelligence/proposed-changes/ to review?
-- [ ] Any open decisions waiting on Corey?
-- [ ] Are MEMORY.md and PROJECTS.md current?
+### 🏗️ Gunner (Product)
+- [ ] Any failed Railway deployments? (check gunner-production.up.railway.app and xhaka-brain-production.up.railway.app)
+- [ ] Any new GitHub commits that need review? (c7lavinder/Gunner)
+- [ ] Is GHL connected? (crmStatus should be `connected` — fixed 2026-03-13)
 - [ ] Any Builder tasks in progress or stuck?
 
-## Alert Cooldowns
-Same alert type: max once per 2 hours
+### 🏠 New Again Houses (Operations)
+- [ ] Any leads stuck in pipeline?
+- [ ] Any team performance issues visible in GHL or Gunner?
+- [ ] Any KPI inputs overdue?
+
+### 🧠 Xhaka (System Health)
+- [ ] Is MEMORY.md current?
+- [ ] Is PROJECTS.md current?
+- [ ] Are there open decisions waiting on Corey?
+- [ ] Did auto-sync push latest changes to github.com/c7lavinder/xhaka?
+- [ ] Session-capture cron healthy? (openclaw cron list — check for error status)
+- [ ] Intelligence jobs healthy? (check data/job-registry.json for failed/stuck jobs)
+- [ ] MEMORY.md under 150 lines?
+- [ ] Local workspace synced to GitHub?
+
+## Response Protocol
+- All clear → `HEARTBEAT_OK`
+- Anything needs attention → specific alert with proposed action
