@@ -10,9 +10,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-14T18:12:02.835Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-14T18:12:02.952Z",
-      "startedAt": "2026-03-14T18:14:01.138Z"
+      "startedAt": "2026-03-14T18:14:01.138Z",
+      "completedAt": "2026-03-14T18:14:06.516Z",
+      "proofOfWork": "Audit WARN for commit 05c14ea9. 5 concern(s). Artifact: intelligence/audits/2026-03-14-05c14ea9.md"
     },
     {
       "id": "task_1773511962418_9i2q18i",
