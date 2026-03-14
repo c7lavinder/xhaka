@@ -19,6 +19,98 @@ export interface EvaluationResult {
   evaluatedAt: string;
 }
 
+// ---------------------------------------------------------------------------
+// Quality thresholds — minimum acceptable score per job
+// ---------------------------------------------------------------------------
+
+const JOB_QUALITY_THRESHOLDS: Record<string, number> = {
+  'researcher': 65,
+  'organize': 60,
+  'scribe': 70,
+  'daily-log': 50,
+  'tool-monitor': 55,
+};
+
+/**
+ * Returns true if the score meets the minimum quality threshold for the job.
+ * If the job is not in the map, defaults to true (no threshold enforced).
+ */
+export function meetsQualityThreshold(jobName: string, score: number): boolean {
+  try {
+    const threshold = JOB_QUALITY_THRESHOLDS[jobName];
+    if (threshold === undefined) return true;
+    return score >= threshold;
+  } catch {
+    return true;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Keep-or-Reset — compare new score against rolling baseline
+// ---------------------------------------------------------------------------
+
+/**
+ * Compare a new job score against the rolling average of the last 3 scores.
+ * - If < 3 historical scores: always 'keep' (not enough data)
+ * - If new score >= baseline - 10: 'keep' (acceptable or improving)
+ * - If new score < baseline - 10: 'reset' (meaningful regression)
+ */
+export async function compareWithBaseline(
+  jobName: string,
+  newScore: number,
+): Promise<'keep' | 'reset'> {
+  try {
+    const file = await getFileContent(REPO, EVAL_LOG_PATH);
+    if (!file || !file.content.trim()) return 'keep';
+
+    let entries: EvaluationResult[] = [];
+    try {
+      entries = JSON.parse(file.content) as EvaluationResult[];
+      if (!Array.isArray(entries)) return 'keep';
+    } catch {
+      return 'keep';
+    }
+
+    // Filter to this job's history, newest last
+    const jobEntries = entries.filter((e) => e.jobName === jobName);
+    const last3 = jobEntries.slice(-3);
+
+    if (last3.length < 3) return 'keep'; // not enough data
+
+    const baseline = last3.reduce((sum, e) => sum + e.score, 0) / last3.length;
+
+    return newScore >= baseline - 10 ? 'keep' : 'reset';
+  } catch (err) {
+    console.warn('[evaluator] compareWithBaseline failed — defaulting to keep:', (err as Error).message);
+    return 'keep';
+  }
+}
+
+/**
+ * Record a job score to evaluation-log.json.
+ * Separated clearly from evaluateJobOutput for explicit baseline tracking.
+ */
+export async function recordJobBaseline(jobName: string, score: number): Promise<void> {
+  try {
+    const runId = new Date().toISOString();
+    const result: EvaluationResult = {
+      jobName,
+      runId,
+      score,
+      grade: score >= 75 ? 'HIGH' : score >= 50 ? 'MEDIUM' : 'LOW',
+      rationale: 'baseline record',
+      evaluatedAt: runId,
+    };
+    await appendEvalLog(result);
+  } catch (err) {
+    console.warn('[evaluator] recordJobBaseline failed:', (err as Error).message);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rubrics
+// ---------------------------------------------------------------------------
+
 function getRubric(jobName: string): string {
   switch (jobName) {
     case 'researcher':
