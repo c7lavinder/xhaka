@@ -24,6 +24,15 @@
 - [ ] Intelligence jobs healthy? (check data/job-registry.json for failed/stuck jobs)
 - [ ] MEMORY.md under 150 lines?
 - [ ] Local workspace synced to GitHub?
+- [ ] Any proposed changes in intelligence/proposed-changes/ to review?
+
+### 🔬 Proposed Changes Review
+- [ ] Check `intelligence/proposed-changes/` for new files
+- [ ] For each proposal: read Target File + Proposed Change + Why
+- [ ] Decide: APPROVE or REJECT
+  - APPROVE → route to Builder: "Implement proposed change at `[filePath]` — see proposal for exact text"
+  - REJECT → move file to `intelligence/proposed-changes/rejected/` with a one-line note
+- [ ] Log decision in today's `memory/YYYY-MM-DD.md`
 
 ## Response Protocol
 - All clear → `HEARTBEAT_OK`
