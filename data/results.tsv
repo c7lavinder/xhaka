@@ -68,3 +68,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-14T14:20:01.073Z	capture	success	428		
 2026-03-14T14:25:01.310Z	capture	success	366		
 2026-03-14T14:30:00.596Z	watchdog	success	387		
+2026-03-14T14:30:01.658Z	heartbeat-check	success	1414		
