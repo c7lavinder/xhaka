@@ -174,3 +174,25 @@ PASS / FAIL / PASS WITH NOTES
 ### Recommendation
 Ship it / Fix these first / Full rewrite needed
 ```
+
+---
+
+## 🔀 Routing Compliance Check (Required on Every Post-Build Audit)
+
+On every post-build audit, verify the routing discipline was followed:
+
+- [ ] **`runs/routing-log.md` was updated for this run.** Check that at least one entry exists with today's run tasks.
+- [ ] **Xhaka did not execute technical work directly.** Review the run folder — if Xhaka wrote code, edited repo files, or debugged infrastructure, flag it immediately.
+- [ ] **No ROUTING-VIOLATION entries exist** in `routing-log.md` for this run. If one does, escalate to Corey.
+
+**If Xhaka executed technical work directly:**
+```
+## ROUTING VIOLATION DETECTED
+
+**What happened:** [describe what Xhaka did that it shouldn't have]
+**Run folder:** [path]
+**Severity:** High
+**Action required:** Corey must be notified. Work done by Xhaka may need to be re-done by the correct specialist.
+```
+
+This check is non-negotiable. The routing system only works if violations are surfaced.
