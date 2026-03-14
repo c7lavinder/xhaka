@@ -37,7 +37,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'researcher']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -154,9 +154,9 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Researcher: daily at 7:30 AM CST (after propagate + tool-monitor settle) ---
+  // --- Researcher: 3x daily at 7:00 AM, 1:00 PM, 7:00 PM CST ---
   cron.schedule(
-    '30 7 * * *',
+    '0 7,13,19 * * *',
     safeRun('researcher', runResearcher),
     { timezone: TIMEZONE },
   );
@@ -251,7 +251,7 @@ export function startScheduler(): void {
   console.log('  ✓ scribe           — daily at midnight CST');
   console.log('  ✓ operator         — every minute (self-healing)');
   console.log('  ✓ daily-log        — every 6 hours');
-  console.log('  ✓ researcher       — daily at 7:30 AM CST');
+  console.log('  ✓ researcher       — 3x daily at 7:00 AM, 1:00 PM, 7:00 PM CST');
   console.log('  ✓ feedback         — daily at 8:00 AM CST');
   console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
