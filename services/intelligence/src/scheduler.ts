@@ -23,6 +23,8 @@ import { runAgentScorecard } from './jobs/agent-scorecard.js';
 import { runHeartbeatCheck } from './jobs/heartbeat-check.js';
 import { runBehaviorSync } from './jobs/behavior-sync.js';
 import { runChangeEvaluator } from './jobs/change-evaluator.js';
+import { runBenchmark } from './jobs/benchmark.js';
+import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -221,6 +223,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Benchmark: every Wednesday at 6:00 AM CST ---
+  cron.schedule(
+    '0 6 * * 3',
+    safeRun('benchmark', runBenchmark),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -244,6 +253,7 @@ export function startScheduler(): void {
   console.log('  ✓ heartbeat-check  — every 30 minutes');
   console.log('  ✓ behavior-sync    — daily at 5:50 AM CST');
   console.log('  ✓ change-evaluator — daily at 9:00 AM CST (15:00 UTC)');
+  console.log('  ✓ benchmark        — every Wednesday at 6:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
@@ -319,9 +329,15 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'change-evaluator':
       await runChangeEvaluator();
       break;
+    case 'benchmark':
+      await runBenchmark();
+      break;
+    case 'pre-deploy-test':
+      await runPreDeployTestJob();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test`,
       );
   }
 }
