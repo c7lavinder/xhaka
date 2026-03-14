@@ -22,6 +22,9 @@
 - [ ] Did auto-sync push latest changes to github.com/c7lavinder/xhaka?
 - [ ] Session-capture cron healthy? (openclaw cron list — check for error status)
 - [ ] Intelligence jobs healthy? (check data/job-registry.json for failed/stuck jobs)
+- [ ] Researcher job healthy? (check job-registry for researcher status)
+- [ ] Article inbox empty? (check intelligence/article-inbox.md — add URLs to trigger research)
+- [ ] Routing log current? (check runs/routing-log.md — last entry should be recent)
 - [ ] MEMORY.md under 150 lines?
 - [ ] Local workspace synced to GitHub?
 
