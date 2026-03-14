@@ -14,6 +14,7 @@ import { runResearcher } from './jobs/researcher.js';
 import { runFeedback } from './jobs/feedback.js';
 import { runInspect } from './jobs/inspect.js';
 import { runRoutingReview } from './jobs/routing-review.js';
+import { runMorningBrief } from './jobs/morning-brief.js';
 import { getFileContent } from './lib/github.js';
 
 // ---------------------------------------------------------------------------
@@ -24,7 +25,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief']);
 
 function safeRun(
   jobName: string,
@@ -152,6 +153,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Morning Brief: daily at 6:00 AM CST ---
+  cron.schedule(
+    '0 6 * * *',
+    safeRun('morning-brief', runMorningBrief),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -169,6 +177,7 @@ export function startScheduler(): void {
   console.log('  ✓ feedback         — daily at 8:00 AM CST');
   console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
+  console.log('  ✓ morning-brief    — daily at 6:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
@@ -226,9 +235,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'routing-review':
       await runRoutingReview();
       break;
+    case 'morning-brief':
+      await runMorningBrief();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief`,
       );
   }
 }
@@ -356,3 +368,4 @@ export async function catchUpMissedJobs(): Promise<void> {
 
   console.log('[scheduler] Catch-up check complete');
 }
+
