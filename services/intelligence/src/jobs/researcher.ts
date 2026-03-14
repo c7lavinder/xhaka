@@ -4,10 +4,10 @@ import {
   updateFile,
 } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
-import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { markJobStart, markJobSuccess, markJobFailed, markJobStatus } from '../utils/job-registry.js';
 import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 import { checkEnv, warnMissingEnv } from '../utils/env-check.js';
-import { evaluateJobOutput } from '../utils/evaluator.js';
+import { evaluateJobOutput, compareWithBaseline, recordJobBaseline } from '../utils/evaluator.js';
 import { sendTelegram } from '../utils/notifier.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -469,13 +469,25 @@ export async function runResearcher(): Promise<void> {
       processed.push(item);
       console.log(`[researcher] ✓ Processed: ${item.url} (score: ${analysis.relevanceScore})`);
 
-      // Evaluate digest output quality
+      // Evaluate digest output quality + keep-or-reset
       try {
         const evalResult = await evaluateJobOutput('researcher', articleContent);
         console.log(`[researcher] Evaluation: score=${evalResult.score} grade=${evalResult.grade}`);
+
+        // Record baseline score for future comparisons
+        await recordJobBaseline('researcher', evalResult.score);
+
+        // Keep-or-Reset: compare against rolling average of last 3 runs
+        const decision = await compareWithBaseline('researcher', evalResult.score);
+        if (decision === 'reset') {
+          await sendTelegram(
+            `⏪ researcher output regressed (score: ${evalResult.score}). Previous version was better. Flagging for inspection.`,
+          );
+          await markJobStatus('researcher', 'NEEDS_REVIEW');
+        }
       } catch (evalErr) {
         console.warn('[researcher] Evaluation step failed (non-fatal):', (evalErr as Error).message);
-      };
+      }
     }
 
     // 4. Rebuild inbox with only failed items
