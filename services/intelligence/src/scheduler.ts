@@ -10,6 +10,7 @@ import { runWatchdog, runWeeklyHeartbeat } from './jobs/watchdog.js';
 import { runScribe } from './jobs/scribe.js';
 import { runOperator } from './jobs/operator.js';
 import { runDailyLog } from './jobs/daily-log.js';
+import { runResearcher } from './jobs/researcher.js';
 import { getFileContent } from './lib/github.js';
 
 // ---------------------------------------------------------------------------
@@ -120,6 +121,13 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Researcher: daily at 7:30 AM CST (after propagate + tool-monitor settle) ---
+  cron.schedule(
+    '30 7 * * *',
+    safeRun('researcher', runResearcher),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -133,11 +141,12 @@ export function startScheduler(): void {
   console.log('  ✓ scribe           — daily at midnight CST');
   console.log('  ✓ operator         — every minute (self-healing)');
   console.log('  ✓ daily-log        — every 6 hours');
+  console.log('  ✓ researcher       — daily at 7:30 AM CST');
 }
 
 // ---------------------------------------------------------------------------
 // Manual trigger — allows running a specific job immediately via env var
-// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize|watchdog|scribe|operator|daily-log
+// Useful for testing on Railway: set RUN_JOB=capture|propagate|improve|cleanup|organize|synthesize|watchdog|scribe|operator|daily-log|researcher
 // ---------------------------------------------------------------------------
 
 export async function runJobNow(jobName: string): Promise<void> {
@@ -178,9 +187,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'daily-log':
       await runDailyLog();
       break;
+    case 'researcher':
+      await runResearcher();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher`,
       );
   }
 }
