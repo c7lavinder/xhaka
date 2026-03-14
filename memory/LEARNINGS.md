@@ -98,3 +98,15 @@
 
 ---
 Last updated: 2026-03-14
+
+
+## Auto-Generated Rules (2026-03-14)
+
+- [HIGH][RULE]: Sub-agents must default to using `gemini-pro` unless another model is verified to be available.
+- [RULE]: Always install tools locally within the workspace to avoid permission issues.
+- [HIGH][RULE]: On Railway, treat disk storage as ephemeral; persist state to database or environment variables.
+- [RULE]: For any code task longer than one line, spawn a specialized agent like The Builder to handle it.
+- [RULE]: Use Claude Code CLI (`npx -y @anthropic-ai/claude-code`) for all file operations in the repository to ensure files are written to the correct paths.
+- [HIGH][RULE]: Maintain Xhaka's unique tone and identity in all communications; avoid generic AI phrases.
+- [RULE]: Before enabling any feature, ensure no individual ENGINE_* environment variables are overriding the global DRY_RUN flag.
+- [RULE]: Implement creation-time triggers for data hygiene processes to capture fast-moving stage changes effectively.
