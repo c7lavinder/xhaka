@@ -22,7 +22,7 @@ type JobRegistry = Record<string, JobEntry>;
 const EXPECTED_KEYS = [
   'capture', 'organize', 'propagate', 'tool-monitor',
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
-  'watchdog', 'daily-log',
+  'watchdog', 'daily-log', 'researcher',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -38,6 +38,7 @@ const DEFAULT_REGISTRY: JobRegistry = {
   operator: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 10 },
   watchdog: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 30 },
   'daily-log': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 6, gracePeriodMinutes: 120 },
+  researcher: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 90 },
 };
 
 /**
