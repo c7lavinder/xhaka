@@ -26,9 +26,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-14T18:12:42.258Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-14T18:12:42.418Z",
-      "startedAt": "2026-03-14T18:14:07.146Z"
+      "startedAt": "2026-03-14T18:14:07.146Z",
+      "completedAt": "2026-03-14T18:14:12.327Z",
+      "proofOfWork": "Audit WARN for commit 5cdfdc91. 3 concern(s). Artifact: intelligence/audits/2026-03-14-5cdfdc91.md"
     }
   ]
 }
