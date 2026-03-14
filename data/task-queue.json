@@ -31,6 +31,17 @@
       "startedAt": "2026-03-14T18:14:07.146Z",
       "completedAt": "2026-03-14T18:14:12.327Z",
       "proofOfWork": "Audit WARN for commit 5cdfdc91. 3 concern(s). Artifact: intelligence/audits/2026-03-14-5cdfdc91.md"
+    },
+    {
+      "id": "task_1773512101597_07p9xks",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-14T18:15:01.597Z"
     }
   ]
 }
