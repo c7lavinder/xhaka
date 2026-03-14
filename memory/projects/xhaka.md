@@ -32,11 +32,11 @@ My home base. The Xhaka Railway project is the system that runs me — my memory
 | Cron | Schedule | Purpose | Status |
 |---|---|---|---|
 | session-capture | Every 4h | Captures session state to memory | Added 2026-03-13 — needs verification |
-| workspace-sync | TBD | Syncs local workspace → GitHub | Pending build |
+| workspace-sync | Every 30min | Syncs local workspace → GitHub | Active as of Mar 13 |
 
 ## GitHub = Single Source of Truth
-All workspace files should stay synced to c7lavinder/xhaka main branch.
-workspace-sync cron pending build to automate this.
+All workspace files stay synced to c7lavinder/xhaka main branch.
+workspace-sync cron runs every 30 minutes (16 workspace files covered).
 
 ## Repo Structure
 ```
@@ -63,19 +63,77 @@ workspace-sync cron pending build to automate this.
 └── docs/               ← Specs and documentation
 ```
 
+## Build History
+
+### Feb 10-17, 2026 — Early xhaka Repo (Memory Only)
+- Xhaka repo primarily a memory store for the Gunner V1 build sessions.
+- Daily logs written to `memory/YYYY-MM-DD.md` during sessions.
+- No railway deployment yet — local Mac mini + OpenClaw only.
+
+### Feb 18, 2026 — OpenClaw Update
+- Updated OpenClaw from 2026.2.9 → 2026.2.17
+- Gemini Flash added as model option (alias: gemini-flash)
+- Google API key stored in auth-profiles.json
+- Model routing plan: Gemini Flash for chat, Sonnet for code/technical
+
+### Feb 19-26, 2026 — Memory Store During V2 Architecture
+- Xhaka repo used as memory store during intensive Gunner V2 architecture/build sessions
+- Key architectural decisions, process maps, build specs all written to daily logs
+- org-chart/index.html built locally (v0.4) — Gunner V2 process map
+- No Railway deployment yet
+
+### Feb 26-Mar 1, 2026 — First Agent Definitions
+- AGENTS.md created: lean AI team of 5 (Xhaka, Builder, Architect, Auditor, Researcher)
+- SOUL.md updated: "I am a Partner/COO, not an engineer" added as Core Truth
+- PATH-FORWARD.md created: master strategic roadmap for 3 active projects
+- First sub-agent runs via OpenClaw (Gemini-based, Anthropic models broken for spawn)
+
+### Mar 8, 2026 — OpenClaw Update + Role Clarity Milestone
+- OpenClaw updated to v2026.3.7 via `npx pnpm@latest`
+- `gemini-3.1-flash-lite-preview` added (alias: gemini-lite)
+- SOUL.md updated: role clarity "I am a Partner/COO, not an engineer"
+- MEMORY.md: "NO BUILDING" prime directive added
+- GitHub repos cleaned up: 6 dead repos archived, 2 active
+
+### Mar 12, 2026 — Control Room + Intelligence Hardening
+- Old vanilla HTML control room (xhaka-production.up.railway.app/control-room) abandoned
+- New Next.js 15 Control Room: c7lavinder/openclaw-control-room
+  - Live URL: xhaka-control-room-production.up.railway.app
+  - Stack: Next.js 15 + TypeScript + Tailwind v4 + Framer Motion
+  - Data source: GitHub API reading from c7lavinder/xhaka repo
+  - Pages: Home, Memory, Agents, Projects, System
+- xhaka-links repo created: c7lavinder/xhaka-links → links-and-docs-production.up.railway.app
+- 10 intelligence hardening fixes shipped + Auditor PASS
+
+### Mar 13, 2026 — Foundation Hardening Day
+- All 12 core files updated and audited (Auditor verdict: READY)
+- workspace-sync cron active (every 30min, 16 files)
+- session-memory-capture cron: first pass deployed, status uncertain
+- Intelligence pipeline: 4 bugs fixed (capture, github.ts 422, stuck job reset, boot recovery)
+- TELEGRAM_BOT_TOKEN set on correct service (xhaka-intelligence, Xhaka project)
+- Railway service map corrected (two separate projects confirmed)
+- 10 new tool profiles created across 12 categories
+- Agent definitions built: agents/README.md, agents/guide.md, all agents updated
+
 ## Key Milestones
 - 2026-03-11: Railway project created, intelligence service deployed
 - 2026-03-11: Inbox/processed folders created, capture job now functional
 - 2026-03-11: Command Center (showcase) live at xhaka-production.up.railway.app
 - 2026-03-11: Memory system structured with subfolders
+- 2026-03-12: Next.js control room built and deployed
 - 2026-03-13: xhaka-control-room and Links and Docs services confirmed
 - 2026-03-13: Session-capture cron added (OpenClaw native, every 4h)
-- 2026-03-13: Foundation hardening phase begins
+- 2026-03-13: Foundation hardening phase begins, workspace-sync active
 
 ## Next Steps
 - Verify session-capture cron is running cleanly (openclaw cron list)
-- Build workspace-sync cron
-- First synthesis run: 2026-03-16
+- Run first memory synthesis (was planned for 2026-03-16)
+- Confirm propagate/improve/cleanup jobs are healthy (were failing as of Mar 13)
+
+## Known Issues (as of Mar 13)
+- `organize` job: failed Mar 13 (11s) — new failure, needs diagnosis
+- `propagate`, `improve`, `cleanup`: 0ms failures since Mar 12 — pre-existing, need Builder
+- `tool-monitor`: code fix deployed, may need Railway redeploy
 
 ---
-Last updated: 2026-03-13
+Last updated: 2026-03-14
