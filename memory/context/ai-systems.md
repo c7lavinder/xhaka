@@ -1,6 +1,6 @@
 # AI Systems — Permanent Knowledge
 
-> Distilled principles from Claude Skills 2.0. These are not suggestions — they are the operating model for how intelligence is built in this system.
+> Distilled principles from multiple sources. These are not suggestions — they are the operating model for how intelligence is built in this system.
 
 ---
 
@@ -56,6 +56,8 @@ See: `memory/context/researcher-improvements.md` for the live log from the Resea
 **The stack model:**
 ```
 session-capture → inbox → daily-log → organize → scribe → MEMORY.md
+                                                    ↓
+                                             researcher → proposed-changes
 ```
 
 Each module:
@@ -71,6 +73,42 @@ Each module:
 
 ---
 
+### 6. Context Loads Once — Every Prompt Gets Sharper
+
+From SEO-era content intelligence principles: load context once at the start of a session (MEMORY.md, agent files, context files), then apply it across every prompt in that session. Don't re-explain who Corey is, what Gunner does, or what NAH is on every request. That context is pre-loaded.
+
+**Applied here:**
+- MEMORY.md is the single pre-load. Always read it first.
+- Agent files carry persistent identity (builder.md, researcher.md, etc.) — no need to re-establish per task
+- AI does the research. Human (Corey) makes the decisions. AI never makes commitments on behalf of NAH.
+
+---
+
+### 7. The Self-Improving Skills Loop: Observe → Inspect → Amend → Evaluate
+
+From cognee's self-improving agent architecture:
+
+```
+OBSERVE  → agent runs, produces output
+INSPECT  → system patterns recent outputs, detects quality decay or improvement opportunity
+AMEND    → system drafts a proposed change to the skill definition
+EVALUATE → run amended skill against benchmark; accept if better, roll back if not
+```
+
+**Key principles:**
+- Amendments must **prove improvement** or be discarded — no "it might help" changes
+- **Failures are evidence, not noise.** A failed run is the most valuable data point for the next cycle.
+- Rollback is not failure — it's the system working correctly
+- The loop closes automatically if `evaluate` catches a regression
+
+**Current state in this system:**
+- OBSERVE: ✅ `researcher` job + `capture` job
+- INSPECT: 🔲 Not built — patterns across outputs not yet automated
+- AMEND: 🟡 Partial — `improve` job drafts changes, but manually triggered
+- EVALUATE: 🔲 Not built — benchmark comparison not yet automated
+
+---
+
 ## Applied to This System
 
 | Principle | Where It Lives |
@@ -80,6 +118,9 @@ Each module:
 | Self-improvement | `agents/researcher.md` → Self-Improvement Loop |
 | Composable stack | `WORKFLOW.md` → Skill Stack Architecture |
 | Improvement log | `memory/context/researcher-improvements.md` |
+| Context pre-load | `MEMORY.md` → read first in every session |
+| Observe loop | `intelligence/` jobs → capture, researcher |
+| Amend pipeline | `intelligence/proposed-changes/` → proposed skill changes |
 
 ---
 
@@ -91,4 +132,4 @@ Each module:
 
 ---
 
-*Last updated: 2026-03-14 | Source: Claude Skills 2.0 series*
+*Last updated: 2026-03-14 | Sources: Claude Skills 2.0, SEO content intelligence, cognee self-improving skills architecture*
