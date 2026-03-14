@@ -6,7 +6,7 @@ import { getFileContent, updateFile, createFile } from '../lib/github.js';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const REGISTRY_PATH = 'data/job-registry.json';
 
-type JobStatus = 'success' | 'failed' | 'running';
+type JobStatus = 'success' | 'failed' | 'running' | 'LOW_QUALITY' | 'NEEDS_REVIEW';
 
 interface JobEntry {
   lastRun: string | null;
@@ -23,6 +23,7 @@ const EXPECTED_KEYS = [
   'capture', 'organize', 'propagate', 'tool-monitor',
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
+  'feedback', 'inspect', 'routing-review',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -39,6 +40,9 @@ const DEFAULT_REGISTRY: JobRegistry = {
   watchdog: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 1, gracePeriodMinutes: 30 },
   'daily-log': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 6, gracePeriodMinutes: 120 },
   researcher: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 90 },
+  feedback: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
+  inspect: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
 };
 
 /**
@@ -62,6 +66,14 @@ export async function markJobSuccess(jobName: string, startTime: number): Promis
  */
 export async function markJobFailed(jobName: string, startTime: number): Promise<void> {
   await writeJobStatus(jobName, 'failed', startTime);
+}
+
+/**
+ * Set a custom status on a job (e.g., LOW_QUALITY, NEEDS_REVIEW).
+ * Does not update lastRun — preserves existing run timestamp.
+ */
+export async function markJobStatus(jobName: string, status: JobStatus): Promise<void> {
+  await writeJobStatus(jobName, status);
 }
 
 // ---------------------------------------------------------------------------

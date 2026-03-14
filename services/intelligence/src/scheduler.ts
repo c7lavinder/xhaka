@@ -11,6 +11,9 @@ import { runScribe } from './jobs/scribe.js';
 import { runOperator } from './jobs/operator.js';
 import { runDailyLog } from './jobs/daily-log.js';
 import { runResearcher } from './jobs/researcher.js';
+import { runFeedback } from './jobs/feedback.js';
+import { runInspect } from './jobs/inspect.js';
+import { runRoutingReview } from './jobs/routing-review.js';
 import { getFileContent } from './lib/github.js';
 
 // ---------------------------------------------------------------------------
@@ -21,7 +24,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'daily-log', 'feedback', 'inspect', 'routing-review']);
 
 function safeRun(
   jobName: string,
@@ -128,6 +131,27 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+  // --- Feedback: daily at 8:00 AM CST ---
+  cron.schedule(
+    '0 8 * * *',
+    safeRun('feedback', runFeedback),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Inspect: every Monday at 7:00 AM CST (before improve) ---
+  cron.schedule(
+    '0 7 * * 1',
+    safeRun('inspect', runInspect),
+    { timezone: TIMEZONE },
+  );
+
+  // --- Routing Review: every Sunday at 7:00 AM CST ---
+  cron.schedule(
+    '0 7 * * 0',
+    safeRun('routing-review', runRoutingReview),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -142,6 +166,9 @@ export function startScheduler(): void {
   console.log('  ✓ operator         — every minute (self-healing)');
   console.log('  ✓ daily-log        — every 6 hours');
   console.log('  ✓ researcher       — daily at 7:30 AM CST');
+  console.log('  ✓ feedback         — daily at 8:00 AM CST');
+  console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
+  console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
 }
 
 // ---------------------------------------------------------------------------
@@ -190,9 +217,18 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'researcher':
       await runResearcher();
       break;
+    case 'feedback':
+      await runFeedback();
+      break;
+    case 'inspect':
+      await runInspect();
+      break;
+    case 'routing-review':
+      await runRoutingReview();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review`,
       );
   }
 }
