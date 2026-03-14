@@ -173,6 +173,21 @@ session-capture → inbox → daily-log → organize → scribe → MEMORY.md
 | `researcher` | Article URL + context note | Insight entry + (if behavioral) proposed change | Connected to Gunner/NAH, has recommended action |
 | `MEMORY.md` | Synthesized entries from subfolders | Single source of truth for active context | < 150 lines, linked to archives |
 
+### The Harness Requirement (Every Job, No Exceptions)
+
+Every job in this stack must have four properties defined before it is built:
+
+1. **One metric it optimizes** — a single, measurable outcome that proves the job did its job. Not "it ran successfully." Something like: "produces ≥1 insight per run" or "mean call grade returned is not null."
+2. **A max runtime** — if the job takes longer than this, something is wrong. Flag it and alert.
+3. **A minimum quality threshold** — the lowest acceptable output. Anything below this means the job failed, even if it exited 0.
+4. **A rollback path if the metric drops** — how to get back to the last known good state in < 5 minutes. A revert commit + redeploy is the standard path.
+
+This is the **keep-or-reset mechanism**: a job that doesn't hit its metric gets reverted, not left in place. Small reversible experiments > large irreversible gambles.
+
+**If a job doesn't have all four of these defined: it doesn't get built.**
+
+---
+
 ### Adding a New Skill
 Every new workflow added to this pipeline must follow this sequence:
 

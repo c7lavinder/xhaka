@@ -44,6 +44,7 @@ Run after every Builder task before pushing to main. Also run when:
 
 ### Build & Deploy
 - [ ] **Proof-of-work artifact defined for every new job?** Artifact exists and is non-empty after first run? (See `WORKFLOW.md` → Proof-of-Work Standard)
+- [ ] **Does this build define a clear success metric? Is failure mode cheap and reversible?** Every build must have: one measurable success metric, a max runtime, a minimum quality threshold, and a rollback path. If `03_builder_output.md` is missing the Harness Declaration → **FAIL**.
 - [ ] **Build passes.** `pnpm run build` completes without errors.
 - [ ] **No `vite build --force`.** This flag is unsupported in Vite 7 — causes deploy failure.
 - [ ] **nixpacks.toml has `cacheDirectories = []`.** Must stay empty to prevent stale cache.

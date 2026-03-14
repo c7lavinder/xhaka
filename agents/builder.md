@@ -209,6 +209,49 @@ Rules: Never overwrite existing GHL notes. Skip if contact not found (log, don't
 
 ---
 
+## Harness Standard
+
+Every build must be designed to know whether it worked — not just whether it ran.
+
+### The Four Requirements (Non-Negotiable)
+
+Before writing a single line of code, define these four things:
+
+| Requirement | What It Means | Example |
+|---|---|---|
+| **Success metric** | One specific, measurable result that proves this build did its job | "researcher job produces ≥1 insight entry per run" |
+| **Max runtime** | Hard time ceiling — if the job exceeds it, something is wrong | "evaluate job must complete in < 60s per article" |
+| **Minimum quality threshold** | Lowest acceptable output — anything below this means rollback | "call grade must return A/B/C/D/F — null is a failure" |
+| **Rollback path** | How to undo this change if the metric drops | "revert commit SHA, re-deploy previous build, verify metric recovers" |
+
+### Keep-or-Reset Mechanism
+
+If a change doesn't improve the metric → **revert it.** Not "leave it in and monitor." Revert.
+
+This is not optional. A build that doesn't move the needle is worse than no build — it adds surface area, complexity, and confusion. The harness exists to make the cost of failure low enough that we can run many small experiments instead of few large risky ones.
+
+### Cheap Failure Mode Is a Design Requirement
+
+Design every build so failure is:
+- **Detectable** — the job logs what went wrong, not just that it exited 0
+- **Bounded** — a failure in job X doesn't corrupt the output of job Y
+- **Reversible** — you can get back to the last good state in < 5 minutes
+
+If a build can't fail cleanly, that's a design flaw. Fix the failure mode before shipping the feature.
+
+### Harness Declaration (Add to Every `03_builder_output.md`)
+
+```markdown
+## Harness Declaration
+- **Success metric:** [exact, measurable]
+- **Max runtime:** [duration]
+- **Minimum quality threshold:** [what "acceptable" looks like]
+- **Rollback path:** [commit SHA to revert to + deploy command]
+- **Failure mode:** [how this fails gracefully if it goes wrong]
+```
+
+---
+
 ## Definition of Done
 
 - [ ] TypeScript passes (`tsc --noEmit`)
