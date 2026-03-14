@@ -152,3 +152,25 @@ Loop: edit one file → run experiment for fixed time → measure result → kee
 - We need: one clear metric per job, time-bounded runs, cheap rollback when a change makes things worse
 - The "keep or reset" mechanism maps directly to: proposed change → evaluate → approve/reject
 - program.md equivalent = SOUL.md + ROUTING.md + agent definitions — this IS the architecture
+---
+# 5 Files That Make AI Work Without You (OpenClaw Setup Guide)
+Source: pasted (founderfunnel.com / Sharbel)
+Submitted: 2026-03-14
+Tags: #openclaw #ai-systems #agent-setup #memory #autonomy
+
+## Content
+The 5 files that separate an AI that waits vs one that works:
+
+1. **SOUL.md** — agent identity, personality, hard rules. Without it: generic corporate mode. With it: actual character with opinions, brevity, and judgment.
+2. **USER.md** — everything the agent needs to know about you so it never asks. Name, timezone, goals, communication style, key contacts.
+3. **MEMORY.md** — durable long-term knowledge. Hard rules, past decisions, lessons learned, API keys. Loaded every session.
+4. **TOOLS.md** — practical access guide. Key apps, IDs, URLs, shortcuts, where everything lives.
+5. **HEARTBEAT.md** — scheduled autonomous pulse. Agent wakes up, works through checklist, alerts if needed, stays silent if not. You don't ask — it just checks.
+
+**Key insight:** These files don't make the AI smarter. They give it context to be useful without constant hand-holding. The files are the architecture. The AI is just the engine.
+
+**What working autonomy looks like:** Wake up to a Telegram message — market summary, tweet drafts scored by bookmark potential, bot status, flagged emails, calendar prep. Didn't ask for any of it.
+
+**How to build it:** Start with SOUL.md (highest ROI). Add USER.md basics. Grow MEMORY.md from mistakes. Build TOOLS.md incrementally. Start HEARTBEAT.md with 2-3 checks.
+
+**Corey assessment:** We have all 5 files. The gap is depth and automation. HEARTBEAT.md is too passive — it's a checklist, not a proactive worker. The autonomous push behavior (Telegram messages without being asked) is what we're building now with the notification layer.
