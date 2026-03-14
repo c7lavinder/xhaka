@@ -62,6 +62,16 @@ export async function runOrganize(): Promise<void> {
       return;
     }
 
+    // Skip if log has no meaningful content (placeholder only)
+    const MEANINGFUL_THRESHOLD = 200;
+    const hasNoActivity = logFile.content.includes('No inbox activity') ||
+                          logFile.content.includes('No activity');
+    if (logFile.content.trim().length < MEANINGFUL_THRESHOLD || hasNoActivity) {
+      console.log(`[organize] Daily log has no meaningful content — skipping OpenAI extraction.`);
+      await markJobSuccess('organize', _startTime);
+      return;
+    }
+
     console.log(`[organize] Found daily log at ${logPath} (${logFile.content.length} chars).`);
 
     // 2. Extract structured info via OpenAI
