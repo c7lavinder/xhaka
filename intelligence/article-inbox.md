@@ -80,3 +80,23 @@ Tags: #ai-systems #automation #workflow-design #skill-building
 ## Content
 Same core framework. Additional emphasis on: self-improving workflows reduce maintenance burden at scale. Teams building tested workflows move faster than competitors. Early adoption of composable skill systems creates compounding advantage.
 Key quote: "Instead of guessing whether the instructions work, the system verifies them through evaluation."
+---
+# Self-Improving Skills — cognee-skills Framework
+Source: pasted (cognee)
+Submitted: 2026-03-14
+Tags: #ai-systems #skill-improvement #self-repair #workflow-design
+
+## Content
+Skills degrade silently. A skill that worked last month fails when the model, codebase, or task patterns shift — and nobody knows until output is already bad.
+
+The self-improvement loop: **ingest → observe → inspect → amend → evaluate**
+
+1. Ingest — store skills with semantic meaning, task patterns, relationships (not just flat files)
+2. Observe — after every run, log: what task was attempted, which skill ran, success/fail, error, user feedback
+3. Inspect — once failures accumulate, trace recurring factors behind bad outcomes
+4. Amend (.amendify()) — propose targeted instruction change grounded in failure evidence. Human review or auto-apply.
+5. Evaluate — did the amendment improve outcomes? If not, roll back. Every change is tracked with rationale and results.
+
+Key principle: the loop must be observe → inspect → amend → **evaluate**. Self-improvement without evaluation is uncontrolled modification. Every amendment must prove it worked or get reverted.
+
+Our current state: have ingest ✅, basic observe ✅ (job-registry), amend in progress ✅ (proposed-changes). Missing: inspect (linking failures to specific instructions) + evaluate (did the amendment improve outcomes?).
