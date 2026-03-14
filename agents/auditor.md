@@ -43,6 +43,7 @@ Run after every Builder task before pushing to main. Also run when:
 - [ ] **No "Push All" without count + warning.** Bulk actions must confirm with affected count.
 
 ### Build & Deploy
+- [ ] **Proof-of-work artifact defined for every new job?** Artifact exists and is non-empty after first run? (See `WORKFLOW.md` → Proof-of-Work Standard)
 - [ ] **Build passes.** `pnpm run build` completes without errors.
 - [ ] **No `vite build --force`.** This flag is unsupported in Vite 7 — causes deploy failure.
 - [ ] **nixpacks.toml has `cacheDirectories = []`.** Must stay empty to prevent stale cache.

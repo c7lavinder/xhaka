@@ -195,6 +195,43 @@ Small, reliable modules > one complex monolith.
 
 ---
 
+
+---
+
+## Proof-of-Work Standard
+
+Every job must declare its proof-of-work artifact **before** the Builder is allowed to build it. No artifact declaration = no build approval.
+
+### Required Declaration
+
+Each job must specify:
+- **Artifact name:** Human-readable name (e.g., "Article Digest")
+- **Artifact path:** Exact path in repo (e.g., `intelligence/article-digest.md`)
+- **Non-empty definition:** What "non-empty" means for that artifact (e.g., "at least one insight entry after first run")
+
+### Builder Checklist Item
+
+Before closing any job task:
+- [ ] Artifact path declared in the spec before build started
+- [ ] Artifact exists in repo after first run
+- [ ] Artifact is non-empty per its declared definition
+- [ ] **If artifact is missing or empty after first run: task is NOT done — do not mark complete**
+
+### Examples
+
+| Job | Artifact | Non-Empty Means |
+|-----|----------|-----------------|
+| `researcher` | `intelligence/article-digest.md` | At least one insight entry |
+| `tool-monitor` | `memory/context/tools/{category}/` | At least one file with content |
+| `organize` | `memory/people/`, `memory/decisions/`, `memory/projects/` | At least one updated file |
+| `scribe` | `memory/YYYY-MM-DD.md` | At least one commit or decision entry |
+| `daily-log` | `memory/YYYY-MM-DD.md` | At least one timestamped entry |
+| `inspect` | `intelligence/inspect-reports/YYYY-MM-DD-{job}.md` | Root cause type + recommended fix present |
+| `routing-review` | `intelligence/routing-reviews/YYYY-MM-DD.md` | At least one pattern observation |
+| `feedback` | `data/feedback-log.json` | At least one entry processed |
+
+**A job that runs and produces nothing is a failed job, regardless of exit status.**
+
 ## Auditor Checklist
 
 Every `04_auditor_report.md` must include this section:
