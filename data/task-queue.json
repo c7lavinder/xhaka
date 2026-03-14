@@ -145,6 +145,17 @@
       "startedAt": "2026-03-14T19:30:01.453Z",
       "completedAt": "2026-03-14T19:30:08.043Z",
       "proofOfWork": "Audit WARN for commit 84b5c7c5. 5 concern(s). Artifact: intelligence/audits/2026-03-14-84b5c7c5.md"
+    },
+    {
+      "id": "task_1773516902087_wnmv4yr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-14T19:35:02.087Z"
     }
   ]
 }
