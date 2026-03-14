@@ -23,7 +23,7 @@ const EXPECTED_KEYS = [
   'capture', 'organize', 'propagate', 'tool-monitor',
   'synthesize', 'improve', 'cleanup', 'scribe', 'operator',
   'watchdog', 'daily-log', 'researcher',
-  'feedback', 'inspect', 'routing-review',
+  'feedback', 'inspect', 'routing-review', 'morning-brief',
 ];
 
 // FIX 9: Default registry for corruption recovery
@@ -43,6 +43,7 @@ const DEFAULT_REGISTRY: JobRegistry = {
   feedback: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
   inspect: { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
   'routing-review': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 168, gracePeriodMinutes: 120 },
+  'morning-brief': { lastRun: null, lastStatus: null, durationMs: null, expectedIntervalHours: 24, gracePeriodMinutes: 60 },
 };
 
 // ---------------------------------------------------------------------------
@@ -212,3 +213,4 @@ async function writeJobStatus(
     console.error('[job-registry] Failed to write status:', (err as Error).message);
   }
 }
+
