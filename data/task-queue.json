@@ -2782,9 +2782,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-15T14:23:09.057Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-15T14:23:09.350Z",
-      "startedAt": "2026-03-15T14:24:01.984Z"
+      "startedAt": "2026-03-15T14:24:01.984Z",
+      "completedAt": "2026-03-15T14:25:10.599Z",
+      "proofOfWork": "Audit WARN for commit 83098695. 3 concern(s). Artifact: intelligence/audits/2026-03-15-83098695.md"
     },
     {
       "id": "task_1773584701931_gy7dzbq",
