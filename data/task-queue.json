@@ -3043,6 +3043,17 @@
       "startedAt": "2026-03-15T15:53:01.994Z",
       "completedAt": "2026-03-15T15:53:07.309Z",
       "proofOfWork": "Audit WARN for commit efa0c0ac. 3 concern(s). Artifact: intelligence/audits/2026-03-15-efa0c0ac.md"
+    },
+    {
+      "id": "task_1773590101799_ftfx2xl",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-15T15:55:01.799Z"
     }
   ]
 }
