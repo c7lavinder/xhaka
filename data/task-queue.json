@@ -900,9 +900,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-15T01:12:10.610Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-15T01:12:10.855Z",
-      "startedAt": "2026-03-15T01:13:01.182Z"
+      "startedAt": "2026-03-15T01:13:01.182Z",
+      "completedAt": "2026-03-15T01:13:06.425Z",
+      "proofOfWork": "Audit WARN for commit e4731d47. 4 concern(s). Artifact: intelligence/audits/2026-03-15-e4731d47.md"
     }
   ]
 }
