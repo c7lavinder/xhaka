@@ -211,13 +211,16 @@ ${result.recommendedFix}
 }
 
 export async function runFeedback(): Promise<void> {
-  const startTime = await markJobStart('feedback');
+  // Initialize startTime before try block so markJobFailed can always reference it
+  // even if markJobStart itself throws (e.g. GitHub API down)
+  let startTime = Date.now();
   try {
+    startTime = await markJobStart('feedback');
     console.log('[feedback] Starting feedback capture job...');
 
     const inboxFile = await getFileContent(REPO, FEEDBACK_INBOX_PATH);
-    if (!inboxFile) {
-      console.log('[feedback] No feedback inbox found — skipping.');
+    if (!inboxFile || !inboxFile.content?.trim()) {
+      console.log('[feedback] No feedback inbox found or inbox is empty — skipping.');
       await markJobSuccess('feedback', startTime);
       return;
     }
@@ -286,7 +289,7 @@ comment: [what was wrong or right]
     await markJobSuccess('feedback', startTime);
   } catch (err) {
     console.error('[feedback] Fatal error:', err);
-    await markJobFailed('feedback', startTime);
+    try { await markJobFailed('feedback', startTime); } catch { /* best effort */ }
     throw err;
   }
 }

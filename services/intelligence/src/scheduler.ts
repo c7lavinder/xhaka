@@ -64,9 +64,9 @@ function safeRun(
   return () => {
     console.log(`[scheduler] Triggering job: ${jobName}`);
     const startTime = Date.now();
-    runWithTimeout(fn, jobName).catch((err) => {
+    runWithTimeout(fn, jobName).catch(async (err) => {
       console.error(`[scheduler] Job ${jobName} failed:`, err);
-      try { markJobFailed(jobName, startTime).catch(() => {}); } catch {}
+      try { await markJobFailed(jobName, startTime); } catch { /* best effort */ }
     });
   };
 }
@@ -492,4 +492,3 @@ export async function catchUpMissedJobs(): Promise<void> {
 
   console.log('[scheduler] Catch-up check complete');
 }
-
