@@ -2971,6 +2971,17 @@
       "startedAt": "2026-03-15T15:27:01.673Z",
       "completedAt": "2026-03-15T15:27:09.313Z",
       "proofOfWork": "Audit WARN for commit d86e3d33. 4 concern(s). Artifact: intelligence/audits/2026-03-15-d86e3d33.md"
+    },
+    {
+      "id": "task_1773588901907_joqg9jr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-15T15:35:01.907Z"
     }
   ]
 }
