@@ -2505,6 +2505,17 @@
       "startedAt": "2026-03-15T12:27:01.408Z",
       "completedAt": "2026-03-15T12:27:07.761Z",
       "proofOfWork": "Audit WARN for commit 7d069bbe. 4 concern(s). Artifact: intelligence/audits/2026-03-15-7d069bbe.md"
+    },
+    {
+      "id": "task_1773578102098_qiwqsdr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-15T12:35:02.098Z"
     }
   ]
 }
