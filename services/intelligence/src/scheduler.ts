@@ -28,7 +28,7 @@ import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { runPatternMiner } from './jobs/pattern-miner.js';
 import { runDispatcher } from './jobs/dispatcher.js';
 import { getFileContent } from './lib/github.js';
-import { getJobTimeout } from './utils/job-registry.js';
+import { getJobTimeout, markJobFailed } from './utils/job-registry.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -63,8 +63,10 @@ function safeRun(
 ): () => void {
   return () => {
     console.log(`[scheduler] Triggering job: ${jobName}`);
+    const startTime = Date.now();
     runWithTimeout(fn, jobName).catch((err) => {
       console.error(`[scheduler] Job ${jobName} failed:`, err);
+      try { markJobFailed(jobName, startTime).catch(() => {}); } catch {}
     });
   };
 }
