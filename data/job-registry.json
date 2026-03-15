@@ -77,9 +77,9 @@
     "gracePeriodMinutes": 120
   },
   "researcher": {
-    "lastRun": "2026-03-15T18:51:02.452Z",
-    "lastStatus": "running",
-    "durationMs": 811,
+    "lastRun": "2026-03-15T18:51:03.265Z",
+    "lastStatus": "success",
+    "durationMs": 989,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 90
   },
