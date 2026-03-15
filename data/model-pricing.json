@@ -1,0 +1,22 @@
+{
+  "gpt-4o": {
+    "input": 5.0,
+    "output": 15.0,
+    "tier": "premium"
+  },
+  "gpt-4o-mini": {
+    "input": 0.15,
+    "output": 0.6,
+    "tier": "standard"
+  },
+  "deepseek/deepseek-chat": {
+    "input": 0.07,
+    "output": 0.28,
+    "tier": "utility"
+  },
+  "_tiers": {
+    "utility": "deepseek/deepseek-chat",
+    "standard": "gpt-4o-mini",
+    "premium": "gpt-4o"
+  }
+}
