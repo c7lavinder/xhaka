@@ -148,50 +148,45 @@ async function writeJobStatus(
     const file = await getFileContent(REPO, REGISTRY_PATH);
 
     let registry: JobRegistry;
-    let parseCorrupted = false;
     
     if (file) {
-      // FIX 9: Wrap JSON.parse in try/catch
+      // Wrap JSON.parse in try/catch
       try {
         registry = JSON.parse(file.content) as JobRegistry;
-
-        // FIX 9: Schema validation — verify expected keys exist
-        const hasValidStructure = typeof registry === 'object' &&
-          registry !== null &&
-          Object.keys(registry).length > 0 &&
-          EXPECTED_KEYS.every(k => k in registry);
-        
-        if (!hasValidStructure) {
-          console.error('[job-registry] Registry missing expected structure — schema invalid');
-          parseCorrupted = true;
-          // Alert but don't crash. Use default registry for this operation.
-          try {
-            const { sendAlert } = await import('./alert.js');
-            await sendAlert('⚠️ job-registry.json schema invalid — expected keys missing');
-          } catch { /* ignore */ }
-          registry = { ...DEFAULT_REGISTRY };
-        }
       } catch (parseErr) {
         console.error('[job-registry] ⚠️ CORRUPTED — JSON.parse failed:', (parseErr as Error).message);
-        parseCorrupted = true;
         
         // Alert Corey
         try {
           const { sendAlert } = await import('./alert.js');
-          await sendAlert('🚨 job-registry.json is corrupted — JSON parse failed. Manual fix required.');
+          await sendAlert('🚨 job-registry.json is corrupted — JSON parse failed. Rebuilding from defaults.');
         } catch { /* ignore */ }
         
-        // Return without writing — don't overwrite the corrupt file
-        return;
+        // Rebuild from defaults instead of bailing out
+        registry = { ...DEFAULT_REGISTRY };
+      }
+
+      // Self-healing: auto-populate any missing EXPECTED_KEYS with defaults.
+      // This permanently prevents "schema invalid" failures when new jobs are added.
+      let healed = false;
+      for (const key of EXPECTED_KEYS) {
+        if (!(key in registry)) {
+          console.warn(`[job-registry] Auto-populating missing key: ${key}`);
+          registry[key] = DEFAULT_REGISTRY[key] ?? {
+            lastRun: null,
+            lastStatus: null,
+            durationMs: null,
+            expectedIntervalHours: 24,
+            gracePeriodMinutes: 60,
+          };
+          healed = true;
+        }
+      }
+      if (healed) {
+        console.log('[job-registry] Registry self-healed — missing keys populated');
       }
     } else {
       console.warn('[job-registry] Registry file not found — skipping write');
-      return;
-    }
-
-    // If parse was corrupted, don't write back
-    if (parseCorrupted) {
-      console.warn('[job-registry] Skipping write due to corruption');
       return;
     }
 
