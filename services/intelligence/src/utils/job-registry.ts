@@ -82,6 +82,7 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'dispatcher': 300000,      // 5 min (may chain into researcher runs)
   'auditor': 120000,         // 2 min
   'architect': 120000,       // 2 min
+  'morning-brief': 120000,   // 2 min (reads 5 GitHub files + sends Telegram)
 };
 
 /**
