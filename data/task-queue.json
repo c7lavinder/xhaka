@@ -921,6 +921,17 @@
       "startedAt": "2026-03-15T01:16:01.290Z",
       "completedAt": "2026-03-15T01:16:06.361Z",
       "proofOfWork": "Audit WARN for commit c82e0061. 4 concern(s). Artifact: intelligence/audits/2026-03-15-c82e0061.md"
+    },
+    {
+      "id": "task_1773537602563_wuk0fst",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-15T01:20:02.563Z"
     }
   ]
 }
