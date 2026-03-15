@@ -3365,6 +3365,17 @@
       "startedAt": "2026-03-15T18:01:01.789Z",
       "completedAt": "2026-03-15T18:01:04.893Z",
       "proofOfWork": "Researcher processed article-inbox.md at 2026-03-15T18:01:04.647Z. Triggered by task task_1773597601968_6otr38n."
+    },
+    {
+      "id": "task_1773597901931_xs4nlr4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 122
+      },
+      "status": "pending",
+      "createdAt": "2026-03-15T18:05:01.931Z"
     }
   ]
 }
