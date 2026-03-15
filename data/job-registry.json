@@ -7,9 +7,9 @@
     "gracePeriodMinutes": 60
   },
   "organize": {
-    "lastRun": "2026-03-14T04:00:00.860Z",
-    "lastStatus": "failed",
-    "durationMs": 10945,
+    "lastRun": "2026-03-15T04:00:01.005Z",
+    "lastStatus": "success",
+    "durationMs": 869,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
