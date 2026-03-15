@@ -62,11 +62,11 @@ function safeRun(
   fn: () => Promise<void>,
 ): () => void {
   return () => {
-    console.log(`[scheduler] Triggering job: ${jobName}`);
     const startTime = Date.now();
-    runWithTimeout(fn, jobName).catch(async (err) => {
+    console.log(`[scheduler] Triggering job: ${jobName}`);
+    runWithTimeout(fn, jobName).catch((err) => {
       console.error(`[scheduler] Job ${jobName} failed:`, err);
-      try { await markJobFailed(jobName, startTime); } catch { /* best effort */ }
+      markJobFailed(jobName, startTime).catch(() => { /* best effort */ });
     });
   };
 }
