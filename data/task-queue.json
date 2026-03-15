@@ -3038,9 +3038,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-15T15:52:55.049Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-15T15:52:55.268Z",
-      "startedAt": "2026-03-15T15:53:01.994Z"
+      "startedAt": "2026-03-15T15:53:01.994Z",
+      "completedAt": "2026-03-15T15:53:07.309Z",
+      "proofOfWork": "Audit WARN for commit efa0c0ac. 3 concern(s). Artifact: intelligence/audits/2026-03-15-efa0c0ac.md"
     }
   ]
 }
