@@ -85,6 +85,13 @@ const JOB_METRICS: Record<string, JobMetric> = {
     target: 90,
     minimum: 70,
   },
+  'repo-researcher': {
+    name: 'repos_analyzed',
+    description: 'GitHub repositories analyzed and written to memory/context/technology/',
+    unit: 'count',
+    target: 1,
+    minimum: 0,
+  },
 };
 
 // ---------------------------------------------------------------------------
