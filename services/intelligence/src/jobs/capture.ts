@@ -14,10 +14,13 @@ import { enqueue } from '../utils/task-queue.js';
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
 const ARTICLE_INBOX_PATH = 'intelligence/article-inbox.md';
+const VOICE_INBOX_PATH = 'intelligence/voice-inbox';
+const VOICE_PROCESSED_PATH = 'intelligence/voice-processed';
 
 // ---------------------------------------------------------------------------
 // Capture job — polls inbox/, routes items to processed/
 // Also watches article-inbox.md and enqueues researcher when items are present
+// Also watches voice-inbox/ and enqueues voice-ingest when audio files are present
 // ---------------------------------------------------------------------------
 
 export async function runCapture(): Promise<void> {
@@ -42,6 +45,9 @@ export async function runCapture(): Promise<void> {
 
     // 2. Check article-inbox.md — enqueue researcher immediately if items exist
     await checkArticleInbox();
+
+    // 3. Check voice-inbox/ — enqueue voice-ingest if unprocessed audio files exist
+    await checkVoiceInbox();
 
     console.log('[capture] Done.');
     await markJobSuccess('capture', _startTime);
@@ -161,6 +167,44 @@ async function checkArticleInbox(): Promise<void> {
     });
   } catch (err) {
     console.warn('[capture] Could not check article-inbox.md:', err);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Check voice-inbox/ — enqueue voice-ingest if unprocessed audio files exist
+// ---------------------------------------------------------------------------
+
+const AUDIO_EXTENSIONS = new Set(['.m4a', '.mp3', '.wav', '.ogg']);
+
+async function checkVoiceInbox(): Promise<void> {
+  try {
+    const inboxFiles = await listDirectory(XHAKA_REPO, VOICE_INBOX_PATH);
+    const audioFiles = inboxFiles.filter(
+      (f) => f.type === 'file' && AUDIO_EXTENSIONS.has(f.name.slice(f.name.lastIndexOf('.')).toLowerCase()),
+    );
+
+    if (audioFiles.length === 0) {
+      console.log('[capture] voice-inbox is empty — voice-ingest idle.');
+      return;
+    }
+
+    // Check which files have already been processed
+    const processedFiles = await listDirectory(XHAKA_REPO, VOICE_PROCESSED_PATH);
+    const processedNames = new Set(processedFiles.filter(f => f.type === 'file').map(f => f.name));
+    const unprocessed = audioFiles.filter(f => !processedNames.has(f.name));
+
+    if (unprocessed.length === 0) {
+      console.log('[capture] All voice-inbox files already processed — voice-ingest idle.');
+      return;
+    }
+
+    console.log(`[capture] 🎙️ voice-inbox has ${unprocessed.length} unprocessed audio file(s) — enqueuing Voice Ingest`);
+    await safeEnqueue('voice-ingest', 'process', {
+      trigger: 'voice-inbox-watch',
+      fileCount: unprocessed.length,
+    });
+  } catch (err) {
+    console.warn('[capture] Could not check voice-inbox:', err);
   }
 }
 

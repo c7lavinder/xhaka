@@ -71,6 +71,13 @@ const JOB_METRICS: Record<string, JobMetric> = {
     target: 3,
     minimum: 1,
   },
+  'voice-ingest': {
+    name: 'voice_memos_processed',
+    description: 'Voice memos transcribed and structured into knowledge notes',
+    unit: 'count',
+    target: 1,
+    minimum: 0,
+  },
 };
 
 // ---------------------------------------------------------------------------
