@@ -35,3 +35,4 @@
 - https://github.com/donnemartin/system-design-primer  # system-design-primer — large-scale system design patterns — architecture reference for Xhaka scaling
 - https://github.com/kamranahmedse/developer-roadmap  # developer-roadmap — visual learning paths for engineering skills — Gunner/NAH team development reference
 - https://github.com/asimovinc/asimov-v0  # Asimov open source humanoid robot — full legs build in 100 days, $25k BOM, modular design, MJF 3D printing. Hardware/robotics, low relevance to current stack.
+- https://github.com/EveryInc/compound-engineering-plugin  # Compound Engineering Plugin — Claude Code plugin marketplace, cross-platform converter (Claude Code → OpenClaw/Codex/Copilot/Windsurf/etc). Install: /plugin marketplace add EveryInc/compound-engineering-plugin. Wednesday setup candidate.
