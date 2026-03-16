@@ -383,6 +383,17 @@
       "startedAt": "2026-03-16T05:17:01.610Z",
       "completedAt": "2026-03-16T05:17:03.810Z",
       "proofOfWork": "Audit PASS for commit d5a2d31a. 0 concern(s). Artifact: intelligence/audits/2026-03-16-d5a2d31a.md"
+    },
+    {
+      "id": "task_1773638401812_6pkke70",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T05:20:01.812Z"
     }
   ]
 }
