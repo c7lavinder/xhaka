@@ -144,3 +144,6 @@ Run `npx paperclipai onboard --yes` on the Mac mini (localhost:3100).
 Create "Xhaka Intelligence Co" company.
 Hire agents in order: Xhaka COO → Builder → Researcher → Auditor → Architect → Librarian → Operator.
 Set budgets as planned (~$100/mo total).
+
+## ClipMart (coming soon)
+Marketplace for pre-built companies — download a full org chart + agent config as a template. Marketing agency, SaaS builder, content studio. One-click import. Not launched yet but on roadmap. When it does: download a wholesale RE or SaaS template and customize for NAH/Gunner.
