@@ -507,3 +507,6 @@ If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 month
 - https://www.jontsai.com/2026/02/12/building-mission-control-for-my-ai-workforce-introducing-openclaw-command-center | Jon Tsai OpenClaw Command Center — scheduling primitives, session cost tracking, Cerebro topic tracking, vanilla JS dashboard philosophy
 - Claude Subagents vs Agent Teams — context-centric decomposition, 5 orchestration patterns, when NOT to use multi-agent | source: direct paste 2026-03-16
 - AI Five-Layer Stack — Energy/Chips/Cloud/Models/Apps, infrastructure gravity thesis, $700B capex, picks-and-shovels phase | source: direct paste 2026-03-16
+- Rise of the AI Chief of Staff — solo consultant built morning briefs + automations with $100 Claude Max, no coding, 36 hours | source: direct paste 2026-03-16
+- AI Was Supposed to Free My Time It Consumed It — task expansion, context switching, always-on fatigue with multi-agent systems | source: direct paste 2026-03-16
+- Zero Human Company — Felix agent with Stripe account, crypto wallet, product portfolio (Nat Eliason / OpenClaw) | source: direct paste 2026-03-16
