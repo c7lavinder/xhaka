@@ -233,3 +233,26 @@ _No significant changes._
 - sync AGENTS.md
 - Add Paperclip org chart config for Xhaka Intelligence Co
 - Add Paperclip deep-dive knowledge file
+## 2026-03-16 (100 commits)
+### ✅ Built
+- add AI and SMB 2026 article
+- heartbeat cognitive load checks — queue overload, MEMORY.md limit, results failures
+- morning brief + heartbeat upgrades — today's focus, system load, cognitive overload alerts
+- add 4 high-value AI learning repos to inbox — RAG, agents, prompting, LLM apps
+- add Attention-Residuals repo to inbox — Moonshot AI research
+- add AI Chief of Staff + cognitive load articles
+- lightweight static control room — vanilla JS, no build step
+### 🐛 Fixed
+- remove stray closing brace in dispatcher.ts switch — TS1128 build error
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- update task_1773651002313_2chh9na -> running
+- update task_1773650662144_vzn1zwo -> running
+- update task_1773650401086_g2qx9un -> running
+- update task_1773649501243_fq0bkpc -> running
