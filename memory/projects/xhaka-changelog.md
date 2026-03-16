@@ -92,3 +92,26 @@ _No significant changes._
 - task-queue: update task_1773636602764_8icxah9 -> running
 - task-queue: completed researcher/process-article-inbox [task_1773636301377_1m80y0n]
 - task-queue: update task_1773636301377_1m80y0n -> running
+## 2026-03-16 (100 commits)
+### ✅ Built
+- feat: book library — Psycho-Cybernetics, Emotional Alchemy, Art of War
+- feat: book library — 7 Habits, Think and Grow Rich, Atomic Habits
+- feat: book library — 5 classics (Homer, Lawrence, Njál, Plato, McCarthy)
+- feat: book library — 7 books processed (Carnegie, Manson, Dostoevsky, Aurelius, McCarthy, Tolstoy, Williams)
+### 🐛 Fixed
+- fix: auditor pulls real diff before evaluating — no more hallucinated concerns
+- fix: add getCommitDiff to github lib for auditor diff fetching
+- fix: scribe skips evaluation when nothing to process — no false LOW_QUALITY alerts
+### 🔄 Changed
+- tool-monitor: update railway latest-update
+- tool-monitor: update posthog latest-update
+- tool-monitor: update anthropic latest-update
+- tool-monitor: update openai latest-update
+- tool-monitor: update gohighlevel latest-update
+- tool-monitor: update packages latest-update
+- tool-monitor: update last-scan state
+- task-queue: update task_1773637801334_eclo7cx -> running
+- task-queue: update task_1773637801334_eclo7cx -> running
+- task-queue: update task_1773637548861_q0e1mpl -> running
+- task-queue: update task_1773637500945_iakcip1 -> running
+- task-queue: update task_1773637201306_zn8irlv -> running
