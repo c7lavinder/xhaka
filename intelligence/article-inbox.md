@@ -504,3 +504,4 @@ If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 month
 - When Corey is evaluating a new product idea, run it through the 5-factor scoring formula before any other analysis
 - When Gunner features are being prioritized, ask: does this increase daily usage frequency and switching cost?
 - When assessing Gunner's competitive position, reference: vertical beats horizontal, SMB gap is the moat
+- https://www.jontsai.com/2026/02/12/building-mission-control-for-my-ai-workforce-introducing-openclaw-command-center | Jon Tsai OpenClaw Command Center — scheduling primitives, session cost tracking, Cerebro topic tracking, vanilla JS dashboard philosophy
