@@ -1,2 +1,3 @@
 # Article Digest
 <!-- Auto-maintained by researcher job. Newest entries at bottom. -->
+- [2026-03-16] [7/10] [Polymarket Overview](https://polymarket.com/@0p0jogggg) — Polymarket is a global prediction market platform offering various categories such as crypto, politics, and finance. It ...
