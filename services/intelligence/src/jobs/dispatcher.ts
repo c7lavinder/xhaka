@@ -138,7 +138,6 @@ async function routeToAgent(task: Task): Promise<string> {
     }
 
 
-        }
 
     // ── Unknown ────────────────────────────────────────────────────────────
     default: {
