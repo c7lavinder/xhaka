@@ -28,6 +28,7 @@ import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { runPatternMiner } from './jobs/pattern-miner.js';
 import { runDispatcher } from './jobs/dispatcher.js';
 import { runVoiceIngest } from './jobs/voice-ingest.js';
+import { runLibrarian } from './jobs/librarian.js';
 import { getFileContent } from './lib/github.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
@@ -39,7 +40,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'dispatcher', 'researcher', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'voice-ingest']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'dispatcher', 'researcher', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'voice-ingest', 'librarian']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -247,6 +248,14 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
+
+  // --- Librarian: daily at 2:00 AM CST (fallback — primary trigger is dispatcher queue) ---
+  cron.schedule(
+    '0 2 * * *',
+    safeRun('librarian', async () => { await runLibrarian(); }),
+    { timezone: TIMEZONE },
+  );
+
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
@@ -275,6 +284,7 @@ export function startScheduler(): void {
   console.log('  ✓ pre-deploy-test   — manual via RUN_JOB');
   console.log('  ✓ pattern-miner     — every Thursday at 6:00 AM CST');
   console.log('  ✓ voice-ingest      — on-demand via capture task queue');
+  console.log('  ✓ librarian         — daily at 2:00 AM CST (fallback cron) + dispatcher queue (primary)');
 }
 
 // ---------------------------------------------------------------------------
@@ -365,9 +375,12 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'voice-ingest':
       await runVoiceIngest();
       break;
+    case 'librarian':
+      await runLibrarian();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner, dispatcher, voice-ingest`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner, dispatcher, voice-ingest, librarian`,
       );
   }
 }
