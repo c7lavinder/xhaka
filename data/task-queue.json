@@ -332,8 +332,9 @@
         "trigger": "article-inbox-watch",
         "itemCount": 36
       },
-      "status": "pending",
-      "createdAt": "2026-03-16T05:05:00.945Z"
+      "status": "running",
+      "createdAt": "2026-03-16T05:05:00.945Z",
+      "startedAt": "2026-03-16T05:06:01.044Z"
     },
     {
       "id": "task_1773637548861_q0e1mpl",
