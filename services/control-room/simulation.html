@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulation Engine — God's Eye View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --card: #111827;
+    --border: #1e293b;
+    --accent: #10b981;
+    --accent-dim: #065f46;
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --blue: #3b82f6;
+    --blue-dim: #1e3a5f;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--accent);
+  }
+
+  header .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  header nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  header nav a:hover {
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  header nav a.active {
+    color: var(--accent);
+    background: var(--accent-dim);
+    border-color: var(--accent-dim);
+  }
+
+  /* MAIN LAYOUT */
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .section-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .section-badge.pending {
+    background: #451a03;
+    color: var(--amber);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  /* DIGITAL TWINS GRID */
+  .twins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .twin-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .twin-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-dim), transparent);
+  }
+
+  .twin-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* CIRCULAR GAUGE */
+  .gauge-wrap {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+  }
+
+  .gauge-wrap svg {
+    transform: rotate(-90deg);
+  }
+
+  .gauge-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 5;
+  }
+
+  .gauge-fill {
+    fill: none;
+    stroke-width: 5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  .gauge-fill.high   { stroke: var(--green); }
+  .gauge-fill.mid    { stroke: var(--amber); }
+  .gauge-fill.low    { stroke: var(--red); }
+
+  .gauge-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .gauge-pct {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .gauge-sub {
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* TWIN INFO */
+  .twin-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .twin-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .twin-role {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* BEHAVIORAL TAGS */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .tag.green  { background: #052e16; color: var(--green); border-color: var(--accent-dim); }
+  .tag.amber  { background: #451a03; color: var(--amber); border-color: #783510; }
+  .tag.red    { background: #450a0a; color: var(--red);   border-color: #7f1d1d; }
+  .tag.muted  { background: #0f172a; color: var(--muted); border-color: var(--border); }
+
+  .twin-status {
+    font-size: 11px;
+    color: var(--muted);
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .twin-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 5px var(--amber);
+    flex-shrink: 0;
+  }
+
+  /* SCENARIO BUILDER */
+  .scenario-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .scenario-layout { grid-template-columns: 1fr; }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .form-select,
+  .form-textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--accent-dim);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  .btn-run {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0f172a;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: not-allowed;
+    margin-top: 8px;
+  }
+
+  .btn-run .btn-icon { font-size: 14px; }
+
+  .output-area {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .output-area .output-icon {
+    font-size: 28px;
+    opacity: 0.4;
+  }
+
+  .output-area .output-label {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .output-area .output-sub {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  /* SYSTEM INTELLIGENCE */
+  .intel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .intel-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .intel-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+  }
+
+  .intel-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .intel-value.pending {
+    color: var(--amber);
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 24px 20px 32px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer .footer-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: 0 0 5px var(--amber);
+    vertical-align: middle;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 16px 12px; }
+    header { padding: 14px 16px; }
+    .twins-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>🧠 Simulation Engine</h1>
+    <span class="subtitle">God's Eye View — Intelligence layer pending</span>
+  </div>
+  <nav>
+    <a href="index.html">← Dashboard</a>
+    <a href="simulation.html" class="active">Simulation</a>
+  </nav>
+</header>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════
+       SECTION 1: TEAM DIGITAL TWINS
+  ══════════════════════════════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">👥 Team Digital Twins</span>
+      <span class="section-badge pending">⏳ Observation Mode</span>
+    </div>
+
+    <div class="twins-grid">
+
+      <!-- Kyle -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill high" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="56.55" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">70%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Kyle</div>
+            <div class="twin-role">Acquisition Manager (AM)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag green">Peak: AM</span>
+          <span class="tag green">Strong: opener</span>
+          <span class="tag green">Strong: close</span>
+          <span class="tag amber">Gap: follow-up</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+      <!-- Daniel -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill high" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="62.2" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">67%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Daniel</div>
+            <div class="twin-role">Lead Manager (LM)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag green">Strong: rapport</span>
+          <span class="tag green">Peak: mid-day</span>
+          <span class="tag amber">Gap: objection handling</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+      <!-- Chris -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill low" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="120.64" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">36%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Chris</div>
+            <div class="twin-role">Lead Manager (LM)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag amber">Developing: opener</span>
+          <span class="tag red">Gap: follow-up</span>
+          <span class="tag red">Gap: close rate</span>
+          <span class="tag muted">Coaching candidate</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+      <!-- Efren -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill mid" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="98.02" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">48%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Efren</div>
+            <div class="twin-role">Lead Manager (LM)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag amber">Developing: rapport</span>
+          <span class="tag amber">Gap: discovery</span>
+          <span class="tag muted">Early stage</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+      <!-- Mirna -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill mid" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="107.44" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">43%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Mirna</div>
+            <div class="twin-role">Lead Manager (LM)</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag amber">Developing: opener</span>
+          <span class="tag amber">Gap: close</span>
+          <span class="tag muted">Early stage</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+      <!-- Esteban -->
+      <div class="twin-card">
+        <div class="twin-top">
+          <div class="gauge-wrap">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle class="gauge-bg" cx="36" cy="36" r="30" />
+              <circle class="gauge-fill high" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="67.86" />
+            </svg>
+            <div class="gauge-label">
+              <span class="gauge-pct">64%</span>
+              <span class="gauge-sub">Gunner</span>
+            </div>
+          </div>
+          <div class="twin-info">
+            <div class="twin-name">Esteban</div>
+            <div class="twin-role">Dispo Manager</div>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag green">Strong: buyer rapport</span>
+          <span class="tag green">Strong: negotiation</span>
+          <span class="tag amber">Gap: urgency</span>
+        </div>
+        <div class="twin-status">Live data wires in when Gunner hits 30+ calls/person</div>
+      </div>
+
+    </div><!-- /twins-grid -->
+  </section>
+
+  <!-- ══════════════════════════════════
+       SECTION 2: WHAT-IF SCENARIO BUILDER
+  ══════════════════════════════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">🔬 What-If Scenario Builder</span>
+      <span class="section-badge pending">⏳ Coming Soon</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Run a Scenario</span>
+        <span class="badge" style="background:#451a03;color:var(--amber);">Needs Gunner Data</span>
+      </div>
+
+      <div class="scenario-layout">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Select Scenario</label>
+            <select class="form-select" disabled>
+              <option value="">— Choose a preset —</option>
+              <option value="coaching">Chris gets coaching for 2 weeks</option>
+              <option value="kyle-calls">Kyle takes 5 calls/day vs 3</option>
+              <option value="fourth-lm">Add a 4th LM</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Describe the Scenario</label>
+            <textarea class="form-textarea" disabled
+              placeholder="Describe a custom scenario — e.g. &quot;What happens if Chris's close rate improves to 30%?&quot;"></textarea>
+          </div>
+
+          <button class="btn-run" disabled>
+            <span class="btn-icon">⚙️</span>
+            Coming Soon — needs Gunner data
+          </button>
+        </div>
+
+        <div class="output-area">
+          <div class="output-icon">🧪</div>
+          <div class="output-label">Simulation output will appear here</div>
+          <div class="output-sub">Intelligence layer activates at 30+ calls per team member</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════
+       SECTION 3: SYSTEM INTELLIGENCE
+  ══════════════════════════════════ -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">⚡ System Intelligence</span>
+      <span class="section-badge">Status</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Intelligence Layer</span>
+      </div>
+      <div class="intel-grid">
+
+        <div class="intel-item">
+          <div class="intel-label">Knowledge Graph</div>
+          <div class="intel-value pending">Indexing…</div>
+        </div>
+
+        <div class="intel-item">
+          <div class="intel-label">Last Gunner Sync</div>
+          <div class="intel-value pending">Pending integration</div>
+        </div>
+
+        <div class="intel-item">
+          <div class="intel-label">Agents Active</div>
+          <div class="intel-value">6</div>
+        </div>
+
+        <div class="intel-item">
+          <div class="intel-label">Memory Layers</div>
+          <div class="intel-value" style="font-size:12px;line-height:1.7;">
+            Working ✅ &nbsp;|&nbsp; Session ✅<br>
+            Episodic 🔄 <span style="color:var(--amber);font-size:11px;">(Hindsight installing)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<footer>
+  <span class="footer-dot"></span>
+  Simulation Engine is live in observation mode. Intelligence layer activates at 30+ calls per team member.
+</footer>
+
+</body>
+</html>
