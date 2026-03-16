@@ -510,3 +510,4 @@ If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 month
 - Rise of the AI Chief of Staff — solo consultant built morning briefs + automations with $100 Claude Max, no coding, 36 hours | source: direct paste 2026-03-16
 - AI Was Supposed to Free My Time It Consumed It — task expansion, context switching, always-on fatigue with multi-agent systems | source: direct paste 2026-03-16
 - Zero Human Company — Felix agent with Stripe account, crypto wallet, product portfolio (Nat Eliason / OpenClaw) | source: direct paste 2026-03-16
+- AI and the SMB 2026 — ground-level report on AI adoption across industries, physical services moat, SaaS commoditization risk, professional services play | source: direct paste 2026-03-16
