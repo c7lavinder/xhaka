@@ -33,3 +33,4 @@
 - https://github.com/openai/openai-cookbook  # OpenAI Cookbook — practical examples, RAG patterns, function calling, agent architectures — direct prompt/agent patterns
 - https://github.com/donnemartin/system-design-primer  # system-design-primer — large-scale system design patterns — architecture reference for Xhaka scaling
 - https://github.com/kamranahmedse/developer-roadmap  # developer-roadmap — visual learning paths for engineering skills — Gunner/NAH team development reference
+- https://github.com/Hamza-Mos/praxlab  # PraxLab — autonomous research harness, program.md loop pattern, tree of self-contained workspaces, SQLite experiment tracking
