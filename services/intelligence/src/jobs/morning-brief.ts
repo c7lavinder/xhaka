@@ -161,6 +161,44 @@ async function buildFeedbackInbox(): Promise<string | null> {
   }
 }
 
+async function buildTodaysFocus(): Promise<string | null> {
+  try {
+    // Pull queue to find highest-priority pending tasks
+    const queueFile = await getFileContent(REPO, 'data/task-queue.json');
+    const queue = queueFile ? JSON.parse(queueFile.content) : { tasks: [] };
+    const pending = (queue.tasks || []).filter((t: { status: string }) => t.status === 'pending');
+
+    const lines: string[] = ["🎯 *Today's Focus*"];
+
+    if (pending.length > 0) {
+      const top3 = pending.slice(0, 3);
+      top3.forEach((t: { agent: string; task: string }) => {
+        lines.push(`• ${t.agent}/${t.task}`);
+      });
+    } else {
+      lines.push('• Queue clear — system running autonomously');
+    }
+
+    return lines.join('\n');
+  } catch {
+    return null;
+  }
+}
+
+async function buildSystemLoad(): Promise<string | null> {
+  try {
+    const queueFile = await getFileContent(REPO, 'data/task-queue.json');
+    const queue = queueFile ? JSON.parse(queueFile.content) : { tasks: [] };
+    const pending = (queue.tasks || []).filter((t: { status: string }) => t.status === 'pending').length;
+    const running = (queue.tasks || []).filter((t: { status: string }) => t.status === 'running').length;
+
+    const loadEmoji = pending > 20 ? '🔴' : pending > 10 ? '🟡' : '🟢';
+    return `${loadEmoji} *System Load:* ${pending} queued · ${running} running`;
+  } catch {
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main runner
 // ---------------------------------------------------------------------------
@@ -173,13 +211,15 @@ export async function runMorningBrief(): Promise<void> {
 
   try {
     // Run all sections concurrently — failures are caught inside each builder
-    const [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox] =
+    const [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox, todaysFocus, systemLoad] =
       await Promise.allSettled([
         buildJobHealth(),
         buildEvaluationScores(),
         buildActionNeeded(),
         buildArticleDigest(),
         buildFeedbackInbox(),
+        buildTodaysFocus(),
+        buildSystemLoad(),
       ]).then((results) => results.map((r) => (r.status === 'fulfilled' ? r.value : null)));
 
     // Cost summary — never throws
@@ -199,9 +239,11 @@ export async function runMorningBrief(): Promise<void> {
     let message: string;
 
     if (!anythingToReport) {
-      message = `🌅 Morning Brief — ${dateLabel}\n\nAll clear. Nothing needs your attention today.${costSection}\n\n— Xhaka`;
+      const loadLine = systemLoad ? `\n\n${systemLoad}` : '';
+      const focusLine = todaysFocus ? `\n\n${todaysFocus}` : '';
+      message = `🌅 Morning Brief — ${dateLabel}${focusLine}${loadLine}\n\nAll clear. Nothing needs your attention today.${costSection}\n\n— Xhaka`;
     } else {
-      const sections = [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox].filter(Boolean) as string[];
+      const sections = [todaysFocus, systemLoad, jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox].filter(Boolean) as string[];
       message = `🌅 Morning Brief — ${dateLabel}\n\n${sections.join('\n\n')}${costSection}\n\n— Xhaka`;
     }
 
