@@ -670,3 +670,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-16T08:50:00.670Z	watchdog	success	519		model=gpt-4o-mini cost=$0.001
 2026-03-16T08:50:03.303Z	capture	success	3147		model=gpt-4o-mini cost=$0.001
 2026-03-16T08:50:15.179Z	organize	success	258		model=gpt-4o-mini cost=$0.003
+2026-03-16T08:50:52.774Z	propagate	success	6705		model=gpt-4o-mini cost=$0.003
