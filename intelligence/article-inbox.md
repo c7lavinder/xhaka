@@ -506,3 +506,4 @@ If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 month
 - When assessing Gunner's competitive position, reference: vertical beats horizontal, SMB gap is the moat
 - https://www.jontsai.com/2026/02/12/building-mission-control-for-my-ai-workforce-introducing-openclaw-command-center | Jon Tsai OpenClaw Command Center — scheduling primitives, session cost tracking, Cerebro topic tracking, vanilla JS dashboard philosophy
 - Claude Subagents vs Agent Teams — context-centric decomposition, 5 orchestration patterns, when NOT to use multi-agent | source: direct paste 2026-03-16
+- AI Five-Layer Stack — Energy/Chips/Cloud/Models/Apps, infrastructure gravity thesis, $700B capex, picks-and-shovels phase | source: direct paste 2026-03-16
