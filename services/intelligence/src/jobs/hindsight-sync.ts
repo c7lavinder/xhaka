@@ -8,7 +8,7 @@ import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-regist
 const HINDSIGHT_URL = process.env.HINDSIGHT_URL ?? 'http://localhost:3200';
 
 export async function runHindsightSync(): Promise<string> {
-  const start = markJobStart('hindsight-sync');
+  const start = await markJobStart('hindsight-sync');
   try {
     // TODO: pull today's session captures from data/results.tsv
     // TODO: POST to Hindsight /api/memories endpoint
