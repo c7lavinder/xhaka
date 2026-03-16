@@ -11,3 +11,4 @@
 
 ## Processed
 (moved here after researcher runs)
+- https://github.com/666ghj/MiroFish  # simulation engine — architecture patterns only, not prediction markets
