@@ -23,3 +23,14 @@
 
 ## 🔴 REQUIRED: Wire Paperclip Polling Crons (Builder task — after Railway service deleted)
 Each agent needs: `openclaw cron add paperclip-poll --schedule "every 10m" --session isolated --model haiku`
+
+## 🔴 REQUIRED: Install Paperclip on Mac mini (local, not Railway)
+**Command:** `npx paperclipai onboard --yes`
+**Runs at:** http://localhost:3100
+**Requirements:** Node.js 20+, pnpm 9.15+
+**Steps after install:**
+1. Create company: "Xhaka Intelligence Co"
+2. Set mission: "Build AI COO that helps Corey run NAH and Gunner without manual oversight"
+3. Hire agents in order: Xhaka COO → Builder → Researcher → Auditor → Architect → Librarian → Operator
+4. Set budgets: $25/$25/$20/$10/$10/$10/$10 = ~$110/mo total
+5. Wire heartbeat polling crons per agent
