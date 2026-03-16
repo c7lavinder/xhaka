@@ -599,6 +599,17 @@
       "startedAt": "2026-03-16T07:21:03.765Z",
       "completedAt": "2026-03-16T07:21:06.536Z",
       "proofOfWork": "Audit PASS for commit b7d847ce. 0 concern(s). Artifact: intelligence/audits/2026-03-16-b7d847ce.md"
+    },
+    {
+      "id": "task_1773645901526_yr3pau4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T07:25:01.526Z"
     }
   ]
 }
