@@ -78,6 +78,13 @@ const JOB_METRICS: Record<string, JobMetric> = {
     target: 1,
     minimum: 0,
   },
+  'librarian': {
+    name: 'knowledge_graph_health_score',
+    description: 'Overall health of the knowledge graph — compliance rate, zero stale items = 100',
+    unit: 'score',
+    target: 90,
+    minimum: 70,
+  },
 };
 
 // ---------------------------------------------------------------------------
