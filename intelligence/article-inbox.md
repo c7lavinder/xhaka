@@ -301,3 +301,34 @@ Replaced $8-12k/mo in content spend.
 ## Core principle
 One flat file = a tool. A graph = a team.
 ---
+
+---
+title: MiroFish: The God View Engine — Multi-Agent Simulation
+source: twitter/github
+date: 2026-03-15
+tags: [mirofish, multi-agent-simulation, graphrag, zep-cloud, super-individual]
+---
+# MiroFish: The God View Engine — Multi-Agent Simulation
+
+MiroFish is a multi-agent simulation engine built by Guo Hangjiang (BaiFu) in 10 days. It generates thousands of autonomous agents with unique personalities, memories, and behaviors to simulate future scenarios based on a single document.
+
+## Core Stack
+- **Simulation Engine:** OASIS (by CAMEL-AI)
+- **Memory:** Zep Cloud for long-term agent memory
+- **Knowledge Representation:** GraphRAG (Knowledge Graphs)
+- **Deployment:** Docker Compose one-click setup
+- **License:** AGPL-3.0
+
+## Key Capabilities
+- **God's Eye View:** Inject variables (rate hikes, CEO resignations) into the simulation to see real-time recalibration.
+- **Entity Extraction:** Turns documents into knowledge graphs.
+- **Emergent Behavior:** Agents form groups, develop opinion leaders, and create herd effects.
+
+## Use Cases
+- Narrative branch prediction (e.g., finishing classical novels).
+- Market sentiment simulation (e.g., Fed rate hikes).
+- Public opinion analysis.
+
+## Github
+https://github.com/666ghj/MiroFish
+---
