@@ -15,3 +15,4 @@
 - https://github.com/topoteretes/cognee  # knowledge graph + memory for AI agents
 - https://github.com/InsForge/InsForge  # agent forge / AI agent builder
 - https://github.com/abhigyanpatwari/GitNexus  # GitHub repo intelligence / codebase understanding
+- https://github.com/volcengine/OpenViking  # ByteDance open agent framework
