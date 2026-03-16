@@ -12,3 +12,4 @@
 ## Processed
 (moved here after researcher runs)
 - https://github.com/666ghj/MiroFish  # simulation engine — architecture patterns only, not prediction markets
+- https://github.com/topoteretes/cognee  # knowledge graph + memory for AI agents
