@@ -174,3 +174,22 @@ The 5 files that separate an AI that waits vs one that works:
 **How to build it:** Start with SOUL.md (highest ROI). Add USER.md basics. Grow MEMORY.md from mistakes. Build TOOLS.md incrementally. Start HEARTBEAT.md with 2-3 checks.
 
 **Corey assessment:** We have all 5 files. The gap is depth and automation. HEARTBEAT.md is too passive — it's a checklist, not a proactive worker. The autonomous push behavior (Telegram messages without being asked) is what we're building now with the notification layer.
+
+---
+title: The $1.49M NBA Swarm — MiroFish on Polymarket
+source: twitter/polymarket
+date: 2026-03-15
+tags: [mirofish, swarm-intelligence, prediction-markets, polymarket, data-arbitrage]
+---
+# The $1.49M NBA Swarm — MiroFish on Polymarket
+
+A developer used MiroFish to simulate 4,096 autonomous agents (analysts, bettors, insiders) to predict NBA outcomes. He piped the consensus into a transformer model to find gaps in Polymarket odds.
+
+## The Edge
+- **Simulating the Crowd:** The edge isn't just the raw data (stats, injuries); it's simulating how thousands of different personalities process that data before the actual market reaches consensus.
+- **Kelly Criterion Integration:** Automated entry when the gap between simulated probability and market odds exceeds a threshold.
+- **Data Moat:** 3 years of NBA vectors + 16,000+ personal prediction history.
+
+## Wallet Ref
+https://polymarket.com/@0p0jogggg
+---
