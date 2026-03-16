@@ -19,3 +19,4 @@
 - https://github.com/lightpanda-io/browser  # headless browser for AI agents
 - https://github.com/obra/superpowers  # Claude Code superpowers / agentic coding enhancements
 - https://github.com/garrytan/gstack  # full-stack AI agent development framework
+- https://github.com/Crosstalk-Solutions/project-nomad  # agent project management / multi-agent coordination
