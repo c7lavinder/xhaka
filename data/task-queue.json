@@ -497,6 +497,17 @@
       "startedAt": "2026-03-16T06:26:01.570Z",
       "completedAt": "2026-03-16T06:26:04.267Z",
       "proofOfWork": "Audit PASS for commit 96694739. 0 concern(s). Artifact: intelligence/audits/2026-03-16-96694739.md"
+    },
+    {
+      "id": "task_1773642602317_hjjdewo",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-16T06:30:02.128Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T06:30:02.317Z"
     }
   ]
 }
