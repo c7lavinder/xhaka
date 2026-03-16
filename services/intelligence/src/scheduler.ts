@@ -30,6 +30,12 @@ import { runDispatcher } from './jobs/dispatcher.js';
 import { runVoiceIngest } from './jobs/voice-ingest.js';
 import { runLibrarian } from './jobs/librarian.js';
 import { getFileContent } from './lib/github.js';
+import {
+  shouldRunIfNotRunSince,
+  shouldSkipDueToConflict,
+  markHeavyJobRunning,
+  markHeavyJobDone,
+} from './utils/smart-scheduler.js';
 import { getJobTimeout } from './utils/job-registry.js';
 
 // ---------------------------------------------------------------------------
@@ -79,33 +85,61 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Propagate: daily at 6:00 AM CST ---
-  cron.schedule(
-    '0 6 * * *',
-    safeRun('propagate', runPropagate),
-    { timezone: TIMEZONE },
-  );
+  // --- Propagate: daily at 6:00 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('0 6 * * *', () => {
+    console.log('[scheduler] Triggering job: propagate');
+    (async () => {
+      if (shouldSkipDueToConflict('propagate')) return;
+      const shouldRun = await shouldRunIfNotRunSince('propagate', 20);
+      if (!shouldRun) { console.log('[scheduler] propagate ran recently — skipping'); return; }
+      markHeavyJobRunning('propagate');
+      try { await runWithTimeout(() => runPropagate(), 'propagate'); }
+      catch (err) { console.error('[scheduler] Job propagate failed:', err); }
+      finally { markHeavyJobDone('propagate'); }
+    })();
+  }, { timezone: TIMEZONE });
 
-  // --- Improve: every Monday at 6:00 AM CST ---
-  cron.schedule(
-    '0 6 * * 1',
-    safeRun('improve', runImprove),
-    { timezone: TIMEZONE },
-  );
+  // --- Improve: every Monday at 6:00 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('0 6 * * 1', () => {
+    console.log('[scheduler] Triggering job: improve');
+    (async () => {
+      if (shouldSkipDueToConflict('improve')) return;
+      const shouldRun = await shouldRunIfNotRunSince('improve', 20);
+      if (!shouldRun) { console.log('[scheduler] improve ran recently — skipping'); return; }
+      markHeavyJobRunning('improve');
+      try { await runWithTimeout(() => runImprove(), 'improve'); }
+      catch (err) { console.error('[scheduler] Job improve failed:', err); }
+      finally { markHeavyJobDone('improve'); }
+    })();
+  }, { timezone: TIMEZONE });
 
-  // --- Cleanup: every Sunday at 6:00 AM CST ---
-  cron.schedule(
-    '0 6 * * 0',
-    safeRun('cleanup', runCleanup),
-    { timezone: TIMEZONE },
-  );
+  // --- Cleanup: every Sunday at 6:00 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('0 6 * * 0', () => {
+    console.log('[scheduler] Triggering job: cleanup');
+    (async () => {
+      if (shouldSkipDueToConflict('cleanup')) return;
+      const shouldRun = await shouldRunIfNotRunSince('cleanup', 20);
+      if (!shouldRun) { console.log('[scheduler] cleanup ran recently — skipping'); return; }
+      markHeavyJobRunning('cleanup');
+      try { await runWithTimeout(() => runCleanup(), 'cleanup'); }
+      catch (err) { console.error('[scheduler] Job cleanup failed:', err); }
+      finally { markHeavyJobDone('cleanup'); }
+    })();
+  }, { timezone: TIMEZONE });
 
-  // --- Organize: daily at 11:00 PM CST ---
-  cron.schedule(
-    '0 23 * * *',
-    safeRun('organize', runOrganize),
-    { timezone: TIMEZONE },
-  );
+  // --- Organize: daily at 11:00 PM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('0 23 * * *', () => {
+    console.log('[scheduler] Triggering job: organize');
+    (async () => {
+      if (shouldSkipDueToConflict('organize')) return;
+      const shouldRun = await shouldRunIfNotRunSince('organize', 20);
+      if (!shouldRun) { console.log('[scheduler] organize ran recently — skipping'); return; }
+      markHeavyJobRunning('organize');
+      try { await runWithTimeout(() => runOrganize(), 'organize'); }
+      catch (err) { console.error('[scheduler] Job organize failed:', err); }
+      finally { markHeavyJobDone('organize'); }
+    })();
+  }, { timezone: TIMEZONE });
 
   // --- Synthesize: fixed dates to avoid month-boundary gaps ---
   // FIX 4: Changed from '0 7 */5 * *' to explicit dates
@@ -136,12 +170,19 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Scribe: daily at midnight CST ---
-  cron.schedule(
-    '0 0 * * *',
-    safeRun('scribe', runScribe),
-    { timezone: TIMEZONE },
-  );
+  // --- Scribe: daily at midnight CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('0 0 * * *', () => {
+    console.log('[scheduler] Triggering job: scribe');
+    (async () => {
+      if (shouldSkipDueToConflict('scribe')) return;
+      const shouldRun = await shouldRunIfNotRunSince('scribe', 20);
+      if (!shouldRun) { console.log('[scheduler] scribe ran recently — skipping'); return; }
+      markHeavyJobRunning('scribe');
+      try { await runWithTimeout(() => runScribe(), 'scribe'); }
+      catch (err) { console.error('[scheduler] Job scribe failed:', err); }
+      finally { markHeavyJobDone('scribe'); }
+    })();
+  }, { timezone: TIMEZONE });
 
   // --- Operator: every minute — self-healing agent ---
   cron.schedule(
