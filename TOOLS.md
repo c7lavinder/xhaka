@@ -107,6 +107,15 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - **Purpose:** Database backend for Gunner V2 migration
 - **Vector DB:** pgvector extension (run `create extension vector;` in Supabase SQL editor when ready)
 
+### Supabase (Xhaka Intelligence — SEPARATE from Gunner)
+- **Project Name:** xhaka-intelligence
+- **URL:** https://hlxmhfxweybxhzmzhwkm.supabase.co
+- **Secret Key:** sb_secret_ZeO8kVlQQ_fX5p22FAjvyQ__hg94B1B
+- **DB Password:** maZL2Vbum00YRczK
+- **Access Level:** Full admin
+- **Purpose:** pgvector semantic search for Xhaka knowledge base (kb-indexer, knowledge-search)
+- **Status:** Created 2026-03-16 — run `services/intelligence/migrations/001_pgvector.sql` to initialize
+
 ### LangSmith (AI Observability)
 - **URL:** smith.langchain.com
 - **Login:** xhakalavinder@gmail.com
