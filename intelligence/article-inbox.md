@@ -174,3 +174,130 @@ The 5 files that separate an AI that waits vs one that works:
 **How to build it:** Start with SOUL.md (highest ROI). Add USER.md basics. Grow MEMORY.md from mistakes. Build TOOLS.md incrementally. Start HEARTBEAT.md with 2-3 checks.
 
 **Corey assessment:** We have all 5 files. The gap is depth and automation. HEARTBEAT.md is too passive — it's a checklist, not a proactive worker. The autonomous push behavior (Telegram messages without being asked) is what we're building now with the notification layer.
+---
+title: RL Environments and the Hidden Industry of Verifiers
+date: 2026-03-14
+source: Elliot Arledge (KernelBench v3)
+tags: [ai-training, rl, verifiers, evaluation, benchmarking]
+---
+
+
+
+---
+title: RL Environments Part 2 - Minecraft, Tooling Bottlenecks, and the Lab Pipeline
+date: 2026-03-14
+source: Elliot Arledge (KernelBench v3)
+tags: [rl, verification, scaling, tooling, xhaka-infrastructure]
+---
+
+
+
+---
+title: RL Environments Part 3 - The Bounty Model and Automated Verification
+date: 2026-03-14
+source: Elliot Arledge (KernelBench v3)
+tags: [scaling, verification-funnel, reward-hacking, adversarial-attack]
+---
+
+
+
+---
+title: RL Environments Part 4 - Unit Economics, Security, and Frontier Strategy
+date: 2026-03-14
+source: Elliot Arledge (KernelBench v3)
+tags: [unit-economics, security, reputation-systems, scaling-strategy]
+---
+
+
+
+---
+title: From Individual Skills to Skill Systems (Plugins)
+date: 2026-03-14
+source: Build With AI (Skill Systems vs Plugins)
+tags: [architecture, plugins, systems-thinking, workflow-automation]
+---
+
+
+
+---
+title: Skill Systems (Plugins) Part 2 - Connective Patterns & Production Pipelines
+date: 2026-03-14
+source: Build With AI (Nick Spisak)
+tags: [architecture, chaining, orchestration, workflows, shared-context]
+---
+
+
+
+---
+title: 7-Step Startup Framework (Jack Coder)
+date: 2026-03-14
+source: Twitter @jackcoder0
+tags: [startup, mvp, validation, growth, logic-patterns]
+---
+
+
+
+---
+title: Skill Graphs > SKILL.md (Structured Knowledge Systems)
+date: 2026-03-14
+source: Arscontexta Research
+tags: [knowledge-graphs, zettelkasten, architecture, wikilinks, agent-cognition]
+---
+
+
+
+---
+title: Hey Noah AI (Personal Executive Agent Research)
+date: 2026-03-14
+source: Ashish (HeyNoahAI)
+tags: [personal-crm, relationship-capital, executive-assistant, time-management]
+---
+
+
+
+
+---
+title: Skill Graph for Content — 10 Social Accounts, Zero Manual Posts
+source: twitter
+date: 2026-03-15
+tags: [skill-graph, content-system, ai-agents, automation, claude-code]
+---
+# Skill Graph for Content — 10 Social Accounts, Zero Manual Posts
+
+Running 10 social media accounts without writing a single post manually using a skill graph: 30+ markdown files wired together that turn an AI agent into a full content team.
+
+## Folder Structure
+```
+/content-skill-graph
+├── index.md (entry point — maps every node)
+├── platforms/ (x.md, linkedin.md, ig.md, tiktok.md...)
+├── voice/ (brand-voice.md, platform-tone.md)
+├── engine/ (hooks.md, repurpose.md, scheduling.md)
+└── audience/ (builders.md, casual.md)
+```
+
+## How It Works
+- Each file = one knowledge node
+- Files contain [[wikilinks]] to related nodes
+- The agent follows the links automatically
+- index.md = the entry point (who you are + node map + execution instructions)
+
+## Key insight on output
+NOT 10 copies of the same text reformatted. 10 pieces that each THINK about the topic differently:
+- X: contrarian thread, lowercase casual, step-by-step
+- LinkedIn: personal narrative, professional tone, 1500 words
+- Instagram: 7-slide carousel, visual-first, bold claim on slide 1
+- TikTok: 45-sec raw screen recording script
+- YouTube: SEO title + structured outline, 8-min format
+
+Same topic. Different angle, hook, voice, structure, format per platform.
+
+## Business impact
+Replaced $8-12k/mo in content spend.
+
+## Tool referenced
+@arscontexta plugin for Claude Code (generates base structure automatically)
+
+## Core principle
+One flat file = a tool. A graph = a team.
+---
