@@ -9,7 +9,7 @@ import {
   getProcessedPath,
 } from '../lib/router.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
-import { enqueue } from '../utils/task-queue.js';
+import { enqueue, getAllTasks } from '../utils/task-queue.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
@@ -17,10 +17,13 @@ const ARTICLE_INBOX_PATH = 'intelligence/article-inbox.md';
 const VOICE_INBOX_PATH = 'intelligence/voice-inbox';
 const VOICE_PROCESSED_PATH = 'intelligence/voice-processed';
 
+const MS_24H = 24 * 60 * 60 * 1000;
+
 // ---------------------------------------------------------------------------
 // Capture job — polls inbox/, routes items to processed/
 // Also watches article-inbox.md and enqueues researcher when items are present
 // Also watches voice-inbox/ and enqueues voice-ingest when audio files are present
+// Also queues librarian/audit daily if one hasn't run in the last 24 hours
 // ---------------------------------------------------------------------------
 
 export async function runCapture(): Promise<void> {
@@ -48,6 +51,9 @@ export async function runCapture(): Promise<void> {
 
     // 3. Check voice-inbox/ — enqueue voice-ingest if unprocessed audio files exist
     await checkVoiceInbox();
+
+    // 4. Queue librarian/audit if none has been created in the last 24 hours
+    await checkLibrarianQueue();
 
     console.log('[capture] Done.');
     await markJobSuccess('capture', _startTime);
@@ -205,6 +211,41 @@ async function checkVoiceInbox(): Promise<void> {
     });
   } catch (err) {
     console.warn('[capture] Could not check voice-inbox:', err);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Check librarian queue — enqueue librarian/audit if none has run in 24 hours
+// Queue-first architecture: dispatcher is primary engine, cron is safety net.
+// ---------------------------------------------------------------------------
+
+async function checkLibrarianQueue(): Promise<void> {
+  try {
+    const allTasks = await getAllTasks();
+    const cutoff = Date.now() - MS_24H;
+
+    const recentLibrarianTask = allTasks.find(
+      (t) =>
+        t.agent === 'librarian' &&
+        t.task === 'audit' &&
+        new Date(t.createdAt).getTime() > cutoff,
+    );
+
+    if (recentLibrarianTask) {
+      console.log(
+        `[capture] 📚 Librarian audit already queued/run recently ` +
+        `(task ${recentLibrarianTask.id}, status: ${recentLibrarianTask.status}) — skipping.`,
+      );
+      return;
+    }
+
+    console.log('[capture] 📚 No librarian audit in last 24h — enqueuing librarian/audit');
+    await safeEnqueue('librarian', 'audit', {
+      trigger: 'daily-capture-check',
+      queuedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.warn('[capture] Could not check librarian queue:', err);
   }
 }
 
