@@ -4442,6 +4442,17 @@
       },
       "status": "pending",
       "createdAt": "2026-03-16T01:40:39.167Z"
+    },
+    {
+      "id": "task_1773625802260_4tcr0ee",
+      "agent": "researcher",
+      "task": "process-articles",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 226
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T01:50:02.260Z"
     }
   ]
 }
