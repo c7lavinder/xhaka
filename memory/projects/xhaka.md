@@ -115,6 +115,32 @@ workspace-sync cron runs every 30 minutes (16 workspace files covered).
 - 10 new tool profiles created across 12 categories
 - Agent definitions built: agents/README.md, agents/guide.md, all agents updated
 
+### Mar 16, 2026 — Control Room v4, Tool Intelligence, Behavioral Hardening
+- **Deploy fix:** xhaka-intelligence TypeScript errors (hindsight-sync + librarian) fixed manually. Build now clean.
+- **GitHub Actions:** Pre-deploy TypeScript check added — catches TS errors before Railway deploy
+- **Control Room v3 → v4:** 3 new MiroFish-inspired panels added (commit `be183381`):
+  - Force-directed Knowledge Graph (vis.js) — books/twins/agents/tech as colored nodes
+  - Digital Twins panel — 6 team cards with circular Gunner score gauges, behavioral tags, peak hours
+  - Simulation Console — God's Eye View UI, scenario inbox, disabled Run button (deferred)
+- **Tools Intelligence page** (tools.html) — 3-tier layout: LIVE / NOT WIRED / WORTH EXPLORING + chat panel
+- **Tool Knowledge Hub built** — tool-research-inbox.md pattern, TOOL-KNOWLEDGE-INDEX.md, tool-researcher.ts job
+  - 13 tools queued: PostHog, Sentry, LangSmith, GHL, BatchDialer, Railway, Claude Code, Supabase, n8n, Zep Cloud, Firecrawl, Retell AI, GraphRAG
+- **MiroFish architecture spec committed** — `memory/context/sim/mirofish-architecture.md` — DEFERRED until Gunner 100 users
+- **Behavioral gap closure:**
+  - LEARNINGS.md added to openclaw.json workspaceFiles (loads every session)
+  - SDD enforcement added to SOUL.md (SPEC + PLAN + TASKS required before Builder spawn)
+  - Auditor checklist updated to review Builder prompts
+- **Morning brief v2** — signal-only format, max 15 lines; Today's Focus + System Load sections added
+- **Librarian quality audit** — flags thin/missing-frontmatter knowledge files
+- **20+ knowledge files added:** agency-agents (sales/marketing/product/specialized), AI tool prompts queued
+- **Key insights captured:**
+  - Gunner data moat: NAH call recordings + GHL + leaderboard = differentiator generic AI can't replicate
+  - Cognitive load risk: if Corey manages agents directly, design broke — Xhaka is the only interface
+  - Agent identity pattern: each specialist only touches what it needs (scoped credentials per agent)
+  - SMB AI clock: 6–12 months before early movers lock in data + systems + brand positioning
+- **Security hardening builder running**
+- **pgvector/hindsight/propagation builders running**
+
 ## Key Milestones
 - 2026-03-11: Railway project created, intelligence service deployed
 - 2026-03-11: Inbox/processed folders created, capture job now functional
@@ -124,16 +150,25 @@ workspace-sync cron runs every 30 minutes (16 workspace files covered).
 - 2026-03-13: xhaka-control-room and Links and Docs services confirmed
 - 2026-03-13: Session-capture cron added (OpenClaw native, every 4h)
 - 2026-03-13: Foundation hardening phase begins, workspace-sync active
+- 2026-03-16: xhaka-intelligence deploy fixed (TypeScript errors resolved)
+- 2026-03-16: Pre-deploy TypeScript check (GitHub Actions) added
+- 2026-03-16: Control Room v4 with force-directed graph, digital twins, simulation console
+- 2026-03-16: Tool Knowledge Hub adopted (13 tools queued)
+- 2026-03-16: LEARNINGS.md + SDD enforcement wired into session context
+- 2026-03-16: Morning brief v2 (signal-only) + librarian quality audit live
+- 2026-03-16: First memory synthesis completed
 
 ## Next Steps
-- Verify session-capture cron is running cleanly (openclaw cron list)
-- Run first memory synthesis (was planned for 2026-03-16)
-- Confirm propagate/improve/cleanup jobs are healthy (were failing as of Mar 13)
+- Monitor tools.html and Tool Knowledge Hub builder completion
+- Verify session-capture cron running cleanly (openclaw cron list)
+- Confirm propagate/improve/cleanup jobs healthy after recent fixes
+- Security hardening builder — await completion report
+- pgvector/hindsight/propagation builders — await completion report
 
-## Known Issues (as of Mar 13)
-- `organize` job: failed Mar 13 (11s) — new failure, needs diagnosis
-- `propagate`, `improve`, `cleanup`: 0ms failures since Mar 12 — pre-existing, need Builder
-- `tool-monitor`: code fix deployed, may need Railway redeploy
+## Known Issues (as of Mar 16)
+- Tools Intelligence page (tools.html): in progress — Architect subagent building
+- Tool Knowledge Hub: in progress — Builder subagent building
+- Behavioral gap closure: in progress — Builder subagent building (LEARNINGS.md + SOUL.md + auditor.md)
 
 ---
-Last updated: 2026-03-14
+Last updated: 2026-03-16
