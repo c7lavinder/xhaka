@@ -417,3 +417,64 @@ brain-ingest --transcript "/path/to/notes.txt" --title "Team Retro" --apply
 1. MCP bridge to GitHub — Claude traverses memory/context/ natively without being handed files
 2. Voice ingestion — Corey drops a voice memo → brain-ingest equivalent → structured memory note
 3. Prose-as-title refactor — rename memory files from categories to claims
+
+---
+title: The Spec Is the New Code — Spec Driven Development
+source: pasted
+date: 2026-03-16
+tags: [spec-driven-development, agent-harness, ai-coding, builder-workflow, task-decomposition, claude-code]
+---
+# The Spec Is the New Code — Spec Driven Development
+
+## Core Thesis
+AI coding agents fail not because the model is weak — but because instructions are ambiguous and the harness is too weak. The fix: spec before code, every time.
+
+## The Ambiguity Problem
+"Add a feature to manage items from the backoffice" → agent guesses: which backoffice? which API contract? which auth model? which error handling? Each silent guess compounds. Complexity amplifies the gap between what you meant and what got built.
+
+## What SDD Is (4 Steps)
+1. **Specify** — what to build (functional, technology-agnostic, Given/When/Then acceptance criteria)
+2. **Plan** — how to build it (architecture decisions, data models, testing strategy, existing patterns)
+3. **Tasks** — break plan into small self-contained ordered tasks (each completable in one agent session)
+4. **Implement** — agent executes one task at a time with full context embedded
+
+## 3 Levels of Maturity
+- **Spec-First**: write spec before coding, discard after. Eliminates ambiguity for that cycle. Start here.
+- **Spec-Anchored**: spec lives in repo alongside code, evolves with it. Living documentation.
+- **Spec-as-Source**: spec IS the primary artifact. Code regenerated to match. Not fully there yet — but the trajectory.
+
+## The Key Insight: Spec = Context Engineering
+"When you hand an agent a well-written spec and plan, you're engineering its entire context window in one shot: architecture decisions, step-by-step guidance, and acceptance criteria — all in a single set of artifacts."
+
+## Spec vs Plan (Critical Distinction)
+- **Spec** = functional layer. WHAT it does. Technology-agnostic. No implementation details.
+- **Plan** = technical layer. HOW to achieve it. Architecture, patterns, constraints, MCPs to use.
+Mixing them forces the agent to juggle two concerns simultaneously → compounding ambiguity.
+
+## Tasks Unlock Two Things
+- **Parallelism** — independent tasks run simultaneously across multiple agents
+- **Agent agnosticism** — start with Claude Code, finish with Cursor, context travels with the task not the agent
+
+## When SDD Makes Sense
+- Complex multi-file changes ✅
+- Features touching multiple domains ✅
+- Legacy codebases ✅
+- Quick bug fix / config change ❌ — just prompt directly
+
+## Tradeoffs
+- 2-3x more tokens upfront vs direct prompting — worth it for complex features
+- Learning curve: shift from "describe code I want" to "describe behavior I need"
+
+## Ecosystem Convergence
+- GitHub Spec Kit (77k stars) — spec-plan-task-implement cycle, agent-agnostic
+- OpenAI Symphony — requires SPEC.md as contract per issue
+- Claude Code Plan Mode — lightweight spec-and-plan step built in
+- The Ralph Loop — PRD in infinite agent loop, progress in files not context window
+
+## Application to Xhaka Builder Workflow
+- Our Builder subagents currently receive task prompts that mix functional + technical — classic ambiguity source
+- Fix: Builder tasks should follow the Spec pattern: WHAT (behavior/acceptance criteria) separated from HOW (architecture/patterns/constraints)
+- AGENTS.md builder.md should encode the SDD pattern as the default workflow
+- Every Builder spawn should include: spec section + plan section + ordered task list
+- The "proof-of-work artifact" rule we already have maps to acceptance criteria — good foundation
+- Next step: update how Xhaka writes Builder prompts to follow Spec → Plan → Tasks structure
