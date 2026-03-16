@@ -150,5 +150,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but low in signal, as it doesn't highlight any significant decisions or rules that could be useful for future reference.",
     "evaluatedAt": "2026-03-16T17:51:05.393Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T20:47:49.410Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output lacks important details about the content or significance of the 100 commits digested, which could be valuable for memory. The entry is concise but low in signal, as it does not provide context or insights into the work done.",
+    "evaluatedAt": "2026-03-16T20:47:51.026Z"
   }
 ]
