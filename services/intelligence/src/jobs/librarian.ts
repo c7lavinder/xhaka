@@ -585,20 +585,21 @@ async function auditKnowledgeQuality(): Promise<string[]> {
       for (const file of files) {
         if (!file.name.endsWith('.md') || ['CLAUDE.md', 'INDEX.md', '.gitkeep'].includes(file.name)) continue;
 
-        // Flag thin files
-        if (file.size < 500) {
-          issues.push(`⚠️ THIN: ${file.path} (${file.size} bytes) — needs content`);
-        }
-
-        // Check for frontmatter on files > 500 bytes
-        if (file.size > 500) {
-          try {
-            const content = await getFileContent(XHAKA_REPO, file.path);
-            if (content && !content.content.startsWith('---')) {
+        // Fetch content once — check size and frontmatter together
+        try {
+          const fileData = await getFileContent(XHAKA_REPO, file.path);
+          if (fileData) {
+            const len = fileData.content.length;
+            // Flag thin files
+            if (len < 500) {
+              issues.push(`⚠️ THIN: ${file.path} (${len} chars) — needs content`);
+            }
+            // Check for frontmatter on files > 500 chars
+            if (len > 500 && !fileData.content.startsWith('---')) {
               issues.push(`⚠️ NO_FRONTMATTER: ${file.path} — missing metadata header`);
             }
-          } catch { /* skip */ }
-        }
+          }
+        } catch { /* skip unreadable files */ }
       }
     } catch { /* skip missing dirs */ }
   }
