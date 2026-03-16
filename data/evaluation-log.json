@@ -86,5 +86,13 @@
     "grade": "LOW",
     "rationale": "The output lacks important information about the content or significance of the 100 commits digested, making it low-signal and not particularly useful for memory retention.",
     "evaluatedAt": "2026-03-16T06:32:29.227Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T07:20:06.117Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output contains basic quantitative data about the scribe's activities, but it lacks context or significance. It doesn't provide insights into the importance or impact of the activities, making it low-signal for MEMORY.md.",
+    "evaluatedAt": "2026-03-16T07:20:07.275Z"
   }
 ]
