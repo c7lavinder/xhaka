@@ -656,3 +656,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-16T08:42:13.341Z	organize	success	301		model=gpt-4o-mini cost=$0.003
 2026-03-16T08:42:50.373Z	propagate	success	5952		model=gpt-4o-mini cost=$0.003
 2026-03-16T08:43:01.537Z	dispatcher	success	778		model=gpt-4o-mini cost=$0.001
+2026-03-16T08:43:36.513Z	tool-monitor	success	15333		model=gpt-4o-mini cost=$0.001
