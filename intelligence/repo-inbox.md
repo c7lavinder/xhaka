@@ -14,3 +14,4 @@
 - https://github.com/666ghj/MiroFish  # simulation engine — architecture patterns only, not prediction markets
 - https://github.com/topoteretes/cognee  # knowledge graph + memory for AI agents
 - https://github.com/InsForge/InsForge  # agent forge / AI agent builder
+- https://github.com/abhigyanpatwari/GitNexus  # GitHub repo intelligence / codebase understanding
