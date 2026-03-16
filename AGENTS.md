@@ -71,12 +71,6 @@ If Xhaka is writing code or pushing commits, something has gone wrong. Stop imme
   - "Chilling in GHL" to ensure config matches code.
 - **Trigger:** "Get the ID", "Check GHL", "Fix the setting".
 
-
-### 📚 The Librarian (Knowledge Graph)
-- **Role:** Knowledge custodian. Keeps the memory system clean, organized, correctly routed.
-- **Responsibility:** Route articles/books to correct folders, audit proposed changes, enforce banned content rules, keep INDEX files current, flag stale content, enforce MEMORY.md line limit, audit knowledge files for template compliance.
-- **Trigger:** Daily 2 AM CDT (fallback cron) + dispatcher task `librarian/audit` (primary — queued daily by capture.ts)
-
 ## Workflow Rules
 1. **CEO (Corey)** gives the objective.
 2. **Xhaka** writes the Spec.
