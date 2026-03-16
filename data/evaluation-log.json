@@ -6,5 +6,13 @@
     "grade": "LOW",
     "rationale": "The output provides basic statistics about the scribe's activity but lacks context or significance. It does not highlight any important insights or decisions that would be valuable for memory.",
     "evaluatedAt": "2026-03-16T02:06:51.827Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T02:36:10.301Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The output provides a general overview of Polymarket and its regulatory status, which could be useful for understanding market trends. However, it lacks specific, actionable insights or concrete implications for a researcher in wholesale real estate, such as how exactly Polymarket's trends could be leveraged or what specific actions should be taken based on this understanding.",
+    "evaluatedAt": "2026-03-16T02:36:12.343Z"
   }
 ]
