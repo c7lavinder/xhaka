@@ -478,3 +478,73 @@ Mixing them forces the agent to juggle two concerns simultaneously → compoundi
 - Every Builder spawn should include: spec section + plan section + ordered task list
 - The "proof-of-work artifact" rule we already have maps to acceptance criteria — good foundation
 - Next step: update how Xhaka writes Builder prompts to follow Spec → Plan → Tasks structure
+
+---
+title: I Built 47 Micro-SaaS Tools in 90 Days With Claude Code
+source: pasted
+date: 2026-03-16
+tags: [micro-saas, portfolio-approach, claude-code, validation, vertical-saas, product-market-fit, pricing]
+---
+# I Built 47 Micro-SaaS Tools in 90 Days With Claude Code
+
+## Core Thesis
+Don't make one big bet. Build a portfolio. Let the market decide what works, then focus on what's proven. Focus is right — but only after you have evidence.
+
+## The Numbers
+- 47 tools built in 90 days
+- Total cost: ~$1,000 (Claude API + hosting + domains)
+- 38 tools: under $100
+- 5 tools: $100–$500
+- 3 tools: $500–$2,000
+- 1 tool: $4,200 MRR
+- Total: $11,340 in 90 days
+
+## What Won and Why
+**Vertical tools (industry-specific) outperformed by 3x.** The winner: proposal/estimate generator for residential contractors. 4.8% monthly churn vs 25%+ for generic AI tools.
+
+5 reasons it won:
+1. **Buyer has money** — contractors do $500K–$2M/yr, $39/mo is nothing
+2. **Daily problem** — estimates written multiple times per week, daily habit
+3. **High switching cost** — logo, pricing data, client history locked in over time
+4. **No good free alternative** — ChatGPT doesn't exist for this use case
+5. **Buyer can't build it themselves** — contractors frame houses, not code
+
+## What Failed and Why
+- **AI content tools**: saturated, competes with ChatGPT, 25%+ churn
+- **Generic developer tools**: developers just build it themselves
+- **One-time use tools**: no retention, no habit loop
+
+## The Scoring Formula (Before Building Anything)
+Score each factor 1–5, then multiply:
+1. Target customer income (broke creator=1, contractor=5)
+2. Usage frequency (once=1, daily=5)
+3. Existing alternatives (saturated=1, gap=5)
+4. Technical sophistication of buyer (developer=1, tradesperson=5)
+5. Integration depth (standalone=1, data accumulates=5)
+
+**>500: build it. 200–500: consider it. <200: skip.**
+- Contractor estimate tool: 5×5×4×5×5 = 2,500 ✅
+- AI blog writer: 1×3×1×2×1 = 6 ❌
+
+## Claude Code's Sweet Spot
+- Excellent at 0→MVP: scaffold, Stripe, auth, CRUD, UI — 80% there in hours
+- Productivity degrades with complexity: great at 5,000-line focused tools, struggles at 100,000-line platforms
+- CLAUDE.md accumulates patterns across builds — each product makes the next one faster
+- Micro-SaaS portfolio stays in Claude's sweet spot by design: never pushes past the complexity ceiling
+
+## The Portfolio Economics
+Traditional: 6 months, $30–50K, one bet, 90% fail rate
+Portfolio: 90 days, $1K, 47 bets, data by day 30, focus by day 60
+
+If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 months without building anything new.
+
+## Application to Gunner
+- Gunner IS a vertical tool (sales call coaching, specific niche)
+- Scoring: buyer income (AM/LM doing deals = 4), frequency (daily calls = 5), alternatives (Gong/Chorus too expensive for SMB = 4), sophistication (sales reps can't build it = 5), integration depth (call history/scores compound = 5) = 4×5×4×5×5 = 2,000 ✅
+- The framework validates Gunner's positioning — stay vertical, stay SMB, don't go horizontal
+- The churn benchmark: 4.8% is healthy for vertical tools. Track Gunner against this.
+
+## Behavioral Rules for Xhaka
+- When Corey is evaluating a new product idea, run it through the 5-factor scoring formula before any other analysis
+- When Gunner features are being prioritized, ask: does this increase daily usage frequency and switching cost?
+- When assessing Gunner's competitive position, reference: vertical beats horizontal, SMB gap is the moat
