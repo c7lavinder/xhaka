@@ -165,3 +165,41 @@ _No significant changes._
 - update last-scan state
 - update task_1773642602317_hjjdewo -> running
 - update task_1773642353963_38p96m6 -> running
+## 2026-03-16 (100 commits)
+### ✅ Built
+- Add Tools Intelligence nav link to Control Room header
+- dispatcher routes researcher/research-tool to tool-researcher job
+- researcher reads tool-research-inbox.md, queues research-tool tasks
+- add tool-researcher.ts — fetches and summarizes tool docs
+- stub knowledge dir for claude-code
+- stub knowledge dir for langsmith
+- Tools Intelligence page — 3-tier status, tool cards, chat interface
+- stub knowledge dir for sentry
+- stub knowledge dir for posthog
+- create TOOL-KNOWLEDGE-INDEX.md — master tool knowledge tracker
+- create tool-research-inbox.md — 13 tools queued for research
+- Control Room v4 — knowledge graph viz, digital twins panel, simulation console
+- Control Room v3 — living intelligence dashboard, 8 panels, GitHub API live data
+- add MiroFish repo to inbox — architecture patterns
+- MiroFish architecture spec — God View Engine, deferred build plan
+### 🐛 Fixed
+- remove duplicate tool-researcher case from dispatcher
+- dispatcher researcher case branches on research-tool task; merge tool-researcher routing
+- close behavioral gaps — LEARNINGS.md, SDD enforcement in SOUL.md, Auditor prompt review
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- remediation-state update
+- results-log [tool-monitor=success]
+- results-log [organize=success]
+- results-log [capture=success]
+- results-log [heartbeat-check=success]
+- results-log [librarian=success]
+- results-log [researcher=success]
+- results-log [dispatcher=success]
+- update AGENTS.md
