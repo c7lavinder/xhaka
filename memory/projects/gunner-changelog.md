@@ -45,3 +45,5 @@
 - use correct Railway domain (gunner-production) for OAuth redirect
 - use GHL Marketplace install link for OAuth connect button
 - startup crash — wrong column name in KPI index, opp ingestion conflict
+## 2026-03-16 (0 commits)
+_No significant changes._
