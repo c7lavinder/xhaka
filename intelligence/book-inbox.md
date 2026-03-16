@@ -17,9 +17,11 @@
 
 ### 2026-03-16 — Batch 2
 
-- [x] **The 7 Habits of Highly Effective People** — Stephen R. Covey → `memory/context/books/7-habits.md`
-- [x] **Think and Grow Rich** — Napoleon Hill → `memory/context/books/think-and-grow-rich.md`
-- [x] **Atomic Habits** — James Clear → `memory/context/books/atomic-habits.md`
+- [x] **Psycho-Cybernetics** — Maxwell Maltz → `memory/context/books/psycho-cybernetics.md`
+- [x] **Emotional Alchemy** — Tara Bennett-Goleman → `memory/context/books/emotional-alchemy.md`
+- [x] **The Art of Explanation** — Lee LeFever → `memory/context/books/art-of-explanation.md`
+- [x] **The Art of War** — Sun Tzu → `memory/context/books/art-of-war.md`
+- [x] **Letters from a Stoic** — Seneca → `memory/context/books/letters-from-a-stoic.md`
 
 ---
 
