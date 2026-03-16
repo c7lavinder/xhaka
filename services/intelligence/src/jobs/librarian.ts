@@ -120,6 +120,42 @@ export async function runLibrarian(): Promise<void> {
     await checkMemoryMd(report);
     await writeReport(report);
 
+
+    // Quality audit — flag thin/malformed files in knowledge base
+    const qualityIssues = await auditKnowledgeQuality();
+    if (qualityIssues.length > 0) {
+      const qualityReport =
+        `# Knowledge Quality Report\n` +
+        `_Generated: ${new Date().toISOString()}_\n\n` +
+        `## Issues Found (${qualityIssues.length})\n\n` +
+        qualityIssues.map((i) => `- ${i}`).join('\n') + '\n';
+      const existingQualityLog = await getFileContent(XHAKA_REPO, 'data/knowledge-quality-log.md').catch(() => null);
+      if (DRY_RUN) {
+        console.log(`[librarian] DRY RUN — would write quality log with ${qualityIssues.length} issue(s)`);
+      } else if (existingQualityLog) {
+        await updateFile(
+          XHAKA_REPO,
+          'data/knowledge-quality-log.md',
+          qualityReport,
+          `chore: knowledge quality audit [${qualityIssues.length} issues]`,
+          existingQualityLog.sha,
+        );
+      } else {
+        await createFile(
+          XHAKA_REPO,
+          'data/knowledge-quality-log.md',
+          qualityReport,
+          `chore: knowledge quality audit [${qualityIssues.length} issues]`,
+        );
+      }
+      console.log(`[librarian] Quality audit: ${qualityIssues.length} issue(s) found`);
+      if (qualityIssues.length > 10) {
+        await sendAlert(`⚠️ Knowledge quality: ${qualityIssues.length} files need attention. Run Librarian audit for details.`);
+      }
+    } else {
+      console.log('[librarian] Quality audit: all files pass');
+    }
+
     // Alert if MEMORY.md approaching limit
     if (report.memoryMdLines >= MEMORY_MD_WARN_THRESHOLD) {
       const emoji = report.memoryMdLines >= MEMORY_MD_HARD_LIMIT ? '🚨' : '⚠️';
@@ -522,6 +558,52 @@ async function writeReport(report: AuditReport): Promise<void> {
   }
 
   console.log(`[librarian] ✓ Report written to ${reportPath}`);
+}
+
+// ---------------------------------------------------------------------------
+// 8. Knowledge quality audit
+// ---------------------------------------------------------------------------
+
+async function auditKnowledgeQuality(): Promise<string[]> {
+  const issues: string[] = [];
+  const KB_PATHS = [
+    'memory/context/concepts',
+    'memory/context/technology',
+    'memory/context/workflows',
+    'memory/context/playbooks',
+    'memory/context/sim',
+    'memory/context/tools',
+    'memory/context/books',
+    'memory/decisions',
+    'memory/people',
+    'memory/projects',
+  ];
+
+  for (const basePath of KB_PATHS) {
+    try {
+      const files = await listDirectory(XHAKA_REPO, basePath).catch(() => []);
+      for (const file of files) {
+        if (!file.name.endsWith('.md') || ['CLAUDE.md', 'INDEX.md', '.gitkeep'].includes(file.name)) continue;
+
+        // Flag thin files
+        if (file.size < 500) {
+          issues.push(`⚠️ THIN: ${file.path} (${file.size} bytes) — needs content`);
+        }
+
+        // Check for frontmatter on files > 500 bytes
+        if (file.size > 500) {
+          try {
+            const content = await getFileContent(XHAKA_REPO, file.path);
+            if (content && !content.content.startsWith('---')) {
+              issues.push(`⚠️ NO_FRONTMATTER: ${file.path} — missing metadata header`);
+            }
+          } catch { /* skip */ }
+        }
+      }
+    } catch { /* skip missing dirs */ }
+  }
+
+  return issues;
 }
 
 // ---------------------------------------------------------------------------
