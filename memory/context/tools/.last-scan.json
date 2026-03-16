@@ -1,12 +1,12 @@
 {
-  "lastRunAt": "2026-03-16T11:05:10.160Z",
+  "lastRunAt": "2026-03-16T16:32:35.378Z",
   "versions": {
     "express": "4.22.0",
     "@octokit/rest": "5.0.5",
     "node-cron": "4.2.2",
-    "openai": "6.29.0",
+    "openai": "6.30.0",
     "@sentry/node": "10.43.0",
-    "@supabase/supabase-js": "2.99.2-canary.0",
+    "@supabase/supabase-js": "2.99.3-canary.0",
     "@trpc/client": "11.13.4",
     "@trpc/server": "11.13.4",
     "drizzle-orm": "1.0.0-beta.17",
@@ -16,9 +16,9 @@
     "zod": "4.3.6"
   },
   "changelogChecked": {
-    "anthropic": "2026-03-16T11:05:09.742Z",
-    "posthog": "2026-03-16T11:05:10.082Z",
-    "railway": "2026-03-16T11:05:10.160Z",
+    "anthropic": "2026-03-16T16:32:33.815Z",
+    "posthog": "2026-03-16T16:32:34.012Z",
+    "railway": "2026-03-16T16:32:34.485Z",
     "openai": "2026-03-16T08:43:28.989Z"
   }
 }
