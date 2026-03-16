@@ -3,6 +3,9 @@ import { Octokit } from '@octokit/rest';
 // ---------------------------------------------------------------------------
 // GitHub API client — wraps Octokit for clean repo read/write operations
 // ---------------------------------------------------------------------------
+// Hardened: updateFile and createFile retry on 409/422 (stale SHA) by
+//           re-fetching the fresh SHA and retrying once automatically.
+// ---------------------------------------------------------------------------
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -127,6 +130,11 @@ export async function getFileLastCommitDate(
 // Write operations
 // ---------------------------------------------------------------------------
 
+/**
+ * Creates (or updates) a file at the given path.
+ * Retries once automatically if a 409/422 Conflict arises from a stale SHA —
+ * fetches the fresh SHA and replays the write.
+ */
 export async function createFile(
   repoEnv: string,
   path: string,
@@ -136,20 +144,47 @@ export async function createFile(
   const { owner, repo } = parseRepo(repoEnv);
   const encoded = Buffer.from(content, 'utf-8').toString('base64');
 
-  // Check for an existing file to get its SHA — if found, this becomes an update
+  // Fetch the current SHA (if file exists) so GitHub accepts the write
   const existing = await getFileContent(repoEnv, path);
-  const sha = existing?.sha;
+  let sha = existing?.sha;
 
-  await octokit.repos.createOrUpdateFileContents({
-    owner,
-    repo,
-    path,
-    message,
-    content: encoded,
-    ...(sha ? { sha } : {}),
-  });
+  try {
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path,
+      message,
+      content: encoded,
+      ...(sha ? { sha } : {}),
+    });
+  } catch (err: unknown) {
+    if (isConflict(err)) {
+      // Stale SHA — re-fetch and retry once
+      console.log(
+        `[github] createFile conflict on "${path}" — SHA stale, re-fetching and retrying…`,
+      );
+      const fresh = await octokit.repos.getContent({ owner, repo, path });
+      sha = (fresh.data as { sha: string }).sha;
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        path,
+        message,
+        content: encoded,
+        sha,
+      });
+      console.log(`[github] createFile self-healed for "${path}" (fresh SHA: ${sha})`);
+    } else {
+      throw err;
+    }
+  }
 }
 
+/**
+ * Updates an existing file at the given path using the provided SHA.
+ * Retries once automatically if a 409/422 Conflict arises from a stale SHA —
+ * fetches the fresh SHA and replays the write.
+ */
 export async function updateFile(
   repoEnv: string,
   path: string,
@@ -159,6 +194,7 @@ export async function updateFile(
 ): Promise<void> {
   const { owner, repo } = parseRepo(repoEnv);
   const encoded = Buffer.from(content, 'utf-8').toString('base64');
+
   try {
     await octokit.repos.createOrUpdateFileContents({
       owner,
@@ -168,11 +204,14 @@ export async function updateFile(
       content: encoded,
       sha,
     });
-  } catch (err: any) {
-    if (err?.status === 422) {
-      // SHA is stale — re-fetch and retry once
+  } catch (err: unknown) {
+    if (isConflict(err)) {
+      // Stale SHA — re-fetch and retry once
+      console.log(
+        `[github] updateFile conflict on "${path}" — SHA stale, re-fetching and retrying…`,
+      );
       const current = await octokit.repos.getContent({ owner, repo, path });
-      const freshSha = (current.data as any).sha;
+      const freshSha = (current.data as { sha: string }).sha;
       await octokit.repos.createOrUpdateFileContents({
         owner,
         repo,
@@ -181,6 +220,7 @@ export async function updateFile(
         content: encoded,
         sha: freshSha,
       });
+      console.log(`[github] updateFile self-healed for "${path}" (fresh SHA: ${freshSha})`);
     } else {
       throw err;
     }
@@ -208,4 +248,11 @@ function isNotFound(err: unknown): boolean {
     'status' in err &&
     (err as { status: number }).status === 404
   );
+}
+
+/** 409 Conflict or 422 Unprocessable Entity both indicate a stale SHA. */
+function isConflict(err: unknown): boolean {
+  if (typeof err !== 'object' || err === null || !('status' in err)) return false;
+  const status = (err as { status: number }).status;
+  return status === 409 || status === 422;
 }

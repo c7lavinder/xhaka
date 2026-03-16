@@ -1,18 +1,23 @@
 // services/intelligence/src/utils/results-log.ts
 // Operational TSV log — appends one row per job run to data/results.tsv.
 // Never throws from appendResult.
+// Hardened: modelUsed and estimatedCost are always written, even on failure.
 
 import { getFileContent, updateFile, createFile } from '../lib/github.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const RESULTS_PATH = 'data/results.tsv';
-const HEADER = 'timestamp\tjobName\tstatus\tdurationMs\tscore\tnotes';
+const HEADER = 'timestamp\tjobName\tstatus\tdurationMs\tscore\tmodelUsed\testimatedCost\tnotes';
 
 export interface ResultEntry {
   jobName: string;
   status: 'success' | 'failed' | 'timeout' | 'skipped';
   durationMs: number;
   score?: number;
+  /** Which model produced the output (e.g. "gpt-4o", "gemini-1.5-flash"). */
+  modelUsed?: string;
+  /** Estimated USD cost for the AI call (0 if not applicable). */
+  estimatedCost?: number;
   notes?: string;
 }
 
@@ -29,6 +34,8 @@ export async function appendResult(entry: ResultEntry): Promise<void> {
       entry.status,
       String(entry.durationMs),
       entry.score !== undefined ? String(entry.score) : '',
+      entry.modelUsed ?? 'unknown',
+      entry.estimatedCost !== undefined ? entry.estimatedCost.toFixed(6) : '0.000000',
       entry.notes ?? '',
     ].join('\t');
 
