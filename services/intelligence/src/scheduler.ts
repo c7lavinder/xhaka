@@ -29,7 +29,7 @@ import { runPatternMiner } from './jobs/pattern-miner.js';
 import { runDispatcher } from './jobs/dispatcher.js';
 import { runVoiceIngest } from './jobs/voice-ingest.js';
 import { runLibrarian } from './jobs/librarian.js';
-import { runHindsightSync } from './jobs/hindsight-sync.js';
+import { runKbIndexer } from './jobs/kb-indexer.js';
 import { getFileContent } from './lib/github.js';
 import {
   shouldRunIfNotRunSince,
@@ -47,7 +47,7 @@ const TIMEZONE = 'America/Chicago';
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
 // Jobs excluded from catch-up (high-frequency or already self-recovering)
-const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'dispatcher', 'researcher', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'voice-ingest', 'librarian', 'hindsight-sync']);
+const CATCHUP_EXCLUDED = new Set(['operator', 'watchdog', 'capture', 'dispatcher', 'researcher', 'daily-log', 'feedback', 'inspect', 'routing-review', 'morning-brief', 'heartbeat-check', 'pre-deploy-test', 'benchmark', 'proactive-scan', 'agent-scorecard', 'behavior-sync', 'change-evaluator', 'pattern-miner', 'voice-ingest', 'librarian', 'kb-indexer']);
 
 // ---------------------------------------------------------------------------
 // Hard runtime kill switch — races job fn against a deadline timer
@@ -298,13 +298,19 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-
-  // --- Hindsight Sync: daily at 11:00 PM CST — episodic memory sync (after all other nightly jobs) ---
-  cron.schedule(
-    '0 23 * * *',
-    safeRun('hindsight-sync', async () => { await runHindsightSync(); }),
-    { timezone: TIMEZONE },
-  );
+  // --- KB Indexer: nightly at 2:00 AM CST — embeds memory/context/ files into Supabase pgvector ---
+  cron.schedule('0 2 * * *', () => {
+    console.log('[scheduler] Triggering job: kb-indexer');
+    (async () => {
+      if (shouldSkipDueToConflict('kb-indexer')) return;
+      const shouldRun = await shouldRunIfNotRunSince('kb-indexer', 20);
+      if (!shouldRun) { console.log('[scheduler] kb-indexer ran recently — skipping'); return; }
+      markHeavyJobRunning('kb-indexer');
+      try { await runWithTimeout(() => runKbIndexer().then(() => {}), 'kb-indexer'); }
+      catch (err) { console.error('[scheduler] Job kb-indexer failed:', err); }
+      finally { markHeavyJobDone('kb-indexer'); }
+    })();
+  }, { timezone: TIMEZONE });
 
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
@@ -335,7 +341,7 @@ export function startScheduler(): void {
   console.log('  ✓ pattern-miner     — every Thursday at 6:00 AM CST');
   console.log('  ✓ voice-ingest      — on-demand via capture task queue');
   console.log('  ✓ librarian         — daily at 2:00 AM CST (fallback cron) + dispatcher queue (primary)');
-  console.log('  ✓ hindsight-sync    — daily at 11:00 PM CST');
+  console.log('  ✓ kb-indexer        — nightly at 2:00 AM CST (pgvector semantic indexing)');
 }
 
 // ---------------------------------------------------------------------------
@@ -426,15 +432,15 @@ export async function runJobNow(jobName: string): Promise<void> {
     case 'voice-ingest':
       await runVoiceIngest();
       break;
-    case 'hindsight-sync':
-      await runHindsightSync();
-      break;
     case 'librarian':
       await runLibrarian();
       break;
+    case 'kb-indexer':
+      await runKbIndexer();
+      break;
     default:
       throw new Error(
-        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner, dispatcher, voice-ingest, librarian, hindsight-sync`,
+        `Unknown job: ${jobName}. Valid values: capture, propagate, improve, cleanup, organize, synthesize, tool-monitor, watchdog, watchdog-heartbeat, scribe, operator, daily-log, researcher, feedback, inspect, routing-review, morning-brief, heartbeat-check, proactive-scan, agent-scorecard, behavior-sync, change-evaluator, benchmark, pre-deploy-test, pattern-miner, dispatcher, voice-ingest, librarian, kb-indexer`,
       );
   }
 }
