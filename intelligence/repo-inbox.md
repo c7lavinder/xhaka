@@ -34,3 +34,5 @@
 - https://github.com/donnemartin/system-design-primer  # system-design-primer — large-scale system design patterns — architecture reference for Xhaka scaling
 - https://github.com/kamranahmedse/developer-roadmap  # developer-roadmap — visual learning paths for engineering skills — Gunner/NAH team development reference
 - https://github.com/Hamza-Mos/praxlab  # PraxLab — autonomous research harness, program.md loop pattern, tree of self-contained workspaces, SQLite experiment tracking
+- https://github.com/affaan-m/agentshield  # AgentShield — CLI scanner for Claude Code configs: npx ecc-agentshield scan → graded security report (secrets/permissions/hooks/MCP/agents). Run BEFORE Wednesday Claude Code setup.
+- https://github.com/karpathy/autoresearch  # Karpathy autoresearch — autonomous agent research loop: program.md sets direction, agent loops train.py forever. 126 experiments overnight, 20 improvements. Pattern generalizes beyond ML.
