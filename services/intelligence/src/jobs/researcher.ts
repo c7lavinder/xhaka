@@ -512,28 +512,6 @@ export async function runResearcher(): Promise<void> {
       await sendAlert(`⚠️ *Researcher job*: All ${failed.length} article(s) failed to process. Check URLs in intelligence/article-inbox.md.`);
     }
 
-
-    // -------------------------------------------------------------------------
-    // Book inbox processing
-    // -------------------------------------------------------------------------
-    const bookInboxPath = 'intelligence/book-inbox.md';
-    const bookInboxFile = await getFileContent(XHAKA_REPO, bookInboxPath);
-    if (bookInboxFile && bookInboxFile.content.trim()) {
-      const bookLines = bookInboxFile.content.split('\n');
-      const unprocessedBooks = bookLines.filter((line: string) => line.trim().startsWith('- [ ]'));
-      if (unprocessedBooks.length > 0) {
-        console.log(`[researcher] Found ${unprocessedBooks.length} unprocessed book(s) in book-inbox.md`);
-        for (const bookLine of unprocessedBooks) {
-          const title = bookLine.replace(/^- \[ \]\s*/, '').trim();
-          console.log(`[researcher] Queuing task: researcher/process-book — "${title}"`);
-          // TODO: queue a task "researcher/process-book" with the title
-          // Same pattern as article processing — actual AI extraction will run here
-        }
-      } else {
-        console.log('[researcher] No unprocessed books in book-inbox.md');
-      }
-    }
-
     console.log(`[researcher] Done. ${processed.length} processed, ${failed.length} failed.`);
     await markJobSuccess('researcher', _startTime);
   } catch (err) {

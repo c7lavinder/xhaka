@@ -47,5 +47,3 @@
 - startup crash — wrong column name in KPI index, opp ingestion conflict
 ## 2026-03-16 (0 commits)
 _No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._

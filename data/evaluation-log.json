@@ -22,13 +22,5 @@
     "grade": "MEDIUM",
     "rationale": "baseline record",
     "evaluatedAt": "2026-03-16T02:36:12.899Z"
-  },
-  {
-    "jobName": "scribe",
-    "runId": "2026-03-16T05:00:11.340Z",
-    "score": 10,
-    "grade": "LOW",
-    "rationale": "The output provides minimal information about the scribe's activities, such as the number of decisions filed and commits digested, but lacks context or significance to warrant inclusion in MEMORY.md.",
-    "evaluatedAt": "2026-03-16T05:00:12.578Z"
   }
 ]

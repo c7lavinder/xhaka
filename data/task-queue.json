@@ -307,20 +307,6 @@
       "startedAt": "2026-03-16T04:51:00.731Z",
       "completedAt": "2026-03-16T04:51:03.605Z",
       "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:51:03.345Z. Triggered by task task_1773636602764_8icxah9."
-    },
-    {
-      "id": "task_1773637201306_zn8irlv",
-      "agent": "researcher",
-      "task": "process-article-inbox",
-      "payload": {
-        "trigger": "article-inbox-watch",
-        "itemCount": 36
-      },
-      "status": "completed",
-      "createdAt": "2026-03-16T05:00:01.306Z",
-      "startedAt": "2026-03-16T05:02:01.621Z",
-      "completedAt": "2026-03-16T05:02:03.976Z",
-      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:02:03.824Z. Triggered by task task_1773637201306_zn8irlv."
     }
   ]
 }
