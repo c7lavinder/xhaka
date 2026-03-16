@@ -1,0 +1,33 @@
+name: TypeScript Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/intelligence/**'
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        working-directory: services/intelligence
+        run: npm ci
+        
+      - name: TypeScript check
+        working-directory: services/intelligence
+        run: npx tsc --noEmit
+        
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot7583931248:AAEStxEx3vhrgmUwf1aoxKeNggsGIIuBYa0/sendMessage" \
+            -d "chat_id=8031111945" \
+            -d "text=⚠️ TypeScript compile FAILED on main. Railway deploy may be broken. Check GitHub Actions: https://github.com/c7lavinder/xhaka/actions"
