@@ -7,6 +7,7 @@
 import { getFileContent, listDirectory, getRecentCommits, getFileLastCommitDate } from '../lib/github.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 import { sendTelegram } from '../utils/notifier.js';
+import { getTodayCostEstimate } from '../utils/smart-scheduler.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
@@ -181,6 +182,12 @@ export async function runMorningBrief(): Promise<void> {
         buildFeedbackInbox(),
       ]).then((results) => results.map((r) => (r.status === 'fulfilled' ? r.value : null)));
 
+    // Cost summary — never throws
+    const costData = await getTodayCostEstimate().catch(() => ({ totalUsd: 0, jobCount: 0, breakdown: {} }));
+    const costSection = costData.jobCount > 0
+      ? `\n💰 *Today\'s AI Cost:* ~$${costData.totalUsd} across ${costData.jobCount} job runs`
+      : '';
+
     // Determine if there's anything worth a full brief
     const hasIssues = jobHealth != null && jobHealth.includes('⚠️');
     const hasScores = evalScores != null;
@@ -192,10 +199,10 @@ export async function runMorningBrief(): Promise<void> {
     let message: string;
 
     if (!anythingToReport) {
-      message = `🌅 Morning Brief — ${dateLabel}\n\nAll clear. Nothing needs your attention today.\n\n— Xhaka`;
+      message = `🌅 Morning Brief — ${dateLabel}\n\nAll clear. Nothing needs your attention today.${costSection}\n\n— Xhaka`;
     } else {
       const sections = [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox].filter(Boolean) as string[];
-      message = `🌅 Morning Brief — ${dateLabel}\n\n${sections.join('\n\n')}\n\n— Xhaka`;
+      message = `🌅 Morning Brief — ${dateLabel}\n\n${sections.join('\n\n')}${costSection}\n\n— Xhaka`;
     }
 
     // Enforce Telegram 4096-char limit
