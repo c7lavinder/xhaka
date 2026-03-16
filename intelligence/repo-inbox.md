@@ -22,3 +22,4 @@
 - https://github.com/Crosstalk-Solutions/project-nomad  # agent project management / multi-agent coordination
 - https://github.com/paperclipai/paperclip  # AI memory / context management
 - https://github.com/vectorize-io/hindsight-openclaw  # episodic memory for OpenClaw — auto-capture, auto-recall, pgvector
+- https://github.com/MoonshotAI/Attention-Residuals  # Moonshot AI attention residuals research — LLM architecture
