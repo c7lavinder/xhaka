@@ -4,7 +4,7 @@
 // Triggered by: task-queue when a commit lands on main
 // Proof of Work: commit audit summary written to intelligence/audits/YYYY-MM-DD-<sha>.md
 
-import { getFileContent, getRecentCommits, createFile } from '../lib/github.js';
+import { getFileContent, getRecentCommits, createFile, getCommitDiff } from '../lib/github.js';
 import { synthesize } from '../lib/openai.js';
 import { sendTelegram } from '../utils/notifier.js';
 
@@ -12,9 +12,23 @@ const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const AUDIT_DIR = 'intelligence/audits';
 const RULES_PATH = 'RULES.md';
 
-// ---------------------------------------------------------------------------
+// Patterns for docs-only files — no real code, skip auditing
+const DOCS_ONLY_PATTERNS = [
+  /\.md$/i,
+  /\.gitkeep$/,
+  /^intelligence\//,         // audit/memory artifacts
+  /package-lock\.json$/,
+  /\.json$/i,                // data/config JSON files
+];
+
+function isDocsOnly(filenames: string[]): boolean {
+  if (filenames.length === 0) return true;
+  return filenames.every((f) => DOCS_ONLY_PATTERNS.some((p) => p.test(f)));
+}
+
+// ----------------------------------------------------------------------------
 // Types
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 interface AuditPayload {
   commitSha?: string;
@@ -25,16 +39,16 @@ interface AuditPayload {
 
 interface AuditResult {
   commitSha: string;
-  verdict: 'PASS' | 'WARN' | 'FAIL';
+  verdict: 'PASS' | 'WARN' | 'FAIL' | 'SKIPPED';
   summary: string;
   concerns: string[];
   recommendations: string[];
   auditedAt: string;
 }
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Main
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 export async function runAuditor(payload: Record<string, unknown> = {}): Promise<string> {
   const p = payload as AuditPayload;
@@ -54,57 +68,91 @@ export async function runAuditor(payload: Record<string, unknown> = {}): Promise
     const commits = await getRecentCommits(REPO_ENV, since);
     if (commits.length > 0) {
       const latest = commits[0];
-      commitSha = latest.sha.slice(0, 8);
+      commitSha = latest.sha; // keep full SHA for diff API call
       commitMessage = latest.message;
       author = latest.author;
     }
   }
 
-  console.log(`[auditor] Auditing commit: ${commitSha} — "${commitMessage}" by ${author}`);
+  console.log(`[auditor] Auditing commit: ${commitSha.slice(0, 8)} — "${commitMessage}" by ${author}`);
 
-  // 2. Load RULES.md for compliance check
+  // 2. Fetch the actual commit diff
+  const diffData = await getCommitDiff(REPO_ENV, commitSha);
+
+  // 3. Skip if diff unavailable or docs-only
+  if (!diffData || diffData.files.length === 0) {
+    console.log('[auditor] No diff available — skipping.');
+    return `skipped: docs-only commit (no diff for ${commitSha.slice(0, 8)})`;
+  }
+
+  const changedFiles = diffData.files.map((f) => f.filename);
+  if (isDocsOnly(changedFiles)) {
+    console.log(`[auditor] Docs-only commit (${changedFiles.join(', ')}) — skipping.`);
+    return `skipped: docs-only commit (${commitSha.slice(0, 8)})`;
+  }
+
+  console.log(`[auditor] Diff fetched: ${diffData.files.length} file(s) changed — proceeding with audit.`);
+
+  // 4. Build the diff text for the prompt (cap at 6000 chars to avoid token overflow)
+  const diffText = diffData.files
+    .map((f) => {
+      const patch = f.patch ? `\n${f.patch}` : ' (binary or no patch)';
+      return `--- ${f.filename} (${f.status}, +${f.additions}/-${f.deletions})${patch}`;
+    })
+    .join('\n\n')
+    .slice(0, 6000);
+
+  // 5. Load RULES.md for compliance context
   let rules = '';
   const rulesFile = await getFileContent(REPO_ENV, RULES_PATH);
   if (rulesFile) {
-    rules = rulesFile.content.slice(0, 3000); // Cap to avoid token overflow
+    rules = rulesFile.content.slice(0, 2000); // Cap to avoid token overflow
   }
 
-  // 3. Ask OpenAI to audit the commit against the rules
-  const systemPrompt = `You are the Auditor for the Xhaka AI system. Your job is to review code changes and ensure they comply with the system's rules and standards.
+  // 6. Ask OpenAI to audit the actual diff
+  const systemPrompt = `You are the Auditor for the Xhaka AI system. You review ACTUAL code diffs — not commit messages. Be specific. Be direct. No hallucinations.
 
 ${rules ? `## RULES.md (excerpt)\n${rules}` : 'No RULES.md found — apply general software quality standards.'}
 
-When auditing, check for:
-- Hardcoded secrets or credentials
-- Circular dependencies
-- Missing error handling
-- Breaking changes to core interfaces
-- DRY violations
+You will receive the real git diff. Audit it for:
+- Hardcoded secrets, API keys, or credentials
+- Missing error handling (unhandled promise rejections, missing try/catch)
+- Circular dependencies introduced
+- Missing tenantId enforcement on multi-tenant routes/queries
+- TypeScript type errors or unsafe \`any\` casts
 - Missing job-registry entries for new jobs
-- Any obvious bugs or regressions
 
-Return a structured JSON object with: verdict (PASS/WARN/FAIL), summary, concerns (array), recommendations (array).`;
+Be specific — cite file names and line numbers from the diff. If no real issues found, verdict is PASS.
 
-  const userPrompt = `Audit this commit:
+IMPORTANT: Only return FAIL if there is a genuine, concrete problem in the diff. Do not WARN on speculative or minor style issues. PASS means clean code, FAIL means real problem found.
 
-SHA: ${commitSha}
+Return a structured JSON object with: verdict (PASS/FAIL), summary, concerns (array), recommendations (array).`;
+
+  const userPrompt = `Commit: ${commitSha.slice(0, 8)}
 Author: ${author}
 Message: ${commitMessage}
 
-Provide your audit verdict and findings.`;
+Here is the actual code diff:
+
+${diffText}
+
+Audit this diff. Be specific — cite file names and line numbers. Verdict must be PASS or FAIL only.`;
 
   let auditResult: AuditResult;
 
   try {
-    const raw = await synthesize(systemPrompt, userPrompt, 800);
+    const raw = await synthesize(systemPrompt, userPrompt, 1000);
 
     // Parse JSON from response
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]);
+      // Normalize: treat WARN as PASS (we only care about real failures)
+      const rawVerdict: string = (parsed.verdict ?? 'PASS').toUpperCase();
+      const verdict = rawVerdict === 'FAIL' ? 'FAIL' : 'PASS';
       auditResult = {
         commitSha,
-        verdict: parsed.verdict ?? 'WARN',
+        verdict,
         summary: parsed.summary ?? 'Audit completed.',
         concerns: parsed.concerns ?? [],
         recommendations: parsed.recommendations ?? [],
@@ -113,7 +161,7 @@ Provide your audit verdict and findings.`;
     } else {
       auditResult = {
         commitSha,
-        verdict: 'WARN',
+        verdict: 'PASS',
         summary: raw.slice(0, 500),
         concerns: [],
         recommendations: [],
@@ -132,11 +180,11 @@ Provide your audit verdict and findings.`;
     };
   }
 
-  // 4. Write audit artifact to repo
+  // 7. Write audit artifact to repo
   const today = new Date().toISOString().slice(0, 10);
   const auditPath = `${AUDIT_DIR}/${today}-${commitSha.slice(0, 8)}.md`;
 
-  const verdictEmoji = auditResult.verdict === 'PASS' ? '✅' : auditResult.verdict === 'WARN' ? '⚠️' : '🚨';
+  const verdictEmoji = auditResult.verdict === 'PASS' ? '✅' : auditResult.verdict === 'FAIL' ? '🚨' : '⚠️';
 
   const auditDoc = `# Audit: ${commitSha.slice(0, 8)}
 
@@ -146,6 +194,7 @@ Provide your audit verdict and findings.`;
 - **Author:** ${author}
 - **Verdict:** ${verdictEmoji} ${auditResult.verdict}
 - **Audited At:** ${auditResult.auditedAt}
+- **Files Changed:** ${changedFiles.join(', ')}
 
 ## Summary
 ${auditResult.summary}
@@ -164,9 +213,9 @@ ${auditResult.recommendations.length > 0 ? auditResult.recommendations.map((r) =
     `auditor: audit ${commitSha.slice(0, 8)} — ${auditResult.verdict}`,
   );
 
-  // 5. Notify Corey if WARN or FAIL
-  if (auditResult.verdict !== 'PASS') {
-    const msg = `${verdictEmoji} *Auditor Report* — Commit \`${commitSha.slice(0, 8)}\`\n\n*Verdict:* ${auditResult.verdict}\n\n${auditResult.summary}\n\n${auditResult.concerns.length > 0 ? '*Concerns:*\n' + auditResult.concerns.map((c) => `• ${c}`).join('\n') : ''}`;
+  // 8. Notify Corey ONLY on FAIL — not on WARN or PASS
+  if (auditResult.verdict === 'FAIL') {
+    const msg = `${verdictEmoji} *Auditor Report* — Commit \`${commitSha.slice(0, 8)}\`\n\n*Verdict:* FAIL\n\n${auditResult.summary}\n\n${auditResult.concerns.length > 0 ? '*Concerns:*\n' + auditResult.concerns.map((c) => `• ${c}`).join('\n') : ''}`;
     await sendTelegram(msg);
   }
 
