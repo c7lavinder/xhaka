@@ -741,6 +741,17 @@
       "startedAt": "2026-03-16T08:45:01.568Z",
       "completedAt": "2026-03-16T08:45:04.686Z",
       "proofOfWork": "Audit PASS for commit 6d168521. 0 concern(s). Artifact: intelligence/audits/2026-03-16-6d168521.md"
+    },
+    {
+      "id": "task_1773651002313_2chh9na",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 356
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T08:50:02.313Z"
     }
   ]
 }
