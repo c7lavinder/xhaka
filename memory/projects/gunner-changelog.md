@@ -40,30 +40,10 @@
 - add diagnostic logging to GHL call ingestion
 - rewrite getCallRecordings to use GHL messages/export endpoint
 - saveGhlTokens now merges into existing crmConfig instead of replacing
-- CRM Layer 2 save no longer wipes OAuth, show token last 4 chars
-- update hardcoded GHL install link client ID
-- use correct Railway domain (gunner-production) for OAuth redirect
-- use GHL Marketplace install link for OAuth connect button
-- startup crash — wrong column name in KPI index, opp ingestion conflict
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
+- CRM Layer 2 save no lo
+
+## Status
+Active development with focus on CRM integration improvements.
+
+## Current State
+The project is actively being developed, with recent efforts on enhancing CRM integration and fixing related bugs. The team is addressing issues with HTTP timeouts and improving logging for better diagnostics. Current focus is on ensuring seamless sync operations and refining the user experience.
