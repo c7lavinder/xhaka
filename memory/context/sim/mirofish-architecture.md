@@ -30,6 +30,7 @@ Document → GraphRAG → Knowledge Graph → Agent Generation → OASIS Simulat
 - **Simulation engine:** OASIS (by CAMEL-AI) — agents that form groups, develop leaders, create herd effects
 - **Memory:** Zep Cloud — long-term agent memory that persists across simulation steps
 - **Knowledge graphs:** GraphRAG — relational entity extraction, not flat files
+- **Recommended GraphRAG implementation:** Cognee (github.com/topoteretes/cognee) — open source, 6 lines to ingest + cognify + search, combined vector/graph, runs locally, pip-installable
 - **Deploy:** Docker Compose one-click setup
 - **License:** AGPL-3.0 — fully open source, forkable
 - **Repo:** github.com/666ghj/MiroFish
