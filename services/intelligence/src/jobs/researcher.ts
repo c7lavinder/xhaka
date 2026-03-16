@@ -545,6 +545,48 @@ export async function runResearcher(): Promise<void> {
       }
     }
 
+
+    // ---------------------------------------------------------------------------
+    // Tool research inbox processing — queue tools for doc fetching
+    // ---------------------------------------------------------------------------
+    const toolInboxFile = await getFileContent(XHAKA_REPO, 'intelligence/tool-research-inbox.md');
+    if (toolInboxFile && toolInboxFile.content.trim()) {
+      // Match lines: - ToolName | https://... | category (not already processed/commented)
+      const toolLines = toolInboxFile.content.split('\n')
+        .filter((l) => l.trim().startsWith('- ') && l.includes(' | ') && !l.includes('~~'))
+        .map((l) => l.trim().replace(/^- /, '').trim())
+        .filter((l) => l.length > 0);
+
+      if (toolLines.length > 0) {
+        const allTasks = await getAllTasks();
+        const thirtyMinAgo = Date.now() - 30 * 60 * 1000;
+        for (const line of toolLines) {
+          const parts = line.split(' | ').map((p) => p.trim());
+          if (parts.length < 3) continue;
+          const [toolName, toolUrl, toolCategory] = parts;
+          if (!toolUrl.startsWith('http')) continue;
+
+          const alreadyQueued = allTasks.some(
+            (t) =>
+              t.agent === 'researcher' &&
+              t.task === 'research-tool' &&
+              (t.payload as Record<string, unknown>)?.tool === toolName &&
+              (t.status === 'pending' || t.status === 'running' ||
+                (t.status === 'completed' && new Date(t.completedAt ?? 0).getTime() > thirtyMinAgo)),
+          );
+          if (!alreadyQueued) {
+            await pushTask({
+              agent: 'researcher',
+              task: 'research-tool',
+              payload: { tool: toolName, url: toolUrl, category: toolCategory },
+            });
+            console.log(`[researcher] ↳ Queued tool for research: ${toolName} (${toolCategory})`);
+          }
+        }
+        console.log(`[researcher] Tool inbox: ${toolLines.length} tool(s) checked.`);
+      }
+    }
+
     console.log(`[researcher] Done. ${processed.length} processed, ${failed.length} failed.`);
     await markJobSuccess('researcher', _startTime);
   } catch (err) {
