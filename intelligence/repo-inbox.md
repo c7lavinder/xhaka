@@ -40,3 +40,5 @@
 - https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools  # 30,000+ lines of leaked AI system prompts — Claude Code 2.0 (57KB), Claude Sonnet 4.6 (99KB), Cursor, Devin, Windsurf, Manus, v0, Replit. HIGH PRIORITY: read Claude Code 2.0 prompt before Wednesday setup.
 - https://github.com/msitarzewski/agency-agents  # The Agency — collection of production-ready AI agent personalities (sales coach, discovery coach, pipeline analyst, strategy). Direct install to Claude Code: cp -r agency-agents/* ~/.claude/agents/
 - https://github.com/morganlinton/SimpleAgent  # SimpleAgent — minimal open source AI agent. Tool definitions, orchestration loop, HTTP execution layer. Onboarding reference.
+- https://github.com/obra/superpowers  # Superpowers — agentic skills framework for Claude Code. Install via plugin marketplace. HIGH PRIORITY Wednesday setup.
+- https://github.com/garrytan/gstack  # gstack — Garry Tan's 10 Claude Code agents. Install: bun + /gstack-upgrade. HIGH PRIORITY Wednesday setup.
