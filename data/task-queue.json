@@ -1428,9 +1428,11 @@
         "trigger": "article-inbox-watch",
         "itemCount": 366
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-16T14:50:01.642Z",
-      "startedAt": "2026-03-16T14:51:01.495Z"
+      "startedAt": "2026-03-16T14:51:01.495Z",
+      "completedAt": "2026-03-16T14:51:04.057Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:51:03.814Z. Triggered by task task_1773672601642_cpidtrt."
     }
   ]
 }
