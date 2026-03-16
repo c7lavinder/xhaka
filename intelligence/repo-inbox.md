@@ -23,3 +23,7 @@
 - https://github.com/paperclipai/paperclip  # AI memory / context management
 - https://github.com/vectorize-io/hindsight-openclaw  # episodic memory for OpenClaw — auto-capture, auto-recall, pgvector
 - https://github.com/MoonshotAI/Attention-Residuals  # Moonshot AI attention residuals research — LLM architecture
+- https://github.com/NirDiamant/RAG_Techniques  # comprehensive RAG techniques — chunking, hybrid search, re-ranking, production retrieval
+- https://github.com/microsoft/ai-agents-for-beginners  # Microsoft 12-lesson AI agents course — design patterns, tool use, memory, multi-agent
+- https://github.com/dair-ai/Prompt-Engineering-Guide  # definitive prompting guide — CoT, ReAct, RAG, cited by Google+OpenAI
+- https://github.com/Shubhamsaboo/awesome-llm-apps  # curated real AI agent apps — study finished implementations
