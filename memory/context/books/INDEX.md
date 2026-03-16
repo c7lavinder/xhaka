@@ -14,9 +14,11 @@ Last updated: 2026-03-16
 | [the-road.md](the-road.md) | The Road | Cormac McCarthy | Literary Fiction | 2026-03-15 |
 | [death-of-ivan-ilyich.md](death-of-ivan-ilyich.md) | The Death of Ivan Ilyich | Leo Tolstoy | Literary Fiction | 2026-03-15 |
 | [stoner.md](stoner.md) | Stoner | John Williams | Literary Fiction | 2026-03-15 |
-| [7-habits.md](7-habits.md) | The 7 Habits of Highly Effective People | Stephen R. Covey | Business / Self-help | 2026-03-16 |
-| [think-and-grow-rich.md](think-and-grow-rich.md) | Think and Grow Rich | Napoleon Hill | Business / Mindset | 2026-03-16 |
-| [atomic-habits.md](atomic-habits.md) | Atomic Habits | James Clear | Business / Behavior | 2026-03-16 |
+| [psycho-cybernetics.md](psycho-cybernetics.md) | Psycho-Cybernetics | Maxwell Maltz | Psychology / Self-image | 2026-03-16 |
+| [emotional-alchemy.md](emotional-alchemy.md) | Emotional Alchemy | Tara Bennett-Goleman | Psychology / Mindfulness | 2026-03-16 |
+| [art-of-explanation.md](art-of-explanation.md) | The Art of Explanation | Lee LeFever | Communication / Teaching | 2026-03-16 |
+| [art-of-war.md](art-of-war.md) | The Art of War | Sun Tzu | Strategy / Philosophy | 2026-03-16 |
+| [letters-from-a-stoic.md](letters-from-a-stoic.md) | Letters from a Stoic | Seneca | Philosophy / Stoicism | 2026-03-16 |
 
 ---
 
