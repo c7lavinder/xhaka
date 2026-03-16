@@ -57,3 +57,38 @@ _No significant changes._
 - task-queue: update task_1773635401606_kuktuzb -> running
 - task-queue: push researcher/process-article-inbox [task_1773635401606_kuktuzb]
 - task-queue: completed researcher/process-article-inbox [task_1773634800984_3t97je6]
+## 2026-03-16 (100 commits)
+### ✅ Built
+- feat: book library — 7 Habits, Think and Grow Rich, Atomic Habits
+- feat: book library — 5 classics (Homer, Lawrence, Njál, Plato, McCarthy)
+- feat: book library — 7 books processed (Carnegie, Manson, Dostoevsky, Aurelius, McCarthy, Tolstoy, Williams)
+- feat: book intelligence pipeline — library, INDEX, E-Myth + 100M Offers processed
+- feat: rebuild Control Room with live GitHub API polling — 8 live panels
+- feat: add index.html redirect for Control Room
+### 🐛 Fixed
+- fix: scribe skips evaluation when nothing to process — no false LOW_QUALITY alerts
+### 🔄 Changed
+- chore: results-log [capture=success]
+- chore: results-log [tool-monitor=success]
+- tool-monitor: update railway latest-update
+- tool-monitor: update posthog latest-update
+- tool-monitor: update anthropic latest-update
+- tool-monitor: update openai latest-update
+- tool-monitor: update gohighlevel latest-update
+- tool-monitor: update packages latest-update
+- tool-monitor: update last-scan state
+- chore: operator-log [SYSTEM=alert]
+- chore: remediation-state update
+- chore: results-log [organize=success]
+- chore: evaluation-log [scribe=10]
+- chore(scribe): gunner digest [2026-03-16]
+- chore(scribe): xhaka digest [2026-03-16]
+- task-queue: push researcher/process-article-inbox [task_1773637500945_iakcip1]
+- task-queue: completed auditor/verify-build [task_1773637368712_pcduuee] — Audit WARN for commit 2543ffed.
+- task-queue: update task_1773637368712_pcduuee -> running
+- task-queue: completed researcher/process-article-inbox [task_1773637201306_zn8irlv]
+- task-queue: update task_1773637201306_zn8irlv -> running
+- task-queue: completed researcher/process-article-inbox [task_1773636602764_8icxah9]
+- task-queue: update task_1773636602764_8icxah9 -> running
+- task-queue: completed researcher/process-article-inbox [task_1773636301377_1m80y0n]
+- task-queue: update task_1773636301377_1m80y0n -> running
