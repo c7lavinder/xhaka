@@ -50,5 +50,13 @@
     "status": "pending",
     "createdAt": "2026-03-16T02:31:18Z",
     "payload": {}
+  },
+  {
+    "id": "task_1773628308488_manual_v2",
+    "agent": "researcher",
+    "task": "process-article-inbox",
+    "status": "pending",
+    "createdAt": "2026-03-16T02:31:48Z",
+    "payload": {}
   }
 ]
