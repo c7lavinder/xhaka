@@ -137,16 +137,8 @@ async function routeToAgent(task: Task): Promise<string> {
       return `Repo researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
     }
 
-        // ── Tool Researcher ───────────────────────────────────────────────────────
-    case 'tool-researcher': {
-      console.log(`[dispatcher] → Tool Researcher: ${String(payload?.tool)} (${String(payload?.category)})`);
-      const result = await runToolResearch(
-        String(payload?.tool ?? ''),
-        String(payload?.url ?? ''),
-        String(payload?.category ?? ''),
-      );
-      return `Tool researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
-    }
+
+        }
 
     // ── Unknown ────────────────────────────────────────────────────────────
     default: {
