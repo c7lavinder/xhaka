@@ -193,3 +193,25 @@ A developer used MiroFish to simulate 4,096 autonomous agents (analysts, bettors
 ## Wallet Ref
 https://polymarket.com/@0p0jogggg
 ---
+
+---
+title: MiroFish God View Terminal — Prediction Market Arbitrage
+source: twitter/kreo
+date: 2026-03-15
+tags: [mirofish, god-view, prediction-markets, polymarket, behavioral-arbitrage]
+---
+# MiroFish God View Terminal — Prediction Market Arbitrage
+
+A implementation of a MiroFish "God View" terminal using 56 live agents to simulate real-world reactions to injected scenarios (Fed cuts, military standoffs, tariff announcements).
+
+## Key Strategy
+- **Predicting the Reaction, Not the Event:** The edge is predicting how people (and thus prediction market odds) will move in response to an event, rather than predicting the event itself.
+- **Agent Segmentation:** Simulates different personas (retail, institutional, opinion leaders) to see where consensus forms first.
+- **Latency & Throughput:** 5,000 ops/s, 23ms latency — essential for beating the "herd" to the trade.
+
+## Performance
+- Reported $7,358 profit in 7 days by front-running market sentiment shifts.
+
+## Wallet/Copytrade
+http://kreo.app/@1743116
+---
