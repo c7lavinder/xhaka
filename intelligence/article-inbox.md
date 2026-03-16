@@ -215,3 +215,22 @@ A implementation of a MiroFish "God View" terminal using 56 live agents to simul
 ## Wallet/Copytrade
 http://kreo.app/@1743116
 ---
+
+---
+title: Niantic's 30 Billion Image Flywheel — Pokémon Go to Robot Navigation
+source: news/niantic
+date: 2026-03-15
+tags: [data-flywheels, niantic, ai-training, visual-navigation, stealth-data-collection]
+---
+# Niantic's 30 Billion Image Flywheel — Pokémon Go to Robot Navigation
+
+Niantic leveraged 500M Pokémon Go players to scan the real world, resulting in a dataset of 30 billion geo-tagged images. This data is now being used to train a 3D AI map that allows delivery robots and AR apps to navigate with centimeter-level precision without relying on GPS.
+
+## The Strategy: Stealth Data Collection
+- **Gamified Collection:** Users "played" while Niantic "collected." The game was the interface for a global mapping operation.
+- **Data Repurposing:** Data collected for a monster-catching game is now powering autonomous robotics and precision logistics.
+- **Accuracy:** Visual navigation within centimeters, far exceeding standard GPS.
+
+## The Lesson
+The best data collection doesn't feel like work. It's a byproduct of an engaging user experience (UX) that creates a secondary, much more valuable asset.
+---
