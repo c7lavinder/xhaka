@@ -288,3 +288,22 @@ _No significant changes._
 - update last-scan state
 - remediation-state update
 - heartbeat-state update
+## 2026-03-16 (100 commits)
+### ✅ Built
+- add pending manual steps reminder
+- librarian quality audit + pending manual steps reminder
+- morning brief v2 — signal-only format
+- pre-deploy TypeScript check — GitHub Actions workflow
+### 🐛 Fixed
+- hindsight-sync — await markJobStart (returns Promise<number>)
+- librarian quality audit — use content.length instead of file.size
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- remediation-state update
+- memory synthesis 2026-03-16 — update dates + system status
