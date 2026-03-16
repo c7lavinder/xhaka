@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "smart-connections": {
+      "command": "python",
+      "args": ["smart-connections-mcp/server.py"],
+      "env": {
+        "OBSIDIAN_VAULT_PATH": "/Users/wholesaleai/.openclaw/workspace"
+      }
+    },
+    "qmd": {
+      "command": "qmd",
+      "args": ["mcp"],
+      "env": {
+        "HOME": "~"
+      }
+    },
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "obsidian-mcp"]
+    }
+  }
+}
