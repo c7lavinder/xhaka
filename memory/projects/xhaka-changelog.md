@@ -146,3 +146,22 @@ _No significant changes._
 - task-queue: update task_1773640801435_3r3e3b0 -> running
 - chore: evaluation-log [researcher=60]
 - refactor: prose-as-title renaming for knowledge graph
+## 2026-03-16 (100 commits)
+### ✅ Built
+- register repo-researcher metric (repos_analyzed)
+- dispatcher routes repo-researcher/process-repo tasks
+- add repo-researcher.ts — analyzes GitHub repos into knowledge notes
+- Librarian agent — knowledge graph custodian, daily audit, banned content enforcement
+- add repo-inbox.md
+### 🐛 Fixed
+- voice-ingest TS2352 — cast Whisper duration via unknown before number
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- update task_1773642602317_hjjdewo -> running
+- update task_1773642353963_38p96m6 -> running
