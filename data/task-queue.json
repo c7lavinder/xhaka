@@ -1503,6 +1503,17 @@
       "startedAt": "2026-03-16T15:26:01.495Z",
       "completedAt": "2026-03-16T15:26:04.058Z",
       "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:26:03.840Z. Triggered by task task_1773674701763_fsf1hwn."
+    },
+    {
+      "id": "task_1773675001856_7cmyola",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T15:30:01.856Z"
     }
   ]
 }
