@@ -203,3 +203,33 @@ _No significant changes._
 - results-log [researcher=success]
 - results-log [dispatcher=success]
 - update AGENTS.md
+## 2026-03-16 (100 commits)
+### ✅ Built
+- lightweight static control room — vanilla JS, no build step
+- AI five-layer stack — infrastructure gravity thesis, Gunner data moat implication
+- add AI five-layer stack article to inbox
+- add multi-agent architecture rules to LEARNINGS.md
+- add Claude subagents vs agent teams article
+- Paperclip KB spec — two memory layers, Hindsight as missing piece
+- add Hindsight repo to inbox — episodic memory layer
+- morning-brief shows daily AI cost estimate via smart-scheduler
+- wrap improve/cleanup/organize/propagate/scribe with smart scheduling
+- markJobSuccess extended with model/cost tracking via LLM router
+- add smart-scheduler.ts — run-if-not-run-since, conflict-avoidance, LLM router, cost tracker
+- add paperclip repo to inbox
+- control-room — lightweight static dashboard, migrated from separate repo
+### 🐛 Fixed
+- remove stray closing brace in dispatcher.ts switch — TS1128 build error
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- remediation-state update
+- heartbeat-state update
+- sync AGENTS.md
+- Add Paperclip org chart config for Xhaka Intelligence Co
+- Add Paperclip deep-dive knowledge file
