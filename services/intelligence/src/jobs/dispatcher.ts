@@ -13,6 +13,7 @@ import { runArchitect } from './architect.js';
 import { runVoiceIngest } from './voice-ingest.js';
 import { runLibrarian } from './librarian.js';
 import { runRepoResearch } from './repo-researcher.js';
+import { runToolResearch } from './tool-researcher.js';
 
 // ---------------------------------------------------------------------------
 // Dispatcher
@@ -127,7 +128,18 @@ async function routeToAgent(task: Task): Promise<string> {
       return `Repo researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
     }
 
-        // ── Unknown ────────────────────────────────────────────────────────────
+        // ── Tool Researcher ───────────────────────────────────────────────────────
+    case 'tool-researcher': {
+      console.log(`[dispatcher] → Tool Researcher: ${String(payload?.tool)} (${String(payload?.category)})`);
+      const result = await runToolResearch(
+        String(payload?.tool ?? ''),
+        String(payload?.url ?? ''),
+        String(payload?.category ?? ''),
+      );
+      return `Tool researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+    // ── Unknown ────────────────────────────────────────────────────────────
     default: {
       const msg = `No handler for agent="${task.agent}" task="${task.task}" — skipped`;
       console.warn(`[dispatcher] ⚠️ ${msg}`);
