@@ -957,6 +957,17 @@
       "startedAt": "2026-03-16T10:21:03.833Z",
       "completedAt": "2026-03-16T10:21:06.599Z",
       "proofOfWork": "Audit PASS for commit 9fb75d57. 0 concern(s). Artifact: intelligence/audits/2026-03-16-9fb75d57.md"
+    },
+    {
+      "id": "task_1773656701090_9syn2q7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T10:25:01.090Z"
     }
   ]
 }
