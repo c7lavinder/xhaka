@@ -9,7 +9,7 @@ import {
   getProcessedPath,
 } from '../lib/router.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
-import { enqueue } from '../utils/task-queue.js';
+import { enqueue, getPendingTasks } from '../utils/task-queue.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
@@ -154,8 +154,16 @@ async function checkArticleInbox(): Promise<void> {
       return;
     }
 
+    // Guard: only enqueue if no pending researcher task already exists
+    const pending = await getPendingTasks();
+    const alreadyQueued = pending.some((t) => t.agent === 'researcher');
+    if (alreadyQueued) {
+      console.log('[capture] Researcher task already pending — skipping duplicate enqueue.');
+      return;
+    }
+
     console.log(`[capture] 📰 article-inbox.md has ${lines.length} item(s) — enqueuing Researcher`);
-    await safeEnqueue('researcher', 'process-article-inbox', {
+    await safeEnqueue('researcher', 'process-articles', {
       trigger: 'article-inbox-watch',
       itemCount: lines.length,
     });
