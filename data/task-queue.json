@@ -353,6 +353,17 @@
       "startedAt": "2026-03-16T05:06:04.222Z",
       "completedAt": "2026-03-16T05:06:09.664Z",
       "proofOfWork": "Audit WARN for commit 029a6aad. 5 concern(s). Artifact: intelligence/audits/2026-03-16-029a6aad.md"
+    },
+    {
+      "id": "task_1773637801334_eclo7cx",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T05:10:01.334Z"
     }
   ]
 }
