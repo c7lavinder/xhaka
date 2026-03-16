@@ -8,6 +8,7 @@ import { markJobStart, markJobSuccess, markJobFailed, markJobStatus } from '../u
 import { sendAlert, classifyOpenAIError } from '../utils/alert.js';
 import { checkEnv, warnMissingEnv } from '../utils/env-check.js';
 import { evaluateJobOutput, compareWithBaseline, recordJobBaseline } from '../utils/evaluator.js';
+import { pushTask, getAllTasks } from '../utils/task-queue.js';
 import { sendTelegram } from '../utils/notifier.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -510,6 +511,38 @@ export async function runResearcher(): Promise<void> {
     // 5. Alert if ALL failed
     if (failed.length > 0 && processed.length === 0) {
       await sendAlert(`⚠️ *Researcher job*: All ${failed.length} article(s) failed to process. Check URLs in intelligence/article-inbox.md.`);
+    }
+
+
+    // ---------------------------------------------------------------------------
+    // Repo inbox processing — queue any new GitHub repo URLs for analysis
+    // ---------------------------------------------------------------------------
+    const repoInboxFile = await getFileContent(XHAKA_REPO, 'intelligence/repo-inbox.md');
+    if (repoInboxFile && repoInboxFile.content.trim()) {
+      const repoLines = repoInboxFile.content.split('\n')
+        .filter((l) => l.trim().startsWith('- https://github.com/'))
+        .map((l) => l.trim().replace(/^- /, '').split('#')[0].trim())
+        .filter((l) => l.length > 0);
+
+      if (repoLines.length > 0) {
+        const allTasks = await getAllTasks();
+        const thirtyMinAgo = Date.now() - 30 * 60 * 1000;
+        for (const repoUrl of repoLines) {
+          const alreadyQueued = allTasks.some(
+            (t) =>
+              t.agent === 'repo-researcher' &&
+              t.task === 'process-repo' &&
+              (t.payload as Record<string, unknown>)?.url === repoUrl &&
+              (t.status === 'pending' || t.status === 'running' ||
+                (t.status === 'completed' && new Date(t.completedAt ?? 0).getTime() > thirtyMinAgo)),
+          );
+          if (!alreadyQueued) {
+            await pushTask({ agent: 'repo-researcher', task: 'process-repo', payload: { url: repoUrl } });
+            console.log(`[researcher] ↳ Queued repo for analysis: ${repoUrl}`);
+          }
+        }
+        console.log(`[researcher] Repo inbox: ${repoLines.length} URL(s) checked.`);
+      }
     }
 
     console.log(`[researcher] Done. ${processed.length} processed, ${failed.length} failed.`);
