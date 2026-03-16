@@ -2,7 +2,7 @@
 // On-Call Dispatcher — reads pending tasks from the queue and routes them
 // to the appropriate specialist agent. Runs every minute.
 //
-// Supported agents: researcher | auditor | architect | voice-ingest | librarian
+// Supported agents: researcher | auditor | architect | voice-ingest | librarian | repo-researcher
 // All agents log a proof-of-work artifact back to the task entry on completion.
 
 import { getPendingTasks, updateTaskStatus, completeTask, pruneOldTasks, type Task } from '../utils/task-queue.js';
@@ -12,6 +12,7 @@ import { runAuditor } from './auditor.js';
 import { runArchitect } from './architect.js';
 import { runVoiceIngest } from './voice-ingest.js';
 import { runLibrarian } from './librarian.js';
+import { runRepoResearch } from './repo-researcher.js';
 
 // ---------------------------------------------------------------------------
 // Dispatcher
@@ -118,7 +119,15 @@ async function routeToAgent(task: Task): Promise<string> {
       return `Librarian audit completed at ${new Date().toISOString()}. Report: intelligence/librarian-reports/${new Date().toISOString().split('T')[0]}.md. Triggered by task ${task.id}.`;
     }
 
-    // ── Unknown ────────────────────────────────────────────────────────────
+
+    // ── Repo Researcher ────────────────────────────────────────────────────
+    case 'repo-researcher': {
+      console.log(`[dispatcher] → Repo Researcher: ${task.task} — ${String(payload?.url)}`);
+      const result = await runRepoResearch(String(payload?.url ?? ''));
+      return `Repo researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+        // ── Unknown ────────────────────────────────────────────────────────────
     default: {
       const msg = `No handler for agent="${task.agent}" task="${task.task}" — skipped`;
       console.warn(`[dispatcher] ⚠️ ${msg}`);
