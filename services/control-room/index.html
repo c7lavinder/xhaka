@@ -1,423 +1,692 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Xhaka — Control Room</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xhaka Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg:       #0a0f1e;
-    --bg2:      #0f172a;
-    --bg3:      #1e293b;
-    --border:   #1e293b;
-    --border2:  #334155;
-    --text:     #e2e8f0;
-    --muted:    #64748b;
-    --teal:     #2dd4bf;
-    --teal-dim: rgba(45,212,191,.12);
-    --amber:    #fbbf24;
-    --amber-dim:rgba(251,191,36,.12);
-    --red:      #f87171;
-    --red-dim:  rgba(248,113,113,.12);
-    --green:    #4ade80;
-    --green-dim:rgba(74,222,128,.12);
-    --blue:     #60a5fa;
-    --blue-dim: rgba(96,165,250,.12);
-    --purple:   #c084fc;
-    --gap:      12px;
-    --r:        10px;
-    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --bg: #0a0a0f;
+    --card: #111827;
+    --border: #1e293b;
+    --accent: #10b981;
+    --accent-dim: #065f46;
+    --text: #f1f5f9;
+    --muted: #64748b;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --green: #10b981;
   }
 
-  html { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
 
-  body { min-height: 100vh; padding: 16px; max-width: 1280px; margin: 0 auto; }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 
-  /* Header */
-  .hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-  .hdr-left { display: flex; align-items: center; gap: 10px; }
-  .brain { font-size: 22px; }
-  .hdr h1 { font-size: 15px; font-weight: 700; color: var(--teal); letter-spacing: .5px; }
-  .hdr sub { color: var(--muted); font-size: 11px; display: block; }
-  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 6px var(--teal); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
-  #ts { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+  header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--accent);
+  }
 
-  /* Stat cards */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin-bottom: 20px; }
-  @media(max-width:640px){ .stats { grid-template-columns: repeat(2,1fr); } }
-  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
-  .stat-val { font-size: 26px; font-weight: 800; color: var(--teal); font-family: var(--font-mono); }
-  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+  header span {
+    font-size: 12px;
+    color: var(--muted);
+  }
 
-  /* Two-col grid */
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-bottom: 20px; }
-  @media(max-width:800px){ .grid2 { grid-template-columns: 1fr; } }
+  #last-updated {
+    font-size: 11px;
+    color: var(--muted);
+  }
 
-  /* Cards */
-  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
-  .card-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .card-title .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 
-  /* Job tiles */
-  .job { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; margin-bottom: 5px; background: var(--bg3); font-family: var(--font-mono); font-size: 12px; }
-  .job:last-child { margin-bottom: 0; }
-  .job-name { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .job-dur { color: var(--muted); font-size: 10px; white-space: nowrap; }
-  .badge { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
-  .badge-ok  { background: var(--green-dim); color: var(--green); }
-  .badge-err { background: var(--red-dim);   color: var(--red); }
-  .badge-run { background: var(--amber-dim); color: var(--amber); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    overflow: hidden;
+  }
+
+  .card.wide { grid-column: 1 / -1; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .badge.red { background: #450a0a; color: var(--red); }
+  .badge.amber { background: #451a03; color: var(--amber); }
+
+  /* Status dot */
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .dot.gray { background: var(--muted); }
+
+  /* Agent cards */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .agent-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .agent-card .agent-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .agent-name {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .agent-role {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Jobs table */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 500;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #0f172a;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #0f172a; }
+
+  .job-name {
+    font-weight: 500;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .status-pill.success { background: #052e16; color: var(--green); }
+  .status-pill.fail { background: #450a0a; color: var(--red); }
+  .status-pill.running { background: #451a03; color: var(--amber); }
+  .status-pill.unknown { background: #1e293b; color: var(--muted); }
 
   /* Commits */
-  .commit { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); }
-  .commit:last-child { border-bottom: 0; }
-  .sha { font-family: var(--font-mono); font-size: 11px; color: var(--teal); flex-shrink: 0; }
-  .commit-msg { font-size: 12px; color: var(--text); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-  .commit-date { font-size: 10px; color: var(--muted); flex-shrink: 0; }
+  .commit-list { display: flex; flex-direction: column; gap: 8px; }
 
-  /* Agents */
-  .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-bottom: 20px; }
-  @media(max-width:800px){ .agents-grid { grid-template-columns: repeat(2,1fr); } }
-  @media(max-width:500px){ .agents-grid { grid-template-columns: 1fr; } }
-  .agent { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
-  .agent-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .agent-emoji { font-size: 20px; }
-  .agent-name { font-weight: 700; font-size: 13px; }
-  .agent-role { font-size: 10px; color: var(--muted); }
-  .agent-status { margin-left: auto; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
-  .s-active   { background: var(--teal-dim);   color: var(--teal); }
-  .s-standby  { background: var(--amber-dim);  color: var(--amber); }
-  .s-sched    { background: var(--purple-dim, rgba(192,132,252,.12)); color: var(--purple); }
-  .agent-desc { font-size: 11px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
-  .agent-trigger { font-size: 10px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 7px; font-family: var(--font-mono); }
-  .agent-trigger span { color: var(--text); }
+  .commit-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px;
+    background: var(--bg);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
 
-  /* Stack tiers */
-  .tier { margin-bottom: 16px; }
-  .tier-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .tier-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; padding: 2px 8px; border-radius: 4px; }
-  .tier-live   { background: var(--teal-dim);  color: var(--teal); }
-  .tier-wired  { background: var(--amber-dim); color: var(--amber); }
-  .tier-explore{ background: var(--blue-dim);  color: var(--blue); }
-  .tier-line   { flex: 1; height: 1px; background: var(--border); }
-  .tier-count  { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
-  .tool-chips  { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { font-size: 11px; padding: 3px 9px; border-radius: 5px; border: 1px solid var(--border2); color: var(--muted); background: var(--bg3); }
+  .commit-sha {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--accent);
+    white-space: nowrap;
+    background: var(--accent-dim);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
 
-  /* Knowledge */
-  .know-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
-  @media(max-width:640px){ .know-grid { grid-template-columns: repeat(2,1fr); } }
-  .know-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; text-align: center; }
-  .know-icon { font-size: 22px; margin-bottom: 6px; }
-  .know-val { font-size: 24px; font-weight: 800; color: var(--text); font-family: var(--font-mono); }
-  .know-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: 2px; }
+  .commit-msg {
+    font-size: 13px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-  /* Skeleton */
-  .skel { background: var(--bg3); border-radius: 4px; animation: shimmer 1.4s ease-in-out infinite; }
-  @keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:.7} }
+  .commit-time {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
 
-  /* Footer */
-  footer { text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); }
-  footer a { color: var(--teal); text-decoration: none; }
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-  /* Section title */
-  .section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-  .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+  .stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
 
-  /* Error */
-  .err { font-size: 11px; color: var(--red); font-family: var(--font-mono); }
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Tool tiers */
+  .tier-section { margin-bottom: 14px; }
+  .tier-section:last-child { margin-bottom: 0; }
+
+  .tier-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tier-label.live { color: var(--green); }
+  .tier-label.notwired { color: var(--muted); }
+  .tier-label.explore { color: var(--amber); }
+
+  .tool-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid;
+  }
+
+  .chip.live {
+    background: #052e16;
+    color: var(--green);
+    border-color: var(--accent-dim);
+  }
+
+  .chip.notwired {
+    background: #0f172a;
+    color: var(--muted);
+    border-color: var(--border);
+  }
+
+  .chip.explore {
+    background: #451a03;
+    color: var(--amber);
+    border-color: #78350f;
+  }
+
+  /* Queue big number */
+  .queue-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .queue-num {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .queue-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .queue-meta span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .loading {
+    color: var(--muted);
+    font-size: 12px;
+    padding: 10px 0;
+    text-align: center;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 12px;
+    padding: 8px;
+    background: #450a0a22;
+    border-radius: 6px;
+    border: 1px solid #450a0a;
+  }
+
+  @media (max-width: 640px) {
+    .grid { padding: 12px; gap: 12px; }
+    header { padding: 14px 16px; }
+    .queue-num { font-size: 36px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="hdr">
-  <div class="hdr-left">
-    <div class="pulse-dot"></div>
-    <span class="brain">🧠</span>
-    <div>
-      <h1>XHAKA — CONTROL ROOM</h1>
-      <sub>c7lavinder/xhaka · Telegram is primary</sub>
+<header>
+  <h1>🧠 Xhaka Control Room</h1>
+  <span id="last-updated">Loading...</span>
+</header>
+
+<div class="grid">
+
+  <!-- Queue Depth -->
+  <div class="card" id="card-queue">
+    <div class="card-header">
+      <span class="card-title">Task Queue</span>
+      <span class="badge" id="queue-badge">—</span>
+    </div>
+    <div class="queue-display">
+      <div class="queue-num" id="queue-depth">—</div>
+      <div class="queue-meta">
+        <span id="queue-detail">Fetching...</span>
+      </div>
     </div>
   </div>
-  <span id="ts">Loading…</span>
-</div>
 
-<!-- STAT CARDS -->
-<div class="stats">
-  <div class="stat"><div class="stat-val" id="s-jobs">—</div><div class="stat-label">Jobs Today</div></div>
-  <div class="stat"><div class="stat-val" id="s-queue">—</div><div class="stat-label">Queue Depth</div></div>
-  <div class="stat"><div class="stat-val" id="s-books">—</div><div class="stat-label">Books Loaded</div></div>
-  <div class="stat"><div class="stat-val" id="s-commits">—</div><div class="stat-label">Commits Today</div></div>
-</div>
-
-<!-- JOBS + COMMITS -->
-<div class="grid2">
-  <div class="card">
-    <div class="card-title"><span class="dot"></span>Recent Intelligence Jobs</div>
-    <div id="jobs-list"><div class="skel" style="height:32px;margin-bottom:5px;border-radius:6px"></div><div class="skel" style="height:32px;margin-bottom:5px;border-radius:6px"></div><div class="skel" style="height:32px;border-radius:6px"></div></div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="dot"></span>Recent Commits</div>
-    <div id="commits-list"><div class="skel" style="height:20px;margin-bottom:8px;border-radius:4px"></div><div class="skel" style="height:20px;margin-bottom:8px;border-radius:4px"></div><div class="skel" style="height:20px;border-radius:4px"></div></div>
-  </div>
-</div>
-
-<!-- AGENTS -->
-<div class="section-title">Agents</div>
-<div class="agents-grid" id="agents-grid">
-<!-- filled by JS -->
-</div>
-
-<!-- STACK -->
-<div class="section-title" style="margin-top:4px">Stack</div>
-<div class="card" style="margin-bottom:20px">
-  <div class="tier">
-    <div class="tier-header">
-      <span class="tier-label tier-live">✅ LIVE</span>
-      <div class="tier-line"></div>
-      <span class="tier-count">8</span>
+  <!-- Knowledge Stats -->
+  <div class="card" id="card-knowledge">
+    <div class="card-header">
+      <span class="card-title">Knowledge Base</span>
     </div>
-    <div class="tool-chips">
-      <span class="chip">Railway</span><span class="chip">GitHub</span><span class="chip">OpenAI</span><span class="chip">Telegram</span><span class="chip">GoHighLevel</span><span class="chip">BatchDialer</span><span class="chip">BatchLeads</span><span class="chip">CallRail</span>
+    <div class="stats-row" id="knowledge-stats">
+      <div class="loading">Loading...</div>
     </div>
   </div>
-  <div class="tier">
-    <div class="tier-header">
-      <span class="tier-label tier-wired">🟡 NOT WIRED</span>
-      <div class="tier-line"></div>
-      <span class="tier-count">5</span>
+
+  <!-- Agents -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="card-title">Agent Roster</span>
+      <span class="badge">6 Active</span>
     </div>
-    <div class="tool-chips">
-      <span class="chip">Sentry</span><span class="chip">PostHog</span><span class="chip">LangSmith</span><span class="chip">Supabase</span><span class="chip">Gemini</span>
+    <div class="agents-grid" id="agents-grid"></div>
+  </div>
+
+  <!-- Job Results -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="card-title">Last 10 Job Results</span>
+      <span class="badge" id="jobs-badge">—</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>Status</th>
+            <th>Agent</th>
+            <th>Duration</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="jobs-body">
+          <tr><td colspan="5" class="loading">Loading job results...</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <div class="tier" style="margin-bottom:0">
-    <div class="tier-header">
-      <span class="tier-label tier-explore">🔵 EXPLORE</span>
-      <div class="tier-line"></div>
-      <span class="tier-count">7</span>
+
+  <!-- Recent Commits -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="card-title">Recent Commits</span>
+      <span class="badge" id="commits-badge">—</span>
     </div>
-    <div class="tool-chips">
-      <span class="chip">Zep Cloud</span><span class="chip">GraphRAG</span><span class="chip">Whisper API</span><span class="chip">MiroFish</span><span class="chip">Retell AI</span><span class="chip">n8n</span><span class="chip">Firecrawl</span>
+    <div class="commit-list" id="commits-list">
+      <div class="loading">Loading commits...</div>
     </div>
   </div>
-</div>
 
-<!-- KNOWLEDGE -->
-<div class="section-title">Knowledge Graph</div>
-<div class="know-grid" style="margin-bottom:20px">
-  <div class="know-card"><div class="know-icon">📚</div><div class="know-val" id="k-books">—</div><div class="know-label">Books</div></div>
-  <div class="know-card"><div class="know-icon">👥</div><div class="know-val" id="k-twins">—</div><div class="know-label">Digital Twins</div></div>
-  <div class="know-card"><div class="know-icon">🔧</div><div class="know-val" id="k-repos">—</div><div class="know-label">Repos Queued</div></div>
-  <div class="know-card"><div class="know-icon">📰</div><div class="know-val" id="k-articles">—</div><div class="know-label">Articles Digested</div></div>
-</div>
+  <!-- Tool Tiers -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="card-title">Tool Status</span>
+    </div>
+    <div class="tier-section">
+      <div class="tier-label live">● LIVE</div>
+      <div class="tool-chips" id="tools-live"></div>
+    </div>
+    <div class="tier-section">
+      <div class="tier-label notwired">○ NOT WIRED</div>
+      <div class="tool-chips" id="tools-notwired"></div>
+    </div>
+    <div class="tier-section">
+      <div class="tier-label explore">◎ EXPLORE</div>
+      <div class="tool-chips" id="tools-explore"></div>
+    </div>
+  </div>
 
-<footer>
-  <a href="https://github.com/c7lavinder/xhaka" target="_blank">c7lavinder/xhaka</a>
-  &nbsp;·&nbsp; Primary interface: Telegram &nbsp;·&nbsp; This is a reference view
-</footer>
+</div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────
-const REPO  = 'c7lavinder/xhaka';
 const TOKEN = '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';
-const API   = 'https://api.github.com';
+const REPO = 'c7lavinder/xhaka';
+const API = 'https://api.github.com';
 
-const gh = (path, raw = false) =>
-  fetch(`${API}/repos/${REPO}${path}`, {
-    headers: {
-      Authorization: `token ${TOKEN}`,
-      Accept: raw ? 'application/vnd.github.v3.raw' : 'application/vnd.github.v3+json'
-    }
-  });
-
-const ghContent = async (path) => {
-  const r = await gh(`/contents/${path}`, true);
-  if (!r.ok) return null;
-  return r.text();
-};
-
-const ghJson = async (path) => {
-  const r = await gh(`/contents/${path}`, true);
-  if (!r.ok) return null;
-  try { return JSON.parse(await r.text()); } catch { return null; }
-};
-
-const ghList = async (path) => {
-  const r = await gh(`/contents/${path}`);
-  if (!r.ok) return [];
-  try { return r.json(); } catch { return []; }
-};
-
-// ── TIMESTAMP ───────────────────────────────────────────────────────────
-document.getElementById('ts').textContent =
-  new Date().toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-
-// ── AGENTS (hardcoded) ───────────────────────────────────────────────────
 const AGENTS = [
-  { emoji:'🧠', name:'Xhaka',        role:'COO',                  status:'active',  desc:'Strategic partner. Goal tracking, accountability, decision support.',        trigger:'Always active' },
-  { emoji:'👷', name:'The Builder',   role:'Engineering',           status:'standby', desc:'Core backend logic, refactoring, DB schema, API endpoints via Claude Code.',  trigger:'Any code task > 2 lines' },
-  { emoji:'👮', name:'The Auditor',   role:'QA & Standards',        status:'sched',   desc:'Code reviews, linting, circular dep checks, enforces RULES.md.',             trigger:'Post-build + every 4h' },
-  { emoji:'🔬', name:'The Researcher',role:'Intelligence & R&D',    status:'sched',   desc:'Industry trends, VC signals, wholesale intel, article processing.',          trigger:'Daily 6AM + on-demand' },
-  { emoji:'🎨', name:'The Architect', role:'Visuals & Dashboard',   status:'standby', desc:'Frontend pages, HTML/CSS/JS, data visualization.',                           trigger:'Any UI request' },
-  { emoji:'📚', name:'The Librarian', role:'Knowledge Custodian',   status:'sched',   desc:'Audits books, twins, repos, articles. Keeps knowledge graph healthy.',        trigger:'Daily 7AM audit' },
+  { name: 'Xhaka',      role: 'COO / Strategy',     emoji: '🧠' },
+  { name: 'Builder',    role: 'Engineering',         emoji: '👷' },
+  { name: 'Auditor',    role: 'QA & Compliance',     emoji: '👮' },
+  { name: 'Researcher', role: 'Intelligence & R&D',  emoji: '🔬' },
+  { name: 'Architect',  role: 'Visuals & Dashboard', emoji: '🎨' },
+  { name: 'Librarian',  role: 'Memory & Knowledge',  emoji: '📚' },
 ];
 
-const agentGrid = document.getElementById('agents-grid');
-agentGrid.innerHTML = AGENTS.map(a => `
-  <div class="agent">
-    <div class="agent-head">
-      <span class="agent-emoji">${a.emoji}</span>
-      <div>
-        <div class="agent-name">${a.name}</div>
-        <div class="agent-role">${a.role}</div>
+const TOOLS = {
+  live:     ['Railway','GitHub','OpenAI','Telegram','GHL','BatchDialer','BatchLeads','CallRail'],
+  notwired: ['Sentry','PostHog','LangSmith','Supabase'],
+  explore:  ['Cognee','OpenViking','GitNexus','Superpowers','gstack','Paperclip','Hindsight'],
+};
+
+// Helpers
+async function ghFetch(path) {
+  const res = await fetch(`${API}${path}`, {
+    headers: { Authorization: `token ${TOKEN}`, Accept: 'application/vnd.github.v3+json' },
+  });
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${path}`);
+  return res.json();
+}
+
+async function ghRaw(path) {
+  const res = await fetch(`${API}${path}`, {
+    headers: { Authorization: `token ${TOKEN}`, Accept: 'application/vnd.github.v3.raw' },
+  });
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${path}`);
+  return res.text();
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
+
+function statusPill(status) {
+  const s = (status || '').toLowerCase();
+  if (s === 'success' || s === 'ok' || s === 'done' || s === 'pass') return `<span class="status-pill success"><span class="dot green"></span>success</span>`;
+  if (s === 'fail' || s === 'error' || s === 'failed') return `<span class="status-pill fail"><span class="dot red"></span>fail</span>`;
+  if (s === 'running' || s === 'active' || s === 'pending') return `<span class="status-pill running"><span class="dot amber"></span>running</span>`;
+  return `<span class="status-pill unknown">${status || '—'}</span>`;
+}
+
+// Render agents (static)
+function renderAgents() {
+  const grid = document.getElementById('agents-grid');
+  grid.innerHTML = AGENTS.map(a => `
+    <div class="agent-card">
+      <div class="agent-top">
+        <span class="dot green"></span>
+        <span>${a.emoji}</span>
+        <span class="agent-name">${a.name}</span>
       </div>
-      <span class="agent-status ${a.status === 'active' ? 's-active' : a.status === 'standby' ? 's-standby' : 's-sched'}">
-        ${a.status === 'active' ? '● ACTIVE' : a.status === 'standby' ? '○ STANDBY' : '⏱ SCHED'}
-      </span>
-    </div>
-    <div class="agent-desc">${a.desc}</div>
-    <div class="agent-trigger">Trigger: <span>${a.trigger}</span></div>
-  </div>
-`).join('');
-
-// ── HELPERS ──────────────────────────────────────────────────────────────
-function relTime(iso) {
-  const d = (Date.now() - new Date(iso)) / 1000;
-  if (d < 60)  return `${Math.round(d)}s ago`;
-  if (d < 3600) return `${Math.round(d/60)}m ago`;
-  if (d < 86400) return `${Math.round(d/3600)}h ago`;
-  return `${Math.round(d/86400)}d ago`;
-}
-
-function fmtMs(ms) {
-  if (!ms || isNaN(ms)) return '';
-  if (ms < 1000) return `${ms}ms`;
-  return `${(ms/1000).toFixed(1)}s`;
-}
-
-function today() {
-  return new Date().toISOString().slice(0,10);
-}
-
-// ── JOBS ─────────────────────────────────────────────────────────────────
-async function loadJobs() {
-  const tsv = await ghContent('data/results.tsv');
-  const el = document.getElementById('jobs-list');
-  if (!tsv) {
-    el.innerHTML = '<div class="err">results.tsv not found</div>';
-    document.getElementById('s-jobs').textContent = '0';
-    return;
-  }
-  const rows = tsv.trim().split('\n')
-    .filter(l => l.trim() && !l.startsWith('#'))
-    .map(l => { const p = l.split('\t'); return { ts: p[0]||'', job: p[1]||'', status: p[2]||'', durationMs: parseInt(p[3]||'0',10), score: p[4]||'', notes: p[5]||'' }; })
-    .reverse()
-    .slice(0, 10);
-
-  const todayStr = today();
-  const todayCount = rows.filter(r => r.ts.startsWith(todayStr)).length;
-  document.getElementById('s-jobs').textContent = todayCount || rows.length;
-
-  if (rows.length === 0) {
-    el.innerHTML = '<div class="err">No job data yet</div>';
-    return;
-  }
-
-  el.innerHTML = rows.map(r => {
-    const ok = r.status === 'success' || r.status === 'ok' || r.status === '✅';
-    const fail = r.status === 'error' || r.status === 'failed' || r.status === '❌';
-    const cls = ok ? 'badge-ok' : fail ? 'badge-err' : 'badge-run';
-    const lbl = ok ? '✅' : fail ? '❌' : '⏳';
-    const dur = fmtMs(r.durationMs);
-    return `<div class="job">
-      <span class="job-name">${r.job || 'unknown-job'}</span>
-      ${dur ? `<span class="job-dur">${dur}</span>` : ''}
-      <span class="badge ${cls}">${lbl} ${r.status}</span>
-    </div>`;
-  }).join('');
-}
-
-// ── QUEUE ─────────────────────────────────────────────────────────────────
-async function loadQueue() {
-  const data = await ghJson('data/task-queue.json');
-  const el = document.getElementById('s-queue');
-  if (!data) { el.textContent = '0'; return; }
-  const depth = Array.isArray(data) ? data.length
-    : data.queue ? data.queue.length
-    : data.tasks ? data.tasks.length
-    : Object.keys(data).length;
-  el.textContent = depth;
-}
-
-// ── COMMITS ───────────────────────────────────────────────────────────────
-async function loadCommits() {
-  const r = await gh('/commits?per_page=5');
-  const el = document.getElementById('commits-list');
-  if (!r.ok) { el.innerHTML = '<div class="err">Could not load commits</div>'; return; }
-  const commits = await r.json();
-  const todayStr = today();
-  const todayCount = commits.filter(c => c.commit.committer.date.startsWith(todayStr)).length;
-  document.getElementById('s-commits').textContent = todayCount || commits.length;
-
-  el.innerHTML = commits.map(c => `
-    <div class="commit">
-      <span class="sha">${c.sha.slice(0,7)}</span>
-      <span class="commit-msg">${c.commit.message.split('\n')[0]}</span>
-      <span class="commit-date">${relTime(c.commit.committer.date)}</span>
+      <div class="agent-role">${a.role}</div>
     </div>
   `).join('');
 }
 
-// ── KNOWLEDGE ─────────────────────────────────────────────────────────────
-async function loadKnowledge() {
-  const [books, twins, repoInbox, articleDigest] = await Promise.all([
-    ghList('memory/context/books'),
-    ghList('memory/context/sim'),
-    ghContent('intelligence/repo-inbox.md'),
-    ghContent('intelligence/article-digest.md'),
-  ]);
-
-  // Books count
-  const bookCount = Array.isArray(books)
-    ? books.filter(f => f.name.endsWith('.md') || f.name.endsWith('.txt')).length
-    : 0;
-  document.getElementById('k-books').textContent = bookCount || '22';
-  document.getElementById('s-books').textContent  = bookCount || '22';
-
-  // Twins count
-  const twinCount = Array.isArray(twins)
-    ? twins.filter(f => f.name.endsWith('.md')).length
-    : 0;
-  document.getElementById('k-twins').textContent = twinCount || '6';
-
-  // Repos queued — count lines starting with '-' or '##' in repo-inbox.md
-  if (repoInbox) {
-    const repoCount = repoInbox.split('\n').filter(l => l.trim().startsWith('- ') || l.trim().match(/^###?\s/)).length;
-    document.getElementById('k-repos').textContent = repoCount || '—';
-  } else {
-    document.getElementById('k-repos').textContent = '—';
-  }
-
-  // Articles digested — count '##' headers in article-digest.md
-  if (articleDigest) {
-    const artCount = (articleDigest.match(/^##\s/mg) || []).length;
-    document.getElementById('k-articles').textContent = artCount || '—';
-  } else {
-    document.getElementById('k-articles').textContent = '—';
+// Render tool tiers (static)
+function renderTools() {
+  for (const [tier, tools] of Object.entries(TOOLS)) {
+    const el = document.getElementById(`tools-${tier}`);
+    const dot = tier === 'live' ? '●' : tier === 'notwired' ? '○' : '◎';
+    el.innerHTML = tools.map(t => `<span class="chip ${tier}">${dot} ${t}</span>`).join('');
   }
 }
 
-// ── BOOT ─────────────────────────────────────────────────────────────────
-Promise.all([loadJobs(), loadQueue(), loadCommits(), loadKnowledge()])
-  .then(() => {
-    document.getElementById('ts').textContent +=
-      ' · loaded ' + ((performance.now()/1000).toFixed(1)) + 's';
-  });
+// Load queue
+async function loadQueue() {
+  try {
+    const raw = await ghRaw(`/repos/${REPO}/contents/data/task-queue.json`);
+    const data = JSON.parse(raw);
+    const tasks = Array.isArray(data) ? data : (data.tasks || data.queue || []);
+    const depth = tasks.length;
+    document.getElementById('queue-depth').textContent = depth;
+    document.getElementById('queue-badge').textContent = `${depth} tasks`;
+    const badge = document.getElementById('queue-badge');
+    if (depth === 0) { badge.className = 'badge'; }
+    else if (depth < 5) { badge.className = 'badge'; }
+    else { badge.className = 'badge amber'; }
+    document.getElementById('queue-detail').innerHTML = depth === 0
+      ? '<span style="color:var(--green)">Queue empty</span>'
+      : `<span style="color:var(--amber)">${depth} pending task${depth !== 1 ? 's' : ''}</span>`;
+  } catch (e) {
+    document.getElementById('queue-depth').textContent = '?';
+    document.getElementById('queue-detail').innerHTML = `<span style="color:var(--muted)">Unavailable</span>`;
+  }
+}
+
+// Load knowledge stats
+async function loadKnowledge() {
+  const el = document.getElementById('knowledge-stats');
+  const stats = [];
+
+  const tryCount = async (label, path) => {
+    try {
+      const data = await ghFetch(`/repos/${REPO}/contents/${path}`);
+      const count = Array.isArray(data) ? data.length : 1;
+      return { label, count };
+    } catch {
+      return { label, count: '?' };
+    }
+  };
+
+  const [books, sim, inbox] = await Promise.all([
+    tryCount('Books', 'memory/context/books'),
+    tryCount('Sim Contexts', 'memory/context/sim'),
+    tryCount('Repo Inbox', 'intelligence/repo-inbox.md'),
+  ]);
+
+  el.innerHTML = [books, sim, inbox].map(s => `
+    <div class="stat-box">
+      <div class="stat-num">${s.count}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>
+  `).join('');
+}
+
+// Load job results
+async function loadJobs() {
+  const tbody = document.getElementById('jobs-body');
+  try {
+    const raw = await ghRaw(`/repos/${REPO}/contents/data/results.tsv`);
+    const lines = raw.trim().split('\n').filter(Boolean);
+    // Try to detect header row
+    let dataLines = lines;
+    if (lines.length && lines[0].toLowerCase().includes('job') || lines[0].toLowerCase().includes('status') || lines[0].toLowerCase().includes('name')) {
+      dataLines = lines.slice(1);
+    }
+    const last10 = dataLines.slice(-10).reverse();
+
+    document.getElementById('jobs-badge').textContent = `${dataLines.length} total`;
+
+    if (last10.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:16px;">No job results found</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = last10.map(line => {
+      const cols = line.split('\t');
+      // Flexible column mapping — try common patterns
+      // Assume: job, status, agent, duration, timestamp (or subset)
+      const [c0, c1, c2, c3, c4] = cols;
+      const job = c0 || '—';
+      const status = c1 || '—';
+      const agent = c2 || '—';
+      const duration = c3 || '—';
+      const ts = c4 || '';
+      const tsDisplay = ts ? `<span title="${ts}">${timeAgo(ts)}</span>` : '—';
+      return `<tr>
+        <td><span class="job-name" title="${job}">${job}</span></td>
+        <td>${statusPill(status)}</td>
+        <td>${agent}</td>
+        <td>${duration}</td>
+        <td>${tsDisplay}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="error-msg">Could not load results.tsv — ${e.message}</div></td></tr>`;
+  }
+}
+
+// Load commits
+async function loadCommits() {
+  const el = document.getElementById('commits-list');
+  try {
+    const data = await ghFetch(`/repos/${REPO}/commits?per_page=5`);
+    document.getElementById('commits-badge').textContent = `${data.length} shown`;
+    el.innerHTML = data.map(c => {
+      const sha = c.sha.slice(0, 7);
+      const msg = c.commit.message.split('\n')[0];
+      const ts = c.commit.committer.date;
+      const author = c.commit.author.name;
+      return `<div class="commit-item">
+        <span class="commit-sha">${sha}</span>
+        <span class="commit-msg" title="${msg}">${msg}</span>
+        <span class="commit-time" title="${author}">${timeAgo(ts)}</span>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    el.innerHTML = `<div class="error-msg">Could not load commits — ${e.message}</div>`;
+  }
+}
+
+// Init
+function updateTimestamp() {
+  document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+}
+
+async function init() {
+  renderAgents();
+  renderTools();
+  await Promise.all([loadQueue(), loadKnowledge(), loadJobs(), loadCommits()]);
+  updateTimestamp();
+}
+
+init();
+
+// Auto-refresh every 60 seconds
+setInterval(init, 60000);
 </script>
 </body>
 </html>
