@@ -388,6 +388,19 @@ export async function runScribe(): Promise<void> {
     console.error('[scribe] Failed to send Telegram summary:', (alertErr as Error).message);
   }
 
+  // ── Guard: skip evaluation when there was nothing to process ─────────────
+  // An empty day (no commits, no decisions, no rules) is not a quality failure —
+  // it's simply a quiet day. Evaluating zero-content output produces misleading
+  // LOW_QUALITY alerts. Only evaluate when the job had real content to work with.
+  const hasContent = totalCommits > 0 || decisionsCount > 0 || rulesCount > 0;
+
+  if (!hasContent && !digestError && !extractionError) {
+    console.log('[scribe] Nothing to scribe today — skipping evaluation (no false LOW_QUALITY alerts)');
+    await markJobSuccess('scribe', startTime);
+    console.log('[scribe] Done');
+    return;
+  }
+
   // Mark job status based on whether all steps succeeded
   if (digestError || extractionError) {
     // Partial success — mark as success but errors are logged
