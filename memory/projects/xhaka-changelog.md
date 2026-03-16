@@ -115,3 +115,34 @@ _No significant changes._
 - task-queue: update task_1773637548861_q0e1mpl -> running
 - task-queue: update task_1773637500945_iakcip1 -> running
 - task-queue: update task_1773637201306_zn8irlv -> running
+## 2026-03-16 (100 commits)
+### ✅ Built
+- feat: add 47 Micro-SaaS article to inbox
+- feat: voice-ingest job — Whisper transcription + GPT-4o extraction
+- feat: add Spec Driven Development article to inbox
+- feat: MCP bridge setup + CLAUDE.md master teaching doc + voice ingest spec
+- feat: add full Claude+Obsidian memory stack article
+- feat: add Claude+Obsidian memory stack article to inbox
+### 🐛 Fixed
+- fix: voice-ingest TS2352 — cast Whisper duration via unknown before number
+### 🔄 Changed
+- chore: results-log [tool-monitor=success]
+- tool-monitor: update railway latest-update
+- tool-monitor: update posthog latest-update
+- tool-monitor: update anthropic latest-update
+- tool-monitor: update openai latest-update
+- tool-monitor: update gohighlevel latest-update
+- tool-monitor: update packages latest-update
+- tool-monitor: update last-scan state
+- chore: operator-log [SYSTEM=alert]
+- chore: remediation-state update
+- purge: scrub all Polymarket/MiroFish/betting articles from inbox
+- purge: remove all Polymarket/MiroFish/betting content from article-inbox
+- delete: remove Polymarket proposed change — banned content
+- reject: Polymarket proposal auto-rejected — banned content
+- task-queue: completed researcher/process-article-inbox
+- task-queue: update task_1773641401410_77ds6j8 -> running
+- task-queue: push researcher/process-article-inbox
+- task-queue: update task_1773640801435_3r3e3b0 -> running
+- chore: evaluation-log [researcher=60]
+- refactor: prose-as-title renaming for knowledge graph
