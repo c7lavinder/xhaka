@@ -305,6 +305,63 @@ export async function runHeartbeatCheck(): Promise<void> {
     await checkProposedChanges(state, alerts);
     await checkMorningBrief(state, alerts);
 
+    // ---------------------------------------------------------------------------
+    // Cognitive load checks — flags when system complexity is adding burden
+    // ---------------------------------------------------------------------------
+
+    // Check 6: Queue depth overload
+    try {
+      const queueFile = await getFileContent(REPO, 'data/task-queue.json').catch(() => null);
+      if (queueFile) {
+        const queue = JSON.parse(queueFile.content);
+        const pendingCount = (queue.tasks || []).filter((t: { status: string }) => t.status === 'pending').length;
+        if (pendingCount > 20) {
+          const key = 'queue-overload';
+          if (!isOnCooldown(state, key)) {
+            alerts.push(`⚠️ Queue overload: ${pendingCount} pending tasks. System may be accumulating faster than processing.`);
+            markAlertSent(state, key);
+          }
+        }
+      }
+    } catch {
+      // never throw from cognitive load checks
+    }
+
+    // Check 7: MEMORY.md line count approaching limit
+    try {
+      const memoryFile = await getFileContent(REPO, 'MEMORY.md').catch(() => null);
+      if (memoryFile) {
+        const lineCount = memoryFile.content.split('\n').length;
+        if (lineCount > 140) {
+          const key = 'memory-limit';
+          if (!isOnCooldown(state, key)) {
+            alerts.push(`⚠️ MEMORY.md approaching limit: ${lineCount}/150 lines. Run synthesis soon.`);
+            markAlertSent(state, key);
+          }
+        }
+      }
+    } catch {
+      // never throw from cognitive load checks
+    }
+
+    // Check 8: Results TSV — check if dispatcher has been failing
+    try {
+      const resultsFile = await getFileContent(REPO, 'data/results.tsv').catch(() => null);
+      if (resultsFile) {
+        const lines = resultsFile.content.trim().split('\n').slice(-20); // last 20 entries
+        const recentFails = lines.filter((l: string) => l.includes('\tfailed\t')).length;
+        if (recentFails >= 5) {
+          const key = 'results-failures';
+          if (!isOnCooldown(state, key)) {
+            alerts.push(`⚠️ ${recentFails} job failures in recent runs. Check results.tsv.`);
+            markAlertSent(state, key);
+          }
+        }
+      }
+    } catch {
+      // never throw from cognitive load checks
+    }
+
     // Persist updated cooldowns regardless of alert outcome
     await saveState(state, sha);
 
