@@ -132,3 +132,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-16T02:08:01.375Z	dispatcher	success	380		
 2026-03-16T02:10:00.585Z	dispatcher	success	397		
 2026-03-16T02:10:01.459Z	watchdog	success	386		
+2026-03-16T02:10:02.325Z	capture	failed	1217		
