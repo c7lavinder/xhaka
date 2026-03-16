@@ -27,3 +27,4 @@
 - https://github.com/microsoft/ai-agents-for-beginners  # Microsoft 12-lesson AI agents course — design patterns, tool use, memory, multi-agent
 - https://github.com/dair-ai/Prompt-Engineering-Guide  # definitive prompting guide — CoT, ReAct, RAG, cited by Google+OpenAI
 - https://github.com/Shubhamsaboo/awesome-llm-apps  # curated real AI agent apps — study finished implementations
+- https://github.com/SidU/openclaw-a365  # OpenClaw A365 — Microsoft 365 channel, agent gets own Entra ID identity, network sandbox, Graph API tools (calendar/email/users)
