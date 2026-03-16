@@ -1,16 +1,16 @@
 # Proposed Change — 2026-03-16
 Source: Polymarket Overview
 Target File: ROUTING.md
-Type: addition
+Type: new-section
 
 ## Current State
 doesn't exist
 
 ## Proposed Change
-Route tasks related to monitoring regulatory changes in international markets to the legal compliance team.
+Tasks related to understanding and analyzing external market platforms like Polymarket should be routed to the Researcher agent.
 
 ## Why
-Ensures that regulatory changes in platforms like Polymarket are properly monitored and addressed.
+This ensures that tasks related to external market analysis are handled by the appropriate agent, improving efficiency and expertise.
 
 ## Confidence
 HIGH
