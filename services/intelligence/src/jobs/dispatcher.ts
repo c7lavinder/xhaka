@@ -2,7 +2,7 @@
 // On-Call Dispatcher — reads pending tasks from the queue and routes them
 // to the appropriate specialist agent. Runs every minute.
 //
-// Supported agents: researcher | auditor | architect | voice-ingest
+// Supported agents: researcher | auditor | architect | voice-ingest | librarian
 // All agents log a proof-of-work artifact back to the task entry on completion.
 
 import { getPendingTasks, updateTaskStatus, completeTask, pruneOldTasks, type Task } from '../utils/task-queue.js';
@@ -11,6 +11,7 @@ import { runResearcher } from './researcher.js';
 import { runAuditor } from './auditor.js';
 import { runArchitect } from './architect.js';
 import { runVoiceIngest } from './voice-ingest.js';
+import { runLibrarian } from './librarian.js';
 
 // ---------------------------------------------------------------------------
 // Dispatcher
@@ -108,6 +109,13 @@ async function routeToAgent(task: Task): Promise<string> {
       console.log(`[dispatcher] → Voice Ingest: ${task.task}`);
       await runVoiceIngest();
       return `Voice ingest completed at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+    // ── Librarian ──────────────────────────────────────────────────────────
+    case 'librarian': {
+      console.log(`[dispatcher] → Librarian: ${task.task}`);
+      await runLibrarian();
+      return `Librarian audit completed at ${new Date().toISOString()}. Report: intelligence/librarian-reports/${new Date().toISOString().split('T')[0]}.md. Triggered by task ${task.id}.`;
     }
 
     // ── Unknown ────────────────────────────────────────────────────────────
