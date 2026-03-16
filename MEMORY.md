@@ -18,6 +18,8 @@
 1. **Xhaka Railway Project** — My home base. Monitor, organize, improve. Not build.
 2. **Gunner** — Corey's SaaS product. I observe, never touch. Builder handles all engineering.
 3. **NAH** — Wholesale ops. $300k/mo net profit goal. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data).
+4. **Security hardening** — ✅ Complete as of 2026-03-16.
+5. **Knowledge base expansion** — ✅ agency-agents patterns, AI tool prompts, Claude Code analysis added.
 
 ---
 
@@ -57,6 +59,7 @@ See `memory/decisions/` for full decision logs.
 - **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
 - **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
 - **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
+- **2026-03-16:** Security hardening complete. Knowledge base expanded with agency-agents, AI tool prompts, Claude Code analysis.
 
 ---
 
@@ -83,11 +86,12 @@ See `memory/people/` for full profiles.
 - **GitHub:** c7lavinder / token in TOOLS.md
 - **Memory cleanup:** Runs Sunday 6 AM CST (auto-archives 30+ day files)
 - **Intelligence jobs:** capture (5m), propagate (daily 6AM), improve (Mon 6AM), cleanup (Sun 6AM)
+- **Pre-deploy TS check:** GitHub Actions wired — alerts on compile failure
 
 ---
 
 ## 📋 SYNTHESIS SCHEDULE
 
 Every 5 days: review recent daily logs → distill key items into this file + subfolders.
-Last synthesis: 2026-03-11
-Next synthesis due: 2026-03-16
+Last synthesis: 2026-03-16
+Next synthesis due: 2026-03-21
