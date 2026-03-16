@@ -28,3 +28,8 @@
 - https://github.com/dair-ai/Prompt-Engineering-Guide  # definitive prompting guide — CoT, ReAct, RAG, cited by Google+OpenAI
 - https://github.com/Shubhamsaboo/awesome-llm-apps  # curated real AI agent apps — study finished implementations
 - https://github.com/SidU/openclaw-a365  # OpenClaw A365 — Microsoft 365 channel, agent gets own Entra ID identity, network sandbox, Graph API tools (calendar/email/users)
+- https://github.com/codecrafters-io/build-your-own-x  # build-your-own-x — implementations of real tools from scratch (databases, git, docker, interpreters) — Builder reference
+- https://github.com/public-apis/public-apis  # public-apis — massive curated list of free public APIs — useful for Researcher + Operator data sourcing
+- https://github.com/openai/openai-cookbook  # OpenAI Cookbook — practical examples, RAG patterns, function calling, agent architectures — direct prompt/agent patterns
+- https://github.com/donnemartin/system-design-primer  # system-design-primer — large-scale system design patterns — architecture reference for Xhaka scaling
+- https://github.com/kamranahmedse/developer-roadmap  # developer-roadmap — visual learning paths for engineering skills — Gunner/NAH team development reference
