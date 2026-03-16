@@ -883,6 +883,17 @@
       "startedAt": "2026-03-16T10:01:01.838Z",
       "completedAt": "2026-03-16T10:01:04.022Z",
       "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:01:03.855Z. Triggered by task task_1773655201766_7uymsev."
+    },
+    {
+      "id": "task_1773655501992_5a83arz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T10:05:01.992Z"
     }
   ]
 }
