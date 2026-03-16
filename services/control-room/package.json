@@ -1,12 +1,8 @@
 {
   "name": "xhaka-control-room",
   "version": "1.0.0",
-  "description": "Lightweight static dashboard — Xhaka Control Room",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "engines": {
-    "node": ">=18"
-  }
+  "type": "module",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "express": "^4.18.0" }
 }
