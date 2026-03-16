@@ -771,6 +771,17 @@
       "startedAt": "2026-03-16T08:53:01.730Z",
       "completedAt": "2026-03-16T08:53:02.641Z",
       "proofOfWork": "skipped: docs-only commit (f92d97cd)"
+    },
+    {
+      "id": "task_1773651901721_hqzri4b",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 357
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T09:05:01.722Z"
     }
   ]
 }
