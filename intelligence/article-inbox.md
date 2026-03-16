@@ -234,3 +234,33 @@ Niantic leveraged 500M Pokémon Go players to scan the real world, resulting in 
 ## The Lesson
 The best data collection doesn't feel like work. It's a byproduct of an engaging user experience (UX) that creates a secondary, much more valuable asset.
 ---
+
+---
+title: Building AI Agents with Claude — The Full Course
+source: article/course
+date: 2026-03-15
+tags: [ai-agents, claude-code, mcp, agent-teams, orchestration, systems-architecture]
+---
+# Building AI Agents with Claude — The Full Course
+
+A complete breakdown of the Claude Agent stack, from single-agent loops to multi-agent parallel teams.
+
+## The Agent Loop
+Think → Act → Observe → Repeat. An agent takes ownership of an outcome, not just a turn-based question.
+
+## The 4 Layers of the Stack
+1. **Claude Code:** The terminal agent for direct filesystem/terminal control.
+2. **Claude Agent SDK:** The engine (loop/tools/context) exposed for custom app development.
+3. **MCP (Model Context Protocol):** The connection layer for external tools (GitHub, DBs, browsers).
+4. **Agent Teams:** Multi-agent orchestration for parallel specialized workflows.
+
+## Critical Test: Chat vs. Agent
+- Single question/answer → Chat.
+- Multiple steps/iteration/tool usage → Agent.
+- Parallel components/specialists needed → Multi-agent.
+- Rule: If you are copy-pasting Claude output back into Claude for the next step, you need an agent.
+
+## Implementation Notes for Xhaka
+- We are currently using Layer 4 (Agent Teams) for Xhaka (Builder, Researcher, Auditor).
+- We are moving toward direct Layer 1 (Claude Code) integration for the Builder on Wednesday.
+---
