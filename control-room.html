@@ -6,6 +6,7 @@
 <title>🧠 Xhaka Intelligence — Control Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <style>
   :root {
     --bg: #0a0a0f;
@@ -832,6 +833,16 @@
     font-size: 0.78rem;
   }
 
+  /* ── DIGITAL TWINS ── */
+  .twins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .twin-card { background: #111827; border: 1px solid #1e293b; border-radius: 10px; padding: 20px; position: relative; }
+  .twin-card.amber-border { border-color: #f59e0b; }
+  .twin-card.red-border { border-color: #ef4444; }
+  .twin-card.green-border { border-color: #10b981; }
+  .twin-score-ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; border: 4px solid; margin-bottom: 10px; }
+  .twin-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .twin-tag { background: #1e293b; color: #94a3b8; font-size: 11px; padding: 3px 8px; border-radius: 12px; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     .header { padding: 10px 14px; }
@@ -946,6 +957,49 @@
     <div class="memory-layout" id="memoryLayout">
       <div class="loading-container" style="grid-column:1/-1"><div class="spinner"></div> Loading memory stats...</div>
     </div>
+  </section>
+
+
+  <!-- SECTION 9: KNOWLEDGE GRAPH VISUALIZATION -->
+  <section class="section" id="knowledge-graph">
+    <h2 class="section-title">🧠 Knowledge Graph</h2>
+    <div id="kg-stats" style="margin-bottom:12px;color:#64748b;font-size:13px;"></div>
+    <div id="kg-network" style="width:100%;height:500px;background:#060610;border:1px solid #1e293b;border-radius:8px;"></div>
+  </section>
+
+  <!-- SECTION 10: DIGITAL TWINS -->
+  <section class="section" id="digital-twins">
+    <h2 class="section-title">👥 Digital Twins — NAH Team</h2>
+    <div class="twins-grid" id="twins-grid"></div>
+  </section>
+
+  <!-- SECTION 11: SIMULATION CONSOLE -->
+  <section class="section" id="simulation">
+    <h2 class="section-title">🌐 Simulation Engine <span style="background:#f59e0b;color:#000;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:10px;font-weight:600;">COMING SOON</span></h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#3b82f6;">5</div>
+        <div style="color:#64748b;font-size:12px;">Digital Twins</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#475569;">—</div>
+        <div style="color:#64748b;font-size:12px;">Simulation Hours</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#475569;">—</div>
+        <div style="color:#64748b;font-size:12px;">Rounds</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:20px;font-weight:600;color:#f59e0b;">Not Connected</div>
+        <div style="color:#64748b;font-size:12px;">Zep Cloud Memory</div>
+      </div>
+    </div>
+    <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:20px;margin-bottom:16px;">
+      <div style="color:#94a3b8;font-size:13px;margin-bottom:12px;font-weight:600;">SCENARIO INBOX</div>
+      <div id="scenario-list" style="color:#475569;font-size:13px;">Loading scenarios...</div>
+    </div>
+    <button disabled style="width:100%;padding:14px;background:#1e293b;color:#475569;border:1px solid #334155;border-radius:8px;font-size:15px;font-weight:600;cursor:not-allowed;letter-spacing:0.5px;">▶ Run Simulation — Active when Gunner hits 100 users</button>
+    <div style="margin-top:10px;text-align:center;color:#334155;font-size:11px;">Powered by OASIS (CAMEL-AI) + GraphRAG + Zep Cloud · Architecture: memory/context/sim/mirofish-architecture.md</div>
   </section>
 
 </div>
@@ -1554,10 +1608,140 @@ async function loadAll() {
   if (memoryText) renderMemory(memoryText, dailyCount);
 }
 
+// ── SECTION 9: Knowledge Graph ───────────────────────────────────────────────
+
+async function initKnowledgeGraph() {
+  const headers = { 'Authorization': `token ${GITHUB_TOKEN}` };
+  const base = `https://api.github.com/repos/${GITHUB_REPO}/contents`;
+
+  const [books, sim, agentsDir, tech] = await Promise.all([
+    fetch(`${base}/memory/context/books`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/memory/context/sim`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/agents`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/memory/context/technology`, {headers}).then(r=>r.json()).catch(()=>[]),
+  ]);
+
+  const nodes = [];
+  const edges = [];
+  let id = 1;
+  const nodeMap = {};
+
+  const addNode = (label, group, title) => {
+    const n = { id: id++, label, group, title, font: { color: '#e2e8f0', size: 12 } };
+    nodes.push(n);
+    nodeMap[label] = n.id;
+    return n.id;
+  };
+
+  const bookFiles = Array.isArray(books) ? books.filter(f => f.name.endsWith('.md') && f.name !== 'INDEX.md' && f.name !== 'CLAUDE.md') : [];
+  bookFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,28), 'books', `Book: ${f.name}`));
+
+  const twinFiles = Array.isArray(sim) ? sim.filter(f => f.name.endsWith('.md') && !f.name.includes('environment') && !f.name.includes('mirofish')) : [];
+  twinFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,22), 'twins', `Digital Twin: ${f.name}`));
+
+  const agentFiles = Array.isArray(agentsDir) ? agentsDir.filter(f => f.name.endsWith('.md')) : [];
+  agentFiles.forEach(f => addNode(f.name.replace('.md',''), 'agents', `Agent: ${f.name}`));
+
+  const techFiles = Array.isArray(tech) ? tech.filter(f => f.name.endsWith('.md') && f.name !== 'README.md').slice(0,10) : [];
+  techFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,22), 'tech', `Tech: ${f.name}`));
+
+  const bookAgentLinks = [
+    ['psycho cybernetics', 'researcher'], ['atomic habits', 'auditor'],
+    ['7 habits', 'builder'], ['art of war', 'researcher'],
+    ['meditations', 'builder'], ['100m offers', 'researcher'],
+    ['e myth revisited', 'builder'],
+  ];
+  bookAgentLinks.forEach(([book, agent]) => {
+    if (nodeMap[book] && nodeMap[agent]) edges.push({ from: nodeMap[book], to: nodeMap[agent], color: { color: '#334155' } });
+  });
+
+  [['kyle barks closes on rapport stalls on price objections', 'researcher'],
+   ['chris segura 36pct self image ceiling not skill gap', 'auditor'],
+   ['daniel lozano consistent process plateauing at 67 pct', 'researcher']
+  ].forEach(([twin, agent]) => {
+    const twinKey = Object.keys(nodeMap).find(k => k.includes('kyle') || k.includes('chris') || k.includes('daniel'));
+    if (twinKey && nodeMap[agent]) edges.push({ from: nodeMap[twinKey], to: nodeMap[agent], color: { color: '#f97316' } });
+  });
+
+  const container = document.getElementById('kg-network');
+  const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+  const options = {
+    groups: {
+      books: { color: { background: '#1e40af', border: '#3b82f6' }, shape: 'dot', size: 14 },
+      twins: { color: { background: '#c2410c', border: '#f97316' }, shape: 'diamond', size: 16 },
+      agents: { color: { background: '#047857', border: '#10b981' }, shape: 'star', size: 18 },
+      tech: { color: { background: '#6d28d9', border: '#8b5cf6' }, shape: 'box', size: 12 },
+    },
+    physics: {
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: { gravitationalConstant: -60, springLength: 130, springConstant: 0.04 },
+      stabilization: { iterations: 150 }
+    },
+    interaction: { hover: true, tooltipDelay: 100 },
+    edges: { smooth: { type: 'continuous' }, color: { color: '#1e293b', hover: '#3b82f6' } },
+  };
+  new vis.Network(container, data, options);
+
+  const total = nodes.length;
+  document.getElementById('kg-stats').textContent = `${total} nodes — books (blue) · twins (orange) · agents (green) · tech (purple) — hover for details`;
+}
+
+// ── SECTION 10: Digital Twins ─────────────────────────────────────────────────
+
+function renderTwins() {
+  const twins = [
+    { name: 'Kyle Barks', role: 'Acquisition Manager', score: 70, level: 'Lvl 5', tags: ['closes on rapport', 'stalls on price', 'top performer'], peak: '9AM–12PM' },
+    { name: 'Daniel Lozano', role: 'Lead Manager', score: 67, level: 'Lvl 5', tags: ['consistent process', 'plateauing', 'needs push'], peak: '1PM–5PM' },
+    { name: 'Chris Segura', role: 'Lead Manager', score: 36, level: 'Lvl 2', tags: ['self-image ceiling', 'needs coaching', '🚨 critical'], peak: '10AM–2PM' },
+    { name: 'Esteban Leiva', role: 'Dispo Manager', score: 64, level: 'Lvl 4', tags: ['buyer relationships', 'dispo edge', 'steady'], peak: '11AM–4PM' },
+    { name: 'Efren Valenzuela', role: 'Lead Generator', score: 48, level: 'Lvl 3', tags: ['developing', 'below target', '🚨 watch'], peak: '9AM–1PM' },
+    { name: 'Mirna Razo', role: 'Lead Generator', score: 43, level: 'Lvl 2', tags: ['early stage', 'needs structure', '🚨 watch'], peak: '9AM–1PM' },
+  ];
+
+  const grid = document.getElementById('twins-grid');
+  grid.innerHTML = twins.map(t => {
+    const borderClass = t.score >= 65 ? 'green-border' : t.score >= 50 ? 'amber-border' : 'red-border';
+    const scoreColor = t.score >= 65 ? '#10b981' : t.score >= 50 ? '#f59e0b' : '#ef4444';
+    return `<div class="twin-card ${borderClass}">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
+        <div class="twin-score-ring" style="border-color:${scoreColor};color:${scoreColor}">${t.score}%</div>
+        <div>
+          <div style="font-weight:600;color:#e2e8f0;font-size:15px;">${t.name}</div>
+          <div style="color:#64748b;font-size:12px;">${t.role} · ${t.level}</div>
+          <div style="color:#475569;font-size:11px;margin-top:2px;">Peak: ${t.peak}</div>
+        </div>
+      </div>
+      <div class="twin-tags">${t.tags.map(tag => `<span class="twin-tag">${tag}</span>`).join('')}</div>
+      <div style="margin-top:12px;font-size:11px;color:#334155;">● ACTIVE TWIN</div>
+    </div>`;
+  }).join('');
+}
+
+// ── SECTION 11: Simulation Scenarios ─────────────────────────────────────────
+
+async function loadScenarios() {
+  const headers = { 'Authorization': `token ${GITHUB_TOKEN}` };
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/memory/context/sim/scenarios`, {headers});
+    if (res.ok) {
+      const files = await res.json();
+      const scenarios = Array.isArray(files) ? files.filter(f => f.name.endsWith('.md')) : [];
+      document.getElementById('scenario-list').innerHTML = scenarios.length > 0
+        ? scenarios.map(f => `<div style="padding:6px 0;border-bottom:1px solid #1e293b;color:#94a3b8;">📋 ${f.name.replace('.md','').replace(/-/g,' ')}</div>`).join('')
+        : '<div style="color:#475569;font-style:italic;">No scenarios queued — add .md files to memory/context/sim/scenarios/</div>';
+    }
+  } catch(e) {
+    document.getElementById('scenario-list').textContent = 'No scenarios queued yet.';
+  }
+}
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 startClock();
 loadAll();
+renderTwins();
+initKnowledgeGraph();
+loadScenarios();
 </script>
 </body>
 </html>
