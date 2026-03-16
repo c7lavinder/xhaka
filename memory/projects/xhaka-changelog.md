@@ -26,3 +26,29 @@ _No significant changes._
 - chore: update last-scan state
 - chore: remediation-state update
 - chore: reset stuck jobs to failed on boot [daily-log, heartbeat-check]
+## 2026-03-16 (100 commits)
+### ✅ Built
+- feat: book intelligence pipeline — library, INDEX, E-Myth + 100M Offers processed
+- feat: rebuild Control Room with live GitHub API polling — 8 live panels
+- feat: add index.html redirect for Control Room
+### 🐛 Fixed
+- researcher: cleared 0 article(s) from inbox (36 failed, kept for retry)
+- intelligence: remove session-capture-2026-03-16-0046.md from inbox (parse error)
+- intelligence: route session-capture-2026-03-16-0046.md → general (parse error)
+### 🔄 Changed
+- chore: results-log [dispatcher=success]
+- chore: heartbeat-state update
+- task-queue: update task_1773636602764_8icxah9 -> running
+- task-queue: push researcher/process-article-inbox [task_1773636602764_8icxah9]
+- task-queue: update task_1773636301377_1m80y0n -> running
+- task-queue: push researcher/process-article-inbox [task_1773636301377_1m80y0n]
+- task-queue: update task_1773635700780_fi38ybl -> running
+- task-queue: push researcher/process-article-inbox [task_1773635700780_fi38ybl]
+- task-queue: update task_1773635401606_kuktuzb -> running
+- task-queue: push researcher/process-article-inbox [task_1773635401606_kuktuzb]
+- task-queue: update task_1773634800984_3t97je6 -> running
+- task-queue: push researcher/process-article-inbox [task_1773634800984_3t97je6]
+- task-queue: update task_1773634500754_i8y55ln -> running
+- task-queue: push researcher/process-article-inbox [task_1773634500754_i8y55ln]
+- task-queue: update task_1773634201489_2dg0ngq -> running
+- task-queue: push researcher/process-article-inbox [task_1773634201489_2dg0ngq]
