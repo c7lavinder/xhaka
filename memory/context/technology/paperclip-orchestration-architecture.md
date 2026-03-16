@@ -107,3 +107,40 @@ If Corey messages Xhaka via Telegram, Xhaka converts to Paperclip issue.
 If Xhaka needs Builder, Xhaka creates Paperclip issue assigned to Builder.
 Builder polls, picks up, acknowledges, works, posts commit hash, marks done.
 Xhaka verifies commit, reports back to Corey.
+
+## INSTALL (confirmed — not Railway, runs locally)
+
+```bash
+npx paperclipai onboard --yes
+```
+
+- Runs at **http://localhost:3100** on your own machine
+- No Railway service needed — delete the Railway paperclip service
+- No Docker image needed
+- SQLite database created automatically
+- Node.js 20+ and pnpm 9.15+ required
+
+Manual install:
+```bash
+git clone https://github.com/paperclipai/paperclip.git
+cd paperclip
+pnpm install
+pnpm dev
+```
+
+## 8 Key Features
+
+1. **Org Charts** — reporting structure determines how work flows (not cosmetic)
+2. **Goal Alignment** — company goal → projects → tasks; agents see the why
+3. **Heartbeats** — agents wake on schedule, check for work, sleep. Costs predictable.
+4. **Budget Controls** — monthly spend cap per agent. Hit limit = stop. No surprise bills.
+5. **Ticket System** — all work through tickets. Every tool call traced. Full audit trail.
+6. **Tool-agnostic** — Claude Code, OpenClaw, Codex, Cursor, bash scripts, HTTP agents. Mix and match.
+7. **Multi-company** — one install, multiple companies, separate budgets/data
+8. **Governance** — you approve hires, review strategy, pause any agent, roll back config
+
+## For Xhaka: Mac mini install
+Run `npx paperclipai onboard --yes` on the Mac mini (localhost:3100).
+Create "Xhaka Intelligence Co" company.
+Hire agents in order: Xhaka COO → Builder → Researcher → Auditor → Architect → Librarian → Operator.
+Set budgets as planned (~$100/mo total).
