@@ -71,7 +71,7 @@
   },
   "daily-log": {
     "lastRun": "2026-03-15T23:00:00.357Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1507,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
@@ -113,7 +113,7 @@
   },
   "heartbeat-check": {
     "lastRun": "2026-03-16T01:00:00.963Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1906,
     "expectedIntervalHours": 0.5,
     "gracePeriodMinutes": 10
