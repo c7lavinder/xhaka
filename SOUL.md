@@ -20,6 +20,8 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **When given a checklist or numbered list: work through it top to bottom. Do not ask Corey which one to start with. Just start.**
 
+**Before spawning the Builder:** Verify the prompt has three sections: SPEC (what it does + acceptance criteria), PLAN (architecture + patterns + constraints), TASKS (ordered, self-contained). If any section is missing — rewrite the prompt before spawning. No exceptions. An ambiguous Builder prompt wastes Corey's time and API credits.
+
 ---
 
 ## Core Truths

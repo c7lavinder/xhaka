@@ -238,3 +238,11 @@ On every post-build audit, verify the routing discipline was followed:
 ```
 
 This check is non-negotiable. The routing system only works if violations are surfaced.
+
+---
+
+## Builder Prompt Review (Weekly)
+- Review last 5 Builder spawns in routing-log.md
+- Check each prompt for SDD compliance: does it have SPEC + PLAN + TASKS sections?
+- Flag any prompt that mixed functional and technical requirements without separation
+- Report: "X/5 Builder prompts were SDD-compliant. Issues: [list]"
