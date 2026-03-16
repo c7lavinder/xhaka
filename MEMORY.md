@@ -59,10 +59,16 @@ See `memory/projects/` for detailed project files.
 
 ## 🧠 KEY DECISIONS
 
+See `memory/decisions/` for full decision logs.
+
+- **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
+- **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
+- **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
 - **2026-03-16:** Pre-deploy TypeScript check added to GitHub Actions — prevents broken deploys.
 - **2026-03-16:** Tool Knowledge Hub adopted — every tool gets overview, setup, best practices, gotchas, integrations.
 - **2026-03-16:** SDD enforcement added to SOUL.md — Builder prompts must have SPEC + PLAN + TASKS. No exceptions.
 - **2026-03-16:** LEARNINGS.md wired into OpenClaw session context — behavioral rules load every session.
+- **2026-03-16:** MiroFish = architecture inspiration only. Simulation engine deferred to Gunner 100-user milestone.
 
 ---
 
