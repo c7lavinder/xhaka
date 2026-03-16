@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔧 Tool Intelligence — Xhaka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0d0d14;
+    --card: #111827;
+    --card2: #141d2e;
+    --border: #1f2937;
+    --border2: #2d3748;
+    --text: #f9fafb;
+    --text2: #9ca3af;
+    --text3: #6b7280;
+    --green: #10b981;
+    --green-dim: #065f46;
+    --amber: #f59e0b;
+    --amber-dim: #78350f;
+    --red: #ef4444;
+    --red-dim: #7f1d1d;
+    --blue: #3b82f6;
+    --blue-dim: #1e3a5f;
+    --purple: #8b5cf6;
+    --purple-dim: #3b0764;
+    --cyan: #06b6d4;
+    --cyan-dim: #164e63;
+    --glow-green: 0 0 20px rgba(16,185,129,0.3);
+    --glow-amber: 0 0 20px rgba(245,158,11,0.3);
+    --glow-blue: 0 0 15px rgba(59,130,246,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 6px rgba(16,185,129,0.2); }
+    50% { box-shadow: 0 0 18px rgba(16,185,129,0.5), 0 0 32px rgba(16,185,129,0.2); }
+  }
+  @keyframes dot-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+  }
+  @keyframes fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .fade-in { animation: fade-in 0.4s ease forwards; }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-brand h1 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text2);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    border-color: var(--border2);
+    background: var(--card2);
+  }
+
+  .nav-link.active {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgba(6,182,212,0.08);
+  }
+
+  .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1440px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 40px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--text3);
+    max-width: 580px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .hero-stat-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .hero-stat-num.green { color: var(--green); }
+  .hero-stat-num.amber { color: var(--amber); }
+  .hero-stat-num.blue { color: var(--blue); }
+
+  .hero-stat-label {
+    font-size: 0.7rem;
+    color: var(--text3);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 48px;
+    animation: fade-in 0.5s ease forwards;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .tier-live {
+    background: rgba(16,185,129,0.12);
+    border: 1px solid rgba(16,185,129,0.3);
+    color: var(--green);
+  }
+
+  .tier-wired {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    color: var(--amber);
+  }
+
+  .tier-explore {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    color: var(--blue);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  }
+
+  .section-count {
+    font-size: 0.7rem;
+    color: var(--text3);
+    background: var(--card);
+    padding: 2px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tier-desc {
+    font-size: 0.82rem;
+    color: var(--text3);
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    background: var(--card);
+    border-left: 3px solid var(--border2);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ── TOOL GRID ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── TOOL CARD ── */
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .tool-card.live::before { background: linear-gradient(90deg, var(--green-dim), var(--green)); }
+  .tool-card.not-wired::before { background: linear-gradient(90deg, var(--amber-dim), var(--amber)); }
+  .tool-card.explore::before { background: linear-gradient(90deg, var(--blue-dim), var(--blue)); }
+
+  .tool-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .tool-card:hover::before { opacity: 1; }
+
+  .tool-card.live:hover { box-shadow: var(--glow-green); }
+  .tool-card.not-wired:hover { box-shadow: var(--glow-amber); }
+  .tool-card.explore:hover { box-shadow: var(--glow-blue); }
+
+  .tool-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .tool-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tool-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .tool-name-wrap { min-width: 0; }
+
+  .tool-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tool-category {
+    font-size: 0.65rem;
+    color: var(--text3);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-live {
+    background: rgba(16,185,129,0.12);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: var(--green);
+  }
+
+  .badge-live::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: dot-pulse 2s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  .badge-not-wired {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.2);
+    color: var(--amber);
+  }
+
+  .badge-explore {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.2);
+    color: var(--blue);
+  }
+
+  .tool-desc {
+    font-size: 0.8rem;
+    color: var(--text2);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  .tool-context {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .tool-context.live-ctx {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.12);
+    color: #6ee7b7;
+  }
+
+  .tool-context.wired-ctx {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.12);
+    color: #fcd34d;
+  }
+
+  .tool-context.explore-ctx {
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.12);
+    color: #93c5fd;
+  }
+
+  .tool-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tool-key-hint {
+    font-size: 0.65rem;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg2);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .details-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text3);
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .details-btn:hover {
+    color: var(--text);
+    border-color: var(--cyan);
+    background: rgba(6,182,212,0.06);
+  }
+
+  .details-panel {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: none;
+  }
+
+  .details-panel.open { display: block; animation: fade-in 0.3s ease forwards; }
+
+  .details-content {
+    font-size: 0.75rem;
+    color: var(--text2);
+    line-height: 1.7;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  .details-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text3);
+  }
+
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+
+  /* ── CHAT PANEL ── */
+  .chat-section {
+    margin-top: 56px;
+  }
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .chat-header h2 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .chat-header .chat-subtitle {
+    font-size: 0.78rem;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .chat-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    padding: 20px;
+    min-height: 220px;
+    max-height: 440px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .chat-msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    animation: fade-in 0.3s ease forwards;
+  }
+
+  .chat-msg.user { flex-direction: row-reverse; }
+
+  .chat-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .chat-avatar.ai-avatar {
+    background: rgba(6,182,212,0.15);
+    border: 1px solid rgba(6,182,212,0.25);
+  }
+
+  .chat-avatar.user-avatar {
+    background: rgba(139,92,246,0.15);
+    border: 1px solid rgba(139,92,246,0.25);
+  }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .chat-bubble.ai-bubble {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 4px 12px 12px 12px;
+  }
+
+  .chat-bubble.user-bubble {
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: var(--text);
+    border-radius: 12px 4px 12px 12px;
+  }
+
+  .chat-bubble pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    background: var(--bg);
+    padding: 10px 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .chat-bubble strong { color: var(--text); }
+  .chat-bubble code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+  }
+
+  .chat-chips {
+    padding: 12px 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: var(--card);
+    color: var(--text3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .chip:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgba(6,182,212,0.06);
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .chat-input:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 2px rgba(6,182,212,0.08);
+  }
+
+  .chat-input::placeholder { color: var(--text3); }
+
+  .chat-send {
+    padding: 10px 18px;
+    background: var(--cyan);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .chat-send:hover { background: #38bdf8; transform: translateY(-1px); }
+  .chat-send:active { transform: translateY(0); }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .header { padding: 10px 14px; }
+    .header-brand h1 { font-size: 1rem; }
+    .page { padding: 0 12px 60px; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <h1>🔧 Tool Intelligence</h1>
+  </div>
+  <div class="header-nav">
+    <a href="/control-room.html" class="nav-link">🧠 Control Room</a>
+    <a href="/teams.html" class="nav-link">👥 Teams</a>
+    <a href="/tools.html" class="nav-link active">🔧 Tools</a>
+    <div class="clock" id="liveClock">--:--:--</div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero-title">Stack Intelligence</div>
+    <div class="hero-sub">Every tool in Corey's stack. Live status, credentials map, and what's worth building next.</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num green">8</div>
+        <div class="hero-stat-label">Live &<br>Wired</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num amber">5</div>
+        <div class="hero-stat-label">Have Keys<br>Not Connected</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num blue">7</div>
+        <div class="hero-stat-label">Worth<br>Exploring</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER 1: LIVE -->
+  <section class="section">
+    <div class="section-header">
+      <span class="tier-badge tier-live">✅ Live — Actively Used</span>
+      <div class="section-line"></div>
+      <span class="section-count">8</span>
+    </div>
+    <div class="tier-desc">These tools are wired in and running. Every data point in the Control Room flows through one of these.</div>
+    <div class="tools-grid" id="live-grid">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- TIER 2: NOT WIRED -->
+  <section class="section">
+    <div class="section-header">
+      <span class="tier-badge tier-wired">🟡 Known — Not Wired</span>
+      <div class="section-line"></div>
+      <span class="section-count">5</span>
+    </div>
+    <div class="tier-desc">Accounts created, keys in hand. Not connected to anything yet. Each one unlocks a specific capability gap.</div>
+    <div class="tools-grid" id="wired-grid">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- TIER 3: EXPLORE -->
+  <section class="section">
+    <div class="section-header">
+      <span class="tier-badge tier-explore">🔵 Worth Exploring</span>
+      <div class="section-line"></div>
+      <span class="section-count">7</span>
+    </div>
+    <div class="tier-desc">Curated. Opinionated. These aren't random — each one addresses a specific bottleneck in NAH operations or the Gunner roadmap.</div>
+    <div class="tools-grid" id="explore-grid">
+      <!-- Cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- CHAT PANEL -->
+  <section class="chat-section">
+    <div class="chat-header">
+      <div>
+        <h2>🤖 Ask About Any Tool</h2>
+        <div class="chat-subtitle">Searches tool knowledge files from GitHub · Keyword match · No hallucinations</div>
+      </div>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg">
+          <div class="chat-avatar ai-avatar">🔧</div>
+          <div class="chat-bubble ai-bubble">
+            Hey. I have access to the tool knowledge files in this repo. Ask me anything about the stack — credentials, what's wired, what it would take to connect something, or what's worth prioritizing next.<br><br>
+            <strong>Try:</strong> "What would Sentry unlock?" or "Which tools power NAH?"
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-chips">
+        <div class="chip" onclick="askQuestion('What tools are not connected?')">What tools are not connected?</div>
+        <div class="chip" onclick="askQuestion('What would Sentry unlock?')">What would Sentry unlock?</div>
+        <div class="chip" onclick="askQuestion('What is the BatchDialer API rate limit?')">BatchDialer API rate limit?</div>
+        <div class="chip" onclick="askQuestion('Which tools power NAH?')">Which tools power NAH?</div>
+        <div class="chip" onclick="askQuestion('What is worth building next?')">What\'s worth building next?</div>
+      </div>
+
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask about any tool..." 
+               onkeydown="if(event.key==='Enter') sendChat()">
+        <button class="chat-send" id="chatSend" onclick="sendChat()">Ask →</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ── GITHUB CONFIG ──────────────────────────────────────────────────────────
+const GITHUB_TOKEN = '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';
+const REPO = 'c7lavinder/xhaka';
+const BRANCH = 'main';
+const TOOLS_DIR = 'memory/context/tools';
+
+// ── CLOCK ──────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('liveClock').textContent =
+    now.toLocaleTimeString('en-US', { hour12: false, timeZone: 'America/Chicago' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── TOOL DATA ─────────────────────────────────────────────────────────────
+const LIVE_TOOLS = [
+  {
+    name: 'Railway',
+    icon: '🚂',
+    category: 'Infrastructure',
+    desc: 'Deploys xhaka-intelligence, xhaka-control-room, and Gunner V2. Auto-deploys on every main commit.',
+    context: '✅ Connected to: xhaka-intelligence · xhaka-control-room · gunner-v2 · gunner-postgres',
+    keyHint: 'API Token: 107983f5…',
+    ghPath: 'memory/context/tools/railway',
+    type: 'live'
+  },
+  {
+    name: 'GitHub',
+    icon: '🐙',
+    category: 'Source Control',
+    desc: 'Repo c7lavinder/xhaka is the source of truth for all Xhaka intelligence, memory, and config.',
+    context: '✅ Connected to: Control Room (live commits) · Agent memory files · Tool knowledge base',
+    keyHint: 'Token: ghp_KKin…',
+    ghPath: 'memory/context/tools/dev-infrastructure',
+    type: 'live'
+  },
+  {
+    name: 'OpenAI',
+    icon: '🤖',
+    category: 'AI / LLM',
+    desc: 'GPT-4o and GPT-4o-mini power all intelligence jobs — Researcher, Scribe, Analyzer, Digital Twins.',
+    context: '✅ Connected to: All agent jobs · Gunner call grading · Whisper voice-ingest',
+    keyHint: 'Via ENV: OPENAI_API_KEY',
+    ghPath: 'memory/context/tools/openai',
+    type: 'live'
+  },
+  {
+    name: 'Telegram',
+    icon: '✈️',
+    category: 'Command Channel',
+    desc: 'Primary command channel. Corey messages Xhaka here. All job completions + alerts route back.',
+    context: '✅ Connected to: Xhaka COO interface · Agent job notifications · Urgent alerts',
+    keyHint: 'Bot ID: 7583931248',
+    ghPath: null,
+    type: 'live'
+  },
+  {
+    name: 'GoHighLevel',
+    icon: '🏠',
+    category: 'CRM',
+    desc: 'NAH deal pipeline. All leads, contacts, opportunities, and call dispositions live here.',
+    context: '✅ Connected to: KPI capture job · Gunner call pull · Digital Twins data feed',
+    keyHint: 'READ ONLY · xhakalavinder@gmail.com',
+    ghPath: 'memory/context/tools/gohighlevel',
+    type: 'live'
+  },
+  {
+    name: 'BatchDialer',
+    icon: '📞',
+    category: 'Calling Platform',
+    desc: 'Cold calling platform for NAH outbound. API pulls call metrics for daily KPI tracking.',
+    context: '✅ Connected to: KPI Entry job · Daily calling metrics · Team performance dashboard',
+    keyHint: 'API Key: d98ac867…',
+    ghPath: 'memory/context/tools/crm-external',
+    type: 'live'
+  },
+  {
+    name: 'BatchLeads',
+    icon: '💬',
+    category: 'SMS Platform',
+    desc: 'SMS outreach platform. API pulls messaging metrics for daily KPI entry.',
+    context: '✅ Connected to: KPI Entry job · SMS volume metrics · Lead response tracking',
+    keyHint: 'API Key: 06b81a7c…',
+    ghPath: 'memory/context/tools/crm-external',
+    type: 'live'
+  },
+  {
+    name: 'CallRail',
+    icon: '📻',
+    category: 'Call Tracking',
+    desc: 'Inbound call tracking and voicemail management. Voicemail Bot pulls and processes recordings.',
+    context: '✅ Connected to: Voicemail Bot job · Call log ingestion · NAH inbound tracking',
+    keyHint: 'API Key: 267bcdd6…',
+    ghPath: 'memory/context/tools/crm-external',
+    type: 'live'
+  }
+];
+
+const NOT_WIRED_TOOLS = [
+  {
+    name: 'Sentry',
+    icon: '🛡️',
+    category: 'Error Tracking',
+    desc: 'Production error tracking. Catches exceptions, creates GitHub issues automatically when Gunner breaks.',
+    context: '🟡 Missing: DSN not added to gunner-v2 env vars · Unlocks: instant prod error alerts + auto issue creation',
+    keyHint: 'DSN: bf7b317b…',
+    ghPath: 'memory/context/tools/observability',
+    type: 'not-wired'
+  },
+  {
+    name: 'PostHog',
+    icon: '📊',
+    category: 'Product Analytics',
+    desc: 'User behavior analytics for Gunner. Tracks feature usage, drop-offs, and team engagement patterns.',
+    context: '🟡 Missing: Project token not in codebase · Unlocks: which features teams actually use, where they drop off',
+    keyHint: 'Token: phc_FEpR…',
+    ghPath: 'memory/context/tools/posthog',
+    type: 'not-wired'
+  },
+  {
+    name: 'LangSmith',
+    icon: '🔬',
+    category: 'AI Observability',
+    desc: 'Traces every OpenAI call across all agent jobs. Debug slow prompts, track token costs, optimize intelligence jobs.',
+    context: '🟡 Missing: API key not wired into intelligence service · Unlocks: full AI call observability, cost tracking',
+    keyHint: 'API Key: lsv2_pt_…',
+    ghPath: 'memory/context/tools/observability',
+    type: 'not-wired'
+  },
+  {
+    name: 'Supabase',
+    icon: '🗄️',
+    category: 'Database',
+    desc: 'Postgres + pgvector for Gunner V2. Migration from current setup not complete.',
+    context: '🟡 Missing: Schema migration not run · pgvector extension not initialized · Unlocks: Gunner V2 full data layer',
+    keyHint: 'Project: tvjkgumckwap…',
+    ghPath: 'memory/context/tools/database-storage',
+    type: 'not-wired'
+  },
+  {
+    name: 'Google Gemini',
+    icon: '💎',
+    category: 'AI / LLM',
+    desc: 'gemini-1.5-flash as fallback. 1,500 req/day free. Currently a key-only setup for fragility hardening.',
+    context: '🟡 Status: Fallback only · Not integrated into production call path · Unlocks: OpenAI failure resilience',
+    keyHint: 'API Key: AIzaSyChM6…',
+    ghPath: 'memory/context/tools/ai-llm',
+    type: 'not-wired'
+  }
+];
+
+const EXPLORE_TOOLS = [
+  {
+    name: 'Zep Cloud',
+    icon: '🧠',
+    category: 'Agent Memory',
+    desc: 'Long-term memory layer for AI agents. Persistent memory across sessions with semantic search.',
+    context: '🔵 Why it matters: MiroFish Digital Twins need long-term memory to simulate realistic behavior. Flat files won\'t scale. Zep is purpose-built for this.',
+    keyHint: 'zep.ai · Managed service',
+    ghPath: null,
+    type: 'explore'
+  },
+  {
+    name: 'GraphRAG',
+    icon: '🕸️',
+    category: 'AI Knowledge',
+    desc: 'Microsoft\'s graph-based RAG. Upgrades flat .md knowledge files to relational entity graphs.',
+    context: '🔵 Why it matters: When Xhaka has 500+ memory files, flat keyword search breaks down. GraphRAG = answers about relationships, not just documents.',
+    keyHint: 'github.com/microsoft/graphrag · OSS',
+    ghPath: null,
+    type: 'explore'
+  },
+  {
+    name: 'Whisper API',
+    icon: '🎙️',
+    category: 'Audio / Voice',
+    desc: 'OpenAI speech-to-text. Voice ingest job already built — just needs to be activated.',
+    context: '🔵 Status: Voice-ingest job already coded. No new account needed — uses existing OpenAI key. One config flag away from live.',
+    keyHint: 'Via existing OPENAI_API_KEY',
+    ghPath: 'memory/context/tools/audio-media',
+    type: 'explore'
+  },
+  {
+    name: 'MiroFish / OASIS',
+    icon: '🌊',
+    category: 'Simulation',
+    desc: 'Agent-based simulation engine. Run full NAH team simulations before making operational changes.',
+    context: '🔵 Deferred until: Gunner hits 100 users. Needs stable Digital Twins data first. Highest leverage play once the data layer is solid.',
+    keyHint: 'Research phase · Not a product yet',
+    ghPath: null,
+    type: 'explore'
+  },
+  {
+    name: 'Retell AI / Bland AI',
+    icon: '🤙',
+    category: 'Voice AI',
+    desc: 'AI-powered voice calling for lead qualification. Scale NAH outreach without adding headcount.',
+    context: '🔵 Why it matters: The #1 bottleneck in NAH is phone hours. AI callers on BatchDialer list = 10x lead touches. Retell has better voice quality; Bland has cheaper pricing.',
+    keyHint: 'retellai.com · bland.ai',
+    ghPath: null,
+    type: 'explore'
+  },
+  {
+    name: 'n8n (self-hosted)',
+    icon: '⚙️',
+    category: 'Workflow Automation',
+    desc: 'Visual workflow automation. Connect GHL + BatchDialer + BatchLeads + Slack without writing custom code.',
+    context: '🔵 Why it matters: Every integration job in xhaka-intelligence was hand-coded. n8n = same power, 10x less maintenance. Self-hosted = $0/mo on Railway.',
+    keyHint: 'n8n.io · OSS self-hosted',
+    ghPath: null,
+    type: 'explore'
+  },
+  {
+    name: 'Firecrawl',
+    icon: '🔥',
+    category: 'Web Scraping',
+    desc: 'Web scraping API with clean markdown output. The Researcher job currently gets headlines only — Firecrawl gets full article content.',
+    context: '🔵 Why it matters: Researcher job pulls RSS headlines but can\'t read full articles. Firecrawl = full article text for real VC/wholesale intelligence, not just titles.',
+    keyHint: 'firecrawl.dev · $19/mo starter',
+    ghPath: null,
+    type: 'explore'
+  }
+];
+
+// ── TOOL CARD RENDERER ─────────────────────────────────────────────────────
+function renderCards(tools, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = tools.map((tool, idx) => {
+    const badgeClass = tool.type === 'live' ? 'badge-live' : tool.type === 'not-wired' ? 'badge-not-wired' : 'badge-explore';
+    const badgeText = tool.type === 'live' ? 'LIVE' : tool.type === 'not-wired' ? 'NOT WIRED' : 'EXPLORE';
+    const ctxClass = tool.type === 'live' ? 'live-ctx' : tool.type === 'not-wired' ? 'wired-ctx' : 'explore-ctx';
+
+    return `
+    <div class="tool-card ${tool.type} fade-in" style="animation-delay:${idx * 0.05}s">
+      <div class="tool-card-header">
+        <div class="tool-info">
+          <div class="tool-icon">${tool.icon}</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">${tool.name}</div>
+            <div class="tool-category">${tool.category}</div>
+          </div>
+        </div>
+        <span class="status-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="tool-desc">${tool.desc}</div>
+      <div class="tool-context ${ctxClass}">${tool.context}</div>
+      <div class="tool-footer">
+        <span class="tool-key-hint">${tool.keyHint}</span>
+        ${tool.ghPath ? `<button class="details-btn" onclick="toggleDetails(this, '${tool.ghPath}', '${tool.name}')">
+          <span>📄 View Details</span>
+        </button>` : `<span style="font-size:0.65rem;color:var(--text3);">No file yet</span>`}
+      </div>
+      <div class="details-panel" id="dp-${tool.name.replace(/\s+/g,'-').toLowerCase()}">
+        <div class="details-loading"><div class="spinner"></div> Fetching from GitHub…</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderCards(LIVE_TOOLS, 'live-grid');
+renderCards(NOT_WIRED_TOOLS, 'wired-grid');
+renderCards(EXPLORE_TOOLS, 'explore-grid');
+
+// ── DETAILS TOGGLE ─────────────────────────────────────────────────────────
+async function toggleDetails(btn, ghPath, toolName) {
+  const panelId = 'dp-' + toolName.replace(/\s+/g,'-').toLowerCase();
+  const panel = document.getElementById(panelId);
+  
+  if (panel.classList.contains('open')) {
+    panel.classList.remove('open');
+    btn.querySelector('span').textContent = '📄 View Details';
+    return;
+  }
+
+  panel.classList.add('open');
+  btn.querySelector('span').textContent = '▲ Hide Details';
+
+  // If already loaded, don't refetch
+  if (panel.dataset.loaded) return;
+
+  try {
+    // List files in the path
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${ghPath}?ref=${BRANCH}`, {
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+    });
+    const data = await res.json();
+    
+    let content = '';
+
+    if (Array.isArray(data)) {
+      // Directory — pick relevant file
+      const mdFiles = data.filter(f => f.name.endsWith('.md') && f.name !== '.gitkeep');
+      if (mdFiles.length === 0) {
+        panel.innerHTML = '<div class="details-content">No tool files found in this directory.</div>';
+        panel.dataset.loaded = '1';
+        return;
+      }
+
+      // Fetch first 2 files
+      const filesToFetch = mdFiles.slice(0, 2);
+      for (const f of filesToFetch) {
+        const fRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${f.path}?ref=${BRANCH}`, {
+          headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+        });
+        const fData = await fRes.json();
+        if (fData.content) {
+          const decoded = atob(fData.content.replace(/\n/g, ''));
+          content += `── ${f.name} ──\n\n${decoded}\n\n`;
+        }
+      }
+    } else if (data.content) {
+      content = atob(data.content.replace(/\n/g, ''));
+    }
+
+    panel.innerHTML = `<div class="details-content">${escapeHtml(content || 'No content found.')}</div>`;
+    panel.dataset.loaded = '1';
+  } catch (e) {
+    panel.innerHTML = `<div class="details-content">Error fetching: ${e.message}</div>`;
+  }
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── CHAT ENGINE ────────────────────────────────────────────────────────────
+const ALL_TOOLS = [...LIVE_TOOLS, ...NOT_WIRED_TOOLS, ...EXPLORE_TOOLS];
+
+const KEYWORD_MAP = {
+  'railway': ['railway'],
+  'github': ['github', 'repo', 'commits', 'source'],
+  'openai': ['openai', 'gpt', 'gpt-4', 'gpt4', 'llm', 'ai model'],
+  'telegram': ['telegram', 'bot', 'command channel', 'message'],
+  'ghl': ['ghl', 'gohighlevel', 'go high level', 'crm', 'pipeline', 'leads', 'nah'],
+  'batchdialer': ['batchdialer', 'batch dialer', 'calling', 'cold call', 'dialer'],
+  'batchleads': ['batchleads', 'batch leads', 'sms', 'text message'],
+  'callrail': ['callrail', 'call rail', 'voicemail', 'inbound', 'call tracking'],
+  'sentry': ['sentry', 'error tracking', 'errors', 'exceptions', 'crash'],
+  'posthog': ['posthog', 'analytics', 'user behavior', 'feature usage'],
+  'langsmith': ['langsmith', 'lang smith', 'observability', 'traces', 'tracing'],
+  'supabase': ['supabase', 'database', 'postgres', 'pgvector', 'migration'],
+  'gemini': ['gemini', 'google ai', 'fallback', 'fragility'],
+  'zep': ['zep', 'memory', 'agent memory', 'long-term memory'],
+  'graphrag': ['graphrag', 'graph rag', 'knowledge graph', 'rag'],
+  'whisper': ['whisper', 'voice', 'speech', 'transcribe', 'audio'],
+  'mirofish': ['mirofish', 'oasis', 'simulation', 'digital twin'],
+  'retell': ['retell', 'bland', 'voice calling', 'ai calling', 'ai voice'],
+  'n8n': ['n8n', 'workflow', 'automation', 'no-code'],
+  'firecrawl': ['firecrawl', 'scraping', 'web scrape', 'researcher', 'articles']
+};
+
+const META_QUERIES = {
+  'not connected': { type: 'not-wired', response: null },
+  'not wired': { type: 'not-wired', response: null },
+  'live': { type: 'live', response: null },
+  'wired': { type: 'live', response: null },
+  'active': { type: 'live', response: null },
+  'explore': { type: 'explore', response: null },
+  'building next': { type: 'explore', response: null },
+  'worth building': { type: 'explore', response: null },
+  'nah': { response: 'NAH (New Again Houses) is powered by these live tools:\n\n• **GHL** — deal pipeline, all leads and contacts\n• **BatchDialer** — cold calling metrics\n• **BatchLeads** — SMS outreach metrics\n• **CallRail** — inbound call tracking + voicemail processing\n• **OpenAI** — powers Gunner call grading for the NAH team\n• **Telegram** — command channel for Xhaka\n\nFor AI voice scale, look at **Retell AI** or **Bland AI** (Explore tier). For full article intelligence on market trends, **Firecrawl** + the Researcher job.' },
+  'next': { response: null }
+};
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  await askQuestion(q);
+}
+
+async function askQuestion(question) {
+  addMessage(question, 'user');
+
+  const send = document.getElementById('chatSend');
+  send.disabled = true;
+
+  const lq = question.toLowerCase();
+
+  // ── Meta query handling ──
+  if (lq.includes('not connected') || lq.includes('not wired') || (lq.includes('what tools') && lq.includes('not'))) {
+    const unwired = NOT_WIRED_TOOLS.map(t => `• **${t.name}** (${t.category}) — ${t.context.replace(/🟡 Missing: /, '')}`).join('\n');
+    addMessage(`Here are the 5 tools with credentials that aren't connected yet:\n\n${unwired}\n\nPriority pick: **Sentry** first (5 min to wire in) → **LangSmith** (immediate AI observability) → **PostHog** (Gunner usage data).`, 'ai');
+    send.disabled = false;
+    return;
+  }
+
+  if (lq.includes('worth building') || lq.includes('building next') || lq.includes('what\'s next') || lq.includes('whats next') || lq.includes('next step')) {
+    addMessage(`Opinionated take on what to build next:\n\n**Tier 1 — Quick wins (keys already exist):**\n• 🛡️ **Sentry** — wire DSN into gunner-v2. One env var. Immediate prod error visibility.\n• 🔬 **LangSmith** — add API key to intelligence jobs. Every GPT call gets traced.\n• 📊 **PostHog** — add token to Gunner frontend. Know which features teams actually use.\n\n**Tier 2 — Infrastructure moves:**\n• 🗄️ **Supabase** — Gunner V2 migration. This is the real work.\n• 🎙️ **Whisper API** — already coded, just needs activation. Voice-ingest job = ready.\n\n**Tier 3 — Scale plays:**\n• 🤙 **Retell AI / Bland AI** — AI callers for NAH when team is at capacity.\n• 🔥 **Firecrawl** — upgrade Researcher from headlines to full articles.`, 'ai');
+    send.disabled = false;
+    return;
+  }
+
+  if (lq.includes('power nah') || lq.includes('nah tools') || (lq.includes('nah') && lq.includes('tool'))) {
+    addMessage(`NAH (New Again Houses) is powered by these live tools:\n\n• 🏠 **GHL** — deal pipeline, all leads and contacts\n• 📞 **BatchDialer** — cold calling metrics\n• 💬 **BatchLeads** — SMS outreach metrics\n• 📻 **CallRail** — inbound call tracking + voicemail processing\n• 🤖 **OpenAI** — powers Gunner call grading for Kyle, Chris, Daniel\n• ✈️ **Telegram** — Xhaka command channel\n\nFor AI voice scale: explore **Retell AI** or **Bland AI**.\nFor full market intel: **Firecrawl** + Researcher job.`, 'ai');
+    send.disabled = false;
+    return;
+  }
+
+  // ── Tool-specific keyword match ──
+  let matchedTools = [];
+  for (const [toolKey, keywords] of Object.entries(KEYWORD_MAP)) {
+    if (keywords.some(kw => lq.includes(kw))) {
+      const tool = ALL_TOOLS.find(t => t.name.toLowerCase().replace(/\s+/g,'').includes(toolKey.replace(/\s+/g,'')) || toolKey === t.name.toLowerCase().replace(/\s+/g,''));
+      if (tool) matchedTools.push(tool);
+    }
+  }
+
+  // Dedupe
+  matchedTools = [...new Map(matchedTools.map(t => [t.name, t])).values()];
+
+  if (matchedTools.length > 0) {
+    // Try to fetch GitHub files for matched tools that have paths
+    const toolsWithPaths = matchedTools.filter(t => t.ghPath);
+    let fileContext = '';
+    
+    for (const tool of toolsWithPaths.slice(0, 2)) {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${tool.ghPath}?ref=${BRANCH}`, {
+          headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+        });
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          const mdFiles = data.filter(f => f.name.endsWith('.md') && f.name !== '.gitkeep');
+          for (const f of mdFiles.slice(0, 1)) {
+            const fRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${f.path}?ref=${BRANCH}`, {
+              headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+            });
+            const fData = await fRes.json();
+            if (fData.content) {
+              const decoded = atob(fData.content.replace(/\n/g, ''));
+              fileContext += `\n--- ${f.name} ---\n${decoded.slice(0, 1200)}\n`;
+            }
+          }
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    let response = '';
+    for (const tool of matchedTools) {
+      const tierLabel = tool.type === 'live' ? '✅ LIVE' : tool.type === 'not-wired' ? '🟡 NOT WIRED' : '🔵 EXPLORE';
+      response += `**${tool.icon} ${tool.name}** — ${tierLabel}\n${tool.desc}\n${tool.context}\nCredentials: \`${tool.keyHint}\`\n\n`;
+    }
+
+    if (fileContext) {
+      response += `\n📄 **From tool knowledge files:**\n\`\`\`\n${fileContext.trim().slice(0, 800)}\n\`\`\``;
+    }
+
+    addMessage(response.trim(), 'ai');
+  } else {
+    addMessage(`I don't have a direct match for "${question}" in the tool knowledge files.\n\nTry asking about a specific tool by name: Railway, GitHub, OpenAI, Telegram, GHL, BatchDialer, BatchLeads, CallRail, Sentry, PostHog, LangSmith, Supabase, Gemini, Zep, Whisper, Firecrawl, n8n, or Retell AI.\n\nOr ask: "What tools are not connected?" or "What's worth building next?"`, 'ai');
+  }
+
+  send.disabled = false;
+}
+
+function addMessage(text, role) {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `chat-avatar ${role === 'ai' ? 'ai-avatar' : 'user-avatar'}`;
+  avatar.textContent = role === 'ai' ? '🔧' : '👤';
+
+  const bubble = document.createElement('div');
+  bubble.className = `chat-bubble ${role === 'ai' ? 'ai-bubble' : 'user-bubble'}`;
+  bubble.innerHTML = formatMessage(text);
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>')
+    .replace(/\n/g, '<br>');
+}
+</script>
+</body>
+</html>
