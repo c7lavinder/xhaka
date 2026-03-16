@@ -256,3 +256,35 @@ _No significant changes._
 - update task_1773650662144_vzn1zwo -> running
 - update task_1773650401086_g2qx9un -> running
 - update task_1773649501243_fq0bkpc -> running
+## 2026-03-16 (100 commits)
+### ✅ Built
+- add pending manual steps reminder
+- librarian quality audit + pending manual steps reminder
+- morning brief v2 — signal-only format
+- pre-deploy TypeScript check — GitHub Actions workflow
+- add specialized agents and INDEX.md to knowledge base
+- add marketing and product agents to knowledge base
+- add sales agents to knowledge base
+- AI tool prompt analysis — Manus, Cursor, Windsurf, Devin patterns
+- AI tool prompt analysis — Manus deep dive
+- concepts beef-up — business strategy fundamentals
+- concepts beef-up — growth frameworks
+- concepts beef-up — GTM frameworks
+- beef up workflows + playbooks — objection handling, sales coaching
+- NAH depth — comprehensive project status file overwrite
+- NAH depth — acquisition process end-to-end workflow
+- NAH depth — motivated seller psychology deep file
+- tools deep dive — GHL, BatchDialer, CallRail knowledge files
+### 🐛 Fixed
+- hindsight-sync — await markJobStart (returns Promise<number>)
+- librarian quality audit — use content.length instead of file.size
+### 🔄 Changed
+- update railway latest-update
+- update posthog latest-update
+- update anthropic latest-update
+- update openai latest-update
+- update gohighlevel latest-update
+- update packages latest-update
+- update last-scan state
+- remediation-state update
+- heartbeat-state update
