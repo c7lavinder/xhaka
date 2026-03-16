@@ -18,3 +18,4 @@
 - https://github.com/volcengine/OpenViking  # ByteDance open agent framework
 - https://github.com/lightpanda-io/browser  # headless browser for AI agents
 - https://github.com/obra/superpowers  # Claude Code superpowers / agentic coding enhancements
+- https://github.com/garrytan/gstack  # full-stack AI agent development framework
