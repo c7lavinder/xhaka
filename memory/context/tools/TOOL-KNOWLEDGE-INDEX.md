@@ -15,10 +15,10 @@
 | Railway | dev-infrastructure | 🟡 Basic | railway.md | Medium |
 | GitHub | dev-infrastructure | 🟡 Basic | github.md | Low |
 | OpenAI | ai-llm | 🟡 Basic | openai.md | High |
-| GHL | crm-external | 🟡 Basic | gohighlevel.md | High |
-| BatchDialer | crm-external | 🟡 Basic | batchdialer.md | High |
+| GHL | crm-external | 🟢 Deep | ghl/knowledge/overview.md | High |
+| BatchDialer | crm-external | 🟢 Deep | batchdialer/knowledge/overview.md | High |
 | BatchLeads | crm-external | 🟡 Basic | batchleads.md | High |
-| CallRail | crm-external | 🟡 Basic | callrail.md | Medium |
+| CallRail | crm-external | 🟢 Deep | callrail/knowledge/overview.md | Medium |
 | PostHog | observability | 🔴 Credentials only | posthog.md | High |
 | Sentry | observability | 🔴 Credentials only | sentry.md | High |
 | LangSmith | observability | 🔴 Credentials only | langsmith.md | High |
