@@ -1,62 +1,15 @@
-[
-  {
-    "id": "task_1773626701339_eaoizbr",
-    "agent": "researcher",
-    "task": "process-article-inbox",
-    "payload": {
-      "trigger": "article-inbox-watch",
-      "itemCount": 122
-    },
-    "status": "completed",
-    "createdAt": "2026-03-16T02:05:01.339Z",
-    "startedAt": "2026-03-16T02:06:01.210Z",
-    "completedAt": "2026-03-16T02:06:02.704Z",
-    "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:06:02.557Z. Triggered by task task_1773626701339_eaoizbr."
-  },
-  {
-    "id": "task_1773626814322_2ojd6l7",
-    "agent": "auditor",
-    "task": "verify-build",
-    "payload": {
-      "commitSha": "7e5bcde3",
-      "commitMessage": "chore: results-log [scribe=success]",
-      "author": "c7lavinder",
-      "triggeredAt": "2026-03-16T02:06:54.142Z"
-    },
-    "status": "completed",
-    "createdAt": "2026-03-16T02:06:54.322Z",
-    "startedAt": "2026-03-16T02:07:01.376Z",
-    "completedAt": "2026-03-16T02:07:06.381Z",
-    "proofOfWork": "Audit WARN for commit 7e5bcde3. 4 concern(s). Artifact: intelligence/audits/2026-03-16-7e5bcde3.md"
-  },
-  {
-    "id": "task_1773627602568_prp7zws",
-    "agent": "researcher",
-    "task": "process-article-inbox",
-    "payload": {
-      "trigger": "article-inbox-watch",
-      "itemCount": 122
-    },
-    "status": "completed",
-    "createdAt": "2026-03-16T02:20:02.568Z",
-    "startedAt": "2026-03-16T02:21:01.179Z",
-    "completedAt": "2026-03-16T02:21:02.845Z",
-    "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:21:02.674Z. Triggered by task task_1773627602568_prp7zws."
-  },
-  {
-    "id": "task_1773628278298_manual",
-    "agent": "researcher",
-    "task": "process-article-inbox",
-    "status": "pending",
-    "createdAt": "2026-03-16T02:31:18Z",
-    "payload": {}
-  },
-  {
-    "id": "task_1773628308488_manual_v2",
-    "agent": "researcher",
-    "task": "process-article-inbox",
-    "status": "pending",
-    "createdAt": "2026-03-16T02:31:48Z",
-    "payload": {}
-  }
-]
+{
+  "tasks": [
+    {
+      "id": "task_1773628501041_5aohoso",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 214
+      },
+      "status": "pending",
+      "createdAt": "2026-03-16T02:35:01.041Z"
+    }
+  ]
+}
