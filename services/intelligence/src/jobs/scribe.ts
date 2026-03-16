@@ -80,6 +80,63 @@ async function upsertFile(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Correction Propagation
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Scan the session summary for behavioral correction patterns and append any
+ * found entries to LEARNINGS.md automatically. Non-fatal — never throws.
+ */
+async function propagateCorrections(summary: string): Promise<void> {
+  try {
+    const correctionSignals = [
+      'never ', 'always ', 'stop ', "don't ", 'do not ',
+      'correction:', 'rule:', 'preference:', 'reminded',
+    ];
+    const hasCorrectionContent = correctionSignals.some(signal =>
+      summary.toLowerCase().includes(signal)
+    );
+    if (!hasCorrectionContent) return;
+
+    // Only propagate HIGH confidence corrections (explicit instruction patterns)
+    const lines = summary.split('\n').filter(l =>
+      correctionSignals.some(s => l.toLowerCase().includes(s)) && l.length > 20
+    );
+    if (lines.length === 0) return;
+
+    const existing = await getFileContent(XHAKA_REPO, 'LEARNINGS.md');
+    if (!existing) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const newEntries = lines
+      .slice(0, 3) // max 3 corrections per session
+      .map(l => `- ${l.trim()} _(auto-propagated ${today})_`)
+      .join('\n');
+
+    let updatedContent: string;
+    if (existing.content.includes('## Auto-Propagated Corrections')) {
+      updatedContent = existing.content.replace(
+        '## Auto-Propagated Corrections',
+        `## Auto-Propagated Corrections\n${newEntries}`,
+      );
+    } else {
+      updatedContent = existing.content.trimEnd() + `\n\n## Auto-Propagated Corrections\n${newEntries}\n`;
+    }
+
+    await updateFile(
+      XHAKA_REPO,
+      'LEARNINGS.md',
+      updatedContent,
+      `chore: auto-propagate corrections from session [scribe]`,
+      existing.sha,
+    );
+    console.log(`[scribe] propagated ${lines.length} corrections to LEARNINGS.md`);
+  } catch (err) {
+    console.warn('[scribe] correction propagation failed (non-fatal):', err);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Step 1: GitHub Digest
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -381,6 +438,9 @@ export async function runScribe(): Promise<void> {
     `📋 *Nightly Scribe* — ${dateStr}\n` +
     statusLine + `\n` +
     `🕐 _System alive at ${new Date().toISOString()}_`;
+
+  // Propagate behavioral corrections to LEARNINGS.md
+  await propagateCorrections(summary);
 
   try {
     await sendAlert(summary);
