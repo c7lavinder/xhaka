@@ -148,7 +148,7 @@ async function processAudioFile(file: AudioFileEntry): Promise<void> {
 
     // verbose_json includes .text and .duration
     transcript = (transcription as { text: string }).text ?? '';
-    durationSeconds = Math.round((transcription as { duration?: number }).duration ?? 0);
+    durationSeconds = Math.round(((transcription as unknown) as { duration?: number }).duration ?? 0);
     console.log(`[voice-ingest] Transcribed: ${transcript.split(/\s+/).length} words, ~${durationSeconds}s`);
   } finally {
     if (existsSync(tmpPath)) {
