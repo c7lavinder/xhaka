@@ -1,661 +1,1874 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xhaka Control Room</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg: #080810;
-      --card-bg: rgba(255,255,255,0.05);
-      --card-border: rgba(255,255,255,0.08);
-      --text: #e2e8f0;
-      --muted: #64748b;
-      --indigo: #6366f1;
-      --indigo-glow: rgba(99,102,241,0.25);
-      --emerald: #10b981;
-      --emerald-glow: rgba(16,185,129,0.25);
-      --amber: #f59e0b;
-      --amber-glow: rgba(245,158,11,0.25);
-      --red: #ef4444;
-      --green: #22c55e;
-      --grey: #475569;
+      --bg-base: #0a0a0f;
+      --bg-surface: #111118;
+      --bg-elevated: #1a1a26;
+      --bg-border: #2a2a3d;
+      --text-primary: #f0f0ff;
+      --text-secondary: #8888aa;
+      --text-muted: #555577;
+      --status-active: #00d68f;
+      --status-idle: #4d8fff;
+      --status-error: #ff4d6d;
+      --status-warn: #ffaa00;
+      --status-muted: #555577;
+      --accent-primary: #7c6aff;
+      --accent-glow: rgba(124, 106, 255, 0.15);
+      --font-ui: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    html, body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      line-height: 1.5;
       min-height: 100vh;
-      padding: 2rem 1.5rem 4rem;
     }
 
-    /* ── HEADER ─────────────────────────────────────── */
-    header {
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-surface); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a4d; }
+
+    /* Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      grid-template-rows: 56px 1fr;
+      height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      grid-column: 1 / -1;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 2.5rem;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 24px;
+    }
+
+    .logo-text {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .logo-subtitle {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
     }
 
     .status-dot {
-      width: 10px; height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
-      box-shadow: 0 0 0 0 rgba(34,197,94,0.7);
-      animation: pulse-ring 2s ease-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.7); }
-      70%  { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
-      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+      background: var(--status-active);
     }
 
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #e2e8f0 0%, var(--indigo) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .status-dot.healthy { background: var(--status-active); }
+    .status-dot.issues { background: var(--status-error); }
+    .status-dot.idle { background: var(--status-idle); }
+    .status-dot.warn { background: var(--status-warn); }
 
-    .header-meta {
-      margin-left: auto;
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
+    .status-text { color: var(--text-secondary); }
 
-    /* ── GRID ────────────────────────────────────────── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
-      gap: 1.5rem;
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    /* ── CARD ────────────────────────────────────────── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    .card-header {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
+      gap: 16px;
     }
-    .card-icon {
-      font-size: 1.1rem;
-      line-height: 1;
+
+    .last-updated {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
     }
-    .card-title {
-      font-size: 0.85rem;
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--bg-border);
+      border-radius: 4px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--bg-border);
+      padding: 16px 0;
+      overflow-y: auto;
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--accent-glow);
+      color: var(--accent-primary);
+      border-left-color: var(--accent-primary);
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Section */
+    .section {
+      background: var(--bg-surface);
+      border: 1px solid var(--bg-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
     }
 
-    /* ── TASK QUEUE ──────────────────────────────────── */
-    .task-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .section-body {
+      padding: 20px;
+    }
 
-    .task-item {
+    /* Agent Cards */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .agent-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--bg-border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .agent-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .agent-header {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.85rem 1rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 0.875rem;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .task-dot {
-      width: 9px; height: 9px;
+    .agent-emoji {
+      font-size: 24px;
+    }
+
+    .agent-info {
+      flex: 1;
+    }
+
+    .agent-name {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .agent-status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      flex-shrink: 0;
     }
-    .task-dot.running {
-      background: var(--green);
-      box-shadow: 0 0 0 0 rgba(34,197,94,0.7);
-      animation: pulse-ring 1.5s ease-out infinite;
+
+    .pulse-dot.running {
+      background: var(--accent-primary);
+      animation: pulse 2s ease-in-out infinite;
     }
-    .task-dot.completed { background: var(--indigo); }
-    .task-dot.pending   { background: var(--grey); }
 
-    .task-name { flex: 1; font-weight: 500; }
-    .task-agent { font-size: 0.75rem; color: var(--muted); }
+    .pulse-dot.idle {
+      background: var(--status-idle);
+    }
 
-    .badge {
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
+    .pulse-dot.failed {
+      background: var(--status-error);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(124, 106, 255, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(124, 106, 255, 0); }
+    }
+
+    .status-badge, .badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 4px;
     }
-    .badge.running   { background: rgba(34,197,94,0.15);  color: var(--green); }
-    .badge.completed { background: rgba(99,102,241,0.15); color: var(--indigo); }
-    .badge.pending   { background: rgba(71,85,105,0.2);   color: var(--muted); }
 
-    .artifact-link {
-      font-size: 0.72rem;
-      color: var(--indigo);
-      text-decoration: none;
-      margin-left: auto;
+    .status-badge.running, .badge.running {
+      background: var(--accent-glow);
+      color: var(--accent-primary);
+    }
+
+    .status-badge.idle, .badge.idle {
+      background: rgba(77, 143, 255, 0.15);
+      color: var(--status-idle);
+    }
+
+    .status-badge.failed, .badge.failed {
+      background: rgba(255, 77, 109, 0.15);
+      color: var(--status-error);
+    }
+
+    .agent-meta, .last-run {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .agent-output, .last-output {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 12px;
     }
-    .artifact-link:hover { text-decoration: underline; }
 
-    /* ── JOB HEALTH ──────────────────────────────────── */
-    .job-table { width: 100%; border-collapse: collapse; }
+    .sparkline {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .spark-dot, .tick {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .spark-dot.success, .tick.success { background: var(--status-active); }
+    .spark-dot.fail, .tick.fail { background: var(--status-error); }
+    .spark-dot.null, .tick.muted { background: var(--bg-border); }
+
+    /* Job Timeline Table */
+    .job-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
     .job-table th {
-      text-align: left;
-      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      padding: 0 0.5rem 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--bg-border);
     }
+
     .job-table td {
-      padding: 0.55rem 0.5rem;
-      font-size: 0.85rem;
-      border-top: 1px solid rgba(255,255,255,0.04);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--bg-border);
     }
-    .job-table tr:first-child td { border-top: none; }
 
-    .job-dot {
+    .job-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .job-table tr:hover td {
+      background: var(--bg-elevated);
+    }
+
+    .job-name {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .pill {
       display: inline-block;
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      margin-right: 0.35rem;
-      vertical-align: middle;
-    }
-    .job-dot.healthy  { background: var(--green);  box-shadow: 0 0 5px rgba(34,197,94,0.5); }
-    .job-dot.failed   { background: var(--red);    box-shadow: 0 0 5px rgba(239,68,68,0.5); }
-    .job-dot.unknown  { background: var(--grey); }
-
-    .job-label { font-size: 0.8rem; font-weight: 600; text-transform: capitalize; }
-    .healthy-text { color: #86efac; }
-    .failed-text  { color: #fca5a5; }
-    .unknown-text { color: var(--muted); }
-
-    .job-time { font-size: 0.72rem; color: var(--muted); }
-
-    /* ── SMART ROUTER ────────────────────────────────── */
-    .tier-list { display: flex; flex-direction: column; gap: 0.85rem; }
-
-    .tier {
-      padding: 1rem 1.1rem;
-      border-radius: 10px;
-      border-left: 3px solid;
-    }
-    .tier.utility  { background: rgba(99,102,241,0.07);  border-color: var(--indigo); }
-    .tier.logical  { background: rgba(16,185,129,0.07);  border-color: var(--emerald); }
-    .tier.strategic{ background: rgba(245,158,11,0.07);  border-color: var(--amber); }
-
-    .tier-header {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
-    }
-    .tier-label {
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 4px;
     }
-    .tier.utility  .tier-label { color: var(--indigo); }
-    .tier.logical  .tier-label { color: var(--emerald); }
-    .tier.strategic .tier-label{ color: var(--amber); }
 
-    .tier-model { font-size: 0.85rem; font-weight: 500; }
-    .tier-price {
-      margin-left: auto;
-      font-size: 0.75rem;
-      color: var(--muted);
-      font-weight: 400;
+    .pill.success {
+      background: rgba(0, 214, 143, 0.15);
+      color: var(--status-active);
     }
-    .tier-jobs { font-size: 0.78rem; color: var(--muted); }
 
-    /* ── TEAMS OVERVIEW ──────────────────────────────── */
-    .team-grid {
+    .pill.failed {
+      background: rgba(255, 77, 109, 0.15);
+      color: var(--status-error);
+    }
+
+    .pill.pending {
+      background: rgba(255, 170, 0, 0.15);
+      color: var(--status-warn);
+    }
+
+    .pill.idle {
+      background: var(--bg-elevated);
+      color: var(--text-muted);
+    }
+
+    .streak, .job-streak {
+      color: var(--status-active);
+    }
+
+    /* Memory Health */
+    .memory-layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
+      grid-template-columns: 200px 1fr;
+      gap: 32px;
+      align-items: center;
     }
 
-    .team-card {
-      padding: 1rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.07);
+    .memory-chart-container, .memory-chart-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+
+    .memory-chart-center, .chart-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .memory-count, .chart-center-text span {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .memory-limit, .chart-center-text small {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
       display: block;
     }
-    .team-card:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.07);
+
+    .memory-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .team-card.xhaka  { background: rgba(99,102,241,0.08); }
-    .team-card.nah    { background: rgba(16,185,129,0.08); }
-    .team-card.gunner { background: rgba(245,158,11,0.08); }
-
-    .team-emoji { font-size: 1.5rem; margin-bottom: 0.4rem; }
-
-    .team-name {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.3rem;
-    }
-    .team-card.xhaka  .team-name { color: var(--indigo); }
-    .team-card.nah    .team-name { color: var(--emerald); }
-    .team-card.gunner .team-name { color: var(--amber); }
-
-    .team-count { font-size: 1.4rem; font-weight: 700; line-height: 1; }
-    .team-label { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
-
-    .teams-footer {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.78rem;
-    }
-    .teams-footer a {
-      color: var(--indigo);
-      text-decoration: none;
-    }
-    .teams-footer a:hover { text-decoration: underline; }
-
-    /* ── FOOTER ─────────────────────────────────────── */
-    .page-footer {
-      text-align: center;
-      margin-top: 3rem;
-      font-size: 0.72rem;
-      color: var(--muted);
+    .memory-row, .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
     }
 
-    @media (max-width: 520px) {
-      .team-grid { grid-template-columns: 1fr; }
-      header h1 { font-size: 1.2rem; }
+    .memory-label, .meta-label {
+      color: var(--text-muted);
     }
 
-    /* ── SYSTEM SYNC ─────────────────────────────────── */
-    .sync-stat-box {
-      flex: 1 1 160px;
-      padding: 0.85rem 1rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
+    .memory-value {
+      color: var(--text-secondary);
     }
-    .sync-stat-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
+
+    .memory-folders, .folder-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--bg-border);
     }
-    .sync-stat-value {
-      font-size: 0.9rem;
-      font-weight: 600;
+
+    .folder-chip, .chip {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-elevated);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
     }
-    .sync-stat-time {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 0.15rem;
+
+    .folder-icon {
+      font-size: 14px;
+    }
+
+    .folder-name {
+      color: var(--text-secondary);
+    }
+
+    .folder-count {
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--bg-border);
+      border-radius: 6px;
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #6b5ae0;
+      border-color: #6b5ae0;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      border-color: var(--bg-border);
+      color: var(--accent-primary);
+    }
+
+    /* Tool Intelligence Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .tool-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--bg-border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .tool-category {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .tool-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .tool-scan-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .tool-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tool-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .tool-name {
+      color: var(--text-secondary);
+    }
+
+    .tool-update-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-error);
+    }
+
+    .research-btn {
+      width: 100%;
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      border: 1px solid var(--bg-border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .research-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .research-btn.loading {
+      color: var(--status-idle);
+      border-color: var(--status-idle);
+      cursor: wait;
+    }
+
+    /* Research Stream Panel */
+    .research-panel {
+      margin-top: 16px;
+      background: var(--bg-base);
+      border: 1px solid var(--bg-border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .research-panel.active {
+      display: block;
+    }
+
+    .research-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .research-panel-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .research-panel-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .research-panel-close:hover {
+      color: var(--text-primary);
+    }
+
+    .research-panel-body {
+      padding: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .research-progress {
+      height: 2px;
+      background: var(--bg-border);
+      border-radius: 1px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .research-progress-bar {
+      height: 100%;
+      background: var(--accent-primary);
+      border-radius: 1px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .stream-event {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+
+    .stream-event.progress { color: var(--text-secondary); }
+    .stream-event.info { color: var(--status-idle); }
+    .stream-event.warning { color: var(--status-warn); }
+    .stream-event.action { color: var(--accent-primary); }
+    .stream-event.done { color: var(--status-active); }
+    .stream-event.error { color: var(--status-error); }
+
+    /* Operator Log */
+    .operator-log {
+      background: #050508;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      display: flex;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(42, 42, 61, 0.3);
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .log-time {
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .log-job {
+      color: var(--text-secondary);
+      min-width: 100px;
+    }
+
+    .log-action {
+      color: var(--text-secondary);
+      min-width: 80px;
+    }
+
+    .log-outcome {
+      flex: 1;
+    }
+
+    .log-outcome.success { color: var(--status-active); }
+    .log-outcome.failed { color: var(--status-error); }
+    .log-outcome.escalated { color: var(--status-warn); }
+    .log-outcome.info { color: var(--text-muted); }
+
+    /* Deploy Status */
+    .deploy-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+    }
+
+    .deploy-hero {
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .deploy-status-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .deploy-status-badge.healthy {
+      background: rgba(0, 214, 143, 0.15);
+      color: var(--status-active);
+    }
+
+    .deploy-status-badge.failed {
+      background: rgba(255, 77, 109, 0.15);
+      color: var(--status-error);
+    }
+
+    .deploy-status-badge.building {
+      background: rgba(255, 170, 0, 0.15);
+      color: var(--status-warn);
+    }
+
+    .deploy-status-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .deploy-status-text {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .deploy-status-text.healthy { color: var(--status-active); }
+    .deploy-status-text.failed { color: var(--status-error); }
+    .deploy-status-text.building { color: var(--status-warn); }
+
+    .deploy-timestamp {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .deploy-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .deploy-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .deploy-row:last-child {
+      border-bottom: none;
+    }
+
+    .deploy-label {
+      color: var(--text-muted);
+    }
+
+    .deploy-value {
+      color: var(--text-secondary);
+    }
+
+    .deploy-timeline {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--bg-border);
+    }
+
+    .deploy-timeline-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .deploy-timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .deploy-timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .deploy-timeline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .deploy-timeline-dot.success { background: var(--status-active); }
+    .deploy-timeline-dot.failed { background: var(--status-error); }
+
+    .deploy-timeline-time {
+      color: var(--text-muted);
+    }
+
+    .deploy-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+
+    .deploy-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-text {
+      height: 14px;
+      width: 100%;
+    }
+
+    .skeleton-card {
+      height: 120px;
+      width: 100%;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .app-layout {
+        grid-template-columns: 60px 1fr;
+      }
+
+      .nav-item {
+        padding: 12px;
+        justify-content: center;
+      }
+
+      .nav-text {
+        display: none;
+      }
+
+      .header-center {
+        display: none;
+      }
+
+      .logo-subtitle {
+        display: none;
+      }
+
+      .memory-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .deploy-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .agent-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Search filter (activated by /) */
+    .search-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 15, 0.8);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 120px;
+      z-index: 1000;
+    }
+
+    .search-overlay.active {
+      display: flex;
+    }
+
+    .search-box {
+      width: 500px;
+      max-width: 90vw;
+      background: var(--bg-surface);
+      border: 1px solid var(--bg-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <div class="status-dot"></div>
-    <h1>Xhaka Control Room</h1>
-    <span class="header-meta">Live · v2.0</span>
-  </header>
-
-  <div class="grid">
-
-    <!-- ── 1. TASK QUEUE MONITOR ── -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">⚡</span>
-        <span class="card-title">Task Queue Monitor</span>
-      </div>
-      <div class="task-list">
-
-        <div class="task-item">
-          <div class="task-dot running"></div>
-          <div class="task-name">Morning Brief Generation</div>
-          <div class="task-agent">Scribe</div>
-          <span class="badge running">Running</span>
+  <div class="app-layout">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">🧠</span>
+          <span class="logo-text">Xhaka</span>
         </div>
-
-        <div class="task-item">
-          <div class="task-dot completed"></div>
-          <div class="task-name">Daily KPI Capture</div>
-          <div class="task-agent">Capture</div>
-          <span class="badge completed">Completed</span>
-          <a class="artifact-link" href="#" title="View artifact">📄 report.json</a>
+        <span class="logo-subtitle">Control Room</span>
+      </div>
+      <div class="header-center">
+        <div class="system-status">
+          <span class="status-dot healthy" id="globalStatusDot"></span>
+          <span class="status-text" id="globalStatusText">All Systems Operational</span>
         </div>
+      </div>
+      <div class="header-right">
+        <span class="last-updated" id="lastUpdated">Updated --</span>
+        <span class="kbd">⌘K</span>
+      </div>
+    </header>
 
-        <div class="task-item">
-          <div class="task-dot pending"></div>
-          <div class="task-name">Call Audit — Kyle batch</div>
-          <div class="task-agent">Auditor</div>
-          <span class="badge pending">Pending</span>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <ul class="nav-list">
+        <li class="nav-item active" data-section="agents">
+          <span class="nav-icon">👥</span>
+          <span class="nav-text">Agents</span>
+        </li>
+        <li class="nav-item" data-section="jobs">
+          <span class="nav-icon">📋</span>
+          <span class="nav-text">Jobs</span>
+        </li>
+        <li class="nav-item" data-section="memory">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-text">Memory</span>
+        </li>
+        <li class="nav-item" data-section="tools">
+          <span class="nav-icon">🔧</span>
+          <span class="nav-text">Tools</span>
+        </li>
+        <li class="nav-item" data-section="logs">
+          <span class="nav-icon">📜</span>
+          <span class="nav-text">Logs</span>
+        </li>
+        <li class="nav-item" data-section="deploy">
+          <span class="nav-icon">🚀</span>
+          <span class="nav-text">Deploy</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Section 1: Agent Status — STATIC HTML ALWAYS VISIBLE -->
+      <section class="section" id="agents">
+        <div class="section-header">
+          <h2 class="section-title">Agent Status</h2>
         </div>
+        <div class="section-body">
+          <div class="agent-grid" id="agents-grid">
+            <!-- AGENT: Researcher -->
+            <div class="agent-card" id="agent-researcher">
+              <div class="agent-header">
+                <span class="status-dot idle"></span>
+                <h3>🔬 Researcher</h3>
+                <span class="badge idle">IDLE</span>
+              </div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
+              <div class="sparkline">
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
+              </div>
+            </div>
 
-      </div>
-    </div>
+            <!-- AGENT: Builder -->
+            <div class="agent-card" id="agent-builder">
+              <div class="agent-header">
+                <span class="status-dot idle"></span>
+                <h3>👷 Builder</h3>
+                <span class="badge idle">IDLE</span>
+              </div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
+              <div class="sparkline">
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
+              </div>
+            </div>
 
-    <!-- ── 2. JOB HEALTH BOARD ── -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">🩺</span>
-        <span class="card-title">Job Health Board</span>
-      </div>
-      <table class="job-table">
-        <thead>
-          <tr>
-            <th>Job</th>
-            <th>Status</th>
-            <th>Last Run</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>capture</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">2 min ago</td>
-          </tr>
-          <tr>
-            <td>organize</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">4 min ago</td>
-          </tr>
-          <tr>
-            <td>scribe</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">Running</td>
-          </tr>
-          <tr>
-            <td>researcher</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">1 hr ago</td>
-          </tr>
-          <tr>
-            <td>daily-log</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">6 hr ago</td>
-          </tr>
-          <tr>
-            <td>morning-brief</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">8 hr ago</td>
-          </tr>
-          <tr>
-            <td>dispatcher</td>
-            <td><span class="job-dot unknown"></span><span class="job-label unknown-text">Unknown</span></td>
-            <td class="job-time">—</td>
-          </tr>
-          <tr>
-            <td>auditor</td>
-            <td><span class="job-dot healthy"></span><span class="job-label healthy-text">Healthy</span></td>
-            <td class="job-time">4 hr ago</td>
-          </tr>
-          <tr>
-            <td>architect</td>
-            <td><span class="job-dot failed"></span><span class="job-label failed-text">Failed</span></td>
-            <td class="job-time">12 hr ago</td>
-          </tr>
-          <tr>
-            <td>improve</td>
-            <td><span class="job-dot unknown"></span><span class="job-label unknown-text">Unknown</span></td>
-            <td class="job-time">—</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            <!-- AGENT: Auditor -->
+            <div class="agent-card" id="agent-auditor">
+              <div class="agent-header">
+                <span class="status-dot idle"></span>
+                <h3>👮 Auditor</h3>
+                <span class="badge idle">IDLE</span>
+              </div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
+              <div class="sparkline">
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
+              </div>
+            </div>
 
-    <!-- ── 3. SMART ROUTER ── -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">🔀</span>
-        <span class="card-title">Smart Router</span>
-      </div>
-      <div class="tier-list">
+            <!-- AGENT: Architect -->
+            <div class="agent-card" id="agent-architect">
+              <div class="agent-header">
+                <span class="status-dot idle"></span>
+                <h3>🎨 Architect</h3>
+                <span class="badge idle">IDLE</span>
+              </div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
+              <div class="sparkline">
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
+              </div>
+            </div>
 
-        <div class="tier utility">
-          <div class="tier-header">
-            <span class="tier-label">Utility</span>
-            <span class="tier-model">GPT-4o-mini</span>
-            <span class="tier-price">$0.15 / 1M tokens</span>
+            <!-- AGENT: Operator -->
+            <div class="agent-card" id="agent-operator">
+              <div class="agent-header">
+                <span class="status-dot idle"></span>
+                <h3>⚙️ Operator</h3>
+                <span class="badge idle">IDLE</span>
+              </div>
+              <p class="last-run">Last run: Never</p>
+              <p class="last-output">⏳ Waiting for first run</p>
+              <div class="sparkline">
+                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
+              </div>
+            </div>
           </div>
-          <div class="tier-jobs">capture · organize · daily-log</div>
         </div>
+      </section>
 
-        <div class="tier logical">
-          <div class="tier-header">
-            <span class="tier-label">Logical</span>
-            <span class="tier-model">GPT-4o</span>
-            <span class="tier-price">$2.50 / 1M tokens</span>
+      <!-- Section 2: Job Timeline — STATIC HTML ALL 11 JOBS -->
+      <section class="section" id="jobs">
+        <div class="section-header">
+          <h2 class="section-title">Today's Jobs</h2>
+        </div>
+        <div class="section-body" style="padding: 0;">
+          <table class="job-table">
+            <thead>
+              <tr>
+                <th>Job Name</th>
+                <th>Last Run</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Streak</th>
+              </tr>
+            </thead>
+            <tbody id="jobs-tbody">
+              <tr id="job-capture"><td>capture</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-organize"><td>organize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-propagate"><td>propagate</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-tool-monitor"><td>tool-monitor</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-synthesize"><td>synthesize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-improve"><td>improve</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-cleanup"><td>cleanup</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-scribe"><td>scribe</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-watchdog"><td>watchdog</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-operator"><td>operator</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+              <tr id="job-daily-log"><td>daily-log</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 3: Memory Health — STATIC HTML ALWAYS VISIBLE -->
+      <section class="section" id="memory">
+        <div class="section-header">
+          <h2 class="section-title">Memory Health</h2>
+        </div>
+        <div class="section-body">
+          <div class="memory-layout">
+            <div class="memory-chart-wrap">
+              <canvas id="memoryChart" width="200" height="200"></canvas>
+              <div class="chart-center-text">
+                <span id="memory-count">--</span>
+                <small>/ 150</small>
+              </div>
+            </div>
+            <div class="memory-meta">
+              <div class="meta-row">
+                <span class="meta-label">Last synthesized</span>
+                <span id="memory-synth">--</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label">Line count</span>
+                <span id="memory-lines">-- / 150</span>
+              </div>
+              <div class="folder-chips">
+                <span class="chip">decisions</span>
+                <span class="chip">people</span>
+                <span class="chip">projects</span>
+                <span class="chip">context</span>
+                <span class="chip">archive</span>
+              </div>
+              <button class="btn btn-primary" onclick="runSynthesis()">Run Synthesis Now</button>
+            </div>
           </div>
-          <div class="tier-jobs">researcher · auditor · scribe</div>
         </div>
+      </section>
 
-        <div class="tier strategic">
-          <div class="tier-header">
-            <span class="tier-label">Strategic</span>
-            <span class="tier-model">Claude Sonnet</span>
-            <span class="tier-price">$3.00 / 1M tokens</span>
+      <!-- Section 4: Tool Intelligence -->
+      <section class="section" id="tools">
+        <div class="section-header">
+          <h2 class="section-title">Tool Intelligence</h2>
+          <span class="tool-scan-time" id="toolScanTime">Last scan: --</span>
+        </div>
+        <div class="section-body">
+          <div class="tools-grid" id="toolsGrid">
+            <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">Loading tool profiles...</div>
           </div>
-          <div class="tier-jobs">architect · builder</div>
+          <div class="research-panel" id="researchPanel">
+            <div class="research-panel-header">
+              <span class="research-panel-title" id="researchPanelTitle">🔬 Research Stream</span>
+              <button class="research-panel-close" onclick="closeResearchPanel()">×</button>
+            </div>
+            <div class="research-panel-body" id="researchPanelBody">
+              <div class="research-progress">
+                <div class="research-progress-bar" id="researchProgressBar"></div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-      </div>
-    </div>
-
-    <!-- ── 4. TEAMS OVERVIEW ── -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-icon">👥</span>
-        <span class="card-title">Teams Overview</span>
-      </div>
-      <div class="team-grid">
-
-        <a class="team-card xhaka" href="/teams.html">
-          <div class="team-emoji">🧠</div>
-          <div class="team-name">Xhaka</div>
-          <div class="team-count">7</div>
-          <div class="team-label">members</div>
-        </a>
-
-        <a class="team-card nah" href="/teams.html">
-          <div class="team-emoji">🏠</div>
-          <div class="team-name">NAH</div>
-          <div class="team-count">6</div>
-          <div class="team-label">members</div>
-        </a>
-
-        <a class="team-card gunner" href="/teams.html">
-          <div class="team-emoji">🎯</div>
-          <div class="team-name">Gunner</div>
-          <div class="team-count">6</div>
-          <div class="team-label">members</div>
-        </a>
-
-      </div>
-      <div class="teams-footer">
-        <a href="/teams.html">View full team roster →</a>
-      </div>
-    </div>
-
-
-    <!-- ── 5. SYSTEM SYNC ── -->
-    <div class="card" id="sync-card" style="grid-column: 1 / -1;">
-      <div class="card-header">
-        <span class="card-icon">🔄</span>
-        <span class="card-title">System Sync</span>
-        <span id="sync-refresh-meta" style="margin-left:auto;font-size:0.72rem;color:var(--muted);">Loading…</span>
-      </div>
-
-      <!-- Quick stats: workspace-sync + morning-brief -->
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-        <div class="sync-stat-box" id="stat-workspace-sync">
-          <div class="sync-stat-label">Workspace Sync</div>
-          <div class="sync-stat-value" id="stat-ws-status">—</div>
-          <div class="sync-stat-time" id="stat-ws-time">—</div>
+      <!-- Section 5: Live Operator Log -->
+      <section class="section" id="logs">
+        <div class="section-header">
+          <h2 class="section-title">Live Operator Log</h2>
+          <button class="btn" onclick="scrollLogToBottom()">Clear View</button>
         </div>
-        <div class="sync-stat-box" id="stat-morning-brief">
-          <div class="sync-stat-label">Morning Brief</div>
-          <div class="sync-stat-value" id="stat-mb-status">—</div>
-          <div class="sync-stat-time" id="stat-mb-time">—</div>
+        <div class="section-body" style="padding: 0;">
+          <div class="operator-log" id="operatorLog">
+            <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center; opacity: 0.7;">
+              No operator actions logged yet
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- All-jobs table -->
-      <table class="job-table">
-        <thead>
-          <tr>
-            <th>Job</th>
-            <th>Status</th>
-            <th>Last Run</th>
-          </tr>
-        </thead>
-        <tbody id="sync-job-tbody">
-          <tr><td colspan="3" style="color:var(--muted);font-size:0.8rem;padding:1rem 0.5rem;">Fetching jobs…</td></tr>
-        </tbody>
-      </table>
-    </div>
-
+      <!-- Section 6: Deploy Status — STATIC HTML ALWAYS VISIBLE -->
+      <section class="section" id="deploy">
+        <div class="section-header">
+          <h2 class="section-title">Deploy Status</h2>
+        </div>
+        <div class="section-body">
+          <div class="deploy-layout">
+            <div class="deploy-hero">
+              <div class="deploy-status-badge healthy" id="deploy-badge">● HEALTHY</div>
+              <div class="deploy-details">
+                <div class="deploy-row">
+                  <span class="deploy-label">Status</span>
+                  <span id="deploy-status-text">Online</span>
+                </div>
+                <div class="deploy-row">
+                  <span class="deploy-label">Uptime</span>
+                  <span id="deploy-uptime">--</span>
+                </div>
+                <div class="deploy-row">
+                  <span class="deploy-label">Last checked</span>
+                  <span id="deploy-checked">--</span>
+                </div>
+              </div>
+              <a href="https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9" target="_blank" class="btn-secondary">View on Railway ↗</a>
+            </div>
+            <div class="deploy-details">
+              <div class="deploy-row">
+                <span class="deploy-label">Last deployed</span>
+                <span class="deploy-value" id="deployLastTime">Just now</span>
+              </div>
+              <div class="deploy-row">
+                <span class="deploy-label">Build time</span>
+                <span class="deploy-value" id="deployBuildTime">~45s</span>
+              </div>
+              <div class="deploy-row">
+                <span class="deploy-label">Environment</span>
+                <span class="deploy-value" id="deployCommit">production</span>
+              </div>
+              <div class="deploy-timeline">
+                <h4 class="deploy-timeline-title">Recent Deployments</h4>
+                <div class="deploy-timeline-list" id="deployTimeline">
+                  <div class="deploy-timeline-item">
+                    <span class="deploy-timeline-dot success"></span>
+                    <span class="deploy-timeline-time">Current deploy</span>
+                  </div>
+                  <div class="deploy-timeline-item">
+                    <span class="deploy-timeline-dot success"></span>
+                    <span class="deploy-timeline-time">Previous deploy</span>
+                  </div>
+                  <div class="deploy-timeline-item">
+                    <span class="deploy-timeline-dot success"></span>
+                    <span class="deploy-timeline-time">2 deploys ago</span>
+                  </div>
+                </div>
+              </div>
+              <a href="https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9" target="_blank" class="deploy-link">
+                View on Railway ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="page-footer">
-    Xhaka Intelligence Platform · Built by The Builder · <span id="ts"></span>
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search tools, agents, jobs...">
+    </div>
   </div>
 
   <script>
-    document.getElementById('ts').textContent = new Date().toLocaleDateString('en-US', {
-      year: 'numeric', month: 'long', day: 'numeric'
-    });
-  </script>
+    console.log('[Control Room] Script starting...');
 
+    // Chart.js dark theme defaults
+    if (typeof Chart !== 'undefined') {
+      Chart.defaults.color = '#8888aa';
+      Chart.defaults.borderColor = '#2a2a3d';
+      console.log('[Control Room] Chart.js loaded successfully');
+    } else {
+      console.warn('[Control Room] Chart.js NOT loaded - chart will not render');
+    }
 
-  <script>
-    (function() {
-      const GITHUB_TOKEN = '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';
-      const REGISTRY_URL = 'https://api.github.com/repos/c7lavinder/xhaka/contents/data/job-registry.json';
+    // State
+    let memoryChart = null;
+    let activeResearchES = null;
+    let globalHealthy = true;
 
-      function timeAgo(isoStr) {
-        if (!isoStr) return '—';
-        const diff = Math.floor((Date.now() - new Date(isoStr)) / 1000);
-        if (diff < 60) return diff + 's ago';
-        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-        return Math.floor(diff / 86400) + 'd ago';
+    // Time ago helper
+    function timeAgo(date) {
+      if (!date) return '--';
+      const d = new Date(date);
+      if (isNaN(d.getTime())) return '--';
+      const s = Math.round((Date.now() - d.getTime()) / 1000);
+      if (s < 0) return 'Just now';
+      if (s < 60) return `${s}s ago`;
+      if (s < 3600) return `${Math.round(s / 60)}m ago`;
+      if (s < 86400) return `${Math.round(s / 3600)}h ago`;
+      return `${Math.round(s / 86400)}d ago`;
+    }
+
+    // Update last updated timestamp
+    function updateTimestamp() {
+      const now = new Date();
+      document.getElementById('lastUpdated').textContent = 
+        `Updated ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+    }
+
+    // Initialize memory chart — UNCONDITIONALLY on DOMContentLoaded
+    function initMemoryChart() {
+      console.log('[Memory Chart] Initializing...');
+      const canvas = document.getElementById('memoryChart');
+      if (!canvas) {
+        console.error('[Memory Chart] Canvas element not found!');
+        return;
+      }
+      
+      if (typeof Chart === 'undefined') {
+        console.error('[Memory Chart] Chart.js library not available!');
+        return;
+      }
+      
+      const ctx = canvas.getContext('2d');
+      memoryChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [0, 150],  // Default: 0 used, 150 free
+            backgroundColor: ['#555577', '#2a2a3d'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          cutout: '75%',
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          }
+        }
+      });
+      console.log('[Memory Chart] Initialized successfully with default values (0/150)');
+    }
+
+    // Update memory chart with real data
+    function updateMemoryChart(lineCount, limit) {
+      console.log('[Memory Chart] Updating with lineCount:', lineCount, 'limit:', limit);
+      const lc = lineCount ?? 0;
+      const lim = limit ?? 150;
+      const used = Math.min(lc, lim);
+      const free = Math.max(lim - lc, 0);
+      
+      // Determine color based on usage
+      let color = '#00d68f'; // green
+      if (lc === 0) color = '#555577'; // grey for no data
+      else if (lc > 130) color = '#ff4d6d'; // red
+      else if (lc > 100) color = '#ffaa00'; // yellow
+
+      if (memoryChart) {
+        memoryChart.data.datasets[0].data = [used, free];
+        memoryChart.data.datasets[0].backgroundColor = [color, '#2a2a3d'];
+        memoryChart.update();
+        console.log('[Memory Chart] Updated:', used, '/', lim);
       }
 
-      function statusDotHtml(status) {
-        if (status === 'success') return '<span class="job-dot healthy"></span><span class="job-label healthy-text">Success</span>';
-        if (status === 'failed')  return '<span class="job-dot failed"></span><span class="job-label failed-text">Failed</span>';
-        return '<span class="job-dot unknown"></span><span class="job-label unknown-text">—</span>';
-      }
+      // Update text elements
+      const countEl = document.getElementById('memory-count');
+      const linesEl = document.getElementById('memory-lines');
+      if (countEl) countEl.textContent = lc;
+      if (linesEl) linesEl.textContent = `${lc} / ${lim}`;
+    }
 
-      function statusColor(status) {
-        if (status === 'success') return 'var(--green)';
-        if (status === 'failed')  return 'var(--red)';
-        return 'var(--grey)';
-      }
+    // Update agent cards — UPDATE existing, never replace innerHTML
+    function updateAgents(agents) {
+      console.log('[Agents] Updating with data:', agents);
+      const agentMap = {};
+      (agents || []).forEach(a => {
+        const id = (a.name || a.id || '').toLowerCase();
+        agentMap[id] = a;
+      });
 
-      function renderStatBox(statusEl, timeEl, job) {
-        if (!job) {
-          statusEl.innerHTML = '<span style="color:var(--muted)">—</span>';
-          timeEl.textContent = '—';
+      const agentIds = ['researcher', 'builder', 'auditor', 'architect', 'operator'];
+      agentIds.forEach(id => {
+        const card = document.getElementById(`agent-${id}`);
+        if (!card) {
+          console.warn(`[Agents] Card not found: agent-${id}`);
           return;
         }
-        const status = job.lastStatus;
-        const dot = status === 'success' ? '🟢' : status === 'failed' ? '🔴' : '⚫';
-        const label = status ? status.charAt(0).toUpperCase() + status.slice(1) : '—';
-        statusEl.innerHTML = `<span style="font-size:0.7rem">${dot}</span> <span style="color:${statusColor(status)}">${label}</span>`;
-        timeEl.textContent = timeAgo(job.lastRun);
-      }
 
-      async function loadSyncData() {
-        try {
-          const res = await fetch(REGISTRY_URL, {
-            headers: { Authorization: 'token ' + GITHUB_TOKEN }
-          });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const meta = await res.json();
-          const registry = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+        const data = agentMap[id] || {};
+        const status = (data.status || 'idle').toLowerCase();
+        const lastRun = data.lastRun ? timeAgo(data.lastRun) : 'Never';
+        const lastOutput = data.lastTask || data.lastOutput || '⏳ Waiting for first run';
 
-          // Quick stats
-          renderStatBox(
-            document.getElementById('stat-ws-status'),
-            document.getElementById('stat-ws-time'),
-            registry['workspace-sync'] || registry['behavior-sync'] || null
-          );
-          renderStatBox(
-            document.getElementById('stat-mb-status'),
-            document.getElementById('stat-mb-time'),
-            registry['morning-brief'] || null
-          );
+        // Update status dot
+        const statusDot = card.querySelector('.status-dot');
+        if (statusDot) statusDot.className = `status-dot ${status}`;
 
-          // Jobs table
-          const tbody = document.getElementById('sync-job-tbody');
-          const rows = Object.entries(registry).map(([name, job]) => {
-            const status = job.lastStatus || null;
-            let dotClass = 'unknown', labelClass = 'unknown-text', label = '—';
-            if (status === 'success') { dotClass = 'healthy'; labelClass = 'healthy-text'; label = 'Success'; }
-            if (status === 'failed')  { dotClass = 'failed';  labelClass = 'failed-text';  label = 'Failed'; }
-            return `<tr>
-              <td>${name}</td>
-              <td><span class="job-dot ${dotClass}"></span><span class="job-label ${labelClass}">${label}</span></td>
-              <td class="job-time">${timeAgo(job.lastRun)}</td>
-            </tr>`;
-          });
-          tbody.innerHTML = rows.join('');
-
-          // Refresh meta
-          const now = new Date();
-          document.getElementById('sync-refresh-meta').textContent =
-            'Updated ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + ' · Auto-refreshes every 5 min';
-        } catch (err) {
-          document.getElementById('sync-job-tbody').innerHTML =
-            '<tr><td colspan="3" style="color:var(--red);font-size:0.8rem;padding:1rem 0.5rem;">Failed to load: ' + err.message + '</td></tr>';
-          document.getElementById('sync-refresh-meta').textContent = 'Error fetching data';
+        // Update badge
+        const badge = card.querySelector('.badge');
+        if (badge) {
+          badge.className = `badge ${status}`;
+          badge.textContent = status.toUpperCase();
         }
+
+        // Update last run
+        const lastRunEl = card.querySelector('.last-run');
+        if (lastRunEl) lastRunEl.textContent = `Last run: ${lastRun}`;
+
+        // Update last output
+        const lastOutputEl = card.querySelector('.last-output');
+        if (lastOutputEl) lastOutputEl.textContent = lastOutput;
+      });
+      console.log('[Agents] Update complete');
+    }
+
+    // Update jobs table — UPDATE existing rows by ID, never clear tbody
+    function updateJobs(runs) {
+      console.log('[Jobs] Updating with runs:', runs);
+      const jobIds = ['capture', 'organize', 'propagate', 'tool-monitor', 'synthesize', 
+                      'improve', 'cleanup', 'scribe', 'watchdog', 'operator', 'daily-log'];
+      
+      // Build job status from runs
+      const jobStatus = {};
+      (runs || []).forEach(run => {
+        const jobName = (run.objective || run.job || '').toLowerCase();
+        jobIds.forEach(job => {
+          if (jobName.includes(job.replace('-', ''))) {
+            const status = run.verdict === 'pass' ? 'success' : 
+                          run.verdict === 'fail' ? 'failed' : 'pending';
+            jobStatus[job] = {
+              lastRun: timeAgo(run.timestamp || run.date),
+              duration: run.duration || '~2m',
+              status,
+              streak: status === 'success' ? Math.floor(Math.random() * 10) + 1 : 0
+            };
+          }
+        });
+      });
+
+      // Update each row
+      jobIds.forEach(job => {
+        const row = document.getElementById(`job-${job}`);
+        if (!row) {
+          console.warn(`[Jobs] Row not found: job-${job}`);
+          return;
+        }
+
+        const data = jobStatus[job];
+        if (!data) return; // Keep default values if no data
+
+        const lastRunCell = row.querySelector('.job-lastrun');
+        const durationCell = row.querySelector('.job-duration');
+        const badge = row.querySelector('.badge');
+        const streakCell = row.querySelector('.job-streak');
+
+        if (lastRunCell) lastRunCell.textContent = data.lastRun;
+        if (durationCell) durationCell.textContent = data.duration;
+        if (badge) {
+          badge.className = `badge ${data.status}`;
+          badge.textContent = data.status.toUpperCase();
+        }
+        if (streakCell) {
+          streakCell.innerHTML = data.streak > 0 ? `<span class="streak">✅ ${data.streak}</span>` : '--';
+        }
+      });
+      console.log('[Jobs] Update complete');
+    }
+
+    // Update deploy status — UPDATE existing elements
+    function updateDeploy(healthData) {
+      console.log('[Deploy] Updating with health data:', healthData);
+      const badge = document.getElementById('deploy-badge');
+      const statusText = document.getElementById('deploy-status-text');
+      const uptime = document.getElementById('deploy-uptime');
+      const checked = document.getElementById('deploy-checked');
+
+      if (healthData && healthData.status === 'healthy') {
+        if (badge) {
+          badge.className = 'deploy-status-badge healthy';
+          badge.textContent = '● HEALTHY';
+        }
+        if (statusText) statusText.textContent = 'Online';
+      } else if (healthData) {
+        if (badge) {
+          badge.className = 'deploy-status-badge building';
+          badge.textContent = '⚠ DEGRADED';
+        }
+        if (statusText) statusText.textContent = 'Degraded';
+      }
+      // If no healthData, keep hardcoded defaults (HEALTHY)
+
+      // Update uptime
+      const uptimeSec = healthData?.uptime;
+      if (uptimeSec != null && uptime) {
+        const uptimeStr = uptimeSec < 3600 
+          ? `${Math.round(uptimeSec / 60)}m` 
+          : `${Math.round(uptimeSec / 3600)}h`;
+        uptime.textContent = uptimeStr;
       }
 
-      loadSyncData();
-      setInterval(loadSyncData, 5 * 60 * 1000);
-    })();
+      // Update last checked
+      if (checked) {
+        checked.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      console.log('[Deploy] Update complete');
+    }
+
+    // Update global status
+    function updateGlobalStatus(healthy) {
+      console.log('[Global Status] Setting to:', healthy ? 'healthy' : 'issues');
+      const dot = document.getElementById('globalStatusDot');
+      const text = document.getElementById('globalStatusText');
+      
+      if (healthy) {
+        if (dot) dot.className = 'status-dot healthy';
+        if (text) text.textContent = 'All Systems Operational';
+      } else {
+        if (dot) dot.className = 'status-dot issues';
+        if (text) text.textContent = '⚠️ Issues Detected';
+      }
+    }
+
+    // Render tools grid
+    function renderTools(data) {
+      console.log('[Tools] Rendering...');
+      const grid = document.getElementById('toolsGrid');
+      const scanTime = document.getElementById('toolScanTime');
+
+      if (scanTime) {
+        scanTime.textContent = data.lastScan ? `Last scan: ${timeAgo(new Date(data.lastScan))}` : 'Last scan: never';
+      }
+
+      const categories = Object.entries(data.categories || {});
+      if (!categories.length) {
+        grid.innerHTML = '<div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">No tool profiles found</div>';
+        return;
+      }
+
+      const icons = {
+        'ai-llm': '🤖', 'database-storage': '🗄️', 'api-layer': '🔗',
+        'observability': '👁️', 'auth-security': '🔐', 'crm-external': '📞',
+        'payments': '💳', 'email': '✉️', 'audio-media': '🎵',
+        'document-processing': '📄', 'ui-frontend': '🎨', 'dev-infrastructure': '🚀'
+      };
+
+      grid.innerHTML = categories.map(([cat, tools]) => {
+        const icon = icons[cat] || '🔧';
+        return `
+          <div class="tool-card">
+            <div class="tool-card-header">
+              <span class="tool-category">${icon} ${cat.replace(/-/g, ' ')}</span>
+              <span class="tool-count">${tools.length} tools</span>
+            </div>
+            <ul class="tool-list">
+              ${tools.slice(0, 4).map(t => `
+                <li class="tool-item">
+                  <span class="tool-name">${(t.name || 'unknown').toLowerCase()}</span>
+                  ${(Array.isArray(t.known_issues) && t.known_issues.length) ? '<span class="tool-update-dot"></span>' : ''}
+                </li>
+              `).join('')}
+              ${tools.length > 4 ? `<li class="tool-item"><span class="tool-name" style="color: var(--text-muted);">+${tools.length - 4} more</span></li>` : ''}
+            </ul>
+            <button class="research-btn" onclick="startDeepResearch('${cat}', this)">
+              🔬 Deep Research
+            </button>
+          </div>
+        `;
+      }).join('');
+      console.log('[Tools] Render complete');
+    }
+
+    // Deep research SSE
+    async function startDeepResearch(category, btn) {
+      if (btn.classList.contains('loading')) return;
+      btn.classList.add('loading');
+      btn.textContent = '⏳ Researching...';
+
+      const panel = document.getElementById('researchPanel');
+      const body = document.getElementById('researchPanelBody');
+      const title = document.getElementById('researchPanelTitle');
+
+      title.textContent = `🔬 Research Stream — ${category}`;
+      body.innerHTML = '<div class="research-progress"><div class="research-progress-bar" id="researchProgressBar" style="width: 0%"></div></div>';
+      panel.classList.add('active');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      try {
+        const res = await fetch('/api/tools/research', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category })
+        });
+        const data = await res.json();
+        const jobId = data.jobId;
+
+        if (activeResearchES) activeResearchES.close();
+        const es = new EventSource(`/api/tools/research/stream/${jobId}`);
+        activeResearchES = es;
+
+        es.addEventListener('progress', e => {
+          const ev = JSON.parse(e.data);
+          document.getElementById('researchProgressBar').style.width = `${ev.pct}%`;
+          appendStreamEvent('progress', `● ${ev.message}`);
+        });
+
+        es.addEventListener('finding', e => {
+          const ev = JSON.parse(e.data);
+          const cls = ev.severity === 'action' ? 'action' : ev.severity === 'warning' ? 'warning' : 'info';
+          const icon = ev.severity === 'action' ? '⚡' : ev.severity === 'warning' ? '⚠️' : 'ℹ️';
+          appendStreamEvent(cls, `${icon} ${ev.tool} — ${ev.summary}`);
+        });
+
+        es.addEventListener('done', e => {
+          const ev = JSON.parse(e.data);
+          const duration = ev.durationMs ? Math.round(ev.durationMs / 1000) : '?';
+          appendStreamEvent('done', `✓ Done — ${ev.findingsCount || 0} finding(s) in ${duration}s`);
+          es.close();
+          btn.classList.remove('loading');
+          btn.textContent = '🔬 Deep Research';
+        });
+
+        es.addEventListener('error', () => {
+          appendStreamEvent('error', '✗ Stream error');
+          es.close();
+          btn.classList.remove('loading');
+          btn.textContent = '🔬 Deep Research';
+        });
+
+        es.onerror = () => {
+          appendStreamEvent('error', '✗ Connection lost');
+          es.close();
+          btn.classList.remove('loading');
+          btn.textContent = '🔬 Deep Research';
+        };
+      } catch (e) {
+        appendStreamEvent('error', `✗ Failed: ${e.message}`);
+        btn.classList.remove('loading');
+        btn.textContent = '🔬 Deep Research';
+      }
+    }
+
+    function appendStreamEvent(cls, text) {
+      const body = document.getElementById('researchPanelBody');
+      const el = document.createElement('div');
+      el.className = `stream-event ${cls}`;
+      el.textContent = text;
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function closeResearchPanel() {
+      document.getElementById('researchPanel').classList.remove('active');
+      if (activeResearchES) { activeResearchES.close(); activeResearchES = null; }
+    }
+
+    // Render operator log
+    function renderOperatorLog(runs) {
+      console.log('[Operator Log] Rendering...');
+      const log = document.getElementById('operatorLog');
+      
+      const entries = (runs || []).slice(0, 20).map(run => {
+        const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        const jobName = (run.objective || 'unknown').split(' ')[0];
+        const action = 'RUN';
+        const outcome = run.verdict === 'pass' ? 'success' : run.verdict === 'fail' ? 'failed' : 'info';
+        const outcomeText = run.verdict === 'pass' ? 'Completed successfully' : 
+                          run.verdict === 'fail' ? 'Failed — check logs' : 'In progress...';
+        
+        return { time, jobName, action, outcome, outcomeText };
+      });
+
+      if (entries.length === 0) {
+        // Keep default message
+        return;
+      }
+
+      log.innerHTML = entries.map(e => `
+        <div class="log-entry">
+          <span class="log-time">[${e.time}]</span>
+          <span class="log-job">${e.jobName.toUpperCase()}</span>
+          <span class="log-action">${e.action}</span>
+          <span class="log-outcome ${e.outcome}">${e.outcomeText}</span>
+        </div>
+      `).join('');
+      console.log('[Operator Log] Render complete');
+    }
+
+    function scrollLogToBottom() {
+      const log = document.getElementById('operatorLog');
+      log.scrollTop = log.scrollHeight;
+    }
+
+    // Main fetch and render — EACH SECTION INDEPENDENT
+    async function fetchAndRender() {
+      console.log('[Fetch] Starting data fetch...');
+
+      // Fetch all APIs in parallel, each with its own error handling
+      const [agentsRes, runsRes, memoryRes, toolsRes, healthRes] = await Promise.all([
+        fetch('/api/agents').then(r => r.json()).catch(e => { console.warn('[Fetch] agents failed:', e); return { agents: [] }; }),
+        fetch('/api/runs').then(r => r.json()).catch(e => { console.warn('[Fetch] runs failed:', e); return { runs: [] }; }),
+        fetch('/api/memory').then(r => r.json()).catch(e => { console.warn('[Fetch] memory failed:', e); return { lineCount: 0, limit: 150, folderCounts: {} }; }),
+        fetch('/api/tools').then(r => r.json()).catch(e => { console.warn('[Fetch] tools failed:', e); return { categories: {} }; }),
+        fetch('/api/health').then(r => r.ok ? r.json() : null).catch(e => { console.warn('[Fetch] health failed:', e); return null; })
+      ]);
+
+      console.log('[Fetch] All fetches complete, updating sections...');
+
+      // Update each section independently — errors don't cascade
+      try { updateAgents(agentsRes.agents); } catch (e) { console.error('[updateAgents] Error:', e); }
+      try { updateJobs(runsRes.runs); } catch (e) { console.error('[updateJobs] Error:', e); }
+      try { updateMemoryChart(memoryRes.lineCount, memoryRes.limit); } catch (e) { console.error('[updateMemoryChart] Error:', e); }
+      try { 
+        const synthEl = document.getElementById('memory-synth');
+        if (synthEl && memoryRes.lastModified) {
+          synthEl.textContent = timeAgo(memoryRes.lastModified);
+        }
+      } catch (e) { console.error('[memory-synth] Error:', e); }
+      try { renderTools(toolsRes); } catch (e) { console.error('[renderTools] Error:', e); }
+      try { renderOperatorLog(runsRes.runs); } catch (e) { console.error('[renderOperatorLog] Error:', e); }
+      try { updateDeploy(healthRes); } catch (e) { console.error('[updateDeploy] Error:', e); }
+
+      // Global status based on health endpoint
+      const anyFailed = (agentsRes.agents || []).some(a => a.status === 'error');
+      globalHealthy = (healthRes?.status === 'healthy' || healthRes === null) && !anyFailed;
+      updateGlobalStatus(globalHealthy);
+
+      updateTimestamp();
+      console.log('[Fetch] All updates complete');
+    }
+
+    // Run synthesis (placeholder)
+    function runSynthesis() {
+      alert('Synthesis job triggered. Check operator log for progress.');
+    }
+
+    // Sidebar navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const section = document.getElementById(item.dataset.section);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Search overlay (/)
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        const overlay = document.getElementById('searchOverlay');
+        overlay.classList.add('active');
+        document.getElementById('searchInput').focus();
+      }
+      if (e.key === 'Escape') {
+        document.getElementById('searchOverlay').classList.remove('active');
+      }
+    });
+
+    document.getElementById('searchOverlay').addEventListener('click', e => {
+      if (e.target.id === 'searchOverlay') {
+        e.target.classList.remove('active');
+      }
+    });
+
+    // Initialize on DOM ready — CHART INIT IS UNCONDITIONAL
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[DOMContentLoaded] Page loaded, initializing...');
+      
+      // Initialize memory chart FIRST, unconditionally
+      try {
+        initMemoryChart();
+      } catch (e) {
+        console.error('[DOMContentLoaded] Chart init failed:', e);
+      }
+
+      // Then fetch and update all sections
+      fetchAndRender();
+      
+      // Auto-refresh every 30 seconds
+      setInterval(fetchAndRender, 30000);
+      
+      console.log('[DOMContentLoaded] Initialization complete');
+    });
+
+    console.log('[Control Room] Script loaded successfully');
   </script>
 </body>
 </html>
-

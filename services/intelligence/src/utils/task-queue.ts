@@ -19,7 +19,6 @@ export interface Task {
   createdAt: string;
   startedAt?: string | null;
   completedAt?: string | null;
-  updatedAt?: string | null;
   proofOfWork?: string | null;   // Artifact summary logged after task completion
 }
 
@@ -33,7 +32,6 @@ interface QueueFile {
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const QUEUE_PATH = 'data/task-queue.json';
-const MAX_COMPLETED_TASKS = 50; // Keep only the most recent completed/failed tasks
 
 // ---------------------------------------------------------------------------
 // Internal helpers
@@ -183,38 +181,23 @@ export async function completeTask(
 }
 
 /**
- * Prune completed/failed tasks, keeping only the most recent MAX_COMPLETED_TASKS.
- * Active (pending/running) tasks are always preserved.
+ * Remove completed and failed tasks older than the given age (default: 7 days).
  * Call this periodically to keep the queue file tidy.
  */
-export async function pruneOldTasks(maxAgeMs?: number): Promise<number> {
+export async function pruneOldTasks(maxAgeMs = 7 * 24 * 60 * 60 * 1000): Promise<number> {
   const { queue, sha } = await readQueueFile();
+  const cutoff = Date.now() - maxAgeMs;
   const before = queue.tasks.length;
 
-  // Separate active tasks from terminal tasks
-  const activeTasks = queue.tasks.filter(
-    (t) => t.status !== 'completed' && t.status !== 'failed',
-  );
-  const terminalTasks = queue.tasks.filter(
-    (t) => t.status === 'completed' || t.status === 'failed',
-  );
-
-  // Sort terminal tasks newest-first by completedAt (fallback: createdAt)
-  terminalTasks.sort((a, b) => {
-    const aTime = new Date(a.completedAt || a.createdAt).getTime();
-    const bTime = new Date(b.completedAt || b.createdAt).getTime();
-    return bTime - aTime;
+  queue.tasks = queue.tasks.filter((t) => {
+    if (t.status !== 'completed' && t.status !== 'failed') return true;
+    return new Date(t.createdAt).getTime() > cutoff;
   });
-
-  // Keep only the most recent MAX_COMPLETED_TASKS
-  const keptTerminal = terminalTasks.slice(0, MAX_COMPLETED_TASKS);
-
-  queue.tasks = [...activeTasks, ...keptTerminal];
 
   const pruned = before - queue.tasks.length;
   if (pruned > 0) {
-    await writeQueueFile(queue, sha, `task-queue: pruned ${pruned} old task(s) (kept last ${MAX_COMPLETED_TASKS})`);
-    console.log(`[task-queue] Pruned ${pruned} old task(s) — kept ${keptTerminal.length} recent completed/failed`);
+    await writeQueueFile(queue, sha, `task-queue: pruned ${pruned} old task(s)`);
+    console.log(`[task-queue] Pruned ${pruned} old task(s)`);
   }
 
   return pruned;

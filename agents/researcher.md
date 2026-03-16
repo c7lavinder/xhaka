@@ -285,7 +285,3 @@ Every task must end with:
 ### Deferred / Not Covered
 - [anything skipped and why]
 ```
-
-## Intelligence Log
-### 2026-03-15: TRPC Dependency Updates
-The automated tool monitor has detected updates for `@trpc/client` and `@trpc/server` from version 11.12.0 to 11.13.0. This update may include important improvements or bug fixes that could impact ongoing projects using these dependencies. It is recommended to review the release notes and test the updates in a controlled environment before full deployment. Utilize the "Deep Research" function in the Control Room Tools panel for a comprehensive analysis of these changes.

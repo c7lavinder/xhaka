@@ -28,7 +28,7 @@ import { runPreDeployTestJob } from './jobs/pre-deploy-test.js';
 import { runPatternMiner } from './jobs/pattern-miner.js';
 import { runDispatcher } from './jobs/dispatcher.js';
 import { getFileContent } from './lib/github.js';
-import { getJobTimeout, markJobFailed } from './utils/job-registry.js';
+import { getJobTimeout } from './utils/job-registry.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler — registers all cron jobs
@@ -62,11 +62,9 @@ function safeRun(
   fn: () => Promise<void>,
 ): () => void {
   return () => {
-    const startTime = Date.now();
     console.log(`[scheduler] Triggering job: ${jobName}`);
     runWithTimeout(fn, jobName).catch((err) => {
       console.error(`[scheduler] Job ${jobName} failed:`, err);
-      markJobFailed(jobName, startTime).catch(() => { /* best effort */ });
     });
   };
 }
@@ -100,9 +98,9 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Organize: daily at 3:00 AM CDT (fallback — dispatcher is primary) ---
+  // --- Organize: daily at 11:00 PM CST ---
   cron.schedule(
-    '0 3 * * *',
+    '0 23 * * *',
     safeRun('organize', runOrganize),
     { timezone: TIMEZONE },
   );
@@ -150,9 +148,9 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Dispatcher: every 5 minutes — primary queue-first engine ---
+  // --- Dispatcher: every minute — task-queue event consumer ---
   cron.schedule(
-    '*/5 * * * *',
+    '* * * * *',
     safeRun('dispatcher', runDispatcher),
     { timezone: TIMEZONE },
   );
@@ -164,9 +162,9 @@ export function startScheduler(): void {
     { timezone: TIMEZONE },
   );
 
-  // --- Researcher: daily at 3:00 AM CDT (fallback — dispatcher is primary) ---
+  // --- Researcher: 3x daily at 7:00 AM, 1:00 PM, 7:00 PM CST ---
   cron.schedule(
-    '0 3 * * *',
+    '0 7,13,19 * * *',
     safeRun('researcher', runResearcher),
     { timezone: TIMEZONE },
   );
@@ -253,16 +251,16 @@ export function startScheduler(): void {
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
   console.log('  ✓ improve          — every Monday at 6:00 AM CST');
   console.log('  ✓ cleanup          — every Sunday at 6:00 AM CST');
-  console.log('  ✓ organize         — daily at 3:00 AM CDT (fallback)');
+  console.log('  ✓ organize         — daily at 11:00 PM CST');
   console.log('  ✓ synthesize       — 1st,6th,11th,16th,21st,26th at 7:00 AM CST');
   console.log('  ✓ tool-monitor     — daily at 6:05 AM CST');
   console.log('  ✓ watchdog         — every 10 minutes');
   console.log('  ✓ weekly-heartbeat — every Monday at 8:00 AM CST');
   console.log('  ✓ scribe           — daily at midnight CST');
   console.log('  ✓ operator         — every minute (self-healing)');
-  console.log('  ✓ dispatcher       — every 5 minutes (primary queue engine)');
+  console.log('  ✓ dispatcher       — every minute (task-queue consumer)');
   console.log('  ✓ daily-log        — every 6 hours');
-  console.log('  ✓ researcher       — daily at 3:00 AM CDT (fallback)');
+  console.log('  ✓ researcher       — 3x daily at 7:00 AM, 1:00 PM, 7:00 PM CST');
   console.log('  ✓ feedback         — daily at 8:00 AM CST');
   console.log('  ✓ inspect          — every Monday at 7:00 AM CST');
   console.log('  ✓ routing-review   — every Sunday at 7:00 AM CST');
@@ -492,3 +490,4 @@ export async function catchUpMissedJobs(): Promise<void> {
 
   console.log('[scheduler] Catch-up check complete');
 }
+

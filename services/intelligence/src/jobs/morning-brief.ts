@@ -165,17 +165,12 @@ async function buildFeedbackInbox(): Promise<string | null> {
 // ---------------------------------------------------------------------------
 
 export async function runMorningBrief(): Promise<void> {
-  // Capture startTime BEFORE markJobStart so we always have it for error reporting.
-  // markJobStart is inside the try/catch so any failure (SHA conflict, network, etc.)
-  // is caught and reported via markJobFailed rather than silently disappearing.
-  const startTime = Date.now();
+  const startTime = await markJobStart('morning-brief');
+  const dateLabel = getDateLabel();
+
+  console.log(`[morning-brief] Running for ${dateLabel}...`);
 
   try {
-    await markJobStart('morning-brief');
-    const dateLabel = getDateLabel();
-
-    console.log(`[morning-brief] Running for ${dateLabel}...`);
-
     // Run all sections concurrently — failures are caught inside each builder
     const [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox] =
       await Promise.allSettled([
@@ -213,18 +208,8 @@ export async function runMorningBrief(): Promise<void> {
 
     await markJobSuccess('morning-brief', startTime);
   } catch (err) {
-    // Top-level catch — ensures ALL failures (including markJobStart SHA conflicts,
-    // Telegram errors, etc.) are visible in the registry rather than disappearing silently.
-    const errorMsg = (err as Error).message ?? String(err);
-    console.error('[morning-brief] ❌ Fatal error:', errorMsg);
-    console.error('[morning-brief] Stack:', (err as Error).stack ?? 'no stack');
-
-    // Best-effort registry update — if this also fails (e.g. another SHA conflict),
-    // at least the console.error above will surface it in Railway logs.
-    try {
-      await markJobFailed('morning-brief', startTime);
-    } catch (regErr) {
-      console.error('[morning-brief] ❌ Also failed to write failed status to registry:', (regErr as Error).message);
-    }
+    // Never rethrow — morning brief failure must not crash the scheduler
+    console.error('[morning-brief] Fatal error:', (err as Error).message);
+    await markJobFailed('morning-brief', startTime);
   }
 }

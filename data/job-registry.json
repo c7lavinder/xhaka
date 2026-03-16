@@ -1,29 +1,29 @@
 {
   "capture": {
-    "lastRun": "2026-03-16T01:55:01.803Z",
-    "lastStatus": "success",
-    "durationMs": 1696,
+    "lastRun": "2026-03-14T09:45:01.153Z",
+    "lastStatus": "failed",
+    "durationMs": 927,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "organize": {
-    "lastRun": "2026-03-15T04:00:01.005Z",
-    "lastStatus": "success",
-    "durationMs": 869,
+    "lastRun": "2026-03-14T04:00:00.860Z",
+    "lastStatus": "failed",
+    "durationMs": 10945,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "propagate": {
-    "lastRun": "2026-03-15T11:00:08.980Z",
+    "lastRun": "2026-03-13T20:49:34.474Z",
     "lastStatus": "success",
-    "durationMs": 8016,
+    "durationMs": 1591,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "tool-monitor": {
-    "lastRun": "2026-03-15T11:05:12.308Z",
-    "lastStatus": "success",
-    "durationMs": 12054,
+    "lastRun": "2026-03-13T11:05:02.336Z",
+    "lastStatus": "failed",
+    "durationMs": 1884,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
@@ -49,143 +49,38 @@
     "gracePeriodMinutes": 120
   },
   "scribe": {
-    "lastRun": "2026-03-15T05:00:09.559Z",
+    "lastRun": "2026-03-14T05:00:07.096Z",
     "lastStatus": "success",
-    "durationMs": 8883,
+    "durationMs": 6906,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
   },
   "operator": {
-    "lastRun": "2026-03-15T14:22:03.219Z",
+    "lastRun": "2026-03-13T17:03:01.807Z",
     "lastStatus": "success",
-    "durationMs": 709,
+    "durationMs": 802,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 10
   },
   "watchdog": {
-    "lastRun": "2026-03-16T02:00:01.396Z",
+    "lastRun": "2026-03-14T09:30:01.905Z",
     "lastStatus": "success",
-    "durationMs": 986,
+    "durationMs": 1015,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 30
   },
   "daily-log": {
-    "lastRun": "2026-03-15T23:00:00.357Z",
-    "lastStatus": "failed",
-    "durationMs": 1507,
+    "lastRun": "2026-03-14T05:00:01.913Z",
+    "lastStatus": "success",
+    "durationMs": 1721,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
   },
   "researcher": {
-    "lastRun": "2026-03-16T01:45:03.286Z",
+    "lastRun": "2026-03-14T08:11:02.413Z",
     "lastStatus": "success",
-    "durationMs": 764,
+    "durationMs": 820,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 90
-  },
-  "feedback": {
-    "lastRun": "2026-03-15T13:00:00.261Z",
-    "lastStatus": "failed",
-    "durationMs": null,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
-  },
-  "inspect": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "routing-review": {
-    "lastRun": "2026-03-15T12:00:04.752Z",
-    "lastStatus": "success",
-    "durationMs": 4050,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "morning-brief": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
-  },
-  "heartbeat-check": {
-    "lastRun": "2026-03-16T01:00:00.963Z",
-    "lastStatus": "failed",
-    "durationMs": 1906,
-    "expectedIntervalHours": 0.5,
-    "gracePeriodMinutes": 10
-  },
-  "benchmark": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "pre-deploy-test": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
-  },
-  "behavior-sync": {
-    "lastRun": "2026-03-15T10:50:05.513Z",
-    "lastStatus": "success",
-    "durationMs": 5136,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
-  },
-  "proactive-scan": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "agent-scorecard": {
-    "lastRun": "2026-03-15T13:00:03.406Z",
-    "lastStatus": "success",
-    "durationMs": 3354,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "change-evaluator": {
-    "lastRun": "2026-03-15T20:00:01.055Z",
-    "lastStatus": "success",
-    "durationMs": 890,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 120
-  },
-  "pattern-miner": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 168,
-    "gracePeriodMinutes": 120
-  },
-  "dispatcher": {
-    "lastRun": "2026-03-16T02:00:03.137Z",
-    "lastStatus": "failed",
-    "durationMs": 2720,
-    "expectedIntervalHours": 1,
-    "gracePeriodMinutes": 5
-  },
-  "auditor": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
-  },
-  "architect": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
-    "expectedIntervalHours": 24,
-    "gracePeriodMinutes": 60
   }
 }

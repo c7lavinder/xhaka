@@ -9,7 +9,7 @@ import {
   getProcessedPath,
 } from '../lib/router.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
-import { enqueue, getAllTasks } from '../utils/task-queue.js';
+import { enqueue } from '../utils/task-queue.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const INBOX_PATH = 'intelligence/inbox';
@@ -151,30 +151,6 @@ async function checkArticleInbox(): Promise<void> {
 
     if (lines.length === 0) {
       console.log('[capture] article-inbox.md has no actionable entries.');
-      return;
-    }
-
-    // Guard: skip if a pending task exists OR if one completed in the last 30 min
-    const allTasks = await getAllTasks();
-
-    const hasPending = allTasks.some(
-      (t) =>
-        t.agent === 'researcher' &&
-        t.task === 'process-article-inbox' &&
-        t.status === 'pending',
-    );
-
-    const thirtyMinutesAgo = Date.now() - 30 * 60 * 1000;
-    const recentlyProcessed = allTasks.some(
-      (t) =>
-        t.agent === 'researcher' &&
-        t.task === 'process-article-inbox' &&
-        t.status === 'completed' &&
-        new Date(t.completedAt || t.updatedAt || 0).getTime() > thirtyMinutesAgo,
-    );
-
-    if (recentlyProcessed || hasPending) {
-      console.log('[capture] Researcher task already pending or completed recently — skipping duplicate enqueue.');
       return;
     }
 
