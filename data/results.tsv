@@ -2360,3 +2360,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-17T06:30:03.118Z	heartbeat-check	success	1997		model=gpt-4o-mini cost=$0.001
 2026-03-17T06:30:04.468Z	capture	success	3352		model=gpt-4o-mini cost=$0.001
 2026-03-17T06:31:02.128Z	researcher	success	312		model=gpt-4o cost=$0.025
+2026-03-17T06:31:29.136Z	librarian	success	24711		model=gpt-4o-mini cost=$0.001
