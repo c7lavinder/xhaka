@@ -3174,8 +3174,9 @@
         "trigger": "article-inbox-watch",
         "itemCount": 370
       },
-      "status": "pending",
-      "createdAt": "2026-03-17T06:30:02.151Z"
+      "status": "running",
+      "createdAt": "2026-03-17T06:30:02.151Z",
+      "startedAt": "2026-03-17T06:31:01.093Z"
     },
     {
       "id": "task_1773729003676_rtrl8no",
