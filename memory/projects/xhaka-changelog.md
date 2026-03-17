@@ -110,3 +110,6 @@ Current State: The project has seen significant progress with new features and b
 - docs: PAPERCLIP-SETUP.md — stable Paperclip tunnel setup
 ### 🔄 Changed
 - chore: remediation-state update
+## 2026-03-17 (100 commits)
+### ✅ Built
+- add Claude Code complete usage guide to KB
