@@ -3711,6 +3711,17 @@
       "startedAt": "2026-03-17T10:36:01.532Z",
       "completedAt": "2026-03-17T10:36:03.668Z",
       "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T10:36:03.507Z. Triggered by task task_1773743701477_cjfhwkd."
+    },
+    {
+      "id": "task_1773744301991_prydlea",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "pending",
+      "createdAt": "2026-03-17T10:45:01.991Z"
     }
   ]
 }
