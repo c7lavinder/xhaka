@@ -2894,8 +2894,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-17T03:59:03.439Z"
       },
-      "status": "pending",
-      "createdAt": "2026-03-17T03:59:03.604Z"
+      "status": "completed",
+      "createdAt": "2026-03-17T03:59:03.604Z",
+      "startedAt": "2026-03-17T04:01:01.938Z",
+      "completedAt": "2026-03-17T04:01:05.186Z",
+      "proofOfWork": "Audit PASS for commit e4d1e831. 0 concern(s). Artifact: intelligence/audits/2026-03-17-e4d1e831.md"
     },
     {
       "id": "task_1773720001592_mmdarkb",
@@ -2905,8 +2908,25 @@
         "trigger": "article-inbox-watch",
         "itemCount": 370
       },
-      "status": "pending",
-      "createdAt": "2026-03-17T04:00:01.592Z"
+      "status": "completed",
+      "createdAt": "2026-03-17T04:00:01.592Z",
+      "startedAt": "2026-03-17T04:01:05.887Z",
+      "completedAt": "2026-03-17T04:01:07.949Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T04:01:07.787Z. Triggered by task task_1773720001592_mmdarkb."
+    },
+    {
+      "id": "task_1773720301831_5nfozxo",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T04:05:01.831Z",
+      "startedAt": "2026-03-17T04:06:01.180Z",
+      "completedAt": "2026-03-17T04:06:03.392Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T04:06:03.233Z. Triggered by task task_1773720301831_5nfozxo."
     }
   ]
 }
