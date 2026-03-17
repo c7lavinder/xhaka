@@ -3193,6 +3193,17 @@
       "startedAt": "2026-03-17T06:31:03.843Z",
       "completedAt": "2026-03-17T06:31:30.105Z",
       "proofOfWork": "Librarian audit completed at 2026-03-17T06:31:29.953Z. Report: intelligence/librarian-reports/2026-03-17.md. Triggered by task task_1773729003676_rtrl8no."
+    },
+    {
+      "id": "task_1773729601802_473vcoc",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "pending",
+      "createdAt": "2026-03-17T06:40:01.802Z"
     }
   ]
 }
