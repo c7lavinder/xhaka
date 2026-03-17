@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Team Room — Xhaka Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg:#EDE0C4; --card:#FAF3E0; --border:#C9A84C; --accent:#B8732A;
+  --deep:#5C3317; --text:#2C1810; --muted:#7A5C3A; --gold:#E8B84B;
+  --brass:#C9A84C; --green:#22863a; --red:#8B0000;
+}
+body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; font-size:14px; line-height:1.6; min-height:100vh; }
+body::before {
+  content:''; position:fixed; top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999; opacity:0.45;
+}
+header { background:var(--deep); border-bottom:3px solid var(--brass); padding:0 28px; display:flex; align-items:center; justify-content:space-between; height:62px; position:sticky; top:0; z-index:100; }
+.brand { display:flex; align-items:baseline; gap:10px; text-decoration:none; }
+.brand-title { font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:4px; }
+.brand-sub { font-size:10px; color:var(--brass); letter-spacing:2.5px; text-transform:uppercase; }
+nav { display:flex; align-items:center; gap:3px; }
+.nav-link { font-family:'Lora',Georgia,serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#D4C4A8; text-decoration:none; padding:5px 12px; border-radius:2px; border:1px solid transparent; transition:all 0.15s; }
+.nav-link:hover,.nav-link.active { color:var(--gold); border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.1); }
+.nav-ts { font-family:'Courier New',monospace; font-size:10px; color:var(--brass); margin-left:12px; opacity:0.8; }
+.main { max-width:1440px; margin:0 auto; padding:28px 24px 48px; }
+.page-heading { margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid var(--brass); }
+.page-heading h1 { font-family:'Playfair Display',Georgia,serif; font-size:30px; font-weight:700; color:var(--deep); margin-bottom:4px; }
+.page-heading p { font-size:13px; color:var(--muted); font-style:italic; }
+.ornament { text-align:center; color:var(--brass); font-size:13px; letter-spacing:6px; margin:24px 0; user-select:none; font-family:'Playfair Display',serif; }
+.team-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:22px; }
+
+/* Portrait cards — framed like gentlemen's club portraits */
+.agent-card {
+  background:var(--card);
+  border:1px solid var(--brass);
+  border-radius:4px;
+  overflow:hidden;
+  box-shadow:3px 4px 18px rgba(184,115,42,0.14);
+  display:flex; flex-direction:column;
+  /* double frame effect */
+  outline:4px solid var(--bg);
+  outline-offset:-8px;
+}
+.agent-portrait {
+  background:var(--deep);
+  padding:22px 20px 18px;
+  text-align:center;
+  border-bottom:3px solid var(--brass);
+  position:relative;
+}
+/* corner ornaments */
+.agent-portrait::before,.agent-portrait::after {
+  content:'✦';
+  position:absolute;
+  top:8px;
+  font-size:10px;
+  color:rgba(201,168,76,0.4);
+}
+.agent-portrait::before { left:10px; }
+.agent-portrait::after  { right:10px; }
+.portrait-emoji { font-size:42px; display:block; margin-bottom:10px; }
+.portrait-name { font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:var(--gold); margin-bottom:3px; }
+.portrait-title { font-size:10px; color:var(--brass); letter-spacing:2px; text-transform:uppercase; }
+.status-pip { position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:5px; }
+.seal { display:inline-block; width:10px; height:10px; border-radius:50%; border:1.5px solid rgba(0,0,0,0.12); flex-shrink:0; }
+.seal.green  { background:#22863a; box-shadow:0 0 6px rgba(34,134,58,0.5); }
+.seal.red    { background:#8B0000; box-shadow:0 0 5px rgba(139,0,0,0.5); }
+.seal.amber  { background:#B8732A; box-shadow:0 0 5px rgba(184,115,42,0.5); }
+.seal.gray   { background:#9C7E5A; }
+.pip-label { font-size:9px; color:rgba(201,168,76,0.7); letter-spacing:1px; text-transform:uppercase; font-family:'Courier New',monospace; }
+
+.agent-body { padding:16px 18px; flex:1; display:flex; flex-direction:column; gap:14px; }
+.agent-tagline { font-style:italic; font-size:12px; color:var(--muted); border-left:2px solid var(--brass); padding-left:10px; }
+.resp-block .resp-title {
+  font-family:'Playfair Display',serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:7px;
+  padding-bottom:4px;
+  border-bottom:1px dotted rgba(201,168,76,0.3);
+}
+.resp-block ul { list-style:none; display:flex; flex-direction:column; gap:3px; }
+.resp-block ul li { font-size:12px; color:var(--text); display:flex; gap:6px; }
+.resp-block ul li::before { content:'›'; color:var(--brass); font-weight:bold; flex-shrink:0; }
+
+.jobs-block { margin-top:auto; }
+.jobs-block .jobs-title {
+  font-family:'Playfair Display',serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:7px;
+  padding-bottom:4px;
+  border-bottom:1px dotted rgba(201,168,76,0.3);
+}
+.job-mini { display:flex; align-items:center; justify-content:space-between; gap:6px; padding:4px 0; border-bottom:1px dotted rgba(201,168,76,0.15); }
+.job-mini:last-child { border-bottom:none; }
+.job-name { font-family:'Courier New',monospace; font-size:11px; color:var(--text); }
+.job-ts   { font-size:10px; color:var(--muted); }
+.stamp { font-family:'Courier New',monospace; font-size:9px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; padding:1px 6px; border-radius:2px; border:1.5px solid; display:inline-block; }
+.stamp.success { color:#22863a; border-color:#22863a; background:rgba(34,134,58,0.07); }
+.stamp.fail    { color:#8B0000; border-color:#8B0000; background:rgba(139,0,0,0.07); }
+.stamp.running { color:#B8732A; border-color:#B8732A; background:rgba(184,115,42,0.07); }
+.stamp.unknown { color:#7A5C3A; border-color:#7A5C3A; background:rgba(122,92,58,0.07); }
+
+.paperclip-status { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); margin-bottom:12px; padding:6px 10px; background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2); border-radius:3px; }
+.loading { color:var(--muted); font-style:italic; font-size:11px; }
+.error-note { color:#8B0000; font-size:11px; font-family:'Courier New',monospace; }
+@media(max-width:640px){.main{padding:16px 12px 32px}header{padding:0 14px}.team-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <span class="brand-title">XHAKA</span>
+    <span class="brand-sub">Control Room</span>
+  </a>
+  <nav>
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="team.html" class="nav-link active">Team Room</a>
+    <a href="intelligence.html" class="nav-link">Intelligence</a>
+    <a href="tools.html" class="nav-link">Tool Room</a>
+    <span class="nav-ts" id="last-updated">—</span>
+  </nav>
+</header>
+
+<div class="main">
+
+  <div class="page-heading">
+    <h1>The Team Room</h1>
+    <p>Seven specialists. One mission. Every agent, their charter, their recent work.</p>
+  </div>
+
+  <div id="paperclip-banner" class="paperclip-status">
+    <span class="seal gray"></span>
+    <span id="paperclip-msg">Checking Paperclip API…</span>
+  </div>
+
+  <div class="team-grid" id="team-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px 0;">
+      <div class="loading">Assembling the roster…</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TOKEN = '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';
+const REPO  = 'c7lavinder/xhaka';
+const API   = 'https://api.github.com';
+
+const AGENTS = [
+  {
+    id: 'xhaka', name: 'Xhaka', emoji: '🧠',
+    title: 'COO · Strategic Partner',
+    tagline: 'The ghost in the machine. Corey\'s right hand — organized, ruthless about clarity.',
+    responsibilities: [
+      'Goal tracking & accountability',
+      'Strategic guidance & decision support',
+      'Memory management & session context',
+      'Specs, spawning, and directing specialists',
+      'Reporting outcomes directly to Corey',
+    ],
+    jobTags: ['xhaka','morning-brief','scribe'],
+  },
+  {
+    id: 'builder', name: 'The Builder', emoji: '👷',
+    title: 'Engineering Lead',
+    tagline: 'Dedicated coding agent via Claude Code CLI. Builds what Xhaka specs — never the other way round.',
+    responsibilities: [
+      'Core backend logic & API endpoints',
+      'Database schema & migrations',
+      'Refactoring & code quality',
+      'Test writing & debugging',
+      'Git commits & deployment pushes',
+    ],
+    jobTags: ['builder','build','deploy','migrate'],
+  },
+  {
+    id: 'researcher', name: 'The Researcher', emoji: '🔬',
+    title: 'Intelligence & R&D',
+    tagline: 'Proactive force multiplier. Scans the frontier so Corey doesn\'t have to.',
+    responsibilities: [
+      'Daily industry trend scans',
+      'VC & wholesale real estate signals',
+      'Tool & library discovery',
+      'Repo inbox processing',
+      'Morning briefing compilation',
+    ],
+    jobTags: ['researcher','research','morning-brief'],
+  },
+  {
+    id: 'auditor', name: 'The Auditor', emoji: '👮',
+    title: 'QA & Compliance Officer',
+    tagline: 'Enforces RULES.md. Scheduled every 4h and post-build. No exceptions.',
+    responsibilities: [
+      'Code reviews — linting & circular deps',
+      'Hardcoding & credential checks',
+      'Enforces RULES.md standards',
+      'Verifies outputs match reality',
+      'Post-build sign-off',
+    ],
+    jobTags: ['auditor','watchdog','heartbeat-check','audit'],
+  },
+  {
+    id: 'architect', name: 'The Architect', emoji: '🎨',
+    title: 'Visuals & Dashboard',
+    tagline: 'Frontend & data visualization. Makes the invisible legible.',
+    responsibilities: [
+      'Control Room dashboard pages',
+      'HTML / CSS / JS styling',
+      'Data visualization components',
+      'Simulation UI',
+      'Making data visible to the human team',
+    ],
+    jobTags: ['architect','dashboard','ui'],
+  },
+  {
+    id: 'librarian', name: 'The Librarian', emoji: '📚',
+    title: 'Memory & Knowledge',
+    tagline: 'Keeper of the knowledge graph. What gets captured, stays captured.',
+    responsibilities: [
+      'KB indexing & embedding jobs',
+      'Memory synthesis (daily → MEMORY.md)',
+      'Article & repo inbox processing',
+      'Context file maintenance',
+      'Book summaries & distillation',
+    ],
+    jobTags: ['capture','kb-indexer','scribe','librarian'],
+  },
+  {
+    id: 'operator', name: 'The Operator', emoji: '⚙️',
+    title: 'Systems & Config',
+    tagline: 'Lives in GHL, Railway, and Twilio. Knows where every setting lives.',
+    responsibilities: [
+      'GHL configuration & webhook verification',
+      'Railway service management',
+      'Pulling IDs & credentials',
+      'Twilio & third-party integrations',
+      'System health & config audits',
+    ],
+    jobTags: ['dispatcher','operator','config','heartbeat-check'],
+  },
+];
+
+async function ghRaw(path) {
+  const r = await fetch(`${API}${path}`, { headers:{ Authorization:`token ${TOKEN}`, Accept:'application/vnd.github.v3.raw' } });
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  return r.text();
+}
+
+function timeAgo(iso) {
+  const d = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(d/60000);
+  if (m<1) return 'just now';
+  if (m<60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h<24) return `${h}h ago`;
+  return `${Math.floor(h/24)}d ago`;
+}
+
+function stampClass(s) {
+  s=(s||'').toLowerCase();
+  if (s==='success'||s==='ok'||s==='done') return 'success';
+  if (s==='fail'||s==='error'||s==='failed') return 'fail';
+  if (s==='running'||s==='active') return 'running';
+  return 'unknown';
+}
+
+function renderJobMini(jobs) {
+  if (!jobs.length) return '<div class="job-mini"><span class="job-name" style="color:var(--muted);font-style:italic;">No recent automated jobs</span></div>';
+  return jobs.map(j => `
+    <div class="job-mini">
+      <span class="job-name">${j.job}</span>
+      <span class="stamp ${stampClass(j.status)}">${j.status}</span>
+      <span class="job-ts">${timeAgo(j.ts)}</span>
+    </div>`).join('');
+}
+
+async function loadPaperclip() {
+  try {
+    const r = await fetch('http://127.0.0.1:3100/api/companies/a72a0d42-623c-47b2-af2c-6fad3ee3be02/agents', { signal: AbortSignal.timeout(3000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    const agents = Array.isArray(data) ? data : (data.agents||data.data||[]);
+    const banner = document.getElementById('paperclip-banner');
+    banner.innerHTML = `<span class="seal green"></span><span id="paperclip-msg">Paperclip API: ${agents.length} agents registered · Live status active</span>`;
+    return agents;
+  } catch(e) {
+    const banner = document.getElementById('paperclip-banner');
+    banner.innerHTML = `<span class="seal amber"></span><span>Paperclip API unreachable from this context (localhost:3100) · Showing static roster</span>`;
+    return [];
+  }
+}
+
+function agentLiveStatus(papercliAgents, agentId) {
+  if (!papercliAgents.length) return 'green'; // assume active
+  const match = papercliAgents.find(a => (a.name||a.id||'').toLowerCase().includes(agentId.toLowerCase()));
+  if (!match) return 'gray';
+  const status = (match.status||match.state||'active').toLowerCase();
+  if (status==='active'||status==='online'||status==='ready') return 'green';
+  if (status==='idle') return 'amber';
+  if (status==='offline'||status==='error') return 'red';
+  return 'green';
+}
+
+async function init() {
+  const [papercliAgents, tsvRaw] = await Promise.all([
+    loadPaperclip(),
+    ghRaw(`/repos/${REPO}/contents/data/results.tsv`).catch(()=>''),
+  ]);
+
+  // Parse TSV into job records
+  const allJobs = tsvRaw.trim().split('\n').filter(Boolean).map(line => {
+    const cols = line.split('\t');
+    return { ts:cols[0], job:cols[1]||'', status:cols[2]||'', duration:cols[3]||'' };
+  });
+
+  const grid = document.getElementById('team-grid');
+  grid.innerHTML = AGENTS.map(agent => {
+    const sealColor = agentLiveStatus(papercliAgents, agent.id);
+    const sealLabel = sealColor==='green'?'Active':sealColor==='amber'?'Idle':'Offline';
+
+    // Get last 3 jobs matching this agent's job tags
+    const agentJobs = allJobs.filter(j => agent.jobTags.some(tag => j.job.toLowerCase().includes(tag))).slice(-6).reverse().slice(0,3);
+
+    return `
+    <div class="agent-card">
+      <div class="agent-portrait">
+        <div class="status-pip">
+          <span class="seal ${sealColor}"></span>
+          <span class="pip-label">${sealLabel}</span>
+        </div>
+        <span class="portrait-emoji">${agent.emoji}</span>
+        <div class="portrait-name">${agent.name}</div>
+        <div class="portrait-title">${agent.title}</div>
+      </div>
+      <div class="agent-body">
+        <div class="agent-tagline">${agent.tagline}</div>
+        <div class="resp-block">
+          <div class="resp-title">Charter</div>
+          <ul>${agent.responsibilities.map(r=>`<li>${r}</li>`).join('')}</ul>
+        </div>
+        <div class="jobs-block">
+          <div class="jobs-title">Recent Activity</div>
+          ${renderJobMini(agentJobs)}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+init();
+setInterval(init, 90000);
+</script>
+</body>
+</html>

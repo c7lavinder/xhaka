@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Tool Room — Xhaka Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --bg:#EDE0C4; --card:#FAF3E0; --border:#C9A84C; --accent:#B8732A;
+  --deep:#5C3317; --text:#2C1810; --muted:#7A5C3A; --gold:#E8B84B;
+  --brass:#C9A84C; --green:#22863a; --red:#8B0000;
+}
+body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; font-size:14px; line-height:1.6; min-height:100vh; }
+body::before {
+  content:''; position:fixed; top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999; opacity:0.45;
+}
+header { background:var(--deep); border-bottom:3px solid var(--brass); padding:0 28px; display:flex; align-items:center; justify-content:space-between; height:62px; position:sticky; top:0; z-index:100; }
+.brand { display:flex; align-items:baseline; gap:10px; text-decoration:none; }
+.brand-title { font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:4px; }
+.brand-sub { font-size:10px; color:var(--brass); letter-spacing:2.5px; text-transform:uppercase; }
+nav { display:flex; align-items:center; gap:3px; }
+.nav-link { font-family:'Lora',Georgia,serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#D4C4A8; text-decoration:none; padding:5px 12px; border-radius:2px; border:1px solid transparent; transition:all 0.15s; }
+.nav-link:hover,.nav-link.active { color:var(--gold); border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.1); }
+.nav-ts { font-family:'Courier New',monospace; font-size:10px; color:var(--brass); margin-left:12px; opacity:0.8; }
+.main { max-width:1440px; margin:0 auto; padding:28px 24px 48px; }
+.page-heading { margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid var(--brass); }
+.page-heading h1 { font-family:'Playfair Display',Georgia,serif; font-size:30px; font-weight:700; color:var(--deep); margin-bottom:4px; }
+.page-heading p { font-size:13px; color:var(--muted); font-style:italic; }
+.ornament { text-align:center; color:var(--brass); font-size:13px; letter-spacing:6px; margin:28px 0; user-select:none; font-family:'Playfair Display',serif; }
+/* Summary pills */
+.summary-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px; }
+.summary-pill {
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:12px; font-weight:600; padding:5px 14px;
+  border-radius:20px; font-family:'Lora',serif; border:1px solid;
+}
+.summary-pill.live       { color:#22863a; border-color:rgba(34,134,58,0.4); background:rgba(34,134,58,0.07); }
+.summary-pill.monitoring { color:#B8732A; border-color:rgba(184,115,42,0.4); background:rgba(184,115,42,0.07); }
+.summary-pill.future     { color:#7A5C3A; border-color:rgba(122,92,58,0.3); background:rgba(122,92,58,0.06); }
+.summary-pill.could      { color:#5C3317; border-color:rgba(92,51,23,0.3); background:rgba(92,51,23,0.06); }
+/* Section header */
+.sec-header {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 0 10px; margin-bottom:18px;
+  border-bottom:2px solid var(--brass);
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:18px; font-weight:700; color:var(--deep);
+}
+.sec-header .dot { width:10px; height:10px; border-radius:50%; border:1.5px solid rgba(0,0,0,0.1); flex-shrink:0; }
+.dot.green  { background:#22863a; box-shadow:0 0 5px rgba(34,134,58,0.5); }
+.dot.amber  { background:#B8732A; box-shadow:0 0 5px rgba(184,115,42,0.5); }
+.dot.gray   { background:#9C7E5A; }
+.dot.deep   { background:#5C3317; }
+/* Tool grid */
+.tool-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+/* Tool cards */
+.tool-card {
+  background:var(--card); border:1px solid var(--brass);
+  border-left-width:4px; border-radius:4px; padding:18px;
+  display:flex; flex-direction:column; gap:10px;
+  box-shadow:2px 3px 12px rgba(184,115,42,0.1);
+  transition:transform 0.12s, box-shadow 0.12s;
+}
+.tool-card:hover { transform:translateY(-2px); box-shadow:3px 5px 18px rgba(184,115,42,0.18); }
+.tool-card.live        { border-left-color:#22863a; }
+.tool-card.monitoring  { border-left-color:#B8732A; }
+.tool-card.future      { border-left-color:#9C7E5A; }
+.tool-card.could       { border-left-color:#5C3317; }
+.tool-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.tool-name-row { display:flex; align-items:center; gap:8px; }
+.tool-emoji { font-size:20px; }
+.tool-name { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:var(--deep); }
+.stamp { font-family:'Courier New',monospace; font-size:9px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; padding:2px 7px; border-radius:2px; border:1.5px solid; display:inline-block; flex-shrink:0; }
+.stamp.live        { color:#22863a; border-color:#22863a; background:rgba(34,134,58,0.07); }
+.stamp.monitoring  { color:#B8732A; border-color:#B8732A; background:rgba(184,115,42,0.07); }
+.stamp.future      { color:#7A5C3A; border-color:#7A5C3A; background:rgba(122,92,58,0.07); }
+.stamp.could       { color:#5C3317; border-color:#5C3317; background:rgba(92,51,23,0.07); }
+.tool-desc { font-size:12px; color:var(--muted); line-height:1.55; flex:1; }
+.tool-note { background:var(--bg); border:1px solid rgba(201,168,76,0.3); border-radius:3px; padding:7px 10px; }
+.tool-note .lbl { font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:3px; font-family:'Playfair Display',serif; }
+.tool-note .txt { font-size:11px; color:var(--text); font-family:'Courier New',monospace; }
+.tool-links { display:flex; gap:7px; flex-wrap:wrap; margin-top:auto; padding-top:2px; }
+.tool-link { font-size:11px; text-decoration:none; padding:3px 10px; border-radius:3px; border:1px solid rgba(201,168,76,0.4); color:var(--muted); background:var(--bg); transition:all 0.12s; }
+.tool-link:hover { color:var(--accent); border-color:var(--brass); }
+.tool-link.ext { color:var(--accent); border-color:rgba(184,115,42,0.35); background:rgba(184,115,42,0.06); }
+.tool-link.ext:hover { background:rgba(184,115,42,0.12); }
+/* Footer */
+.page-footer { text-align:center; padding:24px; color:var(--muted); font-size:12px; border-top:1px solid rgba(201,168,76,0.3); max-width:1440px; margin:0 auto; font-family:'Courier New',monospace; }
+@media(max-width:1100px){.tool-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.tool-grid{grid-template-columns:1fr}.main{padding:16px 12px 32px}header{padding:0 14px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <span class="brand-title">XHAKA</span>
+    <span class="brand-sub">Control Room</span>
+  </a>
+  <nav>
+    <a href="index.html" class="nav-link">Dashboard</a>
+    <a href="team.html" class="nav-link">Team Room</a>
+    <a href="intelligence.html" class="nav-link">Intelligence</a>
+    <a href="tools.html" class="nav-link active">Tool Room</a>
+  </nav>
+</header>
+
+<div class="main">
+
+  <div class="page-heading">
+    <h1>The Tool Room</h1>
+    <p>Every instrument in the arsenal — what it does, what's wired, what's next.</p>
+  </div>
+
+  <div class="summary-row">
+    <span class="summary-pill live">● 9 Live &amp; Wired</span>
+    <span class="summary-pill monitoring">◑ 3 Wiring In Progress</span>
+    <span class="summary-pill future">○ 3 Future</span>
+    <span class="summary-pill could">◎ 5 Worth Evaluating</span>
+  </div>
+
+  <!-- ── LIVE ─────────────────────────────────── -->
+  <div class="sec-header">
+    <span class="dot green"></span>
+    Active &amp; Wired
+  </div>
+
+  <div class="tool-grid">
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📎</span><span class="tool-name">Paperclip</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">Agent orchestration layer. Org chart, budgets, and issue tracker for all 7 agents running in the Xhaka ecosystem.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">v1.0 — localhost:3100. Agent roster + budget tracking active.</div>
+      </div>
+      <div class="tool-links">
+        <a href="http://localhost:3100" class="tool-link ext" target="_blank">↗ localhost:3100</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🧠</span><span class="tool-name">OpenClaw</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">AI agent runtime hosting Xhaka and all specialist agents. Command channel is Telegram — the single source of truth for all instructions.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">Subagent depth increased. Adaptive reasoning enabled. Skills: weather, healthcheck, excalidraw.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://openclaw.ai" class="tool-link ext" target="_blank">↗ openclaw.ai</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🚂</span><span class="tool-name">Railway</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">Deployment platform. Hosts xhaka-intelligence (scheduler, scribe, capture) and xhaka-control-room (this dashboard). Full API token configured.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">xhaka-intelligence + control-room both live. Hindsight service deployed.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://railway.app" class="tool-link ext" target="_blank">↗ railway.app</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🗄️</span><span class="tool-name">Supabase</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">pgvector semantic search for the Gunner V2 knowledge base. kb-indexer job runs nightly to keep embeddings fresh. Gunner V1.5 project live.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">pgvector extension ready. Secret + publishable keys in Railway env.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://supabase.com" class="tool-link ext" target="_blank">↗ supabase.com</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📞</span><span class="tool-name">GHL</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">CRM and pipeline for New Again Houses Nashville. Pulls calls into Gunner automatically. READ ONLY — no writes without Corey's explicit approval.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">Deep Understanding doc published. OTP codes route to spam — check spam.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://docs.google.com/document/d/1Mv5b0I6ra9jaxZKFpVwkRQf9gVfJ3dc0vyKiy70oTrM/edit" class="tool-link" target="_blank">📄 GHL Doc</a>
+        <a href="https://app.gohighlevel.com" class="tool-link ext" target="_blank">↗ gohighlevel.com</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🎯</span><span class="tool-name">Gunner</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">AI call coaching SaaS. Grades NAH team calls with Gemini 1.5 Flash, tracks leaderboard, gamifies improvement. Built by Corey. V2 migration underway.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">Timeline + Motivation analyzers deployed. Team: Daniel, Kyle, Chris.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://getgunner.ai" class="tool-link ext" target="_blank">↗ getgunner.ai</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📱</span><span class="tool-name">BatchDialer</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">Cold calling platform for NAH lead generation. API connected — call metrics pulled for KPI Entry automation. Jessica's data entry workflow.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">API key active. KPI pull job configured and running.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://batchdialer.com" class="tool-link ext" target="_blank">↗ batchdialer.com</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">💬</span><span class="tool-name">BatchLeads</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">SMS campaign platform for NAH lead generation. API connected — SMS metrics pulled for KPI tracking. Forms the lead gen engine alongside BatchDialer.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">API key active. SMS volume metrics flowing into KPI Entry.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://batchleads.io" class="tool-link ext" target="_blank">↗ batchleads.io</a>
+      </div>
+    </div>
+
+    <div class="tool-card live">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📊</span><span class="tool-name">CallRail</span></div>
+        <span class="stamp live">Live</span>
+      </div>
+      <div class="tool-desc">Call tracking and voicemail platform for NAH. API connected — Voicemail Bot pulls and processes recordings automatically.</div>
+      <div class="tool-note">
+        <div class="lbl">What's New</div>
+        <div class="txt">API key configured. Voicemail Bot pipeline active. Call logs in KPI Entry.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://callrail.com" class="tool-link ext" target="_blank">↗ callrail.com</a>
+      </div>
+    </div>
+
+  </div><!-- .tool-grid live -->
+
+  <div class="ornament">─── ✦ ───</div>
+
+  <!-- ── MONITORING ──────────────────────────── -->
+  <div class="sec-header">
+    <span class="dot amber"></span>
+    Wiring In Progress
+  </div>
+
+  <div class="tool-grid">
+
+    <div class="tool-card monitoring">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">⚡</span><span class="tool-name">Claude Code</span></div>
+        <span class="stamp monitoring">Wiring</span>
+      </div>
+      <div class="tool-desc">AI coding agent — The Builder's primary execution environment. Full file access, runs tests, pushes commits. MCP bridges (GitNexus, gstack, Superpowers) in progress.</div>
+      <div class="tool-note">
+        <div class="lbl">What's Next</div>
+        <div class="txt">MCP bridge configuration: GitNexus, gstack, Superpowers queued.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://claude.ai/code" class="tool-link ext" target="_blank">↗ claude.ai/code</a>
+      </div>
+    </div>
+
+    <div class="tool-card monitoring">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🔍</span><span class="tool-name">GitNexus</span></div>
+        <span class="stamp monitoring">Wiring</span>
+      </div>
+      <div class="tool-desc">Code intelligence graph for the xhaka repo. 6,909 symbols indexed, 19,447 relationships mapped. Impact analysis before every edit via AGENTS.md protocol.</div>
+      <div class="tool-note">
+        <div class="lbl">What's Next</div>
+        <div class="txt">MCP bridge to Claude Code. gitnexus_impact running pre-commit.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://gitnexus.dev" class="tool-link ext" target="_blank">↗ gitnexus.dev</a>
+      </div>
+    </div>
+
+    <div class="tool-card monitoring">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🧬</span><span class="tool-name">Hindsight</span></div>
+        <span class="stamp monitoring">Wiring</span>
+      </div>
+      <div class="tool-desc">Episodic memory layer. Auto-extracts facts and decisions from every session, writes to structured memory files. Railway service is live and running.</div>
+      <div class="tool-note">
+        <div class="lbl">What's Next</div>
+        <div class="txt">Wiring into OpenClaw session hooks. Session extraction pipeline running.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://railway.app" class="tool-link ext" target="_blank">↗ Railway Service</a>
+      </div>
+    </div>
+
+  </div><!-- .tool-grid monitoring -->
+
+  <div class="ornament">─── ✦ ───</div>
+
+  <!-- ── FUTURE ──────────────────────────────── -->
+  <div class="sec-header">
+    <span class="dot gray"></span>
+    Future — Not Yet Wired
+  </div>
+
+  <div class="tool-grid">
+
+    <div class="tool-card future">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📈</span><span class="tool-name">PostHog</span></div>
+        <span class="stamp future">Future</span>
+      </div>
+      <div class="tool-desc">User analytics for Gunner. Will track feature usage, drop-offs, and team engagement with the call coaching platform. Account created, project token ready.</div>
+      <div class="tool-note">
+        <div class="lbl">Status</div>
+        <div class="txt">Token: phc_FEpR6F… · Awaiting Gunner V2 integration.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://posthog.com" class="tool-link ext" target="_blank">↗ posthog.com</a>
+      </div>
+    </div>
+
+    <div class="tool-card future">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🚨</span><span class="tool-name">Sentry</span></div>
+        <span class="stamp future">Future</span>
+      </div>
+      <div class="tool-desc">Error tracking for Gunner. Will auto-create GitHub issues when production breaks and alert the team via configured channels. Project and DSN provisioned.</div>
+      <div class="tool-note">
+        <div class="lbl">Status</div>
+        <div class="txt">DSN provisioned. Awaiting SDK integration into Gunner V2.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://sentry.io" class="tool-link ext" target="_blank">↗ sentry.io</a>
+      </div>
+    </div>
+
+    <div class="tool-card future">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🔬</span><span class="tool-name">LangSmith</span></div>
+        <span class="stamp future">Future</span>
+      </div>
+      <div class="tool-desc">AI observability platform. Will track every agent call, debug traces, latency, and performance across the Xhaka + Gunner AI stack. API key ready.</div>
+      <div class="tool-note">
+        <div class="lbl">Status</div>
+        <div class="txt">API key: lsv2_pt_1ba624… · Awaiting LangChain instrumentation.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://smith.langchain.com" class="tool-link ext" target="_blank">↗ smith.langchain.com</a>
+      </div>
+    </div>
+
+  </div><!-- .tool-grid future -->
+
+  <div class="ornament">─── ✦ ───</div>
+
+  <!-- ── COULD IMPLEMENT ─────────────────────── -->
+  <div class="sec-header">
+    <span class="dot deep"></span>
+    Worth Evaluating
+  </div>
+  <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px;">Tools that could compound the stack. Not committed — worth knowing.</p>
+
+  <div class="tool-grid">
+
+    <div class="tool-card could">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🧠</span><span class="tool-name">Cognee</span></div>
+        <span class="stamp could">Evaluate</span>
+      </div>
+      <div class="tool-desc">Knowledge graph + memory for AI agents. Could replace the hand-rolled memory system with a structured, queryable graph. Strong alignment with Xhaka's memory architecture.</div>
+      <div class="tool-note">
+        <div class="lbl">Why Consider</div>
+        <div class="txt">Auto-extracts entities + relationships. Integrates with vector DBs.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://github.com/topoteretes/cognee" class="tool-link ext" target="_blank">↗ GitHub</a>
+      </div>
+    </div>
+
+    <div class="tool-card could">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🌊</span><span class="tool-name">OpenViking</span></div>
+        <span class="stamp could">Evaluate</span>
+      </div>
+      <div class="tool-desc">ByteDance open agent framework. Mature multi-agent orchestration patterns — could accelerate how the Xhaka specialist agents coordinate on complex tasks.</div>
+      <div class="tool-note">
+        <div class="lbl">Why Consider</div>
+        <div class="txt">Production-tested by ByteDance. Strong tool-calling primitives.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://github.com/volcengine/OpenViking" class="tool-link ext" target="_blank">↗ GitHub</a>
+      </div>
+    </div>
+
+    <div class="tool-card could">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">⚡</span><span class="tool-name">Superpowers</span></div>
+        <span class="stamp could">Evaluate</span>
+      </div>
+      <div class="tool-desc">Claude Code superpowers — extends the Builder's agentic coding capabilities with enhanced tool use, memory, and workflow management hooks.</div>
+      <div class="tool-note">
+        <div class="lbl">Why Consider</div>
+        <div class="txt">Direct Builder enhancement. Extends Claude Code natively.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://github.com/obra/superpowers" class="tool-link ext" target="_blank">↗ GitHub</a>
+      </div>
+    </div>
+
+    <div class="tool-card could">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">📐</span><span class="tool-name">gstack</span></div>
+        <span class="stamp could">Evaluate</span>
+      </div>
+      <div class="tool-desc">Full-stack AI agent development framework. Opinionated structure for building production agent systems — could standardize how new specialists get scaffolded and deployed.</div>
+      <div class="tool-note">
+        <div class="lbl">Why Consider</div>
+        <div class="txt">Convention over configuration. Reduces scaffolding time per new agent.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://github.com/garrytan/gstack" class="tool-link ext" target="_blank">↗ GitHub</a>
+      </div>
+    </div>
+
+    <div class="tool-card could">
+      <div class="tool-top">
+        <div class="tool-name-row"><span class="tool-emoji">🌐</span><span class="tool-name">Lightpanda</span></div>
+        <span class="stamp could">Evaluate</span>
+      </div>
+      <div class="tool-desc">Headless browser built for AI agents. Faster and lighter than Playwright for scraping and web automation tasks. Could replace heavy Puppeteer setups in the Researcher pipeline.</div>
+      <div class="tool-note">
+        <div class="lbl">Why Consider</div>
+        <div class="txt">10x faster than Playwright for AI scraping use cases.</div>
+      </div>
+      <div class="tool-links">
+        <a href="https://github.com/lightpanda-io/browser" class="tool-link ext" target="_blank">↗ GitHub</a>
+      </div>
+    </div>
+
+  </div><!-- .tool-grid could -->
+
+</div><!-- .main -->
+
+<footer class="page-footer">
+  20 tools tracked &nbsp;·&nbsp; 9 live · 3 wiring · 3 future · 5 evaluating &nbsp;·&nbsp; Last reviewed: March 2026
+</footer>
+
+</body>
+</html>

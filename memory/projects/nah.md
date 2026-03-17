@@ -1,46 +1,66 @@
-# Project: New Again Houses (NAH)
+---
+title: New Again Houses — Project Status
+category: projects
+last_updated: 2026-03-16
+---
 
-## What It Is
-Corey's wholesale real estate operation. Nashville-based. The primary cash flow business.
+# New Again Houses (NAH)
 
-## Goal
-$300k/mo net profit. Decrease reliance on Corey — systematize, delegate, automate.
+## Business Overview
 
-## Status: Ongoing Operations 🔄
+**What it is:** NAH is a wholesale real estate operation based in Nashville, TN. It functions as a cash buyer and deal sourcer — NAH finds motivated sellers willing to sell below market, gets properties under contract, then assigns those contracts to end buyers (fix-and-flip investors, landlords) for an assignment fee. NAH never holds inventory unless a double close is required.
 
-## Pipeline (GHL)
-- **CRM:** GoHighLevel (app.gohighlevel.com)
-- **Account:** New Again Houses Nashville
-- **Pipeline stages:** New Lead → Contacted → Apt Set → Offer → Contract → Closed / DQ
-- **Calling:** BatchDialer (cold outreach to potential sellers)
-- **SMS:** BatchLeads (outbound texts to potential sellers)
-- **In-pipeline comms:** GHL (all calls/SMS once lead is in CRM)
+**Business Model:**
+- Find motivated sellers (foreclosure, divorce, inheritance, tired landlords, financial distress)
+- Contract the property at a discount (typically 65-70% of ARV minus repairs)
+- Assign the contract to a cash buyer for $10K-$50K+ assignment fee
+- Collect fee at closing. Repeat.
 
-## ⚠️ Tool Definitions (Never Mix These Up)
-- **BatchDialer** = cold calling for LEAD GENERATION only
-- **BatchLeads** = SMS for LEAD GENERATION only
-- **GHL** = ALL pipeline conversations (inbound/outbound with existing leads), tasks, appointments
+**Market:** Nashville metro + surrounding markets. Expansion possible as team scales.
 
-## KPI Snapshot (as of 2026-03-08 audit)
-- Leads: 135 | Apts: 59 | Offers: 57 | Contracts: 57 | Closed: 53
-- Spend/Revenue: $0 shown (manual entry not done)
-- 66 properties missing source assignment
+**Revenue Model:** Pure assignment fees. No flips, no holds, no landlord headaches.
 
-## Team Performance (Gunner scores)
-| Person | Role | Score | Status |
-|---|---|---|---|
-| Kyle Barks | AM | 70% | ✅ |
-| Daniel Lozano | LM | 67% | ✅ |
-| Chris Segura | LM | 36% | 🚨 Coaching needed |
-| Efren Valenzuela | LG | 48% | 🚨 Coaching needed |
-| Alex Diaz | LG | 56% | ⚠️ Watch |
-| Mirna Razo | LG | 43% | 🚨 Coaching needed |
-| Esteban Leiva | Dispo | 64% | — |
-
-## Open Items
-- Assign source to 66 properties in Inventory
-- Chris, Mirna, Efren need active coaching plans
-- GHL webhook needs to point to Gunner Railway URL
+**Goal State:** $300K/month net profit. Corey not needed in daily operations. Systems and team do the work. Gunner coaching accelerates team performance.
 
 ---
-Last updated: 2026-03-11
+
+## Team
+
+| Person | Role | Gunner Score | Status |
+|--------|------|-------------|--------|
+| **Kyle Barks** | Acquisition Manager (AM) | 70% | ✅ Performing |
+| **Daniel Lozano** | Lead Manager (LM) | 67% | ✅ Performing |
+| **Chris Segura** | Lead Manager (LM) | 36% | 🚨 Coaching urgently needed |
+| **Efren Valenzuela** | Lead Generator (LG) | 48% | 🚨 Coaching needed |
+| **Alex Diaz** | Lead Generator (LG) | 56% | ⚠️ Watch |
+| **Mirna Razo** | Lead Generator (LG) | 43% | 🚨 Coaching needed |
+| **Esteban Leiva** | Dispo Manager | 64% | — (dispo-specific metrics apply) |
+| **Jessica** | Data Manager | — | KPI entry, channel routing, source tagging |
+| **Corey Lavinder** | Founder / Operator | — | Escalation point; goal: exit daily ops |
+
+### Role Definitions
+- **LM (Lead Manager):** Makes all first contacts on inbound/outbound leads. Qualifies using MTEQ framework (Motivated? Timeline? Equity? Condition?). Passes 🟢 leads to Kyle.
+- **AM (Acquisition Manager):** Takes qualified leads from LM. Runs Todd's 10-step close. Makes offers, handles objections, gets contract signed.
+- **Dispo Manager:** Matches contracts to end buyers. Manages buyer list. Executes assignment agreements. Drives revenue realization.
+- **LG (Lead Generator):** Cold calling and SMS outreach via BatchDialer / BatchLeads. Volume operation — dials lists, generates conversations.
+- **Data Manager:** Tags leads by source in GHL, enters KPI data, ensures pipeline data integrity.
+
+### Current Gaps
+- **Chris Segura (36%):** Self-image ceiling, not a skill gap. Needs identity work + rep consistency. Gunner coaching active.
+- **Efren / Mirna (43-48%):** Cold call fundamentals. Need scripts + Tyson Smith-style mindset coaching.
+- **66 untagged properties** in inventory — source attribution missing. Jessica action item.
+
+---
+
+## Goals
+
+### Primary Goal
+**
+
+---
+
+## Status
+In Progress
+
+## Current State
+The project is focused on building out the automated wholesale machine with AI components. Currently, only the Coach via Gunner is built, and the remaining components need development. The team is working towards automating operations to reduce Corey's involvement.

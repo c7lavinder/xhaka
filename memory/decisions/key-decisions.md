@@ -2,6 +2,41 @@
 
 ---
 
+## 2026-03-16 — Pre-Deploy TypeScript Check (GitHub Actions)
+**Decision:** Add TypeScript compile check to GitHub Actions CI before Railway deploys.
+**Context:** xhaka-intelligence had two broken deploys caused by Builder TypeScript errors in hindsight-sync and librarian. Xhaka had to fix manually.
+**Outcome:** CI now catches TS errors before deploy. No more broken builds reaching Railway.
+
+## 2026-03-16 — Tool Knowledge Hub Adopted
+**Decision:** Every tool in the stack gets a structured knowledge file: overview, setup guide, best practices, gotchas, integration points.
+**Context:** Xhaka was operating from training data rather than actual tool docs. Not reliable enough.
+**Outcome:** tool-research-inbox.md pattern adopted. TOOL-KNOWLEDGE-INDEX.md tracks depth per tool (🔴/🟡/🟢). 13 tools queued. Knowledge lands at `memory/context/tools/{category}/{tool}/knowledge/`.
+
+## 2026-03-16 — SDD Enforcement in SOUL.md
+**Decision:** Before any Builder spawn, SOUL.md now requires verification that the prompt contains three sections: SPEC, PLAN, TASKS.
+**Context:** Corey called out directly: "we said we were implementing SDD and then you did not within hours."
+**Outcome:** Rule hardcoded into SOUL.md. No exceptions. Ambiguous Builder prompts waste time and API credits.
+
+## 2026-03-16 — LEARNINGS.md Wired Into Session Context
+**Decision:** LEARNINGS.md added to openclaw.json workspaceFiles so it loads automatically every session.
+**Context:** Behavioral rules were being stored but not loaded — pipeline was broken at the last step.
+**Outcome:** 5 active behavioral rules now load every session (SDD, scoring formula, self-image ceiling, knowledge-must-load, visual isomorphism).
+
+## 2026-03-16 — MiroFish = Architecture Inspiration Only
+**Decision:** MiroFish content is about simulation engine patterns, not prediction markets. Simulation console built into Control Room v4 but disabled ("Active when Gunner hits 100 users").
+**Context:** Corey approved: use as architecture inspiration for the multi-agent simulation engine design.
+**Outcome:** `memory/context/sim/mirofish-architecture.md` committed. Project DEFERRED until Gunner 100-user milestone.
+
+## 2026-03-16 — "The tool is not the strategy. Clarity is the strategy."
+**Decision:** Every build must have a clear WHY tied to NAH or Gunner before spawning anything.
+**Context:** Risk of building features disconnected from actual business outcomes.
+**Outcome:** Permanent operating principle. Applied to all future Builder spawns.
+
+## 2026-03-16 — Auditor Must Catch TypeScript Compile Errors
+**Decision:** Auditor checklist updated to verify TypeScript compiles cleanly before approving Builder output.
+**Context:** Two Builder-generated TS errors caused production deploy failures. Auditor should have caught them.
+**Outcome:** Auditor prompt tightened. TypeScript compile check is now a mandatory Auditor step.
+
 ## 2026-03-13 — "Real fix, always" — Permanent Operating Principle
 **Decision:** Never patch symptoms. Always fix root causes.
 **Context:** Established after a series of band-aid fixes that masked underlying issues.

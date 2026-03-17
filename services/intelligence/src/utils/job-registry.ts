@@ -3,6 +3,7 @@
 
 import { getFileContent, updateFile, createFile } from '../lib/github.js';
 import { appendResult } from './results-log.js';
+import { routeModel } from './smart-scheduler.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const REGISTRY_PATH = 'data/job-registry.json';
@@ -111,11 +112,24 @@ export async function markJobStart(jobName: string): Promise<number> {
 
 /**
  * Mark a job as successfully completed.
+ * Optionally pass model/cost/notes for cost-tracking in results.tsv.
  */
-export async function markJobSuccess(jobName: string, startTime: number): Promise<void> {
+export async function markJobSuccess(
+  jobName: string,
+  startTime: number,
+  opts?: { model?: string; cost?: number; notes?: string },
+): Promise<void> {
   const durationMs = Date.now() - startTime;
   await writeJobStatus(jobName, 'success', startTime);
-  await appendResult({ jobName, status: 'success', durationMs });
+  let notesStr = opts?.notes ?? '';
+  try {
+    const { model, estimatedCostUsd } = routeModel(jobName);
+    const modelStr = opts?.model ?? model;
+    const costVal = opts?.cost !== undefined ? opts.cost : estimatedCostUsd;
+    const costNotes = `model=${modelStr} cost=$${costVal.toFixed(3)}`;
+    notesStr = notesStr ? `${notesStr} ${costNotes}` : costNotes;
+  } catch { /* never fail job due to cost tracking */ }
+  await appendResult({ jobName, status: 'success', durationMs, notes: notesStr || undefined });
 }
 
 /**

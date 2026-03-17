@@ -71,6 +71,27 @@ const JOB_METRICS: Record<string, JobMetric> = {
     target: 3,
     minimum: 1,
   },
+  'voice-ingest': {
+    name: 'voice_memos_processed',
+    description: 'Voice memos transcribed and structured into knowledge notes',
+    unit: 'count',
+    target: 1,
+    minimum: 0,
+  },
+  'librarian': {
+    name: 'knowledge_graph_health_score',
+    description: 'Overall health of the knowledge graph — compliance rate, zero stale items = 100',
+    unit: 'score',
+    target: 90,
+    minimum: 70,
+  },
+  'repo-researcher': {
+    name: 'repos_analyzed',
+    description: 'GitHub repositories analyzed and written to memory/context/technology/',
+    unit: 'count',
+    target: 1,
+    minimum: 0,
+  },
 };
 
 // ---------------------------------------------------------------------------

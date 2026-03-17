@@ -1,0 +1,2885 @@
+{
+  "tasks": [
+    {
+      "id": "task_1773628501041_5aohoso",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 214
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T02:35:01.041Z",
+      "startedAt": "2026-03-16T02:36:00.934Z",
+      "completedAt": "2026-03-16T02:36:15.427Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:36:15.270Z. Triggered by task task_1773628501041_5aohoso."
+    },
+    {
+      "id": "task_1773629101582_glijju5",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T02:45:01.582Z",
+      "startedAt": "2026-03-16T02:46:00.561Z",
+      "completedAt": "2026-03-16T02:46:02.969Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:46:02.818Z. Triggered by task task_1773629101582_glijju5."
+    },
+    {
+      "id": "task_1773629401070_aqfz8nu",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T02:50:01.070Z",
+      "startedAt": "2026-03-16T02:51:00.886Z",
+      "completedAt": "2026-03-16T02:51:03.086Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:51:02.941Z. Triggered by task task_1773629401070_aqfz8nu."
+    },
+    {
+      "id": "task_1773629701167_hmixcy9",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T02:55:01.167Z",
+      "startedAt": "2026-03-16T02:56:01.069Z",
+      "completedAt": "2026-03-16T02:56:03.562Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T02:56:03.412Z. Triggered by task task_1773629701167_hmixcy9."
+    },
+    {
+      "id": "task_1773630300721_khxetg7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:05:00.721Z",
+      "startedAt": "2026-03-16T03:07:00.754Z",
+      "completedAt": "2026-03-16T03:07:03.352Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:07:03.191Z. Triggered by task task_1773630300721_khxetg7."
+    },
+    {
+      "id": "task_1773630601070_m0g2zgq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:10:01.070Z",
+      "startedAt": "2026-03-16T03:11:00.962Z",
+      "completedAt": "2026-03-16T03:11:03.314Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:11:03.119Z. Triggered by task task_1773630601070_m0g2zgq."
+    },
+    {
+      "id": "task_1773630901336_5zhi7or",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:15:01.336Z",
+      "startedAt": "2026-03-16T03:16:01.267Z",
+      "completedAt": "2026-03-16T03:16:04.868Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:16:04.683Z. Triggered by task task_1773630901336_5zhi7or."
+    },
+    {
+      "id": "task_1773631500829_yg27xxq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:25:00.829Z",
+      "startedAt": "2026-03-16T03:26:00.835Z",
+      "completedAt": "2026-03-16T03:26:03.044Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:26:02.896Z. Triggered by task task_1773631500829_yg27xxq."
+    },
+    {
+      "id": "task_1773631801122_zkmnel1",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:30:01.122Z",
+      "startedAt": "2026-03-16T03:31:01.041Z",
+      "completedAt": "2026-03-16T03:31:03.409Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:31:03.233Z. Triggered by task task_1773631801122_zkmnel1."
+    },
+    {
+      "id": "task_1773632101394_qmqtke9",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:35:01.394Z",
+      "startedAt": "2026-03-16T03:36:01.326Z",
+      "completedAt": "2026-03-16T03:36:03.645Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:36:03.480Z. Triggered by task task_1773632101394_qmqtke9."
+    },
+    {
+      "id": "task_1773632700997_02g51tc",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:45:00.997Z",
+      "startedAt": "2026-03-16T03:46:00.953Z",
+      "completedAt": "2026-03-16T03:46:03.363Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:46:03.204Z. Triggered by task task_1773632700997_02g51tc."
+    },
+    {
+      "id": "task_1773633001297_jymsbvn",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:50:01.297Z",
+      "startedAt": "2026-03-16T03:51:01.219Z",
+      "completedAt": "2026-03-16T03:51:03.571Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:51:03.391Z. Triggered by task task_1773633001297_jymsbvn."
+    },
+    {
+      "id": "task_1773633301499_nonqzij",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T03:55:01.499Z",
+      "startedAt": "2026-03-16T03:56:01.707Z",
+      "completedAt": "2026-03-16T03:56:04.168Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T03:56:03.978Z. Triggered by task task_1773633301499_nonqzij."
+    },
+    {
+      "id": "task_1773633600821_54zythr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:00:00.821Z",
+      "startedAt": "2026-03-16T04:01:00.841Z",
+      "completedAt": "2026-03-16T04:01:03.342Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:01:03.184Z. Triggered by task task_1773633600821_54zythr."
+    },
+    {
+      "id": "task_1773633901095_xzj15x6",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:05:01.095Z",
+      "startedAt": "2026-03-16T04:07:01.168Z",
+      "completedAt": "2026-03-16T04:07:03.508Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:07:03.348Z. Triggered by task task_1773633901095_xzj15x6."
+    },
+    {
+      "id": "task_1773634201489_2dg0ngq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:10:01.490Z",
+      "startedAt": "2026-03-16T04:11:01.399Z",
+      "completedAt": "2026-03-16T04:11:03.825Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:11:03.668Z. Triggered by task task_1773634201489_2dg0ngq."
+    },
+    {
+      "id": "task_1773634500754_i8y55ln",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:15:00.754Z",
+      "startedAt": "2026-03-16T04:16:00.668Z",
+      "completedAt": "2026-03-16T04:16:03.159Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:16:02.973Z. Triggered by task task_1773634500754_i8y55ln."
+    },
+    {
+      "id": "task_1773634800984_3t97je6",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:20:00.984Z",
+      "startedAt": "2026-03-16T04:21:01.143Z",
+      "completedAt": "2026-03-16T04:21:03.656Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:21:03.435Z. Triggered by task task_1773634800984_3t97je6."
+    },
+    {
+      "id": "task_1773635401606_kuktuzb",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:30:01.606Z",
+      "startedAt": "2026-03-16T04:31:01.603Z",
+      "completedAt": "2026-03-16T04:31:04.296Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:31:04.129Z. Triggered by task task_1773635401606_kuktuzb."
+    },
+    {
+      "id": "task_1773635700780_fi38ybl",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:35:00.780Z",
+      "startedAt": "2026-03-16T04:36:00.798Z",
+      "completedAt": "2026-03-16T04:36:03.086Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:36:02.919Z. Triggered by task task_1773635700780_fi38ybl."
+    },
+    {
+      "id": "task_1773636301377_1m80y0n",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:45:01.377Z",
+      "startedAt": "2026-03-16T04:46:01.340Z",
+      "completedAt": "2026-03-16T04:46:06.085Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:46:05.704Z. Triggered by task task_1773636301377_1m80y0n."
+    },
+    {
+      "id": "task_1773636602764_8icxah9",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T04:50:02.764Z",
+      "startedAt": "2026-03-16T04:51:00.731Z",
+      "completedAt": "2026-03-16T04:51:03.605Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T04:51:03.345Z. Triggered by task task_1773636602764_8icxah9."
+    },
+    {
+      "id": "task_1773637368712_pcduuee",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "2543ffed",
+        "commitMessage": "chore: evaluation-log [scribe=10]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T05:02:48.574Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:02:48.712Z",
+      "startedAt": "2026-03-16T05:03:01.722Z",
+      "completedAt": "2026-03-16T05:03:05.686Z",
+      "proofOfWork": "Audit WARN for commit 2543ffed. 4 concern(s). Artifact: intelligence/audits/2026-03-16-2543ffed.md"
+    },
+    {
+      "id": "task_1773637500945_iakcip1",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:05:00.945Z",
+      "startedAt": "2026-03-16T05:06:01.044Z",
+      "completedAt": "2026-03-16T05:06:03.604Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:06:03.447Z. Triggered by task task_1773637500945_iakcip1."
+    },
+    {
+      "id": "task_1773637548861_q0e1mpl",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "029a6aad",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T05:05:48.704Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:05:48.861Z",
+      "startedAt": "2026-03-16T05:06:04.222Z",
+      "completedAt": "2026-03-16T05:06:09.664Z",
+      "proofOfWork": "Audit WARN for commit 029a6aad. 5 concern(s). Artifact: intelligence/audits/2026-03-16-029a6aad.md"
+    },
+    {
+      "id": "task_1773637801334_eclo7cx",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:10:01.334Z",
+      "startedAt": "2026-03-16T05:11:01.519Z",
+      "completedAt": "2026-03-16T05:11:04.004Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:11:03.849Z. Triggered by task task_1773637801334_eclo7cx."
+    },
+    {
+      "id": "task_1773638165989_ih9mvf3",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "d5a2d31a",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T05:16:05.837Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:16:05.989Z",
+      "startedAt": "2026-03-16T05:17:01.610Z",
+      "completedAt": "2026-03-16T05:17:03.810Z",
+      "proofOfWork": "Audit PASS for commit d5a2d31a. 0 concern(s). Artifact: intelligence/audits/2026-03-16-d5a2d31a.md"
+    },
+    {
+      "id": "task_1773638401812_6pkke70",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:20:01.812Z",
+      "startedAt": "2026-03-16T05:21:00.908Z",
+      "completedAt": "2026-03-16T05:21:03.330Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:21:03.183Z. Triggered by task task_1773638401812_6pkke70."
+    },
+    {
+      "id": "task_1773638701029_92pyd12",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:25:01.029Z",
+      "startedAt": "2026-03-16T05:26:01.262Z",
+      "completedAt": "2026-03-16T05:26:03.846Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:26:03.690Z. Triggered by task task_1773638701029_92pyd12."
+    },
+    {
+      "id": "task_1773639301670_ybgi0nj",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:35:01.670Z",
+      "startedAt": "2026-03-16T05:36:01.864Z",
+      "completedAt": "2026-03-16T05:36:04.259Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:36:04.098Z. Triggered by task task_1773639301670_ybgi0nj."
+    },
+    {
+      "id": "task_1773639901526_tgs3o1a",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:45:01.526Z",
+      "startedAt": "2026-03-16T05:46:01.472Z",
+      "completedAt": "2026-03-16T05:46:03.925Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:46:03.776Z. Triggered by task task_1773639901526_tgs3o1a."
+    },
+    {
+      "id": "task_1773640201774_ynv3qf8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T05:50:01.775Z",
+      "startedAt": "2026-03-16T05:51:00.748Z",
+      "completedAt": "2026-03-16T05:51:03.044Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T05:51:02.904Z. Triggered by task task_1773640201774_ynv3qf8."
+    },
+    {
+      "id": "task_1773640801435_3r3e3b0",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 36
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:00:01.435Z",
+      "startedAt": "2026-03-16T06:01:01.486Z",
+      "completedAt": "2026-03-16T06:01:16.157Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T06:01:16.010Z. Triggered by task task_1773640801435_3r3e3b0."
+    },
+    {
+      "id": "task_1773641401410_77ds6j8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 329
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:10:01.410Z",
+      "startedAt": "2026-03-16T06:11:01.163Z",
+      "completedAt": "2026-03-16T06:11:20.304Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T06:11:20.088Z. Triggered by task task_1773641401410_77ds6j8."
+    },
+    {
+      "id": "task_1773642353963_38p96m6",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "96694739",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T06:25:53.824Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:25:53.963Z",
+      "startedAt": "2026-03-16T06:26:01.570Z",
+      "completedAt": "2026-03-16T06:26:04.267Z",
+      "proofOfWork": "Audit PASS for commit 96694739. 0 concern(s). Artifact: intelligence/audits/2026-03-16-96694739.md"
+    },
+    {
+      "id": "task_1773642602317_hjjdewo",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-16T06:30:02.128Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:30:02.317Z",
+      "startedAt": "2026-03-16T06:31:01.085Z",
+      "completedAt": "2026-03-16T06:31:10.686Z",
+      "proofOfWork": "Librarian audit completed at 2026-03-16T06:31:10.500Z. Report: intelligence/librarian-reports/2026-03-16.md. Triggered by task task_1773642602317_hjjdewo."
+    },
+    {
+      "id": "task_1773642751592_sh6ok5p",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "ed9a8b46",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T06:32:31.441Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:32:31.593Z",
+      "startedAt": "2026-03-16T06:33:01.199Z",
+      "completedAt": "2026-03-16T06:33:04.069Z",
+      "proofOfWork": "Audit PASS for commit ed9a8b46. 0 concern(s). Artifact: intelligence/audits/2026-03-16-ed9a8b46.md"
+    },
+    {
+      "id": "task_1773643801269_xxecm4w",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:50:01.269Z",
+      "startedAt": "2026-03-16T06:51:01.131Z",
+      "completedAt": "2026-03-16T06:51:02.724Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T06:51:02.570Z. Triggered by task task_1773643801269_xxecm4w."
+    },
+    {
+      "id": "task_1773644101452_46024z7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T06:55:01.452Z",
+      "startedAt": "2026-03-16T06:56:01.502Z",
+      "completedAt": "2026-03-16T06:56:03.056Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T06:56:02.894Z. Triggered by task task_1773644101452_46024z7."
+    },
+    {
+      "id": "task_1773644400950_4tif6s8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:00:00.950Z",
+      "startedAt": "2026-03-16T07:01:00.822Z",
+      "completedAt": "2026-03-16T07:01:02.491Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:01:02.337Z. Triggered by task task_1773644400950_4tif6s8."
+    },
+    {
+      "id": "task_1773645601036_ep1bwyq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:20:01.036Z",
+      "startedAt": "2026-03-16T07:21:01.250Z",
+      "completedAt": "2026-03-16T07:21:03.118Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:21:02.945Z. Triggered by task task_1773645601036_ep1bwyq."
+    },
+    {
+      "id": "task_1773645610229_8er2v83",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "b7d847ce",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T07:20:10.040Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:20:10.229Z",
+      "startedAt": "2026-03-16T07:21:03.765Z",
+      "completedAt": "2026-03-16T07:21:06.536Z",
+      "proofOfWork": "Audit PASS for commit b7d847ce. 0 concern(s). Artifact: intelligence/audits/2026-03-16-b7d847ce.md"
+    },
+    {
+      "id": "task_1773645901526_yr3pau4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:25:01.526Z",
+      "startedAt": "2026-03-16T07:26:01.581Z",
+      "completedAt": "2026-03-16T07:26:03.500Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:26:03.328Z. Triggered by task task_1773645901526_yr3pau4."
+    },
+    {
+      "id": "task_1773647101902_f3kt09p",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:45:01.902Z",
+      "startedAt": "2026-03-16T07:46:00.653Z",
+      "completedAt": "2026-03-16T07:46:02.704Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:46:02.461Z. Triggered by task task_1773647101902_f3kt09p."
+    },
+    {
+      "id": "task_1773647401208_sn9ls83",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:50:01.208Z",
+      "startedAt": "2026-03-16T07:51:00.943Z",
+      "completedAt": "2026-03-16T07:51:03.098Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:51:02.932Z. Triggered by task task_1773647401208_sn9ls83."
+    },
+    {
+      "id": "task_1773647701343_fhciupe",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 350
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T07:55:01.343Z",
+      "startedAt": "2026-03-16T07:56:01.334Z",
+      "completedAt": "2026-03-16T07:56:03.325Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:56:03.067Z. Triggered by task task_1773647701343_fhciupe."
+    },
+    {
+      "id": "task_1773648301116_dnbbx3v",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 351
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:05:01.116Z",
+      "startedAt": "2026-03-16T08:06:00.864Z",
+      "completedAt": "2026-03-16T08:06:02.711Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:06:02.517Z. Triggered by task task_1773648301116_dnbbx3v."
+    },
+    {
+      "id": "task_1773648901640_3e0n5r8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 351
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:15:01.640Z",
+      "startedAt": "2026-03-16T08:16:01.593Z",
+      "completedAt": "2026-03-16T08:16:03.859Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:16:03.698Z. Triggered by task task_1773648901640_3e0n5r8."
+    },
+    {
+      "id": "task_1773649200852_euv71dk",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 353
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:20:00.852Z",
+      "startedAt": "2026-03-16T08:21:00.866Z",
+      "completedAt": "2026-03-16T08:21:02.935Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:21:02.764Z. Triggered by task task_1773649200852_euv71dk."
+    },
+    {
+      "id": "task_1773649501243_fq0bkpc",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 353
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:25:01.243Z",
+      "startedAt": "2026-03-16T08:26:01.127Z",
+      "completedAt": "2026-03-16T08:26:03.178Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:26:02.996Z. Triggered by task task_1773649501243_fq0bkpc."
+    },
+    {
+      "id": "task_1773650401086_g2qx9un",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 353
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:40:01.086Z",
+      "startedAt": "2026-03-16T08:41:00.980Z",
+      "completedAt": "2026-03-16T08:41:03.202Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:41:02.934Z. Triggered by task task_1773650401086_g2qx9un."
+    },
+    {
+      "id": "task_1773650662144_vzn1zwo",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "6d168521",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T08:44:21.978Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:44:22.144Z",
+      "startedAt": "2026-03-16T08:45:01.568Z",
+      "completedAt": "2026-03-16T08:45:04.686Z",
+      "proofOfWork": "Audit PASS for commit 6d168521. 0 concern(s). Artifact: intelligence/audits/2026-03-16-6d168521.md"
+    },
+    {
+      "id": "task_1773651002313_2chh9na",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 356
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:50:02.313Z",
+      "startedAt": "2026-03-16T08:51:01.593Z",
+      "completedAt": "2026-03-16T08:51:03.346Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T08:51:03.160Z. Triggered by task task_1773651002313_2chh9na."
+    },
+    {
+      "id": "task_1773651140875_haxciba",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "f92d97cd",
+        "commitMessage": "chore: evaluation-log [scribe=20]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T08:52:20.689Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T08:52:20.875Z",
+      "startedAt": "2026-03-16T08:53:01.730Z",
+      "completedAt": "2026-03-16T08:53:02.641Z",
+      "proofOfWork": "skipped: docs-only commit (f92d97cd)"
+    },
+    {
+      "id": "task_1773651901721_hqzri4b",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 357
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:05:01.722Z",
+      "startedAt": "2026-03-16T09:06:01.607Z",
+      "completedAt": "2026-03-16T09:06:03.676Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:06:03.507Z. Triggered by task task_1773651901721_hqzri4b."
+    },
+    {
+      "id": "task_1773652201816_8svhsd5",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 358
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:10:01.816Z",
+      "startedAt": "2026-03-16T09:11:01.922Z",
+      "completedAt": "2026-03-16T09:11:03.825Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:11:03.668Z. Triggered by task task_1773652201816_8svhsd5."
+    },
+    {
+      "id": "task_1773653101235_vupszjd",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 363
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:25:01.235Z",
+      "startedAt": "2026-03-16T09:26:01.021Z",
+      "completedAt": "2026-03-16T09:26:03.122Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:26:02.962Z. Triggered by task task_1773653101235_vupszjd."
+    },
+    {
+      "id": "task_1773653701923_d8a1f4h",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:35:01.923Z",
+      "startedAt": "2026-03-16T09:36:01.688Z",
+      "completedAt": "2026-03-16T09:36:03.529Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:36:03.368Z. Triggered by task task_1773653701923_d8a1f4h."
+    },
+    {
+      "id": "task_1773654001246_fgp79yj",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:40:01.246Z",
+      "startedAt": "2026-03-16T09:41:01.094Z",
+      "completedAt": "2026-03-16T09:41:02.995Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:41:02.822Z. Triggered by task task_1773654001246_fgp79yj."
+    },
+    {
+      "id": "task_1773654602010_y6jl6lz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:50:02.010Z",
+      "startedAt": "2026-03-16T09:51:01.945Z",
+      "completedAt": "2026-03-16T09:51:03.888Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:51:03.667Z. Triggered by task task_1773654602010_y6jl6lz."
+    },
+    {
+      "id": "task_1773654901367_53cxmji",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T09:55:01.367Z",
+      "startedAt": "2026-03-16T09:56:01.278Z",
+      "completedAt": "2026-03-16T09:56:03.358Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T09:56:03.211Z. Triggered by task task_1773654901367_53cxmji."
+    },
+    {
+      "id": "task_1773655201766_7uymsev",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:00:01.766Z",
+      "startedAt": "2026-03-16T10:01:01.838Z",
+      "completedAt": "2026-03-16T10:01:04.022Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:01:03.855Z. Triggered by task task_1773655201766_7uymsev."
+    },
+    {
+      "id": "task_1773655501992_5a83arz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:05:01.992Z",
+      "startedAt": "2026-03-16T10:06:02.059Z",
+      "completedAt": "2026-03-16T10:06:04.230Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:06:04.041Z. Triggered by task task_1773655501992_5a83arz."
+    },
+    {
+      "id": "task_1773656021922_kw8w78c",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "a947322c",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T10:13:41.686Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:13:41.922Z",
+      "startedAt": "2026-03-16T10:14:01.439Z",
+      "completedAt": "2026-03-16T10:14:04.562Z",
+      "proofOfWork": "Audit PASS for commit a947322c. 0 concern(s). Artifact: intelligence/audits/2026-03-16-a947322c.md"
+    },
+    {
+      "id": "task_1773656101469_q4zb9tj",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:15:01.469Z",
+      "startedAt": "2026-03-16T10:16:01.549Z",
+      "completedAt": "2026-03-16T10:16:06.598Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:16:06.418Z. Triggered by task task_1773656101469_q4zb9tj."
+    },
+    {
+      "id": "task_1773656400850_48bpium",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:20:00.850Z",
+      "startedAt": "2026-03-16T10:21:00.814Z",
+      "completedAt": "2026-03-16T10:21:02.915Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:21:02.694Z. Triggered by task task_1773656400850_48bpium."
+    },
+    {
+      "id": "task_1773656427972_xqma4k0",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "9fb75d57",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T10:20:27.796Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:20:27.972Z",
+      "startedAt": "2026-03-16T10:21:03.833Z",
+      "completedAt": "2026-03-16T10:21:06.599Z",
+      "proofOfWork": "Audit PASS for commit 9fb75d57. 0 concern(s). Artifact: intelligence/audits/2026-03-16-9fb75d57.md"
+    },
+    {
+      "id": "task_1773656701090_9syn2q7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:25:01.090Z",
+      "startedAt": "2026-03-16T10:26:01.212Z",
+      "completedAt": "2026-03-16T10:26:03.769Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:26:03.593Z. Triggered by task task_1773656701090_9syn2q7."
+    },
+    {
+      "id": "task_1773657001615_3dvmw59",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:30:01.615Z",
+      "startedAt": "2026-03-16T10:31:01.330Z",
+      "completedAt": "2026-03-16T10:31:03.547Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:31:03.275Z. Triggered by task task_1773657001615_3dvmw59."
+    },
+    {
+      "id": "task_1773657601160_pmwygm9",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:40:01.160Z",
+      "startedAt": "2026-03-16T10:41:00.888Z",
+      "completedAt": "2026-03-16T10:41:03.531Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:41:03.228Z. Triggered by task task_1773657601160_pmwygm9."
+    },
+    {
+      "id": "task_1773657901297_0xw05fd",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:45:01.297Z",
+      "startedAt": "2026-03-16T10:46:01.384Z",
+      "completedAt": "2026-03-16T10:46:03.833Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:46:03.627Z. Triggered by task task_1773657901297_0xw05fd."
+    },
+    {
+      "id": "task_1773658201748_uv79yjr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T10:50:01.748Z",
+      "startedAt": "2026-03-16T10:51:01.572Z",
+      "completedAt": "2026-03-16T10:51:03.830Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T10:51:03.572Z. Triggered by task task_1773658201748_uv79yjr."
+    },
+    {
+      "id": "task_1773658801363_yncx15e",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:00:01.363Z",
+      "startedAt": "2026-03-16T11:01:01.142Z",
+      "completedAt": "2026-03-16T11:01:03.618Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:01:03.409Z. Triggered by task task_1773658801363_yncx15e."
+    },
+    {
+      "id": "task_1773659401841_zszo0xb",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:10:01.841Z",
+      "startedAt": "2026-03-16T11:11:00.768Z",
+      "completedAt": "2026-03-16T11:11:02.810Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:11:02.558Z. Triggered by task task_1773659401841_zszo0xb."
+    },
+    {
+      "id": "task_1773660002009_v36v76e",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:20:02.009Z",
+      "startedAt": "2026-03-16T11:21:01.252Z",
+      "completedAt": "2026-03-16T11:21:03.742Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:21:03.564Z. Triggered by task task_1773660002009_v36v76e."
+    },
+    {
+      "id": "task_1773660301675_8av3gf6",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:25:01.675Z",
+      "startedAt": "2026-03-16T11:26:01.609Z",
+      "completedAt": "2026-03-16T11:26:03.779Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:26:03.534Z. Triggered by task task_1773660301675_8av3gf6."
+    },
+    {
+      "id": "task_1773660901258_vf0jxs1",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:35:01.258Z",
+      "startedAt": "2026-03-16T11:36:01.162Z",
+      "completedAt": "2026-03-16T11:36:03.213Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:36:02.967Z. Triggered by task task_1773660901258_vf0jxs1."
+    },
+    {
+      "id": "task_1773661801057_4a2v01n",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:50:01.057Z",
+      "startedAt": "2026-03-16T11:51:00.918Z",
+      "completedAt": "2026-03-16T11:51:03.083Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:51:02.925Z. Triggered by task task_1773661801057_4a2v01n."
+    },
+    {
+      "id": "task_1773662101349_6p2k4y4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T11:55:01.349Z",
+      "startedAt": "2026-03-16T11:56:01.293Z",
+      "completedAt": "2026-03-16T11:56:03.528Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T11:56:03.227Z. Triggered by task task_1773662101349_6p2k4y4."
+    },
+    {
+      "id": "task_1773662401937_97breb7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:00:01.937Z",
+      "startedAt": "2026-03-16T12:01:01.543Z",
+      "completedAt": "2026-03-16T12:01:03.736Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:01:03.496Z. Triggered by task task_1773662401937_97breb7."
+    },
+    {
+      "id": "task_1773663001253_e6cvpt5",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:10:01.253Z",
+      "startedAt": "2026-03-16T12:11:01.123Z",
+      "completedAt": "2026-03-16T12:11:03.357Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:11:03.184Z. Triggered by task task_1773663001253_e6cvpt5."
+    },
+    {
+      "id": "task_1773663901286_qrz643y",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:25:01.286Z",
+      "startedAt": "2026-03-16T12:26:01.069Z",
+      "completedAt": "2026-03-16T12:26:03.592Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:26:03.213Z. Triggered by task task_1773663901286_qrz643y."
+    },
+    {
+      "id": "task_1773664501678_8mutn9f",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:35:01.678Z",
+      "startedAt": "2026-03-16T12:36:01.772Z",
+      "completedAt": "2026-03-16T12:36:03.997Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:36:03.664Z. Triggered by task task_1773664501678_8mutn9f."
+    },
+    {
+      "id": "task_1773664800896_63i88da",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:40:00.896Z",
+      "startedAt": "2026-03-16T12:41:00.802Z",
+      "completedAt": "2026-03-16T12:41:03.032Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:41:02.833Z. Triggered by task task_1773664800896_63i88da."
+    },
+    {
+      "id": "task_1773665101159_gxlxkhu",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:45:01.159Z",
+      "startedAt": "2026-03-16T12:46:01.206Z",
+      "completedAt": "2026-03-16T12:46:03.754Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:46:03.428Z. Triggered by task task_1773665101159_gxlxkhu."
+    },
+    {
+      "id": "task_1773665402947_l1p03jz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:50:02.947Z",
+      "startedAt": "2026-03-16T12:51:01.436Z",
+      "completedAt": "2026-03-16T12:51:03.665Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:51:03.400Z. Triggered by task task_1773665402947_l1p03jz."
+    },
+    {
+      "id": "task_1773665701860_7w51wig",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T12:55:01.860Z",
+      "startedAt": "2026-03-16T12:56:00.830Z",
+      "completedAt": "2026-03-16T12:56:02.827Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T12:56:02.632Z. Triggered by task task_1773665701860_7w51wig."
+    },
+    {
+      "id": "task_1773666001328_s137api",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:00:01.328Z",
+      "startedAt": "2026-03-16T13:01:00.983Z",
+      "completedAt": "2026-03-16T13:01:03.088Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:01:02.878Z. Triggered by task task_1773666001328_s137api."
+    },
+    {
+      "id": "task_1773666301385_ek502gi",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:05:01.385Z",
+      "startedAt": "2026-03-16T13:06:01.439Z",
+      "completedAt": "2026-03-16T13:06:04.012Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:06:03.704Z. Triggered by task task_1773666301385_ek502gi."
+    },
+    {
+      "id": "task_1773666601619_53u5mh3",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:10:01.619Z",
+      "startedAt": "2026-03-16T13:11:01.986Z",
+      "completedAt": "2026-03-16T13:11:04.220Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:11:04.026Z. Triggered by task task_1773666601619_53u5mh3."
+    },
+    {
+      "id": "task_1773666901045_4zifh1a",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:15:01.045Z",
+      "startedAt": "2026-03-16T13:16:00.967Z",
+      "completedAt": "2026-03-16T13:16:03.880Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:16:03.624Z. Triggered by task task_1773666901045_4zifh1a."
+    },
+    {
+      "id": "task_1773667201397_23ava18",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:20:01.397Z",
+      "startedAt": "2026-03-16T13:21:01.430Z",
+      "completedAt": "2026-03-16T13:21:03.758Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:21:03.574Z. Triggered by task task_1773667201397_23ava18."
+    },
+    {
+      "id": "task_1773668101183_10rux5t",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:35:01.183Z",
+      "startedAt": "2026-03-16T13:36:01.101Z",
+      "completedAt": "2026-03-16T13:36:03.761Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:36:03.444Z. Triggered by task task_1773668101183_10rux5t."
+    },
+    {
+      "id": "task_1773668702031_1gi6n1s",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T13:45:02.031Z",
+      "startedAt": "2026-03-16T13:46:01.954Z",
+      "completedAt": "2026-03-16T13:46:04.862Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T13:46:04.620Z. Triggered by task task_1773668702031_1gi6n1s."
+    },
+    {
+      "id": "task_1773669601949_ny54q61",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:00:01.949Z",
+      "startedAt": "2026-03-16T14:01:01.704Z",
+      "completedAt": "2026-03-16T14:01:04.347Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:01:04.159Z. Triggered by task task_1773669601949_ny54q61."
+    },
+    {
+      "id": "task_1773669901255_afd7mef",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:05:01.255Z",
+      "startedAt": "2026-03-16T14:06:01.020Z",
+      "completedAt": "2026-03-16T14:06:03.656Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:06:03.412Z. Triggered by task task_1773669901255_afd7mef."
+    },
+    {
+      "id": "task_1773671101166_20bkz0k",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:25:01.166Z",
+      "startedAt": "2026-03-16T14:26:00.979Z",
+      "completedAt": "2026-03-16T14:26:03.388Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:26:03.165Z. Triggered by task task_1773671101166_20bkz0k."
+    },
+    {
+      "id": "task_1773671401569_vswhdqd",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:30:01.569Z",
+      "startedAt": "2026-03-16T14:31:01.654Z",
+      "completedAt": "2026-03-16T14:31:04.604Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:31:04.337Z. Triggered by task task_1773671401569_vswhdqd."
+    },
+    {
+      "id": "task_1773671701708_i4tf4jq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:35:01.708Z",
+      "startedAt": "2026-03-16T14:36:01.617Z",
+      "completedAt": "2026-03-16T14:36:04.282Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:36:04.062Z. Triggered by task task_1773671701708_i4tf4jq."
+    },
+    {
+      "id": "task_1773672001013_8f7agwd",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:40:01.013Z",
+      "startedAt": "2026-03-16T14:41:00.790Z",
+      "completedAt": "2026-03-16T14:41:03.277Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:41:03.043Z. Triggered by task task_1773672001013_8f7agwd."
+    },
+    {
+      "id": "task_1773672601642_cpidtrt",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T14:50:01.642Z",
+      "startedAt": "2026-03-16T14:51:01.495Z",
+      "completedAt": "2026-03-16T14:51:04.057Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T14:51:03.814Z. Triggered by task task_1773672601642_cpidtrt."
+    },
+    {
+      "id": "task_1773673501448_ycpcntl",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:05:01.448Z",
+      "startedAt": "2026-03-16T15:06:01.311Z",
+      "completedAt": "2026-03-16T15:06:03.889Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:06:03.620Z. Triggered by task task_1773673501448_ycpcntl."
+    },
+    {
+      "id": "task_1773673801721_07393f4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:10:01.721Z",
+      "startedAt": "2026-03-16T15:11:01.792Z",
+      "completedAt": "2026-03-16T15:11:04.191Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:11:03.982Z. Triggered by task task_1773673801721_07393f4."
+    },
+    {
+      "id": "task_1773674100966_fh69yik",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:15:00.966Z",
+      "startedAt": "2026-03-16T15:16:01.080Z",
+      "completedAt": "2026-03-16T15:16:03.436Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:16:03.271Z. Triggered by task task_1773674100966_fh69yik."
+    },
+    {
+      "id": "task_1773674401360_08c09n8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:20:01.360Z",
+      "startedAt": "2026-03-16T15:21:01.189Z",
+      "completedAt": "2026-03-16T15:21:03.510Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:21:03.296Z. Triggered by task task_1773674401360_08c09n8."
+    },
+    {
+      "id": "task_1773674701763_fsf1hwn",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:25:01.763Z",
+      "startedAt": "2026-03-16T15:26:01.495Z",
+      "completedAt": "2026-03-16T15:26:04.058Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:26:03.840Z. Triggered by task task_1773674701763_fsf1hwn."
+    },
+    {
+      "id": "task_1773675001856_7cmyola",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:30:01.856Z",
+      "startedAt": "2026-03-16T15:31:00.984Z",
+      "completedAt": "2026-03-16T15:31:03.794Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:31:03.575Z. Triggered by task task_1773675001856_7cmyola."
+    },
+    {
+      "id": "task_1773676501813_0i1d7o6",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T15:55:01.813Z",
+      "startedAt": "2026-03-16T15:56:01.310Z",
+      "completedAt": "2026-03-16T15:56:04.072Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T15:56:03.807Z. Triggered by task task_1773676501813_0i1d7o6."
+    },
+    {
+      "id": "task_1773676801955_xwk9x2h",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:00:01.955Z",
+      "startedAt": "2026-03-16T16:01:01.611Z",
+      "completedAt": "2026-03-16T16:01:04.440Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:01:04.146Z. Triggered by task task_1773676801955_xwk9x2h."
+    },
+    {
+      "id": "task_1773677102081_fr1xs3s",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:05:02.081Z",
+      "startedAt": "2026-03-16T16:06:00.786Z",
+      "completedAt": "2026-03-16T16:06:03.177Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:06:02.994Z. Triggered by task task_1773677102081_fr1xs3s."
+    },
+    {
+      "id": "task_1773677401270_jwukuk7",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:10:01.270Z",
+      "startedAt": "2026-03-16T16:11:01.175Z",
+      "completedAt": "2026-03-16T16:11:03.697Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:11:03.409Z. Triggered by task task_1773677401270_jwukuk7."
+    },
+    {
+      "id": "task_1773677701421_qlf753i",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:15:01.421Z",
+      "startedAt": "2026-03-16T16:16:01.383Z",
+      "completedAt": "2026-03-16T16:16:03.629Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:16:03.394Z. Triggered by task task_1773677701421_qlf753i."
+    },
+    {
+      "id": "task_1773678301067_3avq3nf",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:25:01.068Z",
+      "startedAt": "2026-03-16T16:26:01.034Z",
+      "completedAt": "2026-03-16T16:26:03.488Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:26:03.100Z. Triggered by task task_1773678301067_3avq3nf."
+    },
+    {
+      "id": "task_1773678601415_ukwxe10",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:30:01.415Z",
+      "startedAt": "2026-03-16T16:31:01.321Z",
+      "completedAt": "2026-03-16T16:31:04.082Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:31:03.711Z. Triggered by task task_1773678601415_ukwxe10."
+    },
+    {
+      "id": "task_1773678803949_msefs7g",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "ca3690c1",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T16:33:23.664Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:33:23.949Z",
+      "startedAt": "2026-03-16T16:34:01.529Z",
+      "completedAt": "2026-03-16T16:34:09.414Z",
+      "proofOfWork": "Audit PASS for commit ca3690c1. 0 concern(s). Artifact: intelligence/audits/2026-03-16-ca3690c1.md"
+    },
+    {
+      "id": "task_1773678902790_1zvhdxu",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:35:02.790Z",
+      "startedAt": "2026-03-16T16:36:01.592Z",
+      "completedAt": "2026-03-16T16:36:03.881Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:36:03.671Z. Triggered by task task_1773678902790_1zvhdxu."
+    },
+    {
+      "id": "task_1773679201744_f0987qn",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 366
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:40:01.745Z",
+      "startedAt": "2026-03-16T16:41:01.642Z",
+      "completedAt": "2026-03-16T16:41:04.586Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:41:04.376Z. Triggered by task task_1773679201744_f0987qn."
+    },
+    {
+      "id": "task_1773679291403_icawspz",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "5519e938",
+        "commitMessage": "chore: evaluation-log [scribe=20]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T16:41:31.194Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:41:31.403Z",
+      "startedAt": "2026-03-16T16:42:01.705Z",
+      "completedAt": "2026-03-16T16:42:02.957Z",
+      "proofOfWork": "skipped: docs-only commit (5519e938)"
+    },
+    {
+      "id": "task_1773679802931_jdvhjtg",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T16:50:02.931Z",
+      "startedAt": "2026-03-16T16:51:01.244Z",
+      "completedAt": "2026-03-16T16:51:03.564Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T16:51:03.339Z. Triggered by task task_1773679802931_jdvhjtg."
+    },
+    {
+      "id": "task_1773680401047_exk6b4x",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:00:01.047Z",
+      "startedAt": "2026-03-16T17:01:01.066Z",
+      "completedAt": "2026-03-16T17:01:04.200Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T17:01:03.703Z. Triggered by task task_1773680401047_exk6b4x."
+    },
+    {
+      "id": "task_1773680701168_mj6fg0f",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:05:01.168Z",
+      "startedAt": "2026-03-16T17:06:01.260Z",
+      "completedAt": "2026-03-16T17:06:03.875Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T17:06:03.561Z. Triggered by task task_1773680701168_mj6fg0f."
+    },
+    {
+      "id": "task_1773681301884_5cuspq2",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:15:01.884Z",
+      "startedAt": "2026-03-16T17:16:01.852Z",
+      "completedAt": "2026-03-16T17:16:04.382Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T17:16:04.166Z. Triggered by task task_1773681301884_5cuspq2."
+    },
+    {
+      "id": "task_1773681601052_5i7ju30",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:20:01.053Z",
+      "startedAt": "2026-03-16T17:21:01.071Z",
+      "completedAt": "2026-03-16T17:21:04.135Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T17:21:03.619Z. Triggered by task task_1773681601052_5i7ju30."
+    },
+    {
+      "id": "task_1773683101635_i28pexk",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:45:01.635Z",
+      "startedAt": "2026-03-16T17:46:01.752Z",
+      "completedAt": "2026-03-16T17:46:03.877Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T17:46:03.658Z. Triggered by task task_1773683101635_i28pexk."
+    },
+    {
+      "id": "task_1773683468552_whwnquy",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "7b46f53c",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T17:51:08.306Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T17:51:08.552Z",
+      "startedAt": "2026-03-16T17:52:01.985Z",
+      "completedAt": "2026-03-16T17:52:05.772Z",
+      "proofOfWork": "Audit PASS for commit 7b46f53c. 0 concern(s). Artifact: intelligence/audits/2026-03-16-7b46f53c.md"
+    },
+    {
+      "id": "task_1773684001646_ydxrfci",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:00:01.647Z",
+      "startedAt": "2026-03-16T18:01:01.663Z",
+      "completedAt": "2026-03-16T18:01:04.114Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:01:03.928Z. Triggered by task task_1773684001646_ydxrfci."
+    },
+    {
+      "id": "task_1773684301615_l7155le",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:05:01.615Z",
+      "startedAt": "2026-03-16T18:06:01.770Z",
+      "completedAt": "2026-03-16T18:06:04.047Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:06:03.786Z. Triggered by task task_1773684301615_l7155le."
+    },
+    {
+      "id": "task_1773684602236_pds3v77",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 368
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:10:02.236Z",
+      "startedAt": "2026-03-16T18:11:01.086Z",
+      "completedAt": "2026-03-16T18:11:03.295Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:11:03.109Z. Triggered by task task_1773684602236_pds3v77."
+    },
+    {
+      "id": "task_1773685201944_59f8xwv",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:20:01.944Z",
+      "startedAt": "2026-03-16T18:21:01.968Z",
+      "completedAt": "2026-03-16T18:21:04.330Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:21:04.150Z. Triggered by task task_1773685201944_59f8xwv."
+    },
+    {
+      "id": "task_1773686101981_1ua855e",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:35:01.981Z",
+      "startedAt": "2026-03-16T18:36:01.770Z",
+      "completedAt": "2026-03-16T18:36:03.883Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:36:03.709Z. Triggered by task task_1773686101981_1ua855e."
+    },
+    {
+      "id": "task_1773686701511_ttgtnzl",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:45:01.511Z",
+      "startedAt": "2026-03-16T18:46:01.654Z",
+      "completedAt": "2026-03-16T18:46:03.865Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:46:03.697Z. Triggered by task task_1773686701511_ttgtnzl."
+    },
+    {
+      "id": "task_1773687301234_soaipjr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T18:55:01.234Z",
+      "startedAt": "2026-03-16T18:56:01.234Z",
+      "completedAt": "2026-03-16T18:56:03.527Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T18:56:03.244Z. Triggered by task task_1773687301234_soaipjr."
+    },
+    {
+      "id": "task_1773688501524_ye3p0cm",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:15:01.525Z",
+      "startedAt": "2026-03-16T19:16:01.804Z",
+      "completedAt": "2026-03-16T19:16:04.296Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:16:04.045Z. Triggered by task task_1773688501524_ye3p0cm."
+    },
+    {
+      "id": "task_1773688801941_ilgyh2h",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:20:01.941Z",
+      "startedAt": "2026-03-16T19:21:01.947Z",
+      "completedAt": "2026-03-16T19:21:04.085Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:21:03.917Z. Triggered by task task_1773688801941_ilgyh2h."
+    },
+    {
+      "id": "task_1773689401363_krjza52",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:30:01.363Z",
+      "startedAt": "2026-03-16T19:31:01.724Z",
+      "completedAt": "2026-03-16T19:31:04.610Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:31:04.349Z. Triggered by task task_1773689401363_krjza52."
+    },
+    {
+      "id": "task_1773690001442_7ss312v",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:40:01.442Z",
+      "startedAt": "2026-03-16T19:41:01.372Z",
+      "completedAt": "2026-03-16T19:41:03.420Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:41:03.258Z. Triggered by task task_1773690001442_7ss312v."
+    },
+    {
+      "id": "task_1773690301721_sn2f7qe",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:45:01.721Z",
+      "startedAt": "2026-03-16T19:46:01.861Z",
+      "completedAt": "2026-03-16T19:46:03.999Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:46:03.820Z. Triggered by task task_1773690301721_sn2f7qe."
+    },
+    {
+      "id": "task_1773690901345_tu822jw",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T19:55:01.345Z",
+      "startedAt": "2026-03-16T19:56:01.399Z",
+      "completedAt": "2026-03-16T19:56:03.275Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T19:56:03.121Z. Triggered by task task_1773690901345_tu822jw."
+    },
+    {
+      "id": "task_1773691201957_0q62n2g",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:00:01.957Z",
+      "startedAt": "2026-03-16T20:01:01.927Z",
+      "completedAt": "2026-03-16T20:01:04.335Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:01:04.078Z. Triggered by task task_1773691201957_0q62n2g."
+    },
+    {
+      "id": "task_1773691502168_lpjzoi0",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:05:02.168Z",
+      "startedAt": "2026-03-16T20:06:00.991Z",
+      "completedAt": "2026-03-16T20:06:03.125Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:06:02.923Z. Triggered by task task_1773691502168_lpjzoi0."
+    },
+    {
+      "id": "task_1773692101851_qtqevif",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:15:01.851Z",
+      "startedAt": "2026-03-16T20:16:01.983Z",
+      "completedAt": "2026-03-16T20:16:04.371Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:16:04.126Z. Triggered by task task_1773692101851_qtqevif."
+    },
+    {
+      "id": "task_1773692401234_txj6jbt",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:20:01.234Z",
+      "startedAt": "2026-03-16T20:21:01.266Z",
+      "completedAt": "2026-03-16T20:21:03.975Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:21:03.741Z. Triggered by task task_1773692401234_txj6jbt."
+    },
+    {
+      "id": "task_1773692701549_78cftod",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:25:01.549Z",
+      "startedAt": "2026-03-16T20:26:01.493Z",
+      "completedAt": "2026-03-16T20:26:03.636Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:26:03.485Z. Triggered by task task_1773692701549_78cftod."
+    },
+    {
+      "id": "task_1773693002059_u12igwp",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:30:02.059Z",
+      "startedAt": "2026-03-16T20:31:01.980Z",
+      "completedAt": "2026-03-16T20:31:04.177Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:31:03.999Z. Triggered by task task_1773693002059_u12igwp."
+    },
+    {
+      "id": "task_1773693301161_qj8tkuv",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:35:01.161Z",
+      "startedAt": "2026-03-16T20:36:01.269Z",
+      "completedAt": "2026-03-16T20:36:03.501Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:36:03.266Z. Triggered by task task_1773693301161_qj8tkuv."
+    },
+    {
+      "id": "task_1773693601729_mwsj6ju",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:40:01.729Z",
+      "startedAt": "2026-03-16T20:41:01.422Z",
+      "completedAt": "2026-03-16T20:41:03.531Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:41:03.367Z. Triggered by task task_1773693601729_mwsj6ju."
+    },
+    {
+      "id": "task_1773693901857_mowjfvb",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:45:01.857Z",
+      "startedAt": "2026-03-16T20:46:02.011Z",
+      "completedAt": "2026-03-16T20:46:04.315Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:46:04.123Z. Triggered by task task_1773693901857_mowjfvb."
+    },
+    {
+      "id": "task_1773694074522_io9qgrz",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "e1d1b15b",
+        "commitMessage": "chore: results-log [scribe=success]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-03-16T20:47:54.268Z"
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:47:54.522Z",
+      "startedAt": "2026-03-16T20:48:01.602Z",
+      "completedAt": "2026-03-16T20:48:04.378Z",
+      "proofOfWork": "Audit PASS for commit e1d1b15b. 0 concern(s). Artifact: intelligence/audits/2026-03-16-e1d1b15b.md"
+    },
+    {
+      "id": "task_1773694203237_cqwls16",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:50:03.237Z",
+      "startedAt": "2026-03-16T20:51:00.776Z",
+      "completedAt": "2026-03-16T20:51:03.134Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:51:02.928Z. Triggered by task task_1773694203237_cqwls16."
+    },
+    {
+      "id": "task_1773694501198_04omtjz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T20:55:01.198Z",
+      "startedAt": "2026-03-16T20:56:01.021Z",
+      "completedAt": "2026-03-16T20:56:03.249Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T20:56:03.043Z. Triggered by task task_1773694501198_04omtjz."
+    },
+    {
+      "id": "task_1773694801350_wxvld9z",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:00:01.350Z",
+      "startedAt": "2026-03-16T21:01:01.347Z",
+      "completedAt": "2026-03-16T21:01:03.477Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:01:03.313Z. Triggered by task task_1773694801350_wxvld9z."
+    },
+    {
+      "id": "task_1773695101702_s5eoydf",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:05:01.702Z",
+      "startedAt": "2026-03-16T21:06:01.638Z",
+      "completedAt": "2026-03-16T21:06:03.943Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:06:03.773Z. Triggered by task task_1773695101702_s5eoydf."
+    },
+    {
+      "id": "task_1773695701442_qv4ttdw",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:15:01.442Z",
+      "startedAt": "2026-03-16T21:16:01.166Z",
+      "completedAt": "2026-03-16T21:16:03.702Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:16:03.513Z. Triggered by task task_1773695701442_qv4ttdw."
+    },
+    {
+      "id": "task_1773696002246_bfd1cit",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:20:02.246Z",
+      "startedAt": "2026-03-16T21:21:01.620Z",
+      "completedAt": "2026-03-16T21:21:03.852Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:21:03.644Z. Triggered by task task_1773696002246_bfd1cit."
+    },
+    {
+      "id": "task_1773696601233_7hm50as",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:30:01.233Z",
+      "startedAt": "2026-03-16T21:31:01.219Z",
+      "completedAt": "2026-03-16T21:31:03.589Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:31:03.281Z. Triggered by task task_1773696601233_7hm50as."
+    },
+    {
+      "id": "task_1773697201819_w5kifjc",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:40:01.819Z",
+      "startedAt": "2026-03-16T21:41:01.767Z",
+      "completedAt": "2026-03-16T21:41:04.248Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:41:04.068Z. Triggered by task task_1773697201819_w5kifjc."
+    },
+    {
+      "id": "task_1773697501150_eh0wxuq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:45:01.150Z",
+      "startedAt": "2026-03-16T21:46:01.249Z",
+      "completedAt": "2026-03-16T21:46:03.563Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:46:03.242Z. Triggered by task task_1773697501150_eh0wxuq."
+    },
+    {
+      "id": "task_1773697801441_mc57gol",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:50:01.441Z",
+      "startedAt": "2026-03-16T21:51:01.262Z",
+      "completedAt": "2026-03-16T21:51:03.547Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:51:03.224Z. Triggered by task task_1773697801441_mc57gol."
+    },
+    {
+      "id": "task_1773698101874_2t0xnn4",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T21:55:01.874Z",
+      "startedAt": "2026-03-16T21:56:01.574Z",
+      "completedAt": "2026-03-16T21:56:03.807Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T21:56:03.416Z. Triggered by task task_1773698101874_2t0xnn4."
+    },
+    {
+      "id": "task_1773699001571_qszslpe",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:10:01.571Z",
+      "startedAt": "2026-03-16T22:11:01.582Z",
+      "completedAt": "2026-03-16T22:11:03.834Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:11:03.665Z. Triggered by task task_1773699001571_qszslpe."
+    },
+    {
+      "id": "task_1773699901409_ekxyfjk",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:25:01.409Z",
+      "startedAt": "2026-03-16T22:26:01.429Z",
+      "completedAt": "2026-03-16T22:26:03.909Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:26:03.715Z. Triggered by task task_1773699901409_ekxyfjk."
+    },
+    {
+      "id": "task_1773700501078_d1d1oat",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:35:01.079Z",
+      "startedAt": "2026-03-16T22:36:01.023Z",
+      "completedAt": "2026-03-16T22:36:03.502Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:36:03.210Z. Triggered by task task_1773700501078_d1d1oat."
+    },
+    {
+      "id": "task_1773700801300_2nqzvbm",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:40:01.300Z",
+      "startedAt": "2026-03-16T22:41:01.353Z",
+      "completedAt": "2026-03-16T22:41:03.440Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:41:03.268Z. Triggered by task task_1773700801300_2nqzvbm."
+    },
+    {
+      "id": "task_1773701400906_cgt1mj8",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:50:00.906Z",
+      "startedAt": "2026-03-16T22:51:00.888Z",
+      "completedAt": "2026-03-16T22:51:03.523Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:51:03.184Z. Triggered by task task_1773701400906_cgt1mj8."
+    },
+    {
+      "id": "task_1773701701244_qd0shjc",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T22:55:01.244Z",
+      "startedAt": "2026-03-16T22:56:01.094Z",
+      "completedAt": "2026-03-16T22:56:03.351Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T22:56:03.172Z. Triggered by task task_1773701701244_qd0shjc."
+    },
+    {
+      "id": "task_1773702001541_l61hzmi",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:00:01.541Z",
+      "startedAt": "2026-03-16T23:01:01.554Z",
+      "completedAt": "2026-03-16T23:01:03.841Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:01:03.555Z. Triggered by task task_1773702001541_l61hzmi."
+    },
+    {
+      "id": "task_1773702901707_nmp2dzg",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:15:01.707Z",
+      "startedAt": "2026-03-16T23:16:01.387Z",
+      "completedAt": "2026-03-16T23:16:03.601Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:16:03.429Z. Triggered by task task_1773702901707_nmp2dzg."
+    },
+    {
+      "id": "task_1773703501161_l857pbk",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:25:01.161Z",
+      "startedAt": "2026-03-16T23:26:00.935Z",
+      "completedAt": "2026-03-16T23:26:03.023Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:26:02.831Z. Triggered by task task_1773703501161_l857pbk."
+    },
+    {
+      "id": "task_1773704101881_h87lxek",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:35:01.881Z",
+      "startedAt": "2026-03-16T23:36:01.637Z",
+      "completedAt": "2026-03-16T23:36:03.675Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:36:03.449Z. Triggered by task task_1773704101881_h87lxek."
+    },
+    {
+      "id": "task_1773704701158_s03cr49",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:45:01.158Z",
+      "startedAt": "2026-03-16T23:46:01.126Z",
+      "completedAt": "2026-03-16T23:46:03.055Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:46:02.785Z. Triggered by task task_1773704701158_s03cr49."
+    },
+    {
+      "id": "task_1773705302198_8wky0he",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-16T23:55:02.198Z",
+      "startedAt": "2026-03-16T23:56:01.732Z",
+      "completedAt": "2026-03-16T23:56:03.993Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T23:56:03.816Z. Triggered by task task_1773705302198_8wky0he."
+    },
+    {
+      "id": "task_1773705601072_vm2ikzf",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:00:01.072Z",
+      "startedAt": "2026-03-17T00:01:01.076Z",
+      "completedAt": "2026-03-17T00:01:03.490Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:01:03.310Z. Triggered by task task_1773705601072_vm2ikzf."
+    },
+    {
+      "id": "task_1773705901205_53o9vmr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:05:01.205Z",
+      "startedAt": "2026-03-17T00:06:01.388Z",
+      "completedAt": "2026-03-17T00:06:03.963Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:06:03.606Z. Triggered by task task_1773705901205_53o9vmr."
+    },
+    {
+      "id": "task_1773706201627_mivxkph",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:10:01.627Z",
+      "startedAt": "2026-03-17T00:11:01.623Z",
+      "completedAt": "2026-03-17T00:11:03.600Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:11:03.434Z. Triggered by task task_1773706201627_mivxkph."
+    },
+    {
+      "id": "task_1773706501008_lwg0ben",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:15:01.008Z",
+      "startedAt": "2026-03-17T00:16:00.873Z",
+      "completedAt": "2026-03-17T00:16:03.163Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:16:02.982Z. Triggered by task task_1773706501008_lwg0ben."
+    },
+    {
+      "id": "task_1773706801471_cnqtg98",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:20:01.471Z",
+      "startedAt": "2026-03-17T00:21:01.271Z",
+      "completedAt": "2026-03-17T00:21:03.891Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:21:03.669Z. Triggered by task task_1773706801471_cnqtg98."
+    },
+    {
+      "id": "task_1773707101414_awc1som",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:25:01.414Z",
+      "startedAt": "2026-03-17T00:26:01.610Z",
+      "completedAt": "2026-03-17T00:26:04.223Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:26:03.912Z. Triggered by task task_1773707101414_awc1som."
+    },
+    {
+      "id": "task_1773707701019_if25iwq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:35:01.019Z",
+      "startedAt": "2026-03-17T00:36:00.932Z",
+      "completedAt": "2026-03-17T00:36:03.144Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:36:02.870Z. Triggered by task task_1773707701019_if25iwq."
+    },
+    {
+      "id": "task_1773708001791_8htctfq",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:40:01.791Z",
+      "startedAt": "2026-03-17T00:41:01.312Z",
+      "completedAt": "2026-03-17T00:41:03.538Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:41:03.304Z. Triggered by task task_1773708001791_8htctfq."
+    },
+    {
+      "id": "task_1773708301555_9m7x9xh",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T00:45:01.555Z",
+      "startedAt": "2026-03-17T00:46:02.043Z",
+      "completedAt": "2026-03-17T00:46:04.464Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T00:46:04.134Z. Triggered by task task_1773708301555_9m7x9xh."
+    },
+    {
+      "id": "task_1773709202797_oq3518k",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:00:02.797Z",
+      "startedAt": "2026-03-17T01:01:01.439Z",
+      "completedAt": "2026-03-17T01:01:03.659Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:01:03.489Z. Triggered by task task_1773709202797_oq3518k."
+    },
+    {
+      "id": "task_1773709501825_my5v2yr",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:05:01.825Z",
+      "startedAt": "2026-03-17T01:06:00.841Z",
+      "completedAt": "2026-03-17T01:06:03.171Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:06:02.833Z. Triggered by task task_1773709501825_my5v2yr."
+    },
+    {
+      "id": "task_1773710401711_j50hcvi",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:20:01.711Z",
+      "startedAt": "2026-03-17T01:21:01.764Z",
+      "completedAt": "2026-03-17T01:21:04.007Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:21:03.845Z. Triggered by task task_1773710401711_j50hcvi."
+    },
+    {
+      "id": "task_1773710701049_dx9p0nx",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:25:01.049Z",
+      "startedAt": "2026-03-17T01:26:01.104Z",
+      "completedAt": "2026-03-17T01:26:03.450Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:26:03.097Z. Triggered by task task_1773710701049_dx9p0nx."
+    },
+    {
+      "id": "task_1773711601093_uj9rtxg",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:40:01.093Z",
+      "startedAt": "2026-03-17T01:41:00.824Z",
+      "completedAt": "2026-03-17T01:41:03.229Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:41:03.072Z. Triggered by task task_1773711601093_uj9rtxg."
+    },
+    {
+      "id": "task_1773711901483_c8os3xz",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T01:45:01.483Z",
+      "startedAt": "2026-03-17T01:46:01.125Z",
+      "completedAt": "2026-03-17T01:46:03.317Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T01:46:03.151Z. Triggered by task task_1773711901483_c8os3xz."
+    },
+    {
+      "id": "task_1773713101520_g0705ym",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:05:01.520Z",
+      "startedAt": "2026-03-17T02:06:01.548Z",
+      "completedAt": "2026-03-17T02:06:04.099Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:06:03.888Z. Triggered by task task_1773713101520_g0705ym."
+    },
+    {
+      "id": "task_1773713401681_9n2n3tj",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:10:01.681Z",
+      "startedAt": "2026-03-17T02:11:01.591Z",
+      "completedAt": "2026-03-17T02:11:03.653Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:11:03.361Z. Triggered by task task_1773713401681_9n2n3tj."
+    },
+    {
+      "id": "task_1773713700991_2hhw55l",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:15:00.991Z",
+      "startedAt": "2026-03-17T02:16:00.962Z",
+      "completedAt": "2026-03-17T02:16:03.426Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:16:03.171Z. Triggered by task task_1773713700991_2hhw55l."
+    },
+    {
+      "id": "task_1773714301603_jaxa52b",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:25:01.603Z",
+      "startedAt": "2026-03-17T02:26:01.739Z",
+      "completedAt": "2026-03-17T02:26:04.016Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:26:03.835Z. Triggered by task task_1773714301603_jaxa52b."
+    },
+    {
+      "id": "task_1773714901298_tqz6jdb",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:35:01.298Z",
+      "startedAt": "2026-03-17T02:36:01.146Z",
+      "completedAt": "2026-03-17T02:36:03.285Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:36:03.102Z. Triggered by task task_1773714901298_tqz6jdb."
+    },
+    {
+      "id": "task_1773715201302_6vmgjss",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:40:01.302Z",
+      "startedAt": "2026-03-17T02:41:01.607Z",
+      "completedAt": "2026-03-17T02:41:04.171Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:41:03.789Z. Triggered by task task_1773715201302_6vmgjss."
+    },
+    {
+      "id": "task_1773715501624_v6xe9ih",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:45:01.624Z",
+      "startedAt": "2026-03-17T02:46:01.838Z",
+      "completedAt": "2026-03-17T02:46:04.210Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:46:03.974Z. Triggered by task task_1773715501624_v6xe9ih."
+    },
+    {
+      "id": "task_1773715801229_c05f13s",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:50:01.229Z",
+      "startedAt": "2026-03-17T02:51:01.006Z",
+      "completedAt": "2026-03-17T02:51:03.482Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:51:03.255Z. Triggered by task task_1773715801229_c05f13s."
+    },
+    {
+      "id": "task_1773716101255_lt2gddu",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T02:55:01.256Z",
+      "startedAt": "2026-03-17T02:56:01.262Z",
+      "completedAt": "2026-03-17T02:56:03.682Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T02:56:03.455Z. Triggered by task task_1773716101255_lt2gddu."
+    },
+    {
+      "id": "task_1773716401745_njiix24",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:00:01.745Z",
+      "startedAt": "2026-03-17T03:01:01.673Z",
+      "completedAt": "2026-03-17T03:01:03.783Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:01:03.559Z. Triggered by task task_1773716401745_njiix24."
+    },
+    {
+      "id": "task_1773716700840_2666pet",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:05:00.840Z",
+      "startedAt": "2026-03-17T03:06:00.864Z",
+      "completedAt": "2026-03-17T03:06:03.237Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:06:02.995Z. Triggered by task task_1773716700840_2666pet."
+    },
+    {
+      "id": "task_1773717001113_chd3u3y",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:10:01.113Z",
+      "startedAt": "2026-03-17T03:11:01.191Z",
+      "completedAt": "2026-03-17T03:11:03.646Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:11:03.235Z. Triggered by task task_1773717001113_chd3u3y."
+    },
+    {
+      "id": "task_1773717301500_sf0hagv",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:15:01.500Z",
+      "startedAt": "2026-03-17T03:16:01.519Z",
+      "completedAt": "2026-03-17T03:16:03.601Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:16:03.409Z. Triggered by task task_1773717301500_sf0hagv."
+    },
+    {
+      "id": "task_1773717901225_xhtinds",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:25:01.225Z",
+      "startedAt": "2026-03-17T03:26:00.955Z",
+      "completedAt": "2026-03-17T03:26:03.151Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:26:02.815Z. Triggered by task task_1773717901225_xhtinds."
+    },
+    {
+      "id": "task_1773718201593_84t9xwv",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:30:01.593Z",
+      "startedAt": "2026-03-17T03:31:01.337Z",
+      "completedAt": "2026-03-17T03:31:03.776Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:31:03.406Z. Triggered by task task_1773718201593_84t9xwv."
+    },
+    {
+      "id": "task_1773718501919_ef9tkog",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:35:01.919Z",
+      "startedAt": "2026-03-17T03:36:01.713Z",
+      "completedAt": "2026-03-17T03:36:04.366Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:36:04.043Z. Triggered by task task_1773718501919_ef9tkog."
+    },
+    {
+      "id": "task_1773719101198_ji8g2yj",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "completed",
+      "createdAt": "2026-03-17T03:45:01.198Z",
+      "startedAt": "2026-03-17T03:46:01.410Z",
+      "completedAt": "2026-03-17T03:46:03.728Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T03:46:03.536Z. Triggered by task task_1773719101198_ji8g2yj."
+    },
+    {
+      "id": "task_1773719401677_hwlxo0x",
+      "agent": "researcher",
+      "task": "process-article-inbox",
+      "payload": {
+        "trigger": "article-inbox-watch",
+        "itemCount": 370
+      },
+      "status": "pending",
+      "createdAt": "2026-03-17T03:50:01.677Z"
+    }
+  ]
+}

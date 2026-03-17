@@ -1,1874 +1,1749 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xhaka Control Room</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg-base: #0a0a0f;
-      --bg-surface: #111118;
-      --bg-elevated: #1a1a26;
-      --bg-border: #2a2a3d;
-      --text-primary: #f0f0ff;
-      --text-secondary: #8888aa;
-      --text-muted: #555577;
-      --status-active: #00d68f;
-      --status-idle: #4d8fff;
-      --status-error: #ff4d6d;
-      --status-warn: #ffaa00;
-      --status-muted: #555577;
-      --accent-primary: #7c6aff;
-      --accent-glow: rgba(124, 106, 255, 0.15);
-      --font-ui: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
-
-    html, body {
-      background: var(--bg-base);
-      color: var(--text-primary);
-      font-family: var(--font-ui);
-      font-size: 14px;
-      line-height: 1.5;
-      min-height: 100vh;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-surface); }
-    ::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3a3a4d; }
-
-    /* Layout */
-    .app-layout {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      grid-template-rows: 56px 1fr;
-      height: 100vh;
-    }
-
-    /* Header */
-    .header {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      font-size: 24px;
-    }
-
-    .logo-text {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text-primary);
-    }
-
-    .logo-subtitle {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-left: 8px;
-    }
-
-    .header-center {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .system-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--status-active);
-    }
-
-    .status-dot.healthy { background: var(--status-active); }
-    .status-dot.issues { background: var(--status-error); }
-    .status-dot.idle { background: var(--status-idle); }
-    .status-dot.warn { background: var(--status-warn); }
-
-    .status-text { color: var(--text-secondary); }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .last-updated {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .kbd {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2px 6px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      background: var(--bg-elevated);
-      border: 1px solid var(--bg-border);
-      border-radius: 4px;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: var(--bg-surface);
-      border-right: 1px solid var(--bg-border);
-      padding: 16px 0;
-      overflow-y: auto;
-    }
-
-    .nav-list {
-      list-style: none;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 20px;
-      font-family: var(--font-ui);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
-      border-left: 3px solid transparent;
-      transition: all 0.15s ease;
-    }
-
-    .nav-item:hover {
-      background: var(--bg-elevated);
-      color: var(--text-primary);
-    }
-
-    .nav-item.active {
-      background: var(--accent-glow);
-      color: var(--accent-primary);
-      border-left-color: var(--accent-primary);
-    }
-
-    .nav-icon {
-      font-size: 16px;
-      width: 20px;
-      text-align: center;
-    }
-
-    /* Main Content */
-    .main-content {
-      overflow-y: auto;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    /* Section */
-    .section {
-      background: var(--bg-surface);
-      border: 1px solid var(--bg-border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .section-title {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-    }
-
-    .section-body {
-      padding: 20px;
-    }
-
-    /* Agent Cards */
-    .agent-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .agent-card {
-      background: var(--bg-elevated);
-      border: 1px solid var(--bg-border);
-      border-radius: 10px;
-      padding: 16px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .agent-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-
-    .agent-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .agent-emoji {
-      font-size: 24px;
-    }
-
-    .agent-info {
-      flex: 1;
-    }
-
-    .agent-name {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .agent-status-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    .pulse-dot.running {
-      background: var(--accent-primary);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .pulse-dot.idle {
-      background: var(--status-idle);
-    }
-
-    .pulse-dot.failed {
-      background: var(--status-error);
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(124, 106, 255, 0.4); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(124, 106, 255, 0); }
-    }
-
-    .status-badge, .badge {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    .status-badge.running, .badge.running {
-      background: var(--accent-glow);
-      color: var(--accent-primary);
-    }
-
-    .status-badge.idle, .badge.idle {
-      background: rgba(77, 143, 255, 0.15);
-      color: var(--status-idle);
-    }
-
-    .status-badge.failed, .badge.failed {
-      background: rgba(255, 77, 109, 0.15);
-      color: var(--status-error);
-    }
-
-    .agent-meta, .last-run {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .agent-output, .last-output {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 12px;
-    }
-
-    .sparkline {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .spark-dot, .tick {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    .spark-dot.success, .tick.success { background: var(--status-active); }
-    .spark-dot.fail, .tick.fail { background: var(--status-error); }
-    .spark-dot.null, .tick.muted { background: var(--bg-border); }
-
-    /* Job Timeline Table */
-    .job-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .job-table th {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      text-align: left;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .job-table td {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-secondary);
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .job-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .job-table tr:hover td {
-      background: var(--bg-elevated);
-    }
-
-    .job-name {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .pill {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 4px;
-    }
-
-    .pill.success {
-      background: rgba(0, 214, 143, 0.15);
-      color: var(--status-active);
-    }
-
-    .pill.failed {
-      background: rgba(255, 77, 109, 0.15);
-      color: var(--status-error);
-    }
-
-    .pill.pending {
-      background: rgba(255, 170, 0, 0.15);
-      color: var(--status-warn);
-    }
-
-    .pill.idle {
-      background: var(--bg-elevated);
-      color: var(--text-muted);
-    }
-
-    .streak, .job-streak {
-      color: var(--status-active);
-    }
-
-    /* Memory Health */
-    .memory-layout {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .memory-chart-container, .memory-chart-wrap {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-    }
-
-    .memory-chart-center, .chart-center-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .memory-count, .chart-center-text span {
-      font-family: var(--font-mono);
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .memory-limit, .chart-center-text small {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-muted);
-      display: block;
-    }
-
-    .memory-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .memory-row, .meta-row {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 12px;
-    }
-
-    .memory-label, .meta-label {
-      color: var(--text-muted);
-    }
-
-    .memory-value {
-      color: var(--text-secondary);
-    }
-
-    .memory-folders, .folder-chips {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--bg-border);
-    }
-
-    .folder-chip, .chip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 8px 12px;
-      background: var(--bg-elevated);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-secondary);
-    }
-
-    .folder-icon {
-      font-size: 14px;
-    }
-
-    .folder-name {
-      color: var(--text-secondary);
-    }
-
-    .folder-count {
-      color: var(--text-muted);
-      margin-left: auto;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      border: 1px solid var(--bg-border);
-      border-radius: 6px;
-      background: var(--bg-elevated);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background: var(--accent-glow);
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-    }
-
-    .btn-primary {
-      background: var(--accent-primary);
-      border-color: var(--accent-primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #6b5ae0;
-      border-color: #6b5ae0;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: var(--bg-elevated);
-      border-color: var(--bg-border);
-      color: var(--accent-primary);
-    }
-
-    /* Tool Intelligence Grid */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .tool-card {
-      background: var(--bg-elevated);
-      border: 1px solid var(--bg-border);
-      border-radius: 10px;
-      padding: 16px;
-    }
-
-    .tool-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .tool-category {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .tool-count {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .tool-scan-time {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .tool-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .tool-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 12px;
-    }
-
-    .tool-name {
-      color: var(--text-secondary);
-    }
-
-    .tool-update-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--status-error);
-    }
-
-    .research-btn {
-      width: 100%;
-      padding: 10px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 500;
-      border: 1px solid var(--bg-border);
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .research-btn:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-    }
-
-    .research-btn.loading {
-      color: var(--status-idle);
-      border-color: var(--status-idle);
-      cursor: wait;
-    }
-
-    /* Research Stream Panel */
-    .research-panel {
-      margin-top: 16px;
-      background: var(--bg-base);
-      border: 1px solid var(--bg-border);
-      border-radius: 8px;
-      overflow: hidden;
-      display: none;
-    }
-
-    .research-panel.active {
-      display: block;
-    }
-
-    .research-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .research-panel-title {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .research-panel-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .research-panel-close:hover {
-      color: var(--text-primary);
-    }
-
-    .research-panel-body {
-      padding: 16px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .research-progress {
-      height: 2px;
-      background: var(--bg-border);
-      border-radius: 1px;
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-
-    .research-progress-bar {
-      height: 100%;
-      background: var(--accent-primary);
-      border-radius: 1px;
-      transition: width 0.3s ease;
-      width: 0%;
-    }
-
-    .stream-event {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      line-height: 1.6;
-      margin-bottom: 4px;
-    }
-
-    .stream-event.progress { color: var(--text-secondary); }
-    .stream-event.info { color: var(--status-idle); }
-    .stream-event.warning { color: var(--status-warn); }
-    .stream-event.action { color: var(--accent-primary); }
-    .stream-event.done { color: var(--status-active); }
-    .stream-event.error { color: var(--status-error); }
-
-    /* Operator Log */
-    .operator-log {
-      background: #050508;
-      border-radius: 8px;
-      padding: 16px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .log-entry {
-      display: flex;
-      gap: 12px;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(42, 42, 61, 0.3);
-    }
-
-    .log-entry:last-child {
-      border-bottom: none;
-    }
-
-    .log-time {
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .log-job {
-      color: var(--text-secondary);
-      min-width: 100px;
-    }
-
-    .log-action {
-      color: var(--text-secondary);
-      min-width: 80px;
-    }
-
-    .log-outcome {
-      flex: 1;
-    }
-
-    .log-outcome.success { color: var(--status-active); }
-    .log-outcome.failed { color: var(--status-error); }
-    .log-outcome.escalated { color: var(--status-warn); }
-    .log-outcome.info { color: var(--text-muted); }
-
-    /* Deploy Status */
-    .deploy-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 24px;
-    }
-
-    .deploy-hero {
-      background: var(--bg-elevated);
-      border-radius: 10px;
-      padding: 24px;
-      text-align: center;
-    }
-
-    .deploy-status-badge {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-    }
-
-    .deploy-status-badge.healthy {
-      background: rgba(0, 214, 143, 0.15);
-      color: var(--status-active);
-    }
-
-    .deploy-status-badge.failed {
-      background: rgba(255, 77, 109, 0.15);
-      color: var(--status-error);
-    }
-
-    .deploy-status-badge.building {
-      background: rgba(255, 170, 0, 0.15);
-      color: var(--status-warn);
-    }
-
-    .deploy-status-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    .deploy-status-text {
-      font-family: var(--font-mono);
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .deploy-status-text.healthy { color: var(--status-active); }
-    .deploy-status-text.failed { color: var(--status-error); }
-    .deploy-status-text.building { color: var(--status-warn); }
-
-    .deploy-timestamp {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .deploy-details {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .deploy-row {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--bg-border);
-    }
-
-    .deploy-row:last-child {
-      border-bottom: none;
-    }
-
-    .deploy-label {
-      color: var(--text-muted);
-    }
-
-    .deploy-value {
-      color: var(--text-secondary);
-    }
-
-    .deploy-timeline {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--bg-border);
-    }
-
-    .deploy-timeline-title {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .deploy-timeline-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .deploy-timeline-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-    }
-
-    .deploy-timeline-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    .deploy-timeline-dot.success { background: var(--status-active); }
-    .deploy-timeline-dot.failed { background: var(--status-error); }
-
-    .deploy-timeline-time {
-      color: var(--text-muted);
-    }
-
-    .deploy-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 16px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--accent-primary);
-      text-decoration: none;
-    }
-
-    .deploy-link:hover {
-      text-decoration: underline;
-    }
-
-    /* Loading Skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-shimmer 1.5s infinite;
-      border-radius: 4px;
-    }
-
-    @keyframes skeleton-shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .skeleton-text {
-      height: 14px;
-      width: 100%;
-    }
-
-    .skeleton-card {
-      height: 120px;
-      width: 100%;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .app-layout {
-        grid-template-columns: 60px 1fr;
-      }
-
-      .nav-item {
-        padding: 12px;
-        justify-content: center;
-      }
-
-      .nav-text {
-        display: none;
-      }
-
-      .header-center {
-        display: none;
-      }
-
-      .logo-subtitle {
-        display: none;
-      }
-
-      .memory-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .deploy-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .agent-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Search filter (activated by /) */
-    .search-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(10, 10, 15, 0.8);
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 120px;
-      z-index: 1000;
-    }
-
-    .search-overlay.active {
-      display: flex;
-    }
-
-    .search-box {
-      width: 500px;
-      max-width: 90vw;
-      background: var(--bg-surface);
-      border: 1px solid var(--bg-border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 16px 20px;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      background: transparent;
-      border: none;
-      color: var(--text-primary);
-      outline: none;
-    }
-
-    .search-input::placeholder {
-      color: var(--text-muted);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 Xhaka Intelligence — Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0d0d14;
+    --card: #111827;
+    --card2: #141d2e;
+    --border: #1f2937;
+    --border2: #2d3748;
+    --text: #f9fafb;
+    --text2: #9ca3af;
+    --text3: #6b7280;
+    --green: #10b981;
+    --green-dim: #065f46;
+    --amber: #f59e0b;
+    --amber-dim: #78350f;
+    --red: #ef4444;
+    --red-dim: #7f1d1d;
+    --blue: #3b82f6;
+    --blue-dim: #1e3a5f;
+    --purple: #8b5cf6;
+    --purple-dim: #3b0764;
+    --cyan: #06b6d4;
+    --cyan-dim: #164e63;
+    --glow-green: 0 0 20px rgba(16,185,129,0.3);
+    --glow-red: 0 0 20px rgba(239,68,68,0.4);
+    --glow-amber: 0 0 20px rgba(245,158,11,0.3);
+    --glow-blue: 0 0 15px rgba(59,130,246,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 6px rgba(16,185,129,0.2); }
+    50% { box-shadow: 0 0 18px rgba(16,185,129,0.5), 0 0 32px rgba(16,185,129,0.2); }
+  }
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 6px rgba(239,68,68,0.2); }
+    50% { box-shadow: 0 0 20px rgba(239,68,68,0.6), 0 0 40px rgba(239,68,68,0.2); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slide-in { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes dot-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes countdown-tick {
+    0% { transform: scaleX(1); }
+    100% { transform: scaleX(0); }
+  }
+
+  .fade-in { animation: fade-in 0.4s ease forwards; }
+
+  /* ── SKELETON ── */
+  .skeleton {
+    background: linear-gradient(90deg, var(--card) 25%, var(--card2) 50%, var(--card) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1440px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-brand h1 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .health-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+  .health-dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .health-dot.amber { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+  .health-dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); animation: dot-pulse 0.8s ease-in-out infinite; }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .refresh-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text3);
+  }
+
+  .refresh-bar-wrap {
+    width: 60px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .refresh-bar {
+    height: 100%;
+    background: var(--cyan);
+    border-radius: 2px;
+    transform-origin: left;
+    transition: width 1s linear;
+  }
+
+  .deploy-info {
+    font-size: 0.72rem;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-top: 32px;
+    animation: fade-in 0.5s ease forwards;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  }
+
+  .section-count {
+    font-size: 0.7rem;
+    color: var(--text3);
+    background: var(--card);
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── AGENTS ── */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .agent-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fade-in 0.4s ease forwards;
+  }
+
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .agent-card.active::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+  .agent-card.active { border-color: rgba(16,185,129,0.25); animation: pulse-glow 3s ease-in-out infinite; }
+  .agent-card.standby::before { background: var(--border2); }
+
+  .agent-emoji { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+
+  .agent-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .agent-role {
+    font-size: 0.72rem;
+    color: var(--text3);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .agent-last-task {
+    font-size: 0.7rem;
+    color: var(--text2);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .status-badge.active {
+    background: rgba(16,185,129,0.12);
+    color: var(--green);
+    border: 1px solid rgba(16,185,129,0.3);
+  }
+
+  .status-badge.standby {
+    background: rgba(107,114,128,0.12);
+    color: var(--text3);
+    border: 1px solid var(--border);
+  }
+
+  /* ── JOBS ── */
+  .jobs-group { margin-bottom: 24px; }
+
+  .jobs-group-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .job-tile {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    animation: fade-in 0.4s ease forwards;
+  }
+
+  .job-tile.success { border-color: rgba(16,185,129,0.15); }
+  .job-tile.success:hover { border-color: rgba(16,185,129,0.4); box-shadow: var(--glow-green); }
+  .job-tile.failed { border-color: rgba(239,68,68,0.3); animation: pulse-red 2.5s ease-in-out infinite; }
+  .job-tile.pending { border-color: rgba(245,158,11,0.2); }
+
+  .job-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-transform: capitalize;
+  }
+
+  .job-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .job-time { font-size: 0.68rem; color: var(--text3); }
+
+  .job-duration {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+  }
+
+  .pill-success { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+  .pill-failed { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .pill-pending { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+  .pill-never { background: rgba(107,114,128,0.1); color: var(--text3); border: 1px solid var(--border); }
+
+  /* ── KNOWLEDGE ── */
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 900px) {
+    .knowledge-grid { grid-template-columns: 1fr; }
+  }
+
+  .knowledge-column {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .knowledge-col-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .knowledge-col-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .knowledge-count {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--cyan);
+    line-height: 1;
+  }
+
+  .knowledge-list {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .knowledge-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    animation: slide-in 0.3s ease forwards;
+  }
+
+  .knowledge-item-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+
+  .knowledge-item-sub {
+    font-size: 0.65rem;
+    color: var(--text3);
+  }
+
+  .knowledge-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 1px 7px;
+    border-radius: 20px;
+    background: rgba(6,182,212,0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(6,182,212,0.2);
+    margin-top: 4px;
+  }
+
+  /* ── TASK QUEUE ── */
+  .queue-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .queue-layout { grid-template-columns: 1fr; }
+  }
+
+  .queue-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .queue-card-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .queue-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    margin-bottom: 6px;
+    animation: slide-in 0.3s ease forwards;
+  }
+
+  .queue-item-name { font-size: 0.75rem; font-weight: 500; color: var(--text); }
+  .queue-item-meta { font-size: 0.65rem; color: var(--text3); }
+  .queue-item-agent { font-size: 0.62rem; color: var(--text3); font-style: italic; }
+
+  .health-indicator {
+    text-align: center;
+    padding: 20px 10px;
+  }
+
+  .health-big-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .health-status-text {
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  .health-status-text.flowing { color: var(--green); }
+  .health-status-text.backed-up { color: var(--amber); }
+  .health-status-text.empty { color: var(--text3); }
+
+  .pending-count-big {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+    margin: 8px 0;
+  }
+
+  /* ── COMMITS ── */
+  .commits-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .commits-timeline::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    bottom: 16px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .commit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    position: relative;
+    animation: fade-in 0.4s ease forwards;
+  }
+
+  .commit-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    margin-left: 11px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .commit-dot.feat { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+  .commit-dot.fix { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .commit-dot.chore { background: var(--text3); }
+  .commit-dot.refactor { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+  .commit-dot.other { background: var(--text3); }
+
+  .commit-content { flex: 1; min-width: 0; }
+
+  .commit-message {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .commit-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .commit-sha {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    background: var(--card);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .commit-time { font-size: 0.65rem; color: var(--text3); }
+  .commit-type-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 7px; border-radius: 20px; }
+  .badge-feat { background: var(--blue-dim); color: var(--blue); }
+  .badge-fix { background: var(--red-dim); color: var(--red); }
+  .badge-chore { background: rgba(107,114,128,0.1); color: var(--text3); }
+  .badge-refactor { background: var(--purple-dim); color: var(--purple); }
+
+  /* ── IDEAS ── */
+  .ideas-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .ideas-layout { grid-template-columns: 1fr; }
+  }
+
+  .proposals-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .proposals-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 12px 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label { font-size: 0.62rem; color: var(--text3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .stat-num.pending-color { color: var(--amber); }
+  .stat-num.approved-color { color: var(--green); }
+  .stat-num.rejected-color { color: var(--red); }
+
+  .proposal-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+
+  .proposal-name { font-size: 0.75rem; font-weight: 500; color: var(--text); }
+  .proposal-target { font-size: 0.62rem; color: var(--text3); }
+
+  .ideas-cards { display: flex; flex-direction: column; gap: 10px; }
+
+  .idea-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .idea-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--purple), var(--blue));
+  }
+
+  .idea-card:hover { border-color: var(--border2); transform: translateX(3px); }
+
+  .idea-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    padding-left: 12px;
+  }
+
+  .idea-body {
+    font-size: 0.72rem;
+    color: var(--text2);
+    line-height: 1.5;
+    padding-left: 12px;
+  }
+
+  /* ── MEMORY ── */
+  .memory-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .memory-layout { grid-template-columns: 1fr; }
+  }
+
+  .memory-gauge-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .memory-gauge-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+  }
+
+  .gauge-numbers {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .gauge-current {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .gauge-max { font-size: 1.2rem; color: var(--text3); }
+
+  .gauge-bar-track {
+    height: 8px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .gauge-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s ease;
+  }
+
+  .gauge-bar-fill.green { background: linear-gradient(90deg, var(--green-dim), var(--green)); }
+  .gauge-bar-fill.amber { background: linear-gradient(90deg, var(--amber-dim), var(--amber)); }
+  .gauge-bar-fill.red { background: linear-gradient(90deg, var(--red-dim), var(--red)); box-shadow: 0 0 10px rgba(239,68,68,0.4); }
+
+  .gauge-pct {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .gauge-pct.green { color: var(--green); }
+  .gauge-pct.amber { color: var(--amber); }
+  .gauge-pct.red { color: var(--red); }
+
+  .memory-stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .memory-stat-num {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+    margin: 8px 0;
+  }
+
+  .memory-stat-label { font-size: 0.65rem; color: var(--text3); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ── STALE BADGE ── */
+  .stale-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    color: var(--amber);
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.2);
+    padding: 1px 7px;
+    border-radius: 20px;
+  }
+
+  /* ── LOADING ── */
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px;
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    padding: 24px;
+    text-align: center;
+    color: var(--text3);
+    font-size: 0.78rem;
+  }
+
+  /* ── DIGITAL TWINS ── */
+  .twins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .twin-card { background: #111827; border: 1px solid #1e293b; border-radius: 10px; padding: 20px; position: relative; }
+  .twin-card.amber-border { border-color: #f59e0b; }
+  .twin-card.red-border { border-color: #ef4444; }
+  .twin-card.green-border { border-color: #10b981; }
+  .twin-score-ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; border: 4px solid; margin-bottom: 10px; }
+  .twin-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .twin-tag { background: #1e293b; color: #94a3b8; font-size: 11px; padding: 3px 8px; border-radius: 12px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .header { padding: 10px 14px; }
+    .header-brand h1 { font-size: 1rem; }
+    .clock { font-size: 0.9rem; }
+    .page { padding: 0 12px 40px; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+    .jobs-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
 </head>
 <body>
-  <div class="app-layout">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-left">
-        <div class="logo">
-          <span class="logo-icon">🧠</span>
-          <span class="logo-text">Xhaka</span>
-        </div>
-        <span class="logo-subtitle">Control Room</span>
-      </div>
-      <div class="header-center">
-        <div class="system-status">
-          <span class="status-dot healthy" id="globalStatusDot"></span>
-          <span class="status-text" id="globalStatusText">All Systems Operational</span>
-        </div>
-      </div>
-      <div class="header-right">
-        <span class="last-updated" id="lastUpdated">Updated --</span>
-        <span class="kbd">⌘K</span>
-      </div>
-    </header>
 
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <ul class="nav-list">
-        <li class="nav-item active" data-section="agents">
-          <span class="nav-icon">👥</span>
-          <span class="nav-text">Agents</span>
-        </li>
-        <li class="nav-item" data-section="jobs">
-          <span class="nav-icon">📋</span>
-          <span class="nav-text">Jobs</span>
-        </li>
-        <li class="nav-item" data-section="memory">
-          <span class="nav-icon">🧠</span>
-          <span class="nav-text">Memory</span>
-        </li>
-        <li class="nav-item" data-section="tools">
-          <span class="nav-icon">🔧</span>
-          <span class="nav-text">Tools</span>
-        </li>
-        <li class="nav-item" data-section="logs">
-          <span class="nav-icon">📜</span>
-          <span class="nav-text">Logs</span>
-        </li>
-        <li class="nav-item" data-section="deploy">
-          <span class="nav-icon">🚀</span>
-          <span class="nav-text">Deploy</span>
-        </li>
-      </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Section 1: Agent Status — STATIC HTML ALWAYS VISIBLE -->
-      <section class="section" id="agents">
-        <div class="section-header">
-          <h2 class="section-title">Agent Status</h2>
-        </div>
-        <div class="section-body">
-          <div class="agent-grid" id="agents-grid">
-            <!-- AGENT: Researcher -->
-            <div class="agent-card" id="agent-researcher">
-              <div class="agent-header">
-                <span class="status-dot idle"></span>
-                <h3>🔬 Researcher</h3>
-                <span class="badge idle">IDLE</span>
-              </div>
-              <p class="last-run">Last run: Never</p>
-              <p class="last-output">⏳ Waiting for first run</p>
-              <div class="sparkline">
-                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
-              </div>
-            </div>
-
-            <!-- AGENT: Builder -->
-            <div class="agent-card" id="agent-builder">
-              <div class="agent-header">
-                <span class="status-dot idle"></span>
-                <h3>👷 Builder</h3>
-                <span class="badge idle">IDLE</span>
-              </div>
-              <p class="last-run">Last run: Never</p>
-              <p class="last-output">⏳ Waiting for first run</p>
-              <div class="sparkline">
-                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
-              </div>
-            </div>
-
-            <!-- AGENT: Auditor -->
-            <div class="agent-card" id="agent-auditor">
-              <div class="agent-header">
-                <span class="status-dot idle"></span>
-                <h3>👮 Auditor</h3>
-                <span class="badge idle">IDLE</span>
-              </div>
-              <p class="last-run">Last run: Never</p>
-              <p class="last-output">⏳ Waiting for first run</p>
-              <div class="sparkline">
-                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
-              </div>
-            </div>
-
-            <!-- AGENT: Architect -->
-            <div class="agent-card" id="agent-architect">
-              <div class="agent-header">
-                <span class="status-dot idle"></span>
-                <h3>🎨 Architect</h3>
-                <span class="badge idle">IDLE</span>
-              </div>
-              <p class="last-run">Last run: Never</p>
-              <p class="last-output">⏳ Waiting for first run</p>
-              <div class="sparkline">
-                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
-              </div>
-            </div>
-
-            <!-- AGENT: Operator -->
-            <div class="agent-card" id="agent-operator">
-              <div class="agent-header">
-                <span class="status-dot idle"></span>
-                <h3>⚙️ Operator</h3>
-                <span class="badge idle">IDLE</span>
-              </div>
-              <p class="last-run">Last run: Never</p>
-              <p class="last-output">⏳ Waiting for first run</p>
-              <div class="sparkline">
-                <span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span><span class="tick muted"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 2: Job Timeline — STATIC HTML ALL 11 JOBS -->
-      <section class="section" id="jobs">
-        <div class="section-header">
-          <h2 class="section-title">Today's Jobs</h2>
-        </div>
-        <div class="section-body" style="padding: 0;">
-          <table class="job-table">
-            <thead>
-              <tr>
-                <th>Job Name</th>
-                <th>Last Run</th>
-                <th>Duration</th>
-                <th>Status</th>
-                <th>Streak</th>
-              </tr>
-            </thead>
-            <tbody id="jobs-tbody">
-              <tr id="job-capture"><td>capture</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-organize"><td>organize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-propagate"><td>propagate</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-tool-monitor"><td>tool-monitor</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-synthesize"><td>synthesize</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-improve"><td>improve</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-cleanup"><td>cleanup</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-scribe"><td>scribe</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-watchdog"><td>watchdog</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-operator"><td>operator</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-              <tr id="job-daily-log"><td>daily-log</td><td class="job-lastrun">Never</td><td class="job-duration">—</td><td><span class="badge idle">IDLE</span></td><td class="job-streak">--</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Section 3: Memory Health — STATIC HTML ALWAYS VISIBLE -->
-      <section class="section" id="memory">
-        <div class="section-header">
-          <h2 class="section-title">Memory Health</h2>
-        </div>
-        <div class="section-body">
-          <div class="memory-layout">
-            <div class="memory-chart-wrap">
-              <canvas id="memoryChart" width="200" height="200"></canvas>
-              <div class="chart-center-text">
-                <span id="memory-count">--</span>
-                <small>/ 150</small>
-              </div>
-            </div>
-            <div class="memory-meta">
-              <div class="meta-row">
-                <span class="meta-label">Last synthesized</span>
-                <span id="memory-synth">--</span>
-              </div>
-              <div class="meta-row">
-                <span class="meta-label">Line count</span>
-                <span id="memory-lines">-- / 150</span>
-              </div>
-              <div class="folder-chips">
-                <span class="chip">decisions</span>
-                <span class="chip">people</span>
-                <span class="chip">projects</span>
-                <span class="chip">context</span>
-                <span class="chip">archive</span>
-              </div>
-              <button class="btn btn-primary" onclick="runSynthesis()">Run Synthesis Now</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 4: Tool Intelligence -->
-      <section class="section" id="tools">
-        <div class="section-header">
-          <h2 class="section-title">Tool Intelligence</h2>
-          <span class="tool-scan-time" id="toolScanTime">Last scan: --</span>
-        </div>
-        <div class="section-body">
-          <div class="tools-grid" id="toolsGrid">
-            <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">Loading tool profiles...</div>
-          </div>
-          <div class="research-panel" id="researchPanel">
-            <div class="research-panel-header">
-              <span class="research-panel-title" id="researchPanelTitle">🔬 Research Stream</span>
-              <button class="research-panel-close" onclick="closeResearchPanel()">×</button>
-            </div>
-            <div class="research-panel-body" id="researchPanelBody">
-              <div class="research-progress">
-                <div class="research-progress-bar" id="researchProgressBar"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 5: Live Operator Log -->
-      <section class="section" id="logs">
-        <div class="section-header">
-          <h2 class="section-title">Live Operator Log</h2>
-          <button class="btn" onclick="scrollLogToBottom()">Clear View</button>
-        </div>
-        <div class="section-body" style="padding: 0;">
-          <div class="operator-log" id="operatorLog">
-            <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center; opacity: 0.7;">
-              No operator actions logged yet
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 6: Deploy Status — STATIC HTML ALWAYS VISIBLE -->
-      <section class="section" id="deploy">
-        <div class="section-header">
-          <h2 class="section-title">Deploy Status</h2>
-        </div>
-        <div class="section-body">
-          <div class="deploy-layout">
-            <div class="deploy-hero">
-              <div class="deploy-status-badge healthy" id="deploy-badge">● HEALTHY</div>
-              <div class="deploy-details">
-                <div class="deploy-row">
-                  <span class="deploy-label">Status</span>
-                  <span id="deploy-status-text">Online</span>
-                </div>
-                <div class="deploy-row">
-                  <span class="deploy-label">Uptime</span>
-                  <span id="deploy-uptime">--</span>
-                </div>
-                <div class="deploy-row">
-                  <span class="deploy-label">Last checked</span>
-                  <span id="deploy-checked">--</span>
-                </div>
-              </div>
-              <a href="https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9" target="_blank" class="btn-secondary">View on Railway ↗</a>
-            </div>
-            <div class="deploy-details">
-              <div class="deploy-row">
-                <span class="deploy-label">Last deployed</span>
-                <span class="deploy-value" id="deployLastTime">Just now</span>
-              </div>
-              <div class="deploy-row">
-                <span class="deploy-label">Build time</span>
-                <span class="deploy-value" id="deployBuildTime">~45s</span>
-              </div>
-              <div class="deploy-row">
-                <span class="deploy-label">Environment</span>
-                <span class="deploy-value" id="deployCommit">production</span>
-              </div>
-              <div class="deploy-timeline">
-                <h4 class="deploy-timeline-title">Recent Deployments</h4>
-                <div class="deploy-timeline-list" id="deployTimeline">
-                  <div class="deploy-timeline-item">
-                    <span class="deploy-timeline-dot success"></span>
-                    <span class="deploy-timeline-time">Current deploy</span>
-                  </div>
-                  <div class="deploy-timeline-item">
-                    <span class="deploy-timeline-dot success"></span>
-                    <span class="deploy-timeline-time">Previous deploy</span>
-                  </div>
-                  <div class="deploy-timeline-item">
-                    <span class="deploy-timeline-dot success"></span>
-                    <span class="deploy-timeline-time">2 deploys ago</span>
-                  </div>
-                </div>
-              </div>
-              <a href="https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9" target="_blank" class="deploy-link">
-                View on Railway ↗
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <span class="health-dot green" id="globalHealthDot"></span>
+    <h1>🧠 Xhaka Intelligence</h1>
   </div>
-
-  <!-- Search Overlay -->
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-box">
-      <input type="text" class="search-input" id="searchInput" placeholder="Search tools, agents, jobs...">
+  <div class="header-meta">
+    <div class="clock" id="liveClock">--:--:--</div>
+    <div class="refresh-info">
+      <span id="refreshCountdown">60s</span>
+      <div class="refresh-bar-wrap">
+        <div class="refresh-bar" id="refreshBar" style="width:100%"></div>
+      </div>
     </div>
+    <div class="deploy-info" id="deployInfo">
+      <span>🚂</span>
+      <span id="deployTime">loading deploy...</span>
+    </div>
+    <a href="/teams.html" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:7px;font-size:0.75rem;font-weight:600;color:var(--text3);text-decoration:none;border:1px solid var(--border);background:var(--card);transition:all 0.2s ease;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--border2)'" onmouseout="this.style.color='var(--text3)';this.style.borderColor='var(--border)'">👥 Teams</a>
+    <a href="/tools.html" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:7px;font-size:0.75rem;font-weight:600;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);background:rgba(6,182,212,0.08);transition:all 0.2s ease;">🔧 Tools</a>
   </div>
+</header>
 
-  <script>
-    console.log('[Control Room] Script starting...');
+<div class="page">
 
-    // Chart.js dark theme defaults
-    if (typeof Chart !== 'undefined') {
-      Chart.defaults.color = '#8888aa';
-      Chart.defaults.borderColor = '#2a2a3d';
-      console.log('[Control Room] Chart.js loaded successfully');
-    } else {
-      console.warn('[Control Room] Chart.js NOT loaded - chart will not render');
+  <!-- SECTION 2: AGENTS -->
+  <section class="section" id="section-agents">
+    <div class="section-header">
+      <span class="section-title">Agents — The Team</span>
+      <div class="section-line"></div>
+      <span class="section-count" id="agentCount">6</span>
+    </div>
+    <div class="agents-grid" id="agentsGrid">
+      <div class="loading-container"><div class="spinner"></div> Loading agents...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: JOBS -->
+  <section class="section" id="section-jobs">
+    <div class="section-header">
+      <span class="section-title">Intelligence Jobs — Live Pulse</span>
+      <div class="section-line"></div>
+      <span class="section-count" id="jobsCount">—</span>
+    </div>
+    <div id="jobsContainer">
+      <div class="loading-container"><div class="spinner"></div> Loading jobs...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: KNOWLEDGE -->
+  <section class="section" id="section-knowledge">
+    <div class="section-header">
+      <span class="section-title">Knowledge Graph — The Brain</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="knowledge-grid" id="knowledgeGrid">
+      <div class="loading-container" style="grid-column:1/-1"><div class="spinner"></div> Loading knowledge...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: TASK QUEUE -->
+  <section class="section" id="section-queue">
+    <div class="section-header">
+      <span class="section-title">Task Queue — What's Running</span>
+      <div class="section-line"></div>
+      <span class="section-count" id="queueCount">—</span>
+    </div>
+    <div class="queue-layout" id="queueLayout">
+      <div class="loading-container" style="grid-column:1/-1"><div class="spinner"></div> Loading queue...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: COMMITS -->
+  <section class="section" id="section-commits">
+    <div class="section-header">
+      <span class="section-title">Recent Commits — System Activity</span>
+      <div class="section-line"></div>
+    </div>
+    <div id="commitsTimeline">
+      <div class="loading-container"><div class="spinner"></div> Loading commits...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: IDEAS -->
+  <section class="section" id="section-ideas">
+    <div class="section-header">
+      <span class="section-title">Ideas & Proposed Changes</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="ideas-layout" id="ideasLayout">
+      <div class="loading-container" style="grid-column:1/-1"><div class="spinner"></div> Loading ideas...</div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: MEMORY -->
+  <section class="section" id="section-memory">
+    <div class="section-header">
+      <span class="section-title">Memory Health</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="memory-layout" id="memoryLayout">
+      <div class="loading-container" style="grid-column:1/-1"><div class="spinner"></div> Loading memory stats...</div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 9: KNOWLEDGE GRAPH VISUALIZATION -->
+  <section class="section" id="knowledge-graph">
+    <h2 class="section-title">🧠 Knowledge Graph</h2>
+    <div id="kg-stats" style="margin-bottom:12px;color:#64748b;font-size:13px;"></div>
+    <div id="kg-network" style="width:100%;height:500px;background:#060610;border:1px solid #1e293b;border-radius:8px;"></div>
+  </section>
+
+  <!-- SECTION 10: DIGITAL TWINS -->
+  <section class="section" id="digital-twins">
+    <h2 class="section-title">👥 Digital Twins — NAH Team</h2>
+    <div class="twins-grid" id="twins-grid"></div>
+  </section>
+
+  <!-- SECTION 11: SIMULATION CONSOLE -->
+  <section class="section" id="simulation">
+    <h2 class="section-title">🌐 Simulation Engine <span style="background:#f59e0b;color:#000;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:10px;font-weight:600;">COMING SOON</span></h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#3b82f6;">5</div>
+        <div style="color:#64748b;font-size:12px;">Digital Twins</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#475569;">—</div>
+        <div style="color:#64748b;font-size:12px;">Simulation Hours</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#475569;">—</div>
+        <div style="color:#64748b;font-size:12px;">Rounds</div>
+      </div>
+      <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:20px;font-weight:600;color:#f59e0b;">Not Connected</div>
+        <div style="color:#64748b;font-size:12px;">Zep Cloud Memory</div>
+      </div>
+    </div>
+    <div style="background:#111827;border:1px solid #1e293b;border-radius:8px;padding:20px;margin-bottom:16px;">
+      <div style="color:#94a3b8;font-size:13px;margin-bottom:12px;font-weight:600;">SCENARIO INBOX</div>
+      <div id="scenario-list" style="color:#475569;font-size:13px;">Loading scenarios...</div>
+    </div>
+    <button disabled style="width:100%;padding:14px;background:#1e293b;color:#475569;border:1px solid #334155;border-radius:8px;font-size:15px;font-weight:600;cursor:not-allowed;letter-spacing:0.5px;">▶ Run Simulation — Active when Gunner hits 100 users</button>
+    <div style="margin-top:10px;text-align:center;color:#334155;font-size:11px;">Powered by OASIS (CAMEL-AI) + GraphRAG + Zep Cloud · Architecture: memory/context/sim/mirofish-architecture.md</div>
+  </section>
+
+</div>
+
+<script>
+const GITHUB_TOKEN = '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';
+const GITHUB_REPO = 'c7lavinder/xhaka';
+const RAILWAY_TOKEN = '107983f5-06cc-40b3-92d6-833004dee064';
+const RAILWAY_SERVICE_ID = '629682d3-c8d4-4907-9845-304587be36b2';
+const RAILWAY_ENVIRONMENT_ID = '8f2d6455-5535-43d0-b198-b1248c949c0f';
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function ghHeaders() {
+  return { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' };
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return 'never';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(m / 60);
+  const d = Math.floor(h / 24);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  if (h < 24) return `${h}h ago`;
+  return `${d}d ago`;
+}
+
+function isRecent(dateStr, hours = 24) {
+  if (!dateStr) return false;
+  return (Date.now() - new Date(dateStr).getTime()) < hours * 3600000;
+}
+
+async function ghFetch(path) {
+  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/${path}`, { headers: ghHeaders() });
+  if (!res.ok) throw new Error(`GH ${res.status}: ${path}`);
+  return res.json();
+}
+
+async function ghRaw(path) {
+  const data = await ghFetch(`contents/${path}`);
+  if (Array.isArray(data)) return { type: 'dir', items: data };
+  const text = atob(data.content.replace(/\n/g, ''));
+  return { type: 'file', text, sha: data.sha };
+}
+
+// ── Clock ────────────────────────────────────────────────────────────────────
+
+function startClock() {
+  const el = document.getElementById('liveClock');
+  function tick() {
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ── Refresh Countdown ────────────────────────────────────────────────────────
+
+let refreshSeconds = 60;
+let refreshInterval;
+
+function startRefreshCountdown() {
+  refreshSeconds = 60;
+  const bar = document.getElementById('refreshBar');
+  const countdown = document.getElementById('refreshCountdown');
+  clearInterval(refreshInterval);
+  refreshInterval = setInterval(() => {
+    refreshSeconds--;
+    countdown.textContent = `${refreshSeconds}s`;
+    bar.style.width = `${(refreshSeconds / 60) * 100}%`;
+    if (refreshSeconds <= 0) {
+      clearInterval(refreshInterval);
+      loadAll();
     }
+  }, 1000);
+}
 
-    // State
-    let memoryChart = null;
-    let activeResearchES = null;
-    let globalHealthy = true;
+// ── Global Health ────────────────────────────────────────────────────────────
 
-    // Time ago helper
-    function timeAgo(date) {
-      if (!date) return '--';
-      const d = new Date(date);
-      if (isNaN(d.getTime())) return '--';
-      const s = Math.round((Date.now() - d.getTime()) / 1000);
-      if (s < 0) return 'Just now';
-      if (s < 60) return `${s}s ago`;
-      if (s < 3600) return `${Math.round(s / 60)}m ago`;
-      if (s < 86400) return `${Math.round(s / 3600)}h ago`;
-      return `${Math.round(s / 86400)}d ago`;
-    }
+function updateGlobalHealth(jobs) {
+  const dot = document.getElementById('globalHealthDot');
+  const failed = Object.values(jobs).filter(j => j.lastStatus === 'failed').length;
+  dot.className = 'health-dot ' + (failed === 0 ? 'green' : failed <= 2 ? 'amber' : 'red');
+}
 
-    // Update last updated timestamp
-    function updateTimestamp() {
-      const now = new Date();
-      document.getElementById('lastUpdated').textContent = 
-        `Updated ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
-    }
+// ── SECTION 2: Agents ────────────────────────────────────────────────────────
 
-    // Initialize memory chart — UNCONDITIONALLY on DOMContentLoaded
-    function initMemoryChart() {
-      console.log('[Memory Chart] Initializing...');
-      const canvas = document.getElementById('memoryChart');
-      if (!canvas) {
-        console.error('[Memory Chart] Canvas element not found!');
-        return;
-      }
-      
-      if (typeof Chart === 'undefined') {
-        console.error('[Memory Chart] Chart.js library not available!');
-        return;
-      }
-      
-      const ctx = canvas.getContext('2d');
-      memoryChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          datasets: [{
-            data: [0, 150],  // Default: 0 used, 150 free
-            backgroundColor: ['#555577', '#2a2a3d'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          cutout: '75%',
-          responsive: true,
-          maintainAspectRatio: true,
-          plugins: {
-            legend: { display: false },
-            tooltip: { enabled: false }
-          }
-        }
-      });
-      console.log('[Memory Chart] Initialized successfully with default values (0/150)');
-    }
+const AGENT_DEFS = [
+  { key: 'xhaka-coo', emoji: '🧠', name: 'Xhaka COO', role: 'Strategic partner & decision support', file: null },
+  { key: 'builder', emoji: '👷‍♂️', name: 'Builder', role: 'Core engineering, refactoring, API endpoints', file: 'builder.md' },
+  { key: 'researcher', emoji: '🔬', name: 'Researcher', role: 'Intelligence, R&D, industry trends', file: 'researcher.md' },
+  { key: 'auditor', emoji: '👮‍♂️', name: 'Auditor', role: 'QA, code review, standards enforcement', file: 'auditor.md' },
+  { key: 'architect', emoji: '🎨', name: 'Architect', role: 'Frontend, dashboards, data visualization', file: 'architect.md' },
+  { key: 'librarian', emoji: '📚', name: 'Librarian', role: 'Knowledge capture, books, memory synthesis', file: 'librarian.md' },
+];
 
-    // Update memory chart with real data
-    function updateMemoryChart(lineCount, limit) {
-      console.log('[Memory Chart] Updating with lineCount:', lineCount, 'limit:', limit);
-      const lc = lineCount ?? 0;
-      const lim = limit ?? 150;
-      const used = Math.min(lc, lim);
-      const free = Math.max(lim - lc, 0);
-      
-      // Determine color based on usage
-      let color = '#00d68f'; // green
-      if (lc === 0) color = '#555577'; // grey for no data
-      else if (lc > 130) color = '#ff4d6d'; // red
-      else if (lc > 100) color = '#ffaa00'; // yellow
+async function renderAgents(commits) {
+  const grid = document.getElementById('agentsGrid');
+  const recentMessages = commits.slice(0, 20).map(c => c.commit.message.toLowerCase());
 
-      if (memoryChart) {
-        memoryChart.data.datasets[0].data = [used, free];
-        memoryChart.data.datasets[0].backgroundColor = [color, '#2a2a3d'];
-        memoryChart.update();
-        console.log('[Memory Chart] Updated:', used, '/', lim);
-      }
+  const cards = AGENT_DEFS.map(agent => {
+    // Determine if active based on recent commits mentioning agent
+    const isActive = recentMessages.some(m => m.includes(agent.key.replace('-coo','')) || (agent.key==='xhaka-coo' && m.includes('memory')));
+    const lastCommit = commits.find(c => {
+      const m = c.commit.message.toLowerCase();
+      return m.includes(agent.key.replace('-coo','')) || (agent.key === 'researcher' && (m.includes('research') || m.includes('article'))) || (agent.key === 'librarian' && (m.includes('book') || m.includes('synthesis') || m.includes('memory'))) || (agent.key === 'architect' && (m.includes('dashboard') || m.includes('control-room') || m.includes('ui'))) || (agent.key === 'auditor' && (m.includes('audit') || m.includes('quality')));
+    });
 
-      // Update text elements
-      const countEl = document.getElementById('memory-count');
-      const linesEl = document.getElementById('memory-lines');
-      if (countEl) countEl.textContent = lc;
-      if (linesEl) linesEl.textContent = `${lc} / ${lim}`;
-    }
+    const taskText = lastCommit
+      ? lastCommit.commit.message.slice(0, 60) + (lastCommit.commit.message.length > 60 ? '…' : '')
+      : 'No recent commits found';
+    const status = isActive ? 'active' : 'standby';
 
-    // Update agent cards — UPDATE existing, never replace innerHTML
-    function updateAgents(agents) {
-      console.log('[Agents] Updating with data:', agents);
-      const agentMap = {};
-      (agents || []).forEach(a => {
-        const id = (a.name || a.id || '').toLowerCase();
-        agentMap[id] = a;
-      });
+    return `
+    <div class="agent-card ${status} fade-in">
+      <span class="agent-emoji">${agent.emoji}</span>
+      <div class="agent-name">${agent.name}</div>
+      <div class="agent-role">${agent.role}</div>
+      <div class="agent-last-task">${taskText}</div>
+      <span class="status-badge ${status}">${status === 'active' ? '● ACTIVE' : '○ STANDBY'}</span>
+    </div>`;
+  });
 
-      const agentIds = ['researcher', 'builder', 'auditor', 'architect', 'operator'];
-      agentIds.forEach(id => {
-        const card = document.getElementById(`agent-${id}`);
-        if (!card) {
-          console.warn(`[Agents] Card not found: agent-${id}`);
-          return;
-        }
+  grid.innerHTML = cards.join('');
+}
 
-        const data = agentMap[id] || {};
-        const status = (data.status || 'idle').toLowerCase();
-        const lastRun = data.lastRun ? timeAgo(data.lastRun) : 'Never';
-        const lastOutput = data.lastTask || data.lastOutput || '⏳ Waiting for first run';
+// ── SECTION 3: Jobs ──────────────────────────────────────────────────────────
 
-        // Update status dot
-        const statusDot = card.querySelector('.status-dot');
-        if (statusDot) statusDot.className = `status-dot ${status}`;
+const JOB_GROUPS = {
+  'Core Jobs': ['capture', 'organize', 'propagate', 'scribe'],
+  'Intelligence': ['researcher', 'synthesize', 'improve'],
+  'Quality': ['tool-monitor', 'watchdog', 'operator'],
+  'Maintenance': ['cleanup', 'daily-log'],
+};
 
-        // Update badge
-        const badge = card.querySelector('.badge');
-        if (badge) {
-          badge.className = `badge ${status}`;
-          badge.textContent = status.toUpperCase();
-        }
+function statusPill(status) {
+  const map = {
+    success: '<span class="status-pill pill-success">✅ SUCCESS</span>',
+    failed:  '<span class="status-pill pill-failed">❌ FAILED</span>',
+    pending: '<span class="status-pill pill-pending">⏳ PENDING</span>',
+  };
+  return map[status] || '<span class="status-pill pill-never">⚪ NEVER</span>';
+}
 
-        // Update last run
-        const lastRunEl = card.querySelector('.last-run');
-        if (lastRunEl) lastRunEl.textContent = `Last run: ${lastRun}`;
+function renderJobs(jobs) {
+  const container = document.getElementById('jobsContainer');
+  const allJobs = Object.entries(jobs);
+  document.getElementById('jobsCount').textContent = allJobs.length;
 
-        // Update last output
-        const lastOutputEl = card.querySelector('.last-output');
-        if (lastOutputEl) lastOutputEl.textContent = lastOutput;
-      });
-      console.log('[Agents] Update complete');
-    }
+  let html = '';
+  for (const [groupName, jobKeys] of Object.entries(JOB_GROUPS)) {
+    const groupJobs = jobKeys.filter(k => jobs[k]);
+    if (groupJobs.length === 0) continue;
 
-    // Update jobs table — UPDATE existing rows by ID, never clear tbody
-    function updateJobs(runs) {
-      console.log('[Jobs] Updating with runs:', runs);
-      const jobIds = ['capture', 'organize', 'propagate', 'tool-monitor', 'synthesize', 
-                      'improve', 'cleanup', 'scribe', 'watchdog', 'operator', 'daily-log'];
-      
-      // Build job status from runs
-      const jobStatus = {};
-      (runs || []).forEach(run => {
-        const jobName = (run.objective || run.job || '').toLowerCase();
-        jobIds.forEach(job => {
-          if (jobName.includes(job.replace('-', ''))) {
-            const status = run.verdict === 'pass' ? 'success' : 
-                          run.verdict === 'fail' ? 'failed' : 'pending';
-            jobStatus[job] = {
-              lastRun: timeAgo(run.timestamp || run.date),
-              duration: run.duration || '~2m',
-              status,
-              streak: status === 'success' ? Math.floor(Math.random() * 10) + 1 : 0
-            };
-          }
-        });
-      });
+    html += `<div class="jobs-group">
+      <div class="jobs-group-label">${groupName}</div>
+      <div class="jobs-grid">`;
 
-      // Update each row
-      jobIds.forEach(job => {
-        const row = document.getElementById(`job-${job}`);
-        if (!row) {
-          console.warn(`[Jobs] Row not found: job-${job}`);
-          return;
-        }
-
-        const data = jobStatus[job];
-        if (!data) return; // Keep default values if no data
-
-        const lastRunCell = row.querySelector('.job-lastrun');
-        const durationCell = row.querySelector('.job-duration');
-        const badge = row.querySelector('.badge');
-        const streakCell = row.querySelector('.job-streak');
-
-        if (lastRunCell) lastRunCell.textContent = data.lastRun;
-        if (durationCell) durationCell.textContent = data.duration;
-        if (badge) {
-          badge.className = `badge ${data.status}`;
-          badge.textContent = data.status.toUpperCase();
-        }
-        if (streakCell) {
-          streakCell.innerHTML = data.streak > 0 ? `<span class="streak">✅ ${data.streak}</span>` : '--';
-        }
-      });
-      console.log('[Jobs] Update complete');
-    }
-
-    // Update deploy status — UPDATE existing elements
-    function updateDeploy(healthData) {
-      console.log('[Deploy] Updating with health data:', healthData);
-      const badge = document.getElementById('deploy-badge');
-      const statusText = document.getElementById('deploy-status-text');
-      const uptime = document.getElementById('deploy-uptime');
-      const checked = document.getElementById('deploy-checked');
-
-      if (healthData && healthData.status === 'healthy') {
-        if (badge) {
-          badge.className = 'deploy-status-badge healthy';
-          badge.textContent = '● HEALTHY';
-        }
-        if (statusText) statusText.textContent = 'Online';
-      } else if (healthData) {
-        if (badge) {
-          badge.className = 'deploy-status-badge building';
-          badge.textContent = '⚠ DEGRADED';
-        }
-        if (statusText) statusText.textContent = 'Degraded';
-      }
-      // If no healthData, keep hardcoded defaults (HEALTHY)
-
-      // Update uptime
-      const uptimeSec = healthData?.uptime;
-      if (uptimeSec != null && uptime) {
-        const uptimeStr = uptimeSec < 3600 
-          ? `${Math.round(uptimeSec / 60)}m` 
-          : `${Math.round(uptimeSec / 3600)}h`;
-        uptime.textContent = uptimeStr;
-      }
-
-      // Update last checked
-      if (checked) {
-        checked.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      }
-
-      console.log('[Deploy] Update complete');
-    }
-
-    // Update global status
-    function updateGlobalStatus(healthy) {
-      console.log('[Global Status] Setting to:', healthy ? 'healthy' : 'issues');
-      const dot = document.getElementById('globalStatusDot');
-      const text = document.getElementById('globalStatusText');
-      
-      if (healthy) {
-        if (dot) dot.className = 'status-dot healthy';
-        if (text) text.textContent = 'All Systems Operational';
-      } else {
-        if (dot) dot.className = 'status-dot issues';
-        if (text) text.textContent = '⚠️ Issues Detected';
-      }
-    }
-
-    // Render tools grid
-    function renderTools(data) {
-      console.log('[Tools] Rendering...');
-      const grid = document.getElementById('toolsGrid');
-      const scanTime = document.getElementById('toolScanTime');
-
-      if (scanTime) {
-        scanTime.textContent = data.lastScan ? `Last scan: ${timeAgo(new Date(data.lastScan))}` : 'Last scan: never';
-      }
-
-      const categories = Object.entries(data.categories || {});
-      if (!categories.length) {
-        grid.innerHTML = '<div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 12px;">No tool profiles found</div>';
-        return;
-      }
-
-      const icons = {
-        'ai-llm': '🤖', 'database-storage': '🗄️', 'api-layer': '🔗',
-        'observability': '👁️', 'auth-security': '🔐', 'crm-external': '📞',
-        'payments': '💳', 'email': '✉️', 'audio-media': '🎵',
-        'document-processing': '📄', 'ui-frontend': '🎨', 'dev-infrastructure': '🚀'
-      };
-
-      grid.innerHTML = categories.map(([cat, tools]) => {
-        const icon = icons[cat] || '🔧';
-        return `
-          <div class="tool-card">
-            <div class="tool-card-header">
-              <span class="tool-category">${icon} ${cat.replace(/-/g, ' ')}</span>
-              <span class="tool-count">${tools.length} tools</span>
-            </div>
-            <ul class="tool-list">
-              ${tools.slice(0, 4).map(t => `
-                <li class="tool-item">
-                  <span class="tool-name">${(t.name || 'unknown').toLowerCase()}</span>
-                  ${(Array.isArray(t.known_issues) && t.known_issues.length) ? '<span class="tool-update-dot"></span>' : ''}
-                </li>
-              `).join('')}
-              ${tools.length > 4 ? `<li class="tool-item"><span class="tool-name" style="color: var(--text-muted);">+${tools.length - 4} more</span></li>` : ''}
-            </ul>
-            <button class="research-btn" onclick="startDeepResearch('${cat}', this)">
-              🔬 Deep Research
-            </button>
+    for (const key of groupJobs) {
+      const j = jobs[key];
+      const status = j.lastStatus || 'never';
+      const dur = j.durationMs ? `${j.durationMs.toLocaleString()}ms` : '—';
+      html += `
+        <div class="job-tile ${status}">
+          <div class="job-name">${key}</div>
+          ${statusPill(status)}
+          <div class="job-meta">
+            <span class="job-time">${timeAgo(j.lastRun)}</span>
+            <span class="job-duration">${dur}</span>
           </div>
-        `;
-      }).join('');
-      console.log('[Tools] Render complete');
+        </div>`;
     }
 
-    // Deep research SSE
-    async function startDeepResearch(category, btn) {
-      if (btn.classList.contains('loading')) return;
-      btn.classList.add('loading');
-      btn.textContent = '⏳ Researching...';
+    // Any jobs not in a group
+    html += '</div></div>';
+  }
 
-      const panel = document.getElementById('researchPanel');
-      const body = document.getElementById('researchPanelBody');
-      const title = document.getElementById('researchPanelTitle');
-
-      title.textContent = `🔬 Research Stream — ${category}`;
-      body.innerHTML = '<div class="research-progress"><div class="research-progress-bar" id="researchProgressBar" style="width: 0%"></div></div>';
-      panel.classList.add('active');
-      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-      try {
-        const res = await fetch('/api/tools/research', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ category })
-        });
-        const data = await res.json();
-        const jobId = data.jobId;
-
-        if (activeResearchES) activeResearchES.close();
-        const es = new EventSource(`/api/tools/research/stream/${jobId}`);
-        activeResearchES = es;
-
-        es.addEventListener('progress', e => {
-          const ev = JSON.parse(e.data);
-          document.getElementById('researchProgressBar').style.width = `${ev.pct}%`;
-          appendStreamEvent('progress', `● ${ev.message}`);
-        });
-
-        es.addEventListener('finding', e => {
-          const ev = JSON.parse(e.data);
-          const cls = ev.severity === 'action' ? 'action' : ev.severity === 'warning' ? 'warning' : 'info';
-          const icon = ev.severity === 'action' ? '⚡' : ev.severity === 'warning' ? '⚠️' : 'ℹ️';
-          appendStreamEvent(cls, `${icon} ${ev.tool} — ${ev.summary}`);
-        });
-
-        es.addEventListener('done', e => {
-          const ev = JSON.parse(e.data);
-          const duration = ev.durationMs ? Math.round(ev.durationMs / 1000) : '?';
-          appendStreamEvent('done', `✓ Done — ${ev.findingsCount || 0} finding(s) in ${duration}s`);
-          es.close();
-          btn.classList.remove('loading');
-          btn.textContent = '🔬 Deep Research';
-        });
-
-        es.addEventListener('error', () => {
-          appendStreamEvent('error', '✗ Stream error');
-          es.close();
-          btn.classList.remove('loading');
-          btn.textContent = '🔬 Deep Research';
-        });
-
-        es.onerror = () => {
-          appendStreamEvent('error', '✗ Connection lost');
-          es.close();
-          btn.classList.remove('loading');
-          btn.textContent = '🔬 Deep Research';
-        };
-      } catch (e) {
-        appendStreamEvent('error', `✗ Failed: ${e.message}`);
-        btn.classList.remove('loading');
-        btn.textContent = '🔬 Deep Research';
-      }
-    }
-
-    function appendStreamEvent(cls, text) {
-      const body = document.getElementById('researchPanelBody');
-      const el = document.createElement('div');
-      el.className = `stream-event ${cls}`;
-      el.textContent = text;
-      body.appendChild(el);
-      body.scrollTop = body.scrollHeight;
-    }
-
-    function closeResearchPanel() {
-      document.getElementById('researchPanel').classList.remove('active');
-      if (activeResearchES) { activeResearchES.close(); activeResearchES = null; }
-    }
-
-    // Render operator log
-    function renderOperatorLog(runs) {
-      console.log('[Operator Log] Rendering...');
-      const log = document.getElementById('operatorLog');
-      
-      const entries = (runs || []).slice(0, 20).map(run => {
-        const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-        const jobName = (run.objective || 'unknown').split(' ')[0];
-        const action = 'RUN';
-        const outcome = run.verdict === 'pass' ? 'success' : run.verdict === 'fail' ? 'failed' : 'info';
-        const outcomeText = run.verdict === 'pass' ? 'Completed successfully' : 
-                          run.verdict === 'fail' ? 'Failed — check logs' : 'In progress...';
-        
-        return { time, jobName, action, outcome, outcomeText };
-      });
-
-      if (entries.length === 0) {
-        // Keep default message
-        return;
-      }
-
-      log.innerHTML = entries.map(e => `
-        <div class="log-entry">
-          <span class="log-time">[${e.time}]</span>
-          <span class="log-job">${e.jobName.toUpperCase()}</span>
-          <span class="log-action">${e.action}</span>
-          <span class="log-outcome ${e.outcome}">${e.outcomeText}</span>
+  // Ungrouped
+  const groupedKeys = Object.values(JOB_GROUPS).flat();
+  const ungrouped = allJobs.filter(([k]) => !groupedKeys.includes(k));
+  if (ungrouped.length > 0) {
+    html += `<div class="jobs-group"><div class="jobs-group-label">Other</div><div class="jobs-grid">`;
+    for (const [key, j] of ungrouped) {
+      const status = j.lastStatus || 'never';
+      html += `<div class="job-tile ${status}">
+        <div class="job-name">${key}</div>
+        ${statusPill(status)}
+        <div class="job-meta">
+          <span class="job-time">${timeAgo(j.lastRun)}</span>
+          <span class="job-duration">${j.durationMs ? j.durationMs.toLocaleString()+'ms' : '—'}</span>
         </div>
-      `).join('');
-      console.log('[Operator Log] Render complete');
+      </div>`;
     }
+    html += '</div></div>';
+  }
 
-    function scrollLogToBottom() {
-      const log = document.getElementById('operatorLog');
-      log.scrollTop = log.scrollHeight;
+  container.innerHTML = html;
+}
+
+// ── SECTION 4: Knowledge ─────────────────────────────────────────────────────
+
+function parseBooks(text) {
+  const books = [];
+  const lines = text.split('\n');
+  let current = null;
+  for (const line of lines) {
+    if (line.match(/^##\s+\d+\./)) {
+      if (current) books.push(current);
+      current = { title: line.replace(/^##\s+\d+\.\s*/, '').trim(), author: '', tag: '' };
+    } else if (current && line.match(/\*\*Author\*\*/i)) {
+      current.author = line.replace(/.*\*\*Author\*\*:?\s*/i, '').trim();
+    } else if (current && line.match(/\*\*Framework\*\*|\*\*Theme\*\*|\*\*Tag\*\*/i)) {
+      current.tag = line.replace(/.*\*\*(Framework|Theme|Tag)\*\*:?\s*/i, '').trim().slice(0,30);
     }
-
-    // Main fetch and render — EACH SECTION INDEPENDENT
-    async function fetchAndRender() {
-      console.log('[Fetch] Starting data fetch...');
-
-      // Fetch all APIs in parallel, each with its own error handling
-      const [agentsRes, runsRes, memoryRes, toolsRes, healthRes] = await Promise.all([
-        fetch('/api/agents').then(r => r.json()).catch(e => { console.warn('[Fetch] agents failed:', e); return { agents: [] }; }),
-        fetch('/api/runs').then(r => r.json()).catch(e => { console.warn('[Fetch] runs failed:', e); return { runs: [] }; }),
-        fetch('/api/memory').then(r => r.json()).catch(e => { console.warn('[Fetch] memory failed:', e); return { lineCount: 0, limit: 150, folderCounts: {} }; }),
-        fetch('/api/tools').then(r => r.json()).catch(e => { console.warn('[Fetch] tools failed:', e); return { categories: {} }; }),
-        fetch('/api/health').then(r => r.ok ? r.json() : null).catch(e => { console.warn('[Fetch] health failed:', e); return null; })
-      ]);
-
-      console.log('[Fetch] All fetches complete, updating sections...');
-
-      // Update each section independently — errors don't cascade
-      try { updateAgents(agentsRes.agents); } catch (e) { console.error('[updateAgents] Error:', e); }
-      try { updateJobs(runsRes.runs); } catch (e) { console.error('[updateJobs] Error:', e); }
-      try { updateMemoryChart(memoryRes.lineCount, memoryRes.limit); } catch (e) { console.error('[updateMemoryChart] Error:', e); }
-      try { 
-        const synthEl = document.getElementById('memory-synth');
-        if (synthEl && memoryRes.lastModified) {
-          synthEl.textContent = timeAgo(memoryRes.lastModified);
-        }
-      } catch (e) { console.error('[memory-synth] Error:', e); }
-      try { renderTools(toolsRes); } catch (e) { console.error('[renderTools] Error:', e); }
-      try { renderOperatorLog(runsRes.runs); } catch (e) { console.error('[renderOperatorLog] Error:', e); }
-      try { updateDeploy(healthRes); } catch (e) { console.error('[updateDeploy] Error:', e); }
-
-      // Global status based on health endpoint
-      const anyFailed = (agentsRes.agents || []).some(a => a.status === 'error');
-      globalHealthy = (healthRes?.status === 'healthy' || healthRes === null) && !anyFailed;
-      updateGlobalStatus(globalHealthy);
-
-      updateTimestamp();
-      console.log('[Fetch] All updates complete');
+  }
+  if (current) books.push(current);
+  // Fallback: parse simple list items
+  if (books.length === 0) {
+    for (const line of lines) {
+      if (line.match(/^[-*]\s+\*\*(.+?)\*\*/)) {
+        const m = line.match(/^[-*]\s+\*\*(.+?)\*\*/);
+        books.push({ title: m[1], author: '', tag: '' });
+      } else if (line.match(/^\d+\.\s+/)) {
+        const t = line.replace(/^\d+\.\s+/, '').replace(/\*\*/g, '').trim();
+        if (t) books.push({ title: t.slice(0,50), author: '', tag: '' });
+      }
     }
+  }
+  return books;
+}
 
-    // Run synthesis (placeholder)
-    function runSynthesis() {
-      alert('Synthesis job triggered. Check operator log for progress.');
+function parseArticles(text) {
+  const lines = text.split('\n');
+  const articles = [];
+  let count = 0;
+  for (const line of lines) {
+    if (line.match(/^[-*]\s+/) && line.length > 5) {
+      const title = line.replace(/^[-*]\s+/, '').replace(/\*\*/g,'').trim();
+      if (title.length > 3) articles.push(title);
+      count++;
     }
+  }
+  return { count, articles: articles.slice(0, 5) };
+}
 
-    // Sidebar navigation
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const section = document.getElementById(item.dataset.section);
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-
-    // Search overlay (/)
-    document.addEventListener('keydown', e => {
-      if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        e.preventDefault();
-        const overlay = document.getElementById('searchOverlay');
-        overlay.classList.add('active');
-        document.getElementById('searchInput').focus();
+function parseRepos(text) {
+  const lines = text.split('\n');
+  const queued = [], processed = [];
+  let inProcessed = false;
+  for (const line of lines) {
+    if (line.toLowerCase().includes('processed')) { inProcessed = true; continue; }
+    if (line.match(/^[-*]\s+/) && line.length > 5) {
+      const name = line.replace(/^[-*]\s+/, '').replace(/\*\*/g,'').trim();
+      if (name.length > 2) {
+        if (inProcessed) processed.push(name);
+        else queued.push(name);
       }
-      if (e.key === 'Escape') {
-        document.getElementById('searchOverlay').classList.remove('active');
+    }
+  }
+  return { queued, processed };
+}
+
+function renderKnowledge(booksText, articlesText, reposText) {
+  const grid = document.getElementById('knowledgeGrid');
+  const books = parseBooks(booksText);
+  const { count: articleCount, articles } = parseArticles(articlesText);
+  const { queued, processed } = parseRepos(reposText);
+
+  const booksHtml = `
+    <div class="knowledge-column">
+      <div class="knowledge-col-header">
+        <div class="knowledge-col-title">📚 Books</div>
+        <div class="knowledge-count">${books.length}</div>
+      </div>
+      <div class="knowledge-list">
+        ${books.slice(0, 8).map(b => `
+          <div class="knowledge-item">
+            <div class="knowledge-item-title">${b.title || 'Untitled'}</div>
+            ${b.author ? `<div class="knowledge-item-sub">${b.author}</div>` : ''}
+            ${b.tag ? `<span class="knowledge-tag">${b.tag}</span>` : ''}
+          </div>`).join('')}
+        ${books.length === 0 ? '<div class="empty-state">No books indexed yet</div>' : ''}
+      </div>
+    </div>`;
+
+  const articlesHtml = `
+    <div class="knowledge-column">
+      <div class="knowledge-col-header">
+        <div class="knowledge-col-title">📰 Articles</div>
+        <div class="knowledge-count">${articleCount}</div>
+      </div>
+      <div class="knowledge-list">
+        ${articles.map(a => `
+          <div class="knowledge-item">
+            <div class="knowledge-item-title">${a.slice(0,80)}</div>
+          </div>`).join('')}
+        ${articles.length === 0 ? '<div class="empty-state">No recent articles</div>' : ''}
+      </div>
+    </div>`;
+
+  const reposHtml = `
+    <div class="knowledge-column">
+      <div class="knowledge-col-header">
+        <div class="knowledge-col-title">🔗 Repos</div>
+        <div class="knowledge-count">${queued.length + processed.length}</div>
+      </div>
+      <div class="knowledge-list">
+        <div class="knowledge-item" style="margin-bottom:8px">
+          <div class="knowledge-item-sub" style="font-size:0.65rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">QUEUED (${queued.length})</div>
+          ${queued.slice(0,3).map(r => `<div style="font-size:0.72rem;color:var(--amber);padding:2px 0">${r.slice(0,40)}</div>`).join('')}
+          ${queued.length === 0 ? '<div style="font-size:.72rem;color:var(--text3)">Queue empty</div>' : ''}
+        </div>
+        <div class="knowledge-item">
+          <div class="knowledge-item-sub" style="font-size:0.65rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">PROCESSED (${processed.length})</div>
+          ${processed.slice(0,4).map(r => `<div style="font-size:0.72rem;color:var(--green);padding:2px 0">${r.slice(0,40)}</div>`).join('')}
+          ${processed.length === 0 ? '<div style="font-size:.72rem;color:var(--text3)">None yet</div>' : ''}
+        </div>
+      </div>
+    </div>`;
+
+  grid.innerHTML = booksHtml + articlesHtml + reposHtml;
+}
+
+// ── SECTION 5: Task Queue ────────────────────────────────────────────────────
+
+function renderQueue(tasks) {
+  const layout = document.getElementById('queueLayout');
+  if (!Array.isArray(tasks)) tasks = tasks.tasks || [];
+
+  const pending = tasks.filter(t => t.status === 'pending' || t.status === 'running');
+  const completed = tasks.filter(t => t.status === 'completed' || t.status === 'failed').slice(-5).reverse();
+
+  document.getElementById('queueCount').textContent = `${pending.length} pending`;
+
+  const health = pending.length === 0 ? 'empty' : pending.length > 5 ? 'backed-up' : 'flowing';
+  const healthLabel = { empty: 'EMPTY', flowing: 'FLOWING', 'backed-up': 'BACKED UP' }[health];
+
+  layout.innerHTML = `
+    <div class="queue-card">
+      <div class="queue-card-label">Pending (${pending.length})</div>
+      ${pending.length === 0 ? '<div class="empty-state" style="padding:16px">No pending tasks</div>' : ''}
+      ${pending.map(t => `
+        <div class="queue-item">
+          <div>
+            <div class="queue-item-name">${t.task || t.id}</div>
+            <div class="queue-item-agent">${t.agent || ''}</div>
+          </div>
+          <div class="queue-item-meta">${timeAgo(t.createdAt)}</div>
+        </div>`).join('')}
+    </div>
+    <div class="queue-card">
+      <div class="queue-card-label">Recently Completed</div>
+      ${completed.length === 0 ? '<div class="empty-state" style="padding:16px">No completed tasks</div>' : ''}
+      ${completed.map(t => {
+        const dur = (t.completedAt && t.startedAt)
+          ? `${Math.round((new Date(t.completedAt)-new Date(t.startedAt))/1000)}s`
+          : '';
+        return `
+        <div class="queue-item">
+          <div>
+            <div class="queue-item-name">${t.task || t.id}</div>
+            <div class="queue-item-agent">${t.agent || ''} ${dur ? '· '+dur : ''}</div>
+          </div>
+          <span class="status-pill ${t.status === 'completed' ? 'pill-success' : 'pill-failed'}" style="font-size:.6rem">
+            ${t.status === 'completed' ? '✅' : '❌'}
+          </span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="queue-card" style="text-align:center">
+      <div class="queue-card-label">Queue Health</div>
+      <div class="health-status-text ${health}">${healthLabel}</div>
+      <div class="pending-count-big">${pending.length}</div>
+      <div style="font-size:.65rem;color:var(--text3)">active tasks</div>
+    </div>`;
+}
+
+// ── SECTION 6: Commits ───────────────────────────────────────────────────────
+
+function commitType(msg) {
+  if (msg.startsWith('feat')) return 'feat';
+  if (msg.startsWith('fix')) return 'fix';
+  if (msg.startsWith('chore')) return 'chore';
+  if (msg.startsWith('refactor')) return 'refactor';
+  return 'other';
+}
+
+function renderCommits(commits) {
+  const el = document.getElementById('commitsTimeline');
+  el.innerHTML = `<div class="commits-timeline">
+    ${commits.map((c, i) => {
+      const type = commitType(c.commit.message.toLowerCase());
+      const sha = c.sha.slice(0, 7);
+      const msg = c.commit.message.split('\n')[0];
+      const ago = timeAgo(c.commit.author.date);
+      return `
+        <div class="commit-item" style="animation-delay:${i * 0.05}s">
+          <div class="commit-dot ${type}"></div>
+          <div class="commit-content">
+            <div class="commit-message">${msg}</div>
+            <div class="commit-meta">
+              <span class="commit-sha">${sha}</span>
+              <span class="commit-time">${ago}</span>
+              ${type !== 'other' ? `<span class="commit-type-badge badge-${type}">${type}</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ── SECTION 7: Ideas ─────────────────────────────────────────────────────────
+
+function parseIdeas(text) {
+  const ideas = [];
+  const lines = text.split('\n');
+  let current = null;
+  for (const line of lines) {
+    if (line.match(/^##\s+/) && !line.match(/^###/)) {
+      if (current) ideas.push(current);
+      current = { title: line.replace(/^##\s+/, '').trim(), body: '' };
+    } else if (current && line.trim() && !line.startsWith('#')) {
+      current.body += (current.body ? ' ' : '') + line.trim();
+    }
+  }
+  if (current) ideas.push(current);
+  return ideas.slice(0, 3);
+}
+
+function renderIdeas(proposedDir, ideasText) {
+  const layout = document.getElementById('ideasLayout');
+  const proposals = Array.isArray(proposedDir) ? proposedDir.filter(f => f.type === 'file' && f.name !== '.gitkeep' && f.name !== 'README.md') : [];
+  // Count approved/rejected from subdirs
+  const ideas = parseIdeas(ideasText);
+
+  layout.innerHTML = `
+    <div class="proposals-card">
+      <div class="queue-card-label">Proposed Changes</div>
+      <div class="proposals-stats">
+        <div class="stat-box">
+          <div class="stat-num pending-color">${proposals.length}</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num approved-color">—</div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num rejected-color">—</div>
+          <div class="stat-label">Rejected</div>
+        </div>
+      </div>
+      ${proposals.length === 0
+        ? '<div class="empty-state">No pending proposals</div>'
+        : proposals.map(f => `
+          <div class="proposal-item">
+            <div>
+              <div class="proposal-name">${f.name.replace(/\.md$/,'').replace(/-/g,' ')}</div>
+              <div class="proposal-target">${f.path}</div>
+            </div>
+            <span class="status-pill pill-pending">PENDING</span>
+          </div>`).join('')
       }
-    });
-
-    document.getElementById('searchOverlay').addEventListener('click', e => {
-      if (e.target.id === 'searchOverlay') {
-        e.target.classList.remove('active');
+    </div>
+    <div class="ideas-cards">
+      <div class="queue-card-label" style="margin-bottom:12px">Top Ideas</div>
+      ${ideas.length === 0
+        ? `<div class="idea-card"><div class="idea-title" style="padding-left:12px">No IDEAS.md found</div></div>`
+        : ideas.map(i => `
+          <div class="idea-card">
+            <div class="idea-title">${i.title}</div>
+            <div class="idea-body">${i.body.slice(0, 160)}${i.body.length > 160 ? '…' : ''}</div>
+          </div>`).join('')
       }
+    </div>`;
+}
+
+// ── SECTION 8: Memory ────────────────────────────────────────────────────────
+
+async function getMemoryDailyCount() {
+  try {
+    const data = await ghFetch('contents/memory');
+    if (!Array.isArray(data)) return 0;
+    return data.filter(f => f.name.match(/^\d{4}-\d{2}-\d{2}\.md$/)).length;
+  } catch { return 0; }
+}
+
+function renderMemory(memoryText, dailyCount) {
+  const lines = memoryText.split('\n').length;
+  const pct = Math.min(100, Math.round((lines / 150) * 100));
+  const colorClass = lines < 100 ? 'green' : lines < 140 ? 'amber' : 'red';
+  const colorVar = lines < 100 ? 'var(--green)' : lines < 140 ? 'var(--amber)' : 'var(--red)';
+
+  // Find last synthesis date
+  const synthMatch = memoryText.match(/synthesized?.*?(\d{4}-\d{2}-\d{2})/i) || memoryText.match(/(\d{4}-\d{2}-\d{2})/);
+  const lastSynth = synthMatch ? synthMatch[1] : '—';
+
+  document.getElementById('memoryLayout').innerHTML = `
+    <div class="memory-gauge-card">
+      <div class="memory-gauge-label">MEMORY.md Usage</div>
+      <div class="gauge-numbers">
+        <span class="gauge-current" style="color:${colorVar}">${lines}</span>
+        <span class="gauge-max">/ 150 lines</span>
+      </div>
+      <div class="gauge-bar-track">
+        <div class="gauge-bar-fill ${colorClass}" style="width:${pct}%"></div>
+      </div>
+      <div class="gauge-pct ${colorClass}">${pct}% used ${lines > 140 ? '⚠ APPROACHING LIMIT' : lines > 100 ? '· Keep an eye on this' : '· Healthy'}</div>
+    </div>
+    <div class="memory-stat-card">
+      <div class="memory-stat-label">Daily Logs</div>
+      <div class="memory-stat-num">${dailyCount}</div>
+      <div class="memory-stat-label">entries</div>
+    </div>
+    <div class="memory-stat-card">
+      <div class="memory-stat-label">Last Synthesis</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--cyan);margin:8px 0">${lastSynth}</div>
+      <div class="memory-stat-label">${lastSynth !== '—' ? timeAgo(lastSynth) : 'unknown'}</div>
+    </div>`;
+}
+
+// ── Railway Deploy ────────────────────────────────────────────────────────────
+
+async function fetchDeployTime() {
+  try {
+    const query = `query { deployments(serviceId: "${RAILWAY_SERVICE_ID}", environmentId: "${RAILWAY_ENVIRONMENT_ID}", first: 1) { edges { node { createdAt status } } } }`;
+    const res = await fetch('https://backboard.railway.app/graphql/v2', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RAILWAY_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
     });
+    const data = await res.json();
+    const deployment = data?.data?.deployments?.edges?.[0]?.node;
+    if (deployment) {
+      document.getElementById('deployTime').textContent = `Deploy ${timeAgo(deployment.createdAt)} · ${deployment.status}`;
+    }
+  } catch {
+    document.getElementById('deployTime').textContent = 'Deploy info unavailable';
+  }
+}
 
-    // Initialize on DOM ready — CHART INIT IS UNCONDITIONAL
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('[DOMContentLoaded] Page loaded, initializing...');
-      
-      // Initialize memory chart FIRST, unconditionally
-      try {
-        initMemoryChart();
-      } catch (e) {
-        console.error('[DOMContentLoaded] Chart init failed:', e);
-      }
+// ── Main Load ────────────────────────────────────────────────────────────────
 
-      // Then fetch and update all sections
-      fetchAndRender();
-      
-      // Auto-refresh every 30 seconds
-      setInterval(fetchAndRender, 30000);
-      
-      console.log('[DOMContentLoaded] Initialization complete');
-    });
+async function loadAll() {
+  startRefreshCountdown();
 
-    console.log('[Control Room] Script loaded successfully');
-  </script>
+  const results = await Promise.allSettled([
+    ghFetch('commits?per_page=20'),                  // 0 - commits
+    ghRaw('data/job-registry.json'),                 // 1 - jobs
+    ghRaw('memory/context/books/INDEX.md'),          // 2 - books
+    ghRaw('intelligence/article-inbox.md'),          // 3 - articles
+    ghRaw('intelligence/repo-inbox.md'),             // 4 - repos
+    ghRaw('data/task-queue.json'),                   // 5 - task queue
+    ghFetch('contents/intelligence/proposed-changes'), // 6 - proposals
+    ghRaw('IDEAS.md'),                               // 7 - ideas
+    ghRaw('MEMORY.md'),                              // 8 - memory
+    getMemoryDailyCount(),                           // 9 - daily count
+    fetchDeployTime(),                               // 10 - deploy
+  ]);
+
+  const get = (i) => results[i].status === 'fulfilled' ? results[i].value : null;
+
+  // Commits
+  const commits = get(0) || [];
+  if (commits.length > 0) {
+    renderAgents(commits);
+    renderCommits(commits.slice(0, 10));
+  }
+
+  // Jobs
+  const jobsData = get(1);
+  if (jobsData?.text) {
+    try {
+      const jobs = JSON.parse(jobsData.text);
+      renderJobs(jobs);
+      updateGlobalHealth(jobs);
+    } catch { document.getElementById('jobsContainer').innerHTML = '<div class="empty-state">⚠ Failed to parse job registry</div>'; }
+  }
+
+  // Knowledge
+  const booksText = get(2)?.text || '';
+  const articlesText = get(3)?.text || '';
+  const reposText = get(4)?.text || '';
+  renderKnowledge(booksText, articlesText, reposText);
+
+  // Task Queue
+  const queueData = get(5);
+  if (queueData?.text) {
+    try {
+      const queue = JSON.parse(queueData.text);
+      renderQueue(queue);
+    } catch { document.getElementById('queueLayout').innerHTML = '<div class="empty-state">⚠ Failed to parse task queue</div>'; }
+  }
+
+  // Ideas
+  const proposedDir = get(6) || [];
+  const ideasText = get(7)?.text || '';
+  renderIdeas(proposedDir, ideasText);
+
+  // Memory
+  const memoryText = get(8)?.text || '';
+  const dailyCount = get(9) || 0;
+  if (memoryText) renderMemory(memoryText, dailyCount);
+}
+
+// ── SECTION 9: Knowledge Graph ───────────────────────────────────────────────
+
+async function initKnowledgeGraph() {
+  const headers = { 'Authorization': `token ${GITHUB_TOKEN}` };
+  const base = `https://api.github.com/repos/${GITHUB_REPO}/contents`;
+
+  const [books, sim, agentsDir, tech] = await Promise.all([
+    fetch(`${base}/memory/context/books`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/memory/context/sim`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/agents`, {headers}).then(r=>r.json()).catch(()=>[]),
+    fetch(`${base}/memory/context/technology`, {headers}).then(r=>r.json()).catch(()=>[]),
+  ]);
+
+  const nodes = [];
+  const edges = [];
+  let id = 1;
+  const nodeMap = {};
+
+  const addNode = (label, group, title) => {
+    const n = { id: id++, label, group, title, font: { color: '#e2e8f0', size: 12 } };
+    nodes.push(n);
+    nodeMap[label] = n.id;
+    return n.id;
+  };
+
+  const bookFiles = Array.isArray(books) ? books.filter(f => f.name.endsWith('.md') && f.name !== 'INDEX.md' && f.name !== 'CLAUDE.md') : [];
+  bookFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,28), 'books', `Book: ${f.name}`));
+
+  const twinFiles = Array.isArray(sim) ? sim.filter(f => f.name.endsWith('.md') && !f.name.includes('environment') && !f.name.includes('mirofish')) : [];
+  twinFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,22), 'twins', `Digital Twin: ${f.name}`));
+
+  const agentFiles = Array.isArray(agentsDir) ? agentsDir.filter(f => f.name.endsWith('.md')) : [];
+  agentFiles.forEach(f => addNode(f.name.replace('.md',''), 'agents', `Agent: ${f.name}`));
+
+  const techFiles = Array.isArray(tech) ? tech.filter(f => f.name.endsWith('.md') && f.name !== 'README.md').slice(0,10) : [];
+  techFiles.forEach(f => addNode(f.name.replace('.md','').replace(/-/g,' ').substring(0,22), 'tech', `Tech: ${f.name}`));
+
+  const bookAgentLinks = [
+    ['psycho cybernetics', 'researcher'], ['atomic habits', 'auditor'],
+    ['7 habits', 'builder'], ['art of war', 'researcher'],
+    ['meditations', 'builder'], ['100m offers', 'researcher'],
+    ['e myth revisited', 'builder'],
+  ];
+  bookAgentLinks.forEach(([book, agent]) => {
+    if (nodeMap[book] && nodeMap[agent]) edges.push({ from: nodeMap[book], to: nodeMap[agent], color: { color: '#334155' } });
+  });
+
+  [['kyle barks closes on rapport stalls on price objections', 'researcher'],
+   ['chris segura 36pct self image ceiling not skill gap', 'auditor'],
+   ['daniel lozano consistent process plateauing at 67 pct', 'researcher']
+  ].forEach(([twin, agent]) => {
+    const twinKey = Object.keys(nodeMap).find(k => k.includes('kyle') || k.includes('chris') || k.includes('daniel'));
+    if (twinKey && nodeMap[agent]) edges.push({ from: nodeMap[twinKey], to: nodeMap[agent], color: { color: '#f97316' } });
+  });
+
+  const container = document.getElementById('kg-network');
+  const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+  const options = {
+    groups: {
+      books: { color: { background: '#1e40af', border: '#3b82f6' }, shape: 'dot', size: 14 },
+      twins: { color: { background: '#c2410c', border: '#f97316' }, shape: 'diamond', size: 16 },
+      agents: { color: { background: '#047857', border: '#10b981' }, shape: 'star', size: 18 },
+      tech: { color: { background: '#6d28d9', border: '#8b5cf6' }, shape: 'box', size: 12 },
+    },
+    physics: {
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: { gravitationalConstant: -60, springLength: 130, springConstant: 0.04 },
+      stabilization: { iterations: 150 }
+    },
+    interaction: { hover: true, tooltipDelay: 100 },
+    edges: { smooth: { type: 'continuous' }, color: { color: '#1e293b', hover: '#3b82f6' } },
+  };
+  new vis.Network(container, data, options);
+
+  const total = nodes.length;
+  document.getElementById('kg-stats').textContent = `${total} nodes — books (blue) · twins (orange) · agents (green) · tech (purple) — hover for details`;
+}
+
+// ── SECTION 10: Digital Twins ─────────────────────────────────────────────────
+
+function renderTwins() {
+  const twins = [
+    { name: 'Kyle Barks', role: 'Acquisition Manager', score: 70, level: 'Lvl 5', tags: ['closes on rapport', 'stalls on price', 'top performer'], peak: '9AM–12PM' },
+    { name: 'Daniel Lozano', role: 'Lead Manager', score: 67, level: 'Lvl 5', tags: ['consistent process', 'plateauing', 'needs push'], peak: '1PM–5PM' },
+    { name: 'Chris Segura', role: 'Lead Manager', score: 36, level: 'Lvl 2', tags: ['self-image ceiling', 'needs coaching', '🚨 critical'], peak: '10AM–2PM' },
+    { name: 'Esteban Leiva', role: 'Dispo Manager', score: 64, level: 'Lvl 4', tags: ['buyer relationships', 'dispo edge', 'steady'], peak: '11AM–4PM' },
+    { name: 'Efren Valenzuela', role: 'Lead Generator', score: 48, level: 'Lvl 3', tags: ['developing', 'below target', '🚨 watch'], peak: '9AM–1PM' },
+    { name: 'Mirna Razo', role: 'Lead Generator', score: 43, level: 'Lvl 2', tags: ['early stage', 'needs structure', '🚨 watch'], peak: '9AM–1PM' },
+  ];
+
+  const grid = document.getElementById('twins-grid');
+  grid.innerHTML = twins.map(t => {
+    const borderClass = t.score >= 65 ? 'green-border' : t.score >= 50 ? 'amber-border' : 'red-border';
+    const scoreColor = t.score >= 65 ? '#10b981' : t.score >= 50 ? '#f59e0b' : '#ef4444';
+    return `<div class="twin-card ${borderClass}">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px;">
+        <div class="twin-score-ring" style="border-color:${scoreColor};color:${scoreColor}">${t.score}%</div>
+        <div>
+          <div style="font-weight:600;color:#e2e8f0;font-size:15px;">${t.name}</div>
+          <div style="color:#64748b;font-size:12px;">${t.role} · ${t.level}</div>
+          <div style="color:#475569;font-size:11px;margin-top:2px;">Peak: ${t.peak}</div>
+        </div>
+      </div>
+      <div class="twin-tags">${t.tags.map(tag => `<span class="twin-tag">${tag}</span>`).join('')}</div>
+      <div style="margin-top:12px;font-size:11px;color:#334155;">● ACTIVE TWIN</div>
+    </div>`;
+  }).join('');
+}
+
+// ── SECTION 11: Simulation Scenarios ─────────────────────────────────────────
+
+async function loadScenarios() {
+  const headers = { 'Authorization': `token ${GITHUB_TOKEN}` };
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/memory/context/sim/scenarios`, {headers});
+    if (res.ok) {
+      const files = await res.json();
+      const scenarios = Array.isArray(files) ? files.filter(f => f.name.endsWith('.md')) : [];
+      document.getElementById('scenario-list').innerHTML = scenarios.length > 0
+        ? scenarios.map(f => `<div style="padding:6px 0;border-bottom:1px solid #1e293b;color:#94a3b8;">📋 ${f.name.replace('.md','').replace(/-/g,' ')}</div>`).join('')
+        : '<div style="color:#475569;font-style:italic;">No scenarios queued — add .md files to memory/context/sim/scenarios/</div>';
+    }
+  } catch(e) {
+    document.getElementById('scenario-list').textContent = 'No scenarios queued yet.';
+  }
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+
+startClock();
+loadAll();
+renderTwins();
+initKnowledgeGraph();
+loadScenarios();
+</script>
 </body>
 </html>

@@ -109,3 +109,9 @@ File: `runs/routing-log.md`
 ---
 
 _This file is enforced by the Auditor. Every run, every task, every time._
+
+## Repo Routing
+- NAH business logic → `c7lavinder/NAH`
+- Gunner product code → `c7lavinder/MANUS-Gunner-AI` (branch: production)
+- Xhaka COO / intelligence → `c7lavinder/xhaka`
+- See `REPOS.md` for full map

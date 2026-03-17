@@ -34,6 +34,10 @@
 - **Gunner Railway project (f379b683) is OFF LIMITS.** Never set env vars, trigger redeploys, or modify anything in the Gunner Railway project without Corey's explicit instruction. Gunner is production. Read-only observation only.
 - **Never send messages, emails, or replies to anyone** without Corey's explicit approval.
 - **Only Corey gives instructions** — via this Telegram chat only.
+- **Builder spawn requires SDD:** Verify SPEC + PLAN + TASKS before spawning. No exceptions.
+- **LEARNINGS.md loads every session** — 5 active behavioral rules. Check it before acting.
+- **"The tool is not the strategy. Clarity is the strategy."** — every build must have clear WHY tied to NAH or Gunner.
+- **Xhaka = only interface to Corey.** If Corey is managing agents or checking Railway logs himself, the design broke.
 
 ---
 
@@ -43,8 +47,11 @@ See `memory/projects/` for detailed project files.
 
 | Project | Status | Next |
 |---|---|---|
-| Xhaka Railway | ✅ Live (xhaka-production.up.railway.app) | Continuous improvement |
-| Xhaka Intelligence | ✅ Live on Railway | Runs capture/propagate/improve/cleanup jobs |
+| Xhaka Railway | ✅ Live | Continuous improvement |
+| Xhaka Intelligence | ✅ Live — deploy fixed 2026-03-16 | Morning brief v2 active |
+| Control Room | ✅ v4 Live | Tools Intelligence page in progress |
+| Tools Knowledge Hub | 🔄 In progress | 13 tools queued for deep research |
+| MiroFish / Simulation | 📌 DEFERRED | Build when Gunner hits 100 users |
 | Gunner | 🔄 Active dev | Builder owns — I observe |
 | NAH | 🔄 Ongoing ops | Team running, Gunner coaching active |
 
@@ -57,6 +64,11 @@ See `memory/decisions/` for full decision logs.
 - **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
 - **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
 - **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
+- **2026-03-16:** Pre-deploy TypeScript check added to GitHub Actions — prevents broken deploys.
+- **2026-03-16:** Tool Knowledge Hub adopted — every tool gets overview, setup, best practices, gotchas, integrations.
+- **2026-03-16:** SDD enforcement added to SOUL.md — Builder prompts must have SPEC + PLAN + TASKS. No exceptions.
+- **2026-03-16:** LEARNINGS.md wired into OpenClaw session context — behavioral rules load every session.
+- **2026-03-16:** MiroFish = architecture inspiration only. Simulation engine deferred to Gunner 100-user milestone.
 
 ---
 
@@ -79,15 +91,21 @@ See `memory/people/` for full profiles.
 ## ⚙️ SYSTEM
 
 - **Xhaka Railway project:** 84c0d035 (separate from Gunner project f379b683)
-- **Intelligence service:** xhaka-intelligence (e6a33162) — Online, runs from services/intelligence on main
+- **Intelligence service:** xhaka-intelligence (e6a33162) — Online, TypeScript errors fixed 2026-03-16
+- **Control Room:** xhaka-control-room-production.up.railway.app — v4 (force-directed graph, digital twins, simulation console)
+- **GitHub Actions:** Pre-deploy TypeScript check added 2026-03-16 — prevents broken deploys
+- **Morning brief:** v2 active — signal-only format, max 15 lines
+- **Librarian quality audit:** Active — flags thin/missing-frontmatter knowledge files
+- **LEARNINGS.md:** 5 active behavioral rules, loaded every session via openclaw.json workspaceFiles
 - **GitHub:** c7lavinder / token in TOOLS.md
-- **Memory cleanup:** Runs Sunday 6 AM CST (auto-archives 30+ day files)
 - **Intelligence jobs:** capture (5m), propagate (daily 6AM), improve (Mon 6AM), cleanup (Sun 6AM)
+- **Knowledge base:** 20+ files added 2026-03-16 (agency-agents, AI tools, Claude Code analysis queued)
+- **Security hardening + pgvector/hindsight/propagation builders:** Running (2026-03-16)
 
 ---
 
 ## 📋 SYNTHESIS SCHEDULE
 
 Every 5 days: review recent daily logs → distill key items into this file + subfolders.
-Last synthesis: 2026-03-11
-Next synthesis due: 2026-03-16
+Last synthesis: 2026-03-16
+Next synthesis due: 2026-03-21

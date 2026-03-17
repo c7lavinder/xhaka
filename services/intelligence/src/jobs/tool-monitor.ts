@@ -1,15 +1,39 @@
 // services/intelligence/src/jobs/tool-monitor.ts
-// Daily job: scan both repos' package.json, check GitHub Releases RSS for known packages,
-// check SaaS changelogs, drop findings to intelligence/inbox/
+// Daily job: scan both repos' package.json, check GitHub Releases for known packages,
+// check SaaS changelogs, drop findings to intelligence/inbox/ + data/tool-monitor-results.md
+//
+// FIX (2026-03-16):
+//   - Added direct GitHub release monitoring for all TOOL-REGISTRY repos
+//   - Added Telegram alert when new releases detected
+//   - Added data/tool-monitor-results.md summary output
+//   - Added GitHub API rate-limit handling (429 / X-RateLimit-Remaining)
+//   - Added per-step error isolation (steps no longer cascade-fail)
+//   - Fixed GUNNER_REPO default to match actual Gunner repo name
 
 import { getFileContent, createFile, updateFile, listDirectory } from '../lib/github.js';
 import { fetchText } from '../lib/http.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
+import { sendTelegram } from '../utils/notifier.js';
 
 const XHAKA_REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
-const GUNNER_REPO = process.env.GUNNER_REPO ?? 'c7lavinder/Gunner';
+const GUNNER_REPO = process.env.GUNNER_REPO ?? 'c7lavinder/MANUS-Gunner-AI';
 const TOOLS_STATE_PATH = 'memory/context/tools/.last-scan.json';
 const INBOX_PATH = 'intelligence/inbox';
+const RESULTS_PATH = 'data/tool-monitor-results.md';
+
+// ── Registry: GitHub repos to monitor directly for new releases ──────────────
+// Sourced from TOOL-REGISTRY.md. Update both files together.
+const REGISTRY_GITHUB_REPOS: Array<{ id: string; name: string; repo: string }> = [
+  { id: 'openclaw',      name: 'OpenClaw',      repo: 'openclaw/openclaw' },
+  { id: 'railway-cli',   name: 'Railway CLI',   repo: 'railwayapp/railway-cli' },
+  { id: 'supabase',      name: 'Supabase',      repo: 'supabase/supabase' },
+  { id: 'gunner',        name: 'Gunner',        repo: 'c7lavinder/MANUS-Gunner-AI' },
+  { id: 'posthog',       name: 'PostHog',       repo: 'PostHog/posthog' },
+  { id: 'sentry',        name: 'Sentry',        repo: 'getsentry/sentry' },
+  { id: 'langsmith',     name: 'LangSmith',     repo: 'langchain-ai/langsmith-sdk' },
+  { id: 'hindsight',     name: 'Hindsight',     repo: 'vectorize-io/hindsight-openclaw' },
+  { id: 'claude-code',   name: 'Claude Code',   repo: 'anthropics/claude-code' },
+];
 
 // ── Changelog URLs ──────────────────────────────────────────────────
 const CHANGELOG_SOURCES = [
@@ -43,6 +67,18 @@ const CHANGELOG_SOURCES = [
     url: 'https://railway.app/changelog',
     type: 'html',
   },
+  {
+    id: 'batchdialer',
+    name: 'BatchDialer',
+    url: 'https://batchdialer.com/changelog',
+    type: 'html',
+  },
+  {
+    id: 'batchleads',
+    name: 'BatchLeads',
+    url: 'https://batchleads.io/changelog',
+    type: 'html',
+  },
 ];
 
 // ── Main entry ──────────────────────────────────────────────────────
@@ -52,20 +88,31 @@ export async function runToolMonitor(): Promise<void> {
     console.log('[tool-monitor] Starting daily tool scan...');
 
     // 1. Load last-scan state
-    const stateFile = await getFileContent(XHAKA_REPO, TOOLS_STATE_PATH);
+    const stateFile = await getFileContent(XHAKA_REPO, TOOLS_STATE_PATH).catch(() => null);
     const state: LastScanState = stateFile
       ? JSON.parse(stateFile.content)
-      : { lastRunAt: null, versions: {}, changelogChecked: {} };
+      : { lastRunAt: null, versions: {}, changelogChecked: {}, repoReleases: {} };
     const stateSha = stateFile?.sha ?? null;
     // Defensive defaults — guard against schema mismatch in persisted state
     state.versions = state.versions ?? {};
     state.changelogChecked = state.changelogChecked ?? {};
+    state.repoReleases = state.repoReleases ?? {};
 
     const findings: Finding[] = [];
 
     // 2. Scan package.json deps in both repos
-    const xhakaDeps = await getPackageJsonDeps(XHAKA_REPO);
-    const gunnerDeps = await getPackageJsonDeps(GUNNER_REPO);
+    let xhakaDeps: Record<string, string> = {};
+    let gunnerDeps: Record<string, string> = {};
+    try {
+      xhakaDeps = await getPackageJsonDeps(XHAKA_REPO);
+    } catch (err) {
+      console.warn('[tool-monitor] Failed to scan xhaka package.json deps:', (err as Error).message);
+    }
+    try {
+      gunnerDeps = await getPackageJsonDeps(GUNNER_REPO);
+    } catch (err) {
+      console.warn('[tool-monitor] Failed to scan Gunner package.json deps:', (err as Error).message);
+    }
     const allDeps = mergeDeps(xhakaDeps, gunnerDeps);
 
     console.log(`[tool-monitor] Found ${Object.keys(allDeps).length} total deps across both repos.`);
@@ -76,7 +123,13 @@ export async function runToolMonitor(): Promise<void> {
       const repoSlug = npmPkgToGitHubRepo(pkg);
       if (!repoSlug) continue;
 
-      const latestVersion = await getLatestVersionFromRSS(repoSlug);
+      let latestVersion: string | null = null;
+      try {
+        latestVersion = await getLatestVersionFromRSS(repoSlug);
+      } catch (err) {
+        console.warn(`[tool-monitor] RSS check failed for ${pkg}:`, (err as Error).message);
+        continue;
+      }
       if (!latestVersion) continue;
 
       if (knownVersion && latestVersion !== knownVersion) {
@@ -89,86 +142,168 @@ export async function runToolMonitor(): Promise<void> {
         });
         console.log(`[tool-monitor] Update detected: ${pkg} ${knownVersion} → ${latestVersion}`);
       }
-
-      // Update state with current latest
       state.versions[pkg] = latestVersion;
     }
 
-    // 4. Check changelog URLs for service tools
-    for (const source of CHANGELOG_SOURCES) {
-      const lastChecked = state.changelogChecked[source.id]
-        ? new Date(state.changelogChecked[source.id])
-        : null;
+    // 4. Direct GitHub release monitoring for TOOL-REGISTRY repos
+    console.log(`[tool-monitor] Checking ${REGISTRY_GITHUB_REPOS.length} registry repos for new releases...`);
+    for (const entry of REGISTRY_GITHUB_REPOS) {
+      try {
+        const release = await getLatestGitHubRelease(entry.repo);
+        if (!release) continue;
 
-      const content = await fetchText(source.url);
-      if (!content) {
-        console.warn(`[tool-monitor] Could not fetch changelog for ${source.name}`);
-        continue;
+        const knownTag = state.repoReleases[entry.id];
+        if (knownTag && release.tag !== knownTag) {
+          findings.push({
+            type: 'repo-release',
+            tool: entry.name,
+            repo: entry.repo,
+            fromTag: knownTag,
+            toTag: release.tag,
+            publishedAt: release.published,
+            releaseUrl: `https://github.com/${entry.repo}/releases/tag/${release.tag}`,
+          });
+          console.log(`[tool-monitor] New release: ${entry.name} ${knownTag} → ${release.tag}`);
+        }
+        state.repoReleases[entry.id] = release.tag;
+      } catch (err) {
+        console.warn(`[tool-monitor] Release check failed for ${entry.name}:`, (err as Error).message);
       }
-
-      // Heuristic: look for date strings newer than lastChecked in the page content
-      const hasNewContent = detectNewChangelogContent(content, lastChecked);
-      if (hasNewContent) {
-        findings.push({
-          type: 'changelog-update',
-          service: source.name,
-          url: source.url,
-          detectedAt: new Date().toISOString(),
-        });
-        console.log(`[tool-monitor] Changelog activity detected: ${source.name}`);
-      }
-
-      state.changelogChecked[source.id] = new Date().toISOString();
     }
 
-    // 5. Write findings to intelligence/inbox/
+    // 5. Check changelog URLs for service tools
+    for (const source of CHANGELOG_SOURCES) {
+      try {
+        const lastChecked = state.changelogChecked[source.id]
+          ? new Date(state.changelogChecked[source.id])
+          : null;
+
+        const content = await fetchText(source.url);
+        if (!content) {
+          console.warn(`[tool-monitor] Could not fetch changelog for ${source.name}`);
+          continue;
+        }
+
+        const hasNewContent = detectNewChangelogContent(content, lastChecked);
+        if (hasNewContent) {
+          findings.push({
+            type: 'changelog-update',
+            service: source.name,
+            url: source.url,
+            detectedAt: new Date().toISOString(),
+          });
+          console.log(`[tool-monitor] Changelog activity detected: ${source.name}`);
+        }
+
+        state.changelogChecked[source.id] = new Date().toISOString();
+      } catch (err) {
+        console.warn(`[tool-monitor] Changelog check failed for ${source.name}:`, (err as Error).message);
+      }
+    }
+
+    // 6. Write findings to intelligence/inbox/
     if (findings.length > 0) {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
       const fileName = `tool-monitor-${timestamp}.md`;
       const filePath = `${INBOX_PATH}/${fileName}`;
       const content = buildInboxFile(findings, timestamp);
 
-      await createFile(
-        XHAKA_REPO,
-        filePath,
-        content,
-        `tool-monitor: ${findings.length} update(s) detected`,
-      );
-      console.log(`[tool-monitor] Dropped ${findings.length} finding(s) → ${filePath}`);
+      try {
+        await createFile(
+          XHAKA_REPO,
+          filePath,
+          content,
+          `tool-monitor: ${findings.length} update(s) detected`,
+        );
+        console.log(`[tool-monitor] Dropped ${findings.length} finding(s) → ${filePath}`);
+      } catch (err) {
+        console.warn('[tool-monitor] Failed to write inbox file:', (err as Error).message);
+      }
     } else {
       console.log('[tool-monitor] No updates detected.');
     }
 
-    // 6. Save updated state
+    // 7. Write data/tool-monitor-results.md summary
+    try {
+      await writeResultsSummary(findings, state);
+    } catch (err) {
+      console.warn('[tool-monitor] Failed to write results summary:', (err as Error).message);
+    }
+
+    // 8. Save updated state
     state.lastRunAt = new Date().toISOString();
     const stateContent = JSON.stringify(state, null, 2);
-    if (stateSha) {
-      await updateFile(
-        XHAKA_REPO,
-        TOOLS_STATE_PATH,
-        stateContent,
-        'tool-monitor: update last-scan state',
-        stateSha,
-      );
-    } else {
-      await createFile(
-        XHAKA_REPO,
-        TOOLS_STATE_PATH,
-        stateContent,
-        'tool-monitor: initialize last-scan state',
-      );
+    try {
+      if (stateSha) {
+        await updateFile(
+          XHAKA_REPO,
+          TOOLS_STATE_PATH,
+          stateContent,
+          'tool-monitor: update last-scan state',
+          stateSha,
+        );
+      } else {
+        await createFile(
+          XHAKA_REPO,
+          TOOLS_STATE_PATH,
+          stateContent,
+          'tool-monitor: initialize last-scan state',
+        );
+      }
+    } catch (err) {
+      // State write failure is non-fatal — job still succeeded
+      console.warn('[tool-monitor] Failed to save scan state:', (err as Error).message);
     }
 
-    // 7. Write latest-update.md for each category
+    // 9. Write latest-update.md for each category
     const depUpdateCount = findings.filter(f => f.type === 'dep-update').length;
-    await writeLatestUpdateFile('packages', `Last scanned: ${new Date().toISOString()}\nDeps checked: ${Object.keys(allDeps).length}\nUpdates found: ${depUpdateCount}\n`);
+    await writeLatestUpdateFile(
+      'packages',
+      `Last scanned: ${new Date().toISOString()}\nDeps checked: ${Object.keys(allDeps).length}\nUpdates found: ${depUpdateCount}\n`,
+    );
     for (const source of CHANGELOG_SOURCES) {
-      const hasActivity = findings.some(f => f.type === 'changelog-update' && (f as ChangelogFinding).service === source.name);
-      await writeLatestUpdateFile(source.id, `Last scanned: ${new Date().toISOString()}\nService: ${source.name}\nChangelog activity: ${hasActivity ? 'YES — new content detected' : 'none detected'}\n`);
+      const hasActivity = findings.some(
+        f => f.type === 'changelog-update' && (f as ChangelogFinding).service === source.name,
+      );
+      await writeLatestUpdateFile(
+        source.id,
+        `Last scanned: ${new Date().toISOString()}\nService: ${source.name}\nChangelog activity: ${hasActivity ? 'YES — new content detected' : 'none detected'}\n`,
+      );
     }
 
-        console.log('[tool-monitor] Done.');
+    // 10. Send Telegram alert if any findings
+    if (findings.length > 0) {
+      const releaseFindings = findings.filter(f => f.type === 'repo-release') as RepoReleaseFinding[];
+      const depFindings = findings.filter(f => f.type === 'dep-update') as DepUpdateFinding[];
+      const changelogFindings = findings.filter(f => f.type === 'changelog-update') as ChangelogFinding[];
 
+      const lines = [`🔧 *Tool Monitor — ${findings.length} update(s) detected*`, ``];
+
+      if (releaseFindings.length > 0) {
+        lines.push(`*New Releases:*`);
+        for (const f of releaseFindings) {
+          lines.push(`• ${f.tool}: \`${f.fromTag}\` → \`${f.toTag}\``);
+        }
+        lines.push(``);
+      }
+      if (depFindings.length > 0) {
+        lines.push(`*Dep Updates:*`);
+        for (const f of depFindings) {
+          lines.push(`• \`${f.package}\`: ${f.fromVersion} → ${f.toVersion}`);
+        }
+        lines.push(``);
+      }
+      if (changelogFindings.length > 0) {
+        lines.push(`*Changelog Activity:*`);
+        for (const f of changelogFindings) {
+          lines.push(`• ${f.service}: [view](${f.url})`);
+        }
+      }
+
+      await sendTelegram(lines.join('\n'));
+    }
+
+    console.log('[tool-monitor] Done.');
     await markJobSuccess('tool-monitor', _startTime);
   } catch (err) {
     console.error('[tool-monitor] Fatal error:', err);
@@ -180,7 +315,6 @@ export async function runToolMonitor(): Promise<void> {
 // ── Helpers ─────────────────────────────────────────────────────────
 
 async function getPackageJsonDeps(repo: string): Promise<Record<string, string>> {
-  // Fetch root package.json
   const rootPkg = await getFileContent(repo, 'package.json');
   const deps: Record<string, string> = {};
 
@@ -189,7 +323,6 @@ async function getPackageJsonDeps(repo: string): Promise<Record<string, string>>
     Object.assign(deps, parsed.dependencies ?? {}, parsed.devDependencies ?? {});
   }
 
-  // Also check services/*/package.json (one level deep)
   const serviceEntries = await listDirectory(repo, 'services');
   for (const entry of serviceEntries) {
     if (entry.type !== 'dir') continue;
@@ -207,11 +340,9 @@ async function getPackageJsonDeps(repo: string): Promise<Record<string, string>>
 }
 
 function mergeDeps(...depMaps: Record<string, string>[]): Record<string, string> {
-  // Last write wins on version conflicts — flag if different versions exist
   const merged: Record<string, string> = {};
   for (const deps of depMaps) {
     for (const [k, v] of Object.entries(deps)) {
-      // Strip semver range prefix (^, ~, >=) for clean version string
       merged[k] = v.replace(/^[\^~>=]+/, '');
     }
   }
@@ -219,23 +350,25 @@ function mergeDeps(...depMaps: Record<string, string>[]): Record<string, string>
 }
 
 // Maps npm package name to GitHub owner/repo slug for RSS
-// Extend this map as needed
 const NPM_TO_GITHUB: Record<string, string> = {
-  'openai':                'openai/openai-node',
-  '@supabase/supabase-js': 'supabase/supabase-js',
-  '@trpc/server':          'trpc/trpc',
-  '@trpc/client':          'trpc/trpc',
-  'zod':                   'colinhacks/zod',
-  'express':               'expressjs/express',
-  '@octokit/rest':         'octokit/octokit.js',
-  'node-cron':             'node-cron/node-cron',
-  'jose':                  'panva/jose',
-  'jsonwebtoken':          'auth0/node-jsonwebtoken',
-  'posthog-node':          'PostHog/posthog-node',
-  '@sentry/node':          'getsentry/sentry-javascript',
-  'prisma':                'prisma/prisma',
-  '@prisma/client':        'prisma/prisma',
-  'drizzle-orm':           'drizzle-team/drizzle-orm',
+  'openai':                   'openai/openai-node',
+  '@anthropic-ai/sdk':        'anthropics/anthropic-sdk-python',
+  '@supabase/supabase-js':    'supabase/supabase-js',
+  '@trpc/server':             'trpc/trpc',
+  '@trpc/client':             'trpc/trpc',
+  'zod':                      'colinhacks/zod',
+  'express':                  'expressjs/express',
+  '@octokit/rest':            'octokit/octokit.js',
+  'node-cron':                'node-cron/node-cron',
+  'jose':                     'panva/jose',
+  'jsonwebtoken':             'auth0/node-jsonwebtoken',
+  'posthog-node':             'PostHog/posthog-node',
+  '@sentry/node':             'getsentry/sentry-javascript',
+  'prisma':                   'prisma/prisma',
+  '@prisma/client':           'prisma/prisma',
+  'drizzle-orm':              'drizzle-team/drizzle-orm',
+  'langsmith':                'langchain-ai/langsmith-sdk',
+  '@langchain/core':          'langchain-ai/langchainjs',
 };
 
 function npmPkgToGitHubRepo(pkg: string): string | null {
@@ -243,26 +376,64 @@ function npmPkgToGitHubRepo(pkg: string): string | null {
 }
 
 async function getLatestVersionFromRSS(repoSlug: string): Promise<string | null> {
-  // Fetch https://github.com/{owner}/{repo}/releases.atom
   const url = `https://github.com/${repoSlug}/releases.atom`;
   const xml = await fetchText(url);
   if (!xml) return null;
 
-  // Parse first <title> inside first <entry> — format: "v1.2.3" or "1.2.3"
-  // Simple regex approach (no XML parser dep needed):
   const entryMatch = xml.match(/<entry>[\s\S]*?<title[^>]*>(.*?)<\/title>/);
   if (!entryMatch) return null;
 
   const raw = entryMatch[1].replace(/<!\[CDATA\[(.*?)\]\]>/, '$1').trim();
-  // Strip leading "v" if present
   return raw.replace(/^v/, '');
+}
+
+// Direct GitHub API release check — handles rate limits gracefully
+async function getLatestGitHubRelease(repo: string): Promise<{ tag: string; published: string } | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const url = `https://api.github.com/repos/${repo}/releases/latest`;
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'xhaka-tool-monitor/1.0',
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    clearTimeout(timer);
+
+    // Rate limit handling
+    if (res.status === 429 || res.status === 403) {
+      const remaining = res.headers.get('X-RateLimit-Remaining');
+      const reset = res.headers.get('X-RateLimit-Reset');
+      console.warn(
+        `[tool-monitor] GitHub rate limit for ${repo} — remaining: ${remaining}, resets: ${reset ? new Date(Number(reset) * 1000).toISOString() : 'unknown'}`,
+      );
+      return null;
+    }
+
+    // Repo might not have releases or might be private
+    if (res.status === 404 || !res.ok) return null;
+
+    const data = (await res.json()) as { tag_name?: string; published_at?: string };
+    if (!data.tag_name) return null;
+
+    return {
+      tag: data.tag_name.replace(/^v/, ''),
+      published: data.published_at ?? '',
+    };
+  } catch {
+    return null;
+  }
 }
 
 function detectNewChangelogContent(html: string, lastChecked: Date | null): boolean {
   if (!lastChecked) return false; // First run — don't flood inbox
 
-  // Look for date strings in the HTML newer than lastChecked
-  // Match patterns: "March 10, 2026", "2026-03-10", "Mar 10 2026"
   const datePatterns = [
     /(\d{4}-\d{2}-\d{2})/g,
     /([A-Z][a-z]+ \d{1,2},? \d{4})/g,
@@ -282,6 +453,7 @@ function detectNewChangelogContent(html: string, lastChecked: Date | null): bool
 
 function buildInboxFile(findings: Finding[], timestamp: string): string {
   const depUpdates = findings.filter(f => f.type === 'dep-update');
+  const repoReleases = findings.filter(f => f.type === 'repo-release');
   const changelogUpdates = findings.filter(f => f.type === 'changelog-update');
 
   const lines = [
@@ -297,6 +469,20 @@ function buildInboxFile(findings: Finding[], timestamp: string): string {
     `Automated daily scan detected ${findings.length} update(s).`,
     ``,
   ];
+
+  if (repoReleases.length > 0) {
+    lines.push(`## New Tool Releases`);
+    lines.push(``);
+    for (const f of repoReleases as RepoReleaseFinding[]) {
+      lines.push(`### ${f.tool}`);
+      lines.push(`- **From:** ${f.fromTag}`);
+      lines.push(`- **To:** ${f.toTag}`);
+      lines.push(`- **Published:** ${f.publishedAt}`);
+      lines.push(`- **Release:** ${f.releaseUrl}`);
+      lines.push(`- **Repo:** https://github.com/${f.repo}`);
+      lines.push(``);
+    }
+  }
 
   if (depUpdates.length > 0) {
     lines.push(`## Dependency Updates`);
@@ -327,6 +513,91 @@ function buildInboxFile(findings: Finding[], timestamp: string): string {
   return lines.join('\n');
 }
 
+// ── data/tool-monitor-results.md ────────────────────────────────────
+
+async function writeResultsSummary(findings: Finding[], state: LastScanState): Promise<void> {
+  const now = new Date().toISOString();
+  const repoReleases = findings.filter(f => f.type === 'repo-release') as RepoReleaseFinding[];
+  const depUpdates = findings.filter(f => f.type === 'dep-update') as DepUpdateFinding[];
+  const changelogUpdates = findings.filter(f => f.type === 'changelog-update') as ChangelogFinding[];
+
+  const lines = [
+    `# Tool Monitor — Latest Results`,
+    ``,
+    `**Last Run:** ${now}`,
+    `**Total Findings:** ${findings.length}`,
+    ``,
+    `## Registry Repos Monitored`,
+    ``,
+    `| Tool | Repo | Latest Release |`,
+    `|---|---|---|`,
+  ];
+
+  for (const entry of REGISTRY_GITHUB_REPOS) {
+    const tag = state.repoReleases[entry.id] ?? '—';
+    lines.push(`| ${entry.name} | [${entry.repo}](https://github.com/${entry.repo}) | \`${tag}\` |`);
+  }
+
+  lines.push(``);
+
+  if (repoReleases.length > 0) {
+    lines.push(`## 🚀 New Releases Detected`);
+    lines.push(``);
+    for (const f of repoReleases) {
+      lines.push(`- **${f.tool}**: \`${f.fromTag}\` → \`${f.toTag}\` — [view release](${f.releaseUrl})`);
+    }
+    lines.push(``);
+  }
+
+  if (depUpdates.length > 0) {
+    lines.push(`## 📦 Dependency Updates`);
+    lines.push(``);
+    for (const f of depUpdates) {
+      lines.push(`- \`${f.package}\`: ${f.fromVersion} → ${f.toVersion}`);
+    }
+    lines.push(``);
+  }
+
+  if (changelogUpdates.length > 0) {
+    lines.push(`## 📝 Changelog Activity`);
+    lines.push(``);
+    for (const f of changelogUpdates) {
+      lines.push(`- **${f.service}**: [${f.url}](${f.url})`);
+    }
+    lines.push(``);
+  }
+
+  if (findings.length === 0) {
+    lines.push(`## ✅ No Updates`);
+    lines.push(``);
+    lines.push(`All tools are on known versions. No changelog activity detected.`);
+    lines.push(``);
+  }
+
+  lines.push(`---`);
+  lines.push(`_Auto-generated by tool-monitor job. Next run: daily at 6:05 AM CST._`);
+
+  const content = lines.join('\n');
+
+  const existing = await getFileContent(XHAKA_REPO, RESULTS_PATH).catch(() => null);
+  if (existing) {
+    await updateFile(
+      XHAKA_REPO,
+      RESULTS_PATH,
+      content,
+      `tool-monitor: update results [${findings.length} finding(s)]`,
+      existing.sha,
+    );
+  } else {
+    await createFile(
+      XHAKA_REPO,
+      RESULTS_PATH,
+      content,
+      `tool-monitor: init results file`,
+    );
+  }
+  console.log(`[tool-monitor] Wrote results summary → ${RESULTS_PATH}`);
+}
 
 // ── Latest-Update Writers ────────────────────────────────────────────
 
@@ -351,9 +622,10 @@ interface LastScanState {
   lastRunAt: string | null;
   versions: Record<string, string>;
   changelogChecked: Record<string, string>;
+  repoReleases: Record<string, string>;
 }
 
-type Finding = DepUpdateFinding | ChangelogFinding;
+type Finding = DepUpdateFinding | RepoReleaseFinding | ChangelogFinding;
 
 interface DepUpdateFinding {
   type: 'dep-update';
@@ -361,6 +633,16 @@ interface DepUpdateFinding {
   fromVersion: string;
   toVersion: string;
   rssUrl: string;
+}
+
+interface RepoReleaseFinding {
+  type: 'repo-release';
+  tool: string;
+  repo: string;
+  fromTag: string;
+  toTag: string;
+  publishedAt: string;
+  releaseUrl: string;
 }
 
 interface ChangelogFinding {

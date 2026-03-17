@@ -52,4 +52,26 @@ Source: Excalidraw diagram skill (2026-03-16)
 
 **Rule:** Every visual must pass the isomorphism test: if you removed all text, would the structure alone communicate the concept?
 If not — redesign. Shape IS the meaning.
+---
 
+## Multi-Agent Architecture Rules (2026-03-16)
+Source: "Claude Subagents vs Agent Teams"
+
+**Rule 1 — Split by context, not by role.**
+Never split agents by org chart (planner/implementer/tester). Split only when context can be genuinely isolated. If two subtasks need overlapping information, they belong to the same agent.
+
+**Rule 2 — Sub-agents for parallel exploration. Agent teams for ongoing negotiation.**
+Sub-agents: fire-and-forget, isolated, result flows back to parent. Use for: research, lookups, codebase exploration.
+Agent teams: persistent, peer-to-peer, shared state. Use for: features that require reconciliation across agents.
+
+**Rule 3 — Never write code in parallel sub-agents.**
+Parallel agents writing code make incompatible assumptions. Sub-agents for coding = answer questions and explore only. One agent writes the code.
+
+**Rule 4 — Start with one agent. Add complexity only where it breaks.**
+Most multi-agent pipelines could have been better prompting on a single agent. Measure before adding agents.
+
+**Rule 5 — The description field IS the router.**
+In Claude sub-agent SDK: the description field routes tasks. Keep it specific and distinct from other agents or they'll conflict.
+
+**Rule 6 — Tier models by task complexity.**
+Heavy reasoning → Sonnet/Opus. Routing/summarizing → GPT-4o-mini. Never use expensive models for routine work.

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xhaka Control Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#EDE0C4; --card:#FAF3E0; --border:#C9A84C; --accent:#B8732A;
+  --deep:#5C3317; --text:#2C1810; --muted:#7A5C3A; --gold:#E8B84B;
+  --brass:#C9A84C; --green:#22863a; --red:#8B0000;
+}
+body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; font-size:14px; line-height:1.6; min-height:100vh; }
+body::before {
+  content:''; position:fixed; top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9999; opacity:0.45;
+}
+header { background:var(--deep); border-bottom:3px solid var(--brass); padding:0 28px; display:flex; align-items:center; justify-content:space-between; height:62px; position:sticky; top:0; z-index:100; }
+.brand { display:flex; align-items:baseline; gap:10px; text-decoration:none; }
+.brand-title { font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:4px; }
+.brand-sub { font-size:10px; color:var(--brass); letter-spacing:2.5px; text-transform:uppercase; }
+nav { display:flex; align-items:center; gap:3px; }
+.nav-link { font-family:'Lora',Georgia,serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#D4C4A8; text-decoration:none; padding:5px 12px; border-radius:2px; border:1px solid transparent; transition:all 0.15s; }
+.nav-link:hover,.nav-link.active { color:var(--gold); border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.1); }
+.nav-ts { font-family:'Courier New',monospace; font-size:10px; color:var(--brass); margin-left:12px; opacity:0.8; }
+.main { max-width:1440px; margin:0 auto; padding:28px 24px 48px; }
+.grid { display:grid; gap:18px; }
+.g2 { grid-template-columns:1fr 1fr; }
+.g4 { grid-template-columns:repeat(4,1fr); }
+.g-auto { grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+.wide { grid-column:1/-1; }
+.card { background:var(--card); border:1px solid var(--brass); border-radius:4px; padding:20px; box-shadow:2px 3px 14px rgba(184,115,42,0.13); }
+.card-label { font-family:'Playfair Display',Georgia,serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--muted); display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.section-title { font-family:'Playfair Display',Georgia,serif; font-size:18px; font-weight:700; color:var(--deep); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid rgba(201,168,76,0.5); }
+.ornament { text-align:center; color:var(--brass); font-family:'Playfair Display',serif; font-size:13px; letter-spacing:6px; margin:28px 0; user-select:none; }
+.seal { display:inline-block; width:10px; height:10px; border-radius:50%; border:1.5px solid rgba(0,0,0,0.12); flex-shrink:0; }
+.seal.green  { background:#22863a; box-shadow:0 0 5px rgba(34,134,58,0.45); }
+.seal.red    { background:#8B0000; box-shadow:0 0 5px rgba(139,0,0,0.45); }
+.seal.amber  { background:#B8732A; box-shadow:0 0 5px rgba(184,115,42,0.45); }
+.seal.gray   { background:#9C7E5A; }
+.stamp { font-family:'Courier New',monospace; font-size:9px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; padding:2px 7px; border-radius:2px; border:1.5px solid; display:inline-block; }
+.stamp.success { color:#22863a; border-color:#22863a; background:rgba(34,134,58,0.07); }
+.stamp.fail    { color:#8B0000; border-color:#8B0000; background:rgba(139,0,0,0.07); }
+.stamp.running { color:#B8732A; border-color:#B8732A; background:rgba(184,115,42,0.07); }
+.stamp.unknown { color:#7A5C3A; border-color:#7A5C3A; background:rgba(122,92,58,0.07); }
+.stamp.live    { color:#22863a; border-color:#22863a; background:rgba(34,134,58,0.07); }
+.stat-num { font-family:'Playfair Display',Georgia,serif; font-size:48px; font-weight:700; color:var(--accent); line-height:1; }
+.stat-unit { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
+.stat-tile { background:var(--bg); border:1px solid rgba(201,168,76,0.4); border-radius:3px; padding:16px; text-align:center; }
+.stat-tile .num { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--accent); line-height:1; }
+.stat-tile .lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-top:5px; }
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { text-align:left; font-family:'Playfair Display',serif; font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:6px 12px; border-bottom:2px solid var(--brass); }
+td { padding:7px 12px; border-bottom:1px dotted rgba(201,168,76,0.25); color:var(--text); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(201,168,76,0.05); }
+.commit-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px dotted rgba(201,168,76,0.25); }
+.commit-row:last-child { border-bottom:none; }
+.commit-sha { font-family:'Courier New',monospace; font-size:11px; color:var(--accent); background:rgba(184,115,42,0.1); border:1px solid rgba(184,115,42,0.25); padding:1px 6px; border-radius:2px; white-space:nowrap; flex-shrink:0; }
+.commit-msg { flex:1; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.commit-ts { font-size:11px; color:var(--muted); white-space:nowrap; }
+.chip-row { display:flex; flex-wrap:wrap; gap:6px; }
+.chip { font-size:12px; padding:3px 11px; border-radius:20px; border:1px solid; font-family:'Lora',serif; }
+.chip.live     { color:#22863a; border-color:rgba(34,134,58,0.4); background:rgba(34,134,58,0.07); }
+.chip.notwired { color:var(--muted); border-color:rgba(122,92,58,0.3); background:rgba(122,92,58,0.05); }
+.chip.explore  { color:var(--accent); border-color:rgba(184,115,42,0.35); background:rgba(184,115,42,0.07); }
+.agent-mini { background:var(--bg); border:1px solid rgba(201,168,76,0.35); border-radius:3px; padding:10px 12px; display:flex; flex-direction:column; gap:4px; }
+.agent-mini-top { display:flex; align-items:center; gap:8px; }
+.agent-mini-name { font-weight:600; font-size:13px; font-family:'Playfair Display',serif; }
+.agent-mini-role { font-size:11px; color:var(--muted); }
+.agents-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+.tier-section { margin-bottom:16px; }
+.tier-section:last-child { margin-bottom:0; }
+.tier-label { font-family:'Playfair Display',serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; padding-bottom:4px; border-bottom:1px dotted rgba(201,168,76,0.35); }
+.tier-label.green { color:#22863a; }
+.tier-label.amber { color:var(--accent); }
+.queue-row { display:flex; align-items:center; gap:20px; }
+.queue-meta { display:flex; flex-direction:column; gap:4px; }
+.loading { color:var(--muted); font-style:italic; font-size:12px; padding:14px 0; text-align:center; animation:pulse 1.6s infinite; }
+.error-note { color:#8B0000; font-size:11px; font-family:'Courier New',monospace; padding:6px 10px; background:rgba(139,0,0,0.06); border:1px solid rgba(139,0,0,0.18); border-radius:2px; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@media(max-width:960px){.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.g2,.g4{grid-template-columns:1fr}.main{padding:16px 12px 32px}header{padding:0 14px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <span class="brand-title">XHAKA</span>
+    <span class="brand-sub">Control Room</span>
+  </a>
+  <nav>
+    <a href="index.html" class="nav-link active">Dashboard</a>
+    <a href="team.html" class="nav-link">Team Room</a>
+    <a href="intelligence.html" class="nav-link">Intelligence</a>
+    <a href="tools.html" class="nav-link">Tool Room</a>
+    <span class="nav-ts" id="last-updated">—</span>
+  </nav>
+</header>
+
+<div class="main">
+
+  <div class="grid g-auto" style="margin-bottom:18px;">
+
+    <!-- Queue Depth -->
+    <div class="card">
+      <div class="card-label">
+        Task Queue
+        <span class="stamp live" id="queue-badge">—</span>
+      </div>
+      <div class="queue-row">
+        <div>
+          <div class="stat-num" id="queue-depth">—</div>
+          <div class="stat-unit">pending</div>
+        </div>
+        <div class="queue-meta">
+          <span id="queue-detail" style="font-size:12px;color:var(--muted);font-style:italic;">Fetching queue…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Knowledge Base Counts -->
+    <div class="card" style="grid-column:span 2;">
+      <div class="card-label">Knowledge Base — Live Counts</div>
+      <div class="grid g4" id="kb-tiles">
+        <div class="stat-tile"><div class="num" id="kb-articles">…</div><div class="lbl">Articles Inbox</div></div>
+        <div class="stat-tile"><div class="num" id="kb-repos">…</div><div class="lbl">Repo Inbox</div></div>
+        <div class="stat-tile"><div class="num" id="kb-total">…</div><div class="lbl">KB Docs</div></div>
+        <div class="stat-tile"><div class="num" id="kb-books">…</div><div class="lbl">Books</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ornament">─── ✦ ───</div>
+
+  <!-- Agent Roster -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-label">
+      Agent Roster
+      <a href="team.html" style="font-size:11px;color:var(--accent);text-decoration:none;font-family:'Courier New',monospace;letter-spacing:0.5px;">View Full Team →</a>
+    </div>
+    <div class="agents-grid" id="agents-grid"></div>
+  </div>
+
+  <!-- Job Results -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-label">
+      Recent Job Results
+      <span class="stamp unknown" id="jobs-badge">—</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Job</th><th>Status</th><th>Duration</th><th>Model</th><th>Cost</th><th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="jobs-body">
+          <tr><td colspan="6" class="loading">Consulting the ledger…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Commits -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-label">
+      Recent Commits
+      <span class="stamp unknown" id="commits-badge">—</span>
+    </div>
+    <div id="commits-list"><div class="loading">Loading…</div></div>
+  </div>
+
+  <!-- Tool Status -->
+  <div class="card">
+    <div class="card-label">
+      Tool Status
+      <a href="tools.html" style="font-size:11px;color:var(--accent);text-decoration:none;font-family:'Courier New',monospace;">View Full Room →</a>
+    </div>
+    <div class="tier-section">
+      <div class="tier-label green">● Live &amp; Wired</div>
+      <div class="chip-row" id="tools-live"></div>
+    </div>
+    <div class="tier-section" style="margin-top:14px;">
+      <div class="tier-label">○ Not Yet Wired</div>
+      <div class="chip-row" id="tools-notwired"></div>
+    </div>
+    <div class="tier-section" style="margin-top:14px;">
+      <div class="tier-label amber">◎ Exploring</div>
+      <div class="chip-row" id="tools-explore"></div>
+    </div>
+  </div>
+
+</div><!-- .main -->
+
+<script>
+const TOKEN = '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';
+const REPO  = 'c7lavinder/xhaka';
+const API   = 'https://api.github.com';
+
+const AGENTS = [
+  { name:'Xhaka',      role:'COO / Strategy',     emoji:'🧠' },
+  { name:'Builder',    role:'Engineering',         emoji:'👷' },
+  { name:'Auditor',    role:'QA & Compliance',     emoji:'👮' },
+  { name:'Researcher', role:'Intelligence & R&D',  emoji:'🔬' },
+  { name:'Architect',  role:'Visuals & Dashboard', emoji:'🎨' },
+  { name:'Librarian',  role:'Memory & Knowledge',  emoji:'📚' },
+  { name:'Operator',   role:'Systems & Config',    emoji:'⚙️' },
+];
+
+const TOOLS = {
+  live:     ['Railway','GitHub','OpenAI','Telegram','GHL','BatchDialer','BatchLeads','CallRail','Gunner'],
+  notwired: ['Sentry','PostHog','LangSmith','Supabase'],
+  explore:  ['Cognee','OpenViking','GitNexus','Superpowers','gstack','Paperclip','Hindsight'],
+};
+
+async function ghFetch(path) {
+  const r = await fetch(`${API}${path}`, { headers:{ Authorization:`token ${TOKEN}`, Accept:'application/vnd.github.v3+json' } });
+  if (!r.ok) throw new Error(`GitHub ${r.status}: ${path}`);
+  return r.json();
+}
+async function ghRaw(path) {
+  const r = await fetch(`${API}${path}`, { headers:{ Authorization:`token ${TOKEN}`, Accept:'application/vnd.github.v3.raw' } });
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  return r.text();
+}
+
+function timeAgo(iso) {
+  const d = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(d/60000);
+  if (m<1) return 'just now';
+  if (m<60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h<24) return `${h}h ago`;
+  return `${Math.floor(h/24)}d ago`;
+}
+
+function stampClass(s) {
+  s=(s||'').toLowerCase();
+  if (s==='success'||s==='ok'||s==='done'||s==='pass') return 'success';
+  if (s==='fail'||s==='error'||s==='failed') return 'fail';
+  if (s==='running'||s==='active'||s==='pending') return 'running';
+  return 'unknown';
+}
+
+// Agents
+function renderAgents() {
+  document.getElementById('agents-grid').innerHTML = AGENTS.map(a=>`
+    <div class="agent-mini">
+      <div class="agent-mini-top">
+        <span class="seal green"></span>
+        <span>${a.emoji}</span>
+        <span class="agent-mini-name">${a.name}</span>
+      </div>
+      <div class="agent-mini-role">${a.role}</div>
+    </div>`).join('');
+}
+
+// Tools
+function renderTools() {
+  const dot = { live:'●', notwired:'○', explore:'◎' };
+  for (const [tier, tools] of Object.entries(TOOLS)) {
+    const el = document.getElementById(`tools-${tier}`);
+    if (el) el.innerHTML = tools.map(t=>`<span class="chip ${tier}">${dot[tier]} ${t}</span>`).join('');
+  }
+}
+
+// Queue
+async function loadQueue() {
+  try {
+    const raw = await ghRaw(`/repos/${REPO}/contents/data/task-queue.json`);
+    const data = JSON.parse(raw);
+    const tasks = Array.isArray(data) ? data : (data.tasks||data.queue||[]);
+    const n = tasks.length;
+    document.getElementById('queue-depth').textContent = n;
+    document.getElementById('queue-badge').textContent = `${n} tasks`;
+    document.getElementById('queue-detail').innerHTML = n===0
+      ? '<span style="color:var(--green)">Queue clear — all quiet</span>'
+      : `<span style="color:var(--accent)">${n} pending task${n!==1?'s':''}</span>`;
+  } catch {
+    document.getElementById('queue-depth').textContent = '?';
+    document.getElementById('queue-detail').innerHTML = '<span style="color:var(--muted)">Unavailable</span>';
+  }
+}
+
+// KB counts
+async function refreshKBCounts() {
+  const headers = { Authorization:`token ${TOKEN}` };
+  try {
+    const articleRaw = await fetch(`${API}/repos/${REPO}/contents/intelligence/article-inbox.md`,{headers}).then(r=>r.json()).then(d=>atob(d.content.replace(/\n/g,'')));
+    document.getElementById('kb-articles').textContent = articleRaw.split('\n').filter(l=>l.trim().startsWith('- ')||l.trim().startsWith('# ')).filter(l=>!l.trim().startsWith('# Article')).length || articleRaw.split('---').filter(s=>s.trim().length>20).length-1;
+  } catch { document.getElementById('kb-articles').textContent='?'; }
+  try {
+    const repoRaw = await fetch(`${API}/repos/${REPO}/contents/intelligence/repo-inbox.md`,{headers}).then(r=>r.json()).then(d=>atob(d.content.replace(/\n/g,'')));
+    document.getElementById('kb-repos').textContent = repoRaw.split('\n').filter(l=>l.trim().startsWith('- ')).length;
+  } catch { document.getElementById('kb-repos').textContent='?'; }
+  try {
+    const tree = await fetch(`${API}/repos/${REPO}/git/trees/main?recursive=1`,{headers}).then(r=>r.json());
+    document.getElementById('kb-total').textContent = tree.tree.filter(f=>f.path.startsWith('memory/context/')&&f.path.endsWith('.md')).length;
+    document.getElementById('kb-books').textContent = tree.tree.filter(f=>f.path.startsWith('memory/context/books/')&&f.path.endsWith('.md')&&!f.path.endsWith('INDEX.md')&&!f.path.endsWith('CLAUDE.md')).length;
+  } catch { document.getElementById('kb-total').textContent='?'; document.getElementById('kb-books').textContent='?'; }
+}
+
+// Jobs
+async function loadJobs() {
+  const tbody = document.getElementById('jobs-body');
+  try {
+    const raw = await ghRaw(`/repos/${REPO}/contents/data/results.tsv`);
+    const lines = raw.trim().split('\n').filter(Boolean);
+    const last10 = lines.slice(-10).reverse();
+    document.getElementById('jobs-badge').textContent = `${lines.length} total`;
+    tbody.innerHTML = last10.map(line => {
+      const cols = line.split('\t');
+      const ts=cols[0]||''; const job=cols[1]||'—'; const status=cols[2]||'—';
+      const dur=cols[3]||'—'; const extra=cols[5]||'';
+      const model = (extra.match(/model=([^\s]+)/)||[])[1]||'—';
+      const cost  = (extra.match(/cost=([^\s]+)/)||[])[1]||'—';
+      const sc = stampClass(status);
+      const tsDisplay = ts ? `<span title="${ts}" class="mono" style="font-size:11px;">${timeAgo(ts)}</span>` : '—';
+      return `<tr>
+        <td><span class="mono" style="font-size:12px;">${job}</span></td>
+        <td><span class="stamp ${sc}">${status}</span></td>
+        <td><span class="mono" style="font-size:11px;">${dur}ms</span></td>
+        <td><span class="mono" style="font-size:11px;">${model}</span></td>
+        <td><span style="color:var(--muted);font-size:11px;">${cost}</span></td>
+        <td>${tsDisplay}</td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="error-note">Could not load results.tsv — ${e.message}</div></td></tr>`;
+  }
+}
+
+// Commits
+async function loadCommits() {
+  const el = document.getElementById('commits-list');
+  try {
+    const data = await ghFetch(`/repos/${REPO}/commits?per_page=7`);
+    document.getElementById('commits-badge').textContent = `${data.length} shown`;
+    el.innerHTML = data.map(c => {
+      const sha = c.sha.slice(0,7);
+      const msg = c.commit.message.split('\n')[0];
+      const ts  = c.commit.committer.date;
+      const author = c.commit.author.name;
+      return `<div class="commit-row">
+        <span class="commit-sha">${sha}</span>
+        <span class="commit-msg" title="${msg}">${msg}</span>
+        <span class="commit-ts" title="${author}">${timeAgo(ts)}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = `<div class="error-note">Could not load commits — ${e.message}</div>`;
+  }
+}
+
+function updateTs() {
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+async function init() {
+  renderAgents();
+  renderTools();
+  await Promise.all([loadQueue(), refreshKBCounts(), loadJobs(), loadCommits()]);
+  updateTs();
+}
+
+init();
+setInterval(init, 60000);
+setInterval(refreshKBCounts, 300000);
+</script>
+</body>
+</html>

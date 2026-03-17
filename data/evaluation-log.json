@@ -1,1 +1,162 @@
-[]
+[
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T02:06:50.493Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides basic statistics about the scribe's activity but lacks context or significance. It does not highlight any important insights or decisions that would be valuable for memory.",
+    "evaluatedAt": "2026-03-16T02:06:51.827Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T02:36:10.301Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The output provides a general overview of Polymarket and its regulatory status, which could be useful for understanding market trends. However, it lacks specific, actionable insights or concrete implications for a researcher in wholesale real estate, such as how exactly Polymarket's trends could be leveraged or what specific actions should be taken based on this understanding.",
+    "evaluatedAt": "2026-03-16T02:36:12.343Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T02:36:12.899Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "baseline record",
+    "evaluatedAt": "2026-03-16T02:36:12.899Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T05:02:44.951Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides a basic summary of the scribe's activities, but it lacks detail and context. It does not highlight any important or high-signal information that would be valuable for memory retention.",
+    "evaluatedAt": "2026-03-16T05:02:46.199Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T05:05:45.647Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output does not provide any genuinely important information to be added to MEMORY.md. It only gives a summary of tasks completed without any specific details or insights that would be useful for future reference.",
+    "evaluatedAt": "2026-03-16T05:05:46.342Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T05:16:01.910Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides basic statistics about the scribe's activity but lacks context or significance. It does not highlight any genuinely important items or insights that would be valuable for future reference.",
+    "evaluatedAt": "2026-03-16T05:16:03.318Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T06:01:12.457Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The output provides a summary of Polymarket's operations and regulatory status, which are useful insights. However, it lacks specific, actionable implications for how these insights could be directly applied to wholesale real estate operations beyond a general statement about data-driven forecasts. More concrete examples or strategies would enhance its applicability.",
+    "evaluatedAt": "2026-03-16T06:01:13.563Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T06:11:15.445Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The output provides a general overview of Polymarket and its regulatory environment, which could be relevant for strategic decision-making in real estate. However, it lacks specific, actionable insights or concrete implications for how exactly these prediction markets can be leveraged in wholesale real estate operations.",
+    "evaluatedAt": "2026-03-16T06:11:17.459Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-16T06:11:17.972Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "baseline record",
+    "evaluatedAt": "2026-03-16T06:11:17.972Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T06:25:50.508Z",
+    "score": 0,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important information that should be added to MEMORY.md. It merely provides a summary of tasks completed without any significant insights or details.",
+    "evaluatedAt": "2026-03-16T06:25:51.630Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T06:32:28.291Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output lacks important information about the content or significance of the 100 commits digested, making it low-signal and not particularly useful for memory retention.",
+    "evaluatedAt": "2026-03-16T06:32:29.227Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T07:20:06.117Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output contains basic quantitative data about the scribe's activities, but it lacks context or significance. It doesn't provide insights into the importance or impact of the activities, making it low-signal for MEMORY.md.",
+    "evaluatedAt": "2026-03-16T07:20:07.275Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T08:44:18.385Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides minimal information about the scribe's activities, with only quantitative data and no qualitative insights or context. This lacks high-signal information that would be valuable for memory, such as specific challenges faced or notable patterns observed.",
+    "evaluatedAt": "2026-03-16T08:44:19.192Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T08:52:17.068Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a brief summary of the scribe's activities but lacks any genuinely important or insightful information that would be valuable for long-term memory. It is concise but low in signal.",
+    "evaluatedAt": "2026-03-16T08:52:18.162Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T10:13:38.046Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides minimal information about the scribe's activities, focusing on quantitative metrics without context or significance. It lacks high-signal insights or genuinely important items that would be valuable for memory retention.",
+    "evaluatedAt": "2026-03-16T10:13:38.996Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T10:20:23.282Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of the scribe's activities but lacks detail on the significance or impact of these activities. It does not highlight genuinely important items or provide high-signal information that would be useful for memory retention.",
+    "evaluatedAt": "2026-03-16T10:20:24.863Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T16:33:17.637Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides quantitative data about the scribe's activities but lacks context or significance. It does not highlight any genuinely important items or insights that would be valuable for MEMORY.md.",
+    "evaluatedAt": "2026-03-16T16:33:20.110Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T16:41:26.878Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a brief summary of the scribe's activities, but it lacks depth and context. It does not highlight any genuinely important items or insights that would be valuable for MEMORY.md.",
+    "evaluatedAt": "2026-03-16T16:41:28.332Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T17:51:03.166Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but low in signal, as it doesn't highlight any significant decisions or rules that could be useful for future reference.",
+    "evaluatedAt": "2026-03-16T17:51:05.393Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-16T20:47:49.410Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output lacks important details about the content or significance of the 100 commits digested, which could be valuable for memory. The entry is concise but low in signal, as it does not provide context or insights into the work done.",
+    "evaluatedAt": "2026-03-16T20:47:51.026Z"
+  }
+]

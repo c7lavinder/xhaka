@@ -2,7 +2,7 @@
 // On-Call Dispatcher — reads pending tasks from the queue and routes them
 // to the appropriate specialist agent. Runs every minute.
 //
-// Supported agents: researcher | auditor | architect
+// Supported agents: researcher | auditor | architect | voice-ingest | librarian | repo-researcher
 // All agents log a proof-of-work artifact back to the task entry on completion.
 
 import { getPendingTasks, updateTaskStatus, completeTask, pruneOldTasks, type Task } from '../utils/task-queue.js';
@@ -10,6 +10,10 @@ import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-regist
 import { runResearcher } from './researcher.js';
 import { runAuditor } from './auditor.js';
 import { runArchitect } from './architect.js';
+import { runVoiceIngest } from './voice-ingest.js';
+import { runLibrarian } from './librarian.js';
+import { runRepoResearch } from './repo-researcher.js';
+import { runToolResearch } from './tool-researcher.js';
 
 // ---------------------------------------------------------------------------
 // Dispatcher
@@ -83,6 +87,15 @@ async function routeToAgent(task: Task): Promise<string> {
 
     // ── Researcher ─────────────────────────────────────────────────────────
     case 'researcher': {
+      if (task.task === 'research-tool') {
+        console.log(`[dispatcher] → Tool Researcher: ${String(payload?.tool)} (${String(payload?.category)})`);
+        const result = await runToolResearch(
+          String(payload?.tool ?? ''),
+          String(payload?.url ?? ''),
+          String(payload?.category ?? ''),
+        );
+        return `Tool researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+      }
       console.log(`[dispatcher] → Researcher: ${task.task}`);
       await runResearcher();
       return `Researcher processed article-inbox.md at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
@@ -101,6 +114,30 @@ async function routeToAgent(task: Task): Promise<string> {
       const result = await runArchitect(payload);
       return result;
     }
+
+    // ── Voice Ingest ───────────────────────────────────────────────────────
+    case 'voice-ingest': {
+      console.log(`[dispatcher] → Voice Ingest: ${task.task}`);
+      await runVoiceIngest();
+      return `Voice ingest completed at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+    // ── Librarian ──────────────────────────────────────────────────────────
+    case 'librarian': {
+      console.log(`[dispatcher] → Librarian: ${task.task}`);
+      await runLibrarian();
+      return `Librarian audit completed at ${new Date().toISOString()}. Report: intelligence/librarian-reports/${new Date().toISOString().split('T')[0]}.md. Triggered by task ${task.id}.`;
+    }
+
+
+    // ── Repo Researcher ────────────────────────────────────────────────────
+    case 'repo-researcher': {
+      console.log(`[dispatcher] → Repo Researcher: ${task.task} — ${String(payload?.url)}`);
+      const result = await runRepoResearch(String(payload?.url ?? ''));
+      return `Repo researcher: ${result} at ${new Date().toISOString()}. Triggered by task ${task.id}.`;
+    }
+
+
 
     // ── Unknown ────────────────────────────────────────────────────────────
     default: {

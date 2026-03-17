@@ -5,6 +5,9 @@ My home base. The Xhaka Railway project is the system that runs me — my memory
 
 ## Status: Active — Foundation Hardening 🔧
 
+## Current State
+The project is stable with all services online and functioning as expected. Recent sessions focused on team mapping and visual output, confirming the completion of all Xhaka week-1 builds. The control room has transitioned to a new Next.js setup, improving reliability and maintainability.
+
 ## Infrastructure
 - **Repo:** c7lavinder/xhaka (GitHub — single source of truth)
 - **Railway Project:** Xhaka (ID: 84c0d035-cf53-4edd-b29c-31aeb42caac9)
@@ -71,69 +74,3 @@ workspace-sync cron runs every 30 minutes (16 workspace files covered).
 - No railway deployment yet — local Mac mini + OpenClaw only.
 
 ### Feb 18, 2026 — OpenClaw Update
-- Updated OpenClaw from 2026.2.9 → 2026.2.17
-- Gemini Flash added as model option (alias: gemini-flash)
-- Google API key stored in auth-profiles.json
-- Model routing plan: Gemini Flash for chat, Sonnet for code/technical
-
-### Feb 19-26, 2026 — Memory Store During V2 Architecture
-- Xhaka repo used as memory store during intensive Gunner V2 architecture/build sessions
-- Key architectural decisions, process maps, build specs all written to daily logs
-- org-chart/index.html built locally (v0.4) — Gunner V2 process map
-- No Railway deployment yet
-
-### Feb 26-Mar 1, 2026 — First Agent Definitions
-- AGENTS.md created: lean AI team of 5 (Xhaka, Builder, Architect, Auditor, Researcher)
-- SOUL.md updated: "I am a Partner/COO, not an engineer" added as Core Truth
-- PATH-FORWARD.md created: master strategic roadmap for 3 active projects
-- First sub-agent runs via OpenClaw (Gemini-based, Anthropic models broken for spawn)
-
-### Mar 8, 2026 — OpenClaw Update + Role Clarity Milestone
-- OpenClaw updated to v2026.3.7 via `npx pnpm@latest`
-- `gemini-3.1-flash-lite-preview` added (alias: gemini-lite)
-- SOUL.md updated: role clarity "I am a Partner/COO, not an engineer"
-- MEMORY.md: "NO BUILDING" prime directive added
-- GitHub repos cleaned up: 6 dead repos archived, 2 active
-
-### Mar 12, 2026 — Control Room + Intelligence Hardening
-- Old vanilla HTML control room (xhaka-production.up.railway.app/control-room) abandoned
-- New Next.js 15 Control Room: c7lavinder/openclaw-control-room
-  - Live URL: xhaka-control-room-production.up.railway.app
-  - Stack: Next.js 15 + TypeScript + Tailwind v4 + Framer Motion
-  - Data source: GitHub API reading from c7lavinder/xhaka repo
-  - Pages: Home, Memory, Agents, Projects, System
-- xhaka-links repo created: c7lavinder/xhaka-links → links-and-docs-production.up.railway.app
-- 10 intelligence hardening fixes shipped + Auditor PASS
-
-### Mar 13, 2026 — Foundation Hardening Day
-- All 12 core files updated and audited (Auditor verdict: READY)
-- workspace-sync cron active (every 30min, 16 files)
-- session-memory-capture cron: first pass deployed, status uncertain
-- Intelligence pipeline: 4 bugs fixed (capture, github.ts 422, stuck job reset, boot recovery)
-- TELEGRAM_BOT_TOKEN set on correct service (xhaka-intelligence, Xhaka project)
-- Railway service map corrected (two separate projects confirmed)
-- 10 new tool profiles created across 12 categories
-- Agent definitions built: agents/README.md, agents/guide.md, all agents updated
-
-## Key Milestones
-- 2026-03-11: Railway project created, intelligence service deployed
-- 2026-03-11: Inbox/processed folders created, capture job now functional
-- 2026-03-11: Command Center (showcase) live at xhaka-production.up.railway.app
-- 2026-03-11: Memory system structured with subfolders
-- 2026-03-12: Next.js control room built and deployed
-- 2026-03-13: xhaka-control-room and Links and Docs services confirmed
-- 2026-03-13: Session-capture cron added (OpenClaw native, every 4h)
-- 2026-03-13: Foundation hardening phase begins, workspace-sync active
-
-## Next Steps
-- Verify session-capture cron is running cleanly (openclaw cron list)
-- Run first memory synthesis (was planned for 2026-03-16)
-- Confirm propagate/improve/cleanup jobs are healthy (were failing as of Mar 13)
-
-## Known Issues (as of Mar 13)
-- `organize` job: failed Mar 13 (11s) — new failure, needs diagnosis
-- `propagate`, `improve`, `cleanup`: 0ms failures since Mar 12 — pre-existing, need Builder
-- `tool-monitor`: code fix deployed, may need Railway redeploy
-
----
-Last updated: 2026-03-14

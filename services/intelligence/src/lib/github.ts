@@ -32,6 +32,20 @@ export interface CommitInfo {
   url: string;
 }
 
+export interface CommitDiffFile {
+  filename: string;
+  status: string;
+  additions: number;
+  deletions: number;
+  patch?: string;
+}
+
+export interface CommitDiff {
+  files: CommitDiffFile[];
+  totalAdditions: number;
+  totalDeletions: number;
+}
+
 // ---------------------------------------------------------------------------
 // Read operations
 // ---------------------------------------------------------------------------
@@ -119,6 +133,30 @@ export async function getFileLastCommitDate(
     const raw = data[0].commit.committer?.date ?? data[0].commit.author?.date;
     return raw ? new Date(raw) : null;
   } catch {
+    return null;
+  }
+}
+
+export async function getCommitDiff(
+  repoEnv: string,
+  ref: string,
+): Promise<CommitDiff | null> {
+  const { owner, repo } = parseRepo(repoEnv);
+  try {
+    const { data } = await octokit.repos.getCommit({ owner, repo, ref });
+    const files = (data.files ?? []).map((f) => ({
+      filename: f.filename ?? '',
+      status: f.status ?? 'modified',
+      additions: f.additions ?? 0,
+      deletions: f.deletions ?? 0,
+      patch: f.patch,
+    }));
+    const totalAdditions = files.reduce((sum, f) => sum + f.additions, 0);
+    const totalDeletions = files.reduce((sum, f) => sum + f.deletions, 0);
+    return { files, totalAdditions, totalDeletions };
+  } catch (err: unknown) {
+    if (isNotFound(err)) return null;
+    console.error('[github] getCommitDiff failed:', err);
     return null;
   }
 }

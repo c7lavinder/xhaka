@@ -1,160 +1,90 @@
 // services/intelligence/src/jobs/morning-brief.ts
-// Runs daily at 6:00 AM CST — compiles and sends a morning summary to Corey.
-// Covers: job health, evaluation scores, proposed changes, inspection reports,
-// article digest, and feedback inbox.
+// Runs daily at 6:00 AM CST — signal-only brief. Max 15 lines.
+// Leads with decisions needed, then alerts, then focus, then one-line status.
 // Never throws — if any section fails to load, it's skipped gracefully.
 
-import { getFileContent, listDirectory, getRecentCommits, getFileLastCommitDate } from '../lib/github.js';
+import { getFileContent } from '../lib/github.js';
 import { markJobStart, markJobSuccess, markJobFailed } from '../utils/job-registry.js';
 import { sendTelegram } from '../utils/notifier.js';
+import { getTodayCostEstimate } from '../utils/smart-scheduler.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 
-interface JobEntry {
-  lastRun: string | null;
-  lastStatus: string | null;
-  durationMs: number | null;
-  expectedIntervalHours: number;
-  gracePeriodMinutes: number;
-}
+// ---------------------------------------------------------------------------
+// Helper: open decisions from memory/decisions/key-decisions.md
+// ---------------------------------------------------------------------------
 
-interface EvaluationResult {
-  jobName: string;
-  runId: string;
-  score: number;
-  grade: string;
-  rationale: string;
-  evaluatedAt: string;
-}
-
-function getDateLabel(): string {
-  return new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'America/Chicago',
-  });
+async function getOpenDecisions(): Promise<string[]> {
+  try {
+    const f = await getFileContent(REPO, 'memory/decisions/key-decisions.md');
+    if (!f) return [];
+    return f.content.split('\n')
+      .filter(l => l.includes('PENDING') || l.includes('⏳') || l.includes('waiting on Corey'))
+      .map(l => l.replace(/^[#\-\*\s]+/, '').trim())
+      .filter(l => l.length > 10)
+      .slice(0, 3);
+  } catch { return []; }
 }
 
 // ---------------------------------------------------------------------------
-// Section builders — each returns a string or null if nothing to surface
+// Helper: recent failures from data/results.tsv (last 24h)
 // ---------------------------------------------------------------------------
 
-async function buildJobHealth(): Promise<string | null> {
+async function getAlerts(): Promise<string[]> {
   try {
-    const file = await getFileContent(REPO, 'data/job-registry.json');
-    if (!file) return null;
-
-    const registry: Record<string, JobEntry> = JSON.parse(file.content);
-    const badStatuses = ['failed', 'LOW_QUALITY', 'NEEDS_REVIEW'];
-    const flagged = Object.entries(registry)
-      .filter(([, entry]) => entry.lastStatus && badStatuses.includes(entry.lastStatus))
-      .map(([name, entry]) => `  • ${name}: ${entry.lastStatus}`);
-
-    if (flagged.length === 0) {
-      return 'JOB HEALTH\n✅ All jobs healthy';
-    }
-    return `JOB HEALTH\n⚠️ Issues detected:\n${flagged.join('\n')}`;
-  } catch {
-    return null;
-  }
+    const f = await getFileContent(REPO, 'data/results.tsv');
+    if (!f) return [];
+    const lines = f.content.trim().split('\n').slice(1); // skip header
+    const yesterday = Date.now() - 24 * 60 * 60 * 1000;
+    const recentFails = lines
+      .filter(l => {
+        const parts = l.split('\t');
+        return parts[2] === 'failed' && new Date(parts[0]).getTime() > yesterday;
+      })
+      .map(l => {
+        const parts = l.split('\t');
+        return `${parts[1]} failed at ${new Date(parts[0]).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+      });
+    return recentFails.slice(0, 3);
+  } catch { return []; }
 }
 
-async function buildEvaluationScores(): Promise<string | null> {
+// ---------------------------------------------------------------------------
+// Helper: top 3 pending queue items
+// ---------------------------------------------------------------------------
+
+async function buildTodaysFocus(): Promise<string | null> {
   try {
-    const file = await getFileContent(REPO, 'data/evaluation-log.json');
-    if (!file) return null;
+    const queueFile = await getFileContent(REPO, 'data/task-queue.json');
+    const queue = queueFile ? JSON.parse(queueFile.content) : { tasks: [] };
+    const pending = (queue.tasks || []).filter((t: { status: string }) => t.status === 'pending');
 
-    const log: EvaluationResult[] = JSON.parse(file.content);
-    if (!Array.isArray(log) || log.length === 0) return null;
-
-    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-    const recent = log.filter((e) => new Date(e.evaluatedAt).getTime() > cutoff);
-    if (recent.length === 0) return null;
-
-    // Latest score per job in the past 24h
-    const byJob: Record<string, EvaluationResult> = {};
-    for (const entry of recent) {
-      if (!byJob[entry.jobName] || entry.evaluatedAt > byJob[entry.jobName].evaluatedAt) {
-        byJob[entry.jobName] = entry;
-      }
-    }
-
-    const lines = Object.values(byJob).map((e) => {
-      const flag = e.score < 65 ? ' ⚠️' : '';
-      return `  • ${e.jobName}: ${e.score}/100 (${e.grade})${flag}`;
-    });
-
-    return `OVERNIGHT SCORES\n${lines.join('\n')}`;
-  } catch {
-    return null;
-  }
-}
-
-async function buildActionNeeded(): Promise<string | null> {
-  const parts: string[] = [];
-
-  // Proposed changes — files directly under proposed-changes/ (not in approved/ or rejected/)
-  try {
-    const entries = await listDirectory(REPO, 'intelligence/proposed-changes');
-    const pending = entries.filter((f) => f.type === 'file');
+    const lines: string[] = ["🎯 *Today's Focus:*"];
     if (pending.length > 0) {
-      parts.push(`🔬 ${pending.length} proposed change${pending.length === 1 ? '' : 's'} waiting for review`);
+      pending.slice(0, 3).forEach((t: { agent: string; task: string }) => {
+        lines.push(`  • ${t.agent}/${t.task}`);
+      });
+    } else {
+      lines.push('  • Queue clear — running autonomously');
     }
-  } catch {
-    // skip section
-  }
-
-  // Inspection reports written in past 24h — use recent commits as proxy
-  try {
-    const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const commits = await getRecentCommits(REPO, since, 'intelligence/inspect-reports');
-    if (commits.length > 0) {
-      parts.push(`🔍 ${commits.length} inspection report${commits.length === 1 ? '' : 's'} written overnight`);
-    }
-  } catch {
-    // skip section
-  }
-
-  if (parts.length === 0) return null;
-  return `ACTION NEEDED\n${parts.join('\n')}`;
-}
-
-async function buildArticleDigest(): Promise<string | null> {
-  try {
-    const lastCommitDate = await getFileLastCommitDate(REPO, 'intelligence/article-digest.md');
-    if (!lastCommitDate) return null;
-
-    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-    if (lastCommitDate.getTime() < cutoff) return null;
-
-    const file = await getFileContent(REPO, 'intelligence/article-digest.md');
-    if (!file || !file.content.trim()) return null;
-
-    const tail = file.content.slice(-200).trim();
-    if (!tail) return null;
-
-    // Use last non-empty line as one-line summary
-    const lines = tail.split('\n').map((l) => l.trim()).filter(Boolean);
-    const summary = lines[lines.length - 1] ?? tail;
-    return `📰 Article Digest updated: ${summary.slice(0, 120)}`;
+    return lines.join('\n');
   } catch {
     return null;
   }
 }
 
-async function buildFeedbackInbox(): Promise<string | null> {
+// ---------------------------------------------------------------------------
+// Helper: one-line system load
+// ---------------------------------------------------------------------------
+
+async function buildSystemLoad(): Promise<string | null> {
   try {
-    const file = await getFileContent(REPO, 'intelligence/feedback-inbox.md');
-    if (!file || !file.content.trim()) return null;
-
-    // Count content blocks between --- delimiters (skip header block)
-    const sections = file.content.split(/^---$/m);
-    const entries = sections.slice(1).filter((s) => s.trim().length > 0);
-    if (entries.length === 0) return null;
-
-    return `💬 ${entries.length} feedback entr${entries.length === 1 ? 'y' : 'ies'} waiting to be processed`;
+    const queueFile = await getFileContent(REPO, 'data/task-queue.json');
+    const queue = queueFile ? JSON.parse(queueFile.content) : { tasks: [] };
+    const pending = (queue.tasks || []).filter((t: { status: string }) => t.status === 'pending').length;
+    const running = (queue.tasks || []).filter((t: { status: string }) => t.status === 'running').length;
+    const loadEmoji = pending > 20 ? '🔴' : pending > 10 ? '🟡' : '🟢';
+    return `${loadEmoji} *Status:* ${pending} queued · ${running} running`;
   } catch {
     return null;
   }
@@ -166,37 +96,55 @@ async function buildFeedbackInbox(): Promise<string | null> {
 
 export async function runMorningBrief(): Promise<void> {
   const startTime = await markJobStart('morning-brief');
-  const dateLabel = getDateLabel();
 
-  console.log(`[morning-brief] Running for ${dateLabel}...`);
+  console.log('[morning-brief] Running...');
 
   try {
-    // Run all sections concurrently — failures are caught inside each builder
-    const [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox] =
-      await Promise.allSettled([
-        buildJobHealth(),
-        buildEvaluationScores(),
-        buildActionNeeded(),
-        buildArticleDigest(),
-        buildFeedbackInbox(),
-      ]).then((results) => results.map((r) => (r.status === 'fulfilled' ? r.value : null)));
+    const [openDecisions, alerts, focus, load] = await Promise.all([
+      getOpenDecisions(),
+      getAlerts(),
+      buildTodaysFocus(),
+      buildSystemLoad(),
+    ]);
 
-    // Determine if there's anything worth a full brief
-    const hasIssues = jobHealth != null && jobHealth.includes('⚠️');
-    const hasScores = evalScores != null;
-    const hasActions = actionNeeded != null;
-    const hasDigest = articleDigest != null;
-    const hasFeedback = feedbackInbox != null;
-    const anythingToReport = hasIssues || hasScores || hasActions || hasDigest || hasFeedback;
+    const costData = await getTodayCostEstimate().catch(() => ({ totalUsd: 0, jobCount: 0 }));
 
-    let message: string;
+    // NEW FORMAT — tight, signal-only
+    const sections: string[] = [];
 
-    if (!anythingToReport) {
-      message = `🌅 Morning Brief — ${dateLabel}\n\nAll clear. Nothing needs your attention today.\n\n— Xhaka`;
-    } else {
-      const sections = [jobHealth, evalScores, actionNeeded, articleDigest, feedbackInbox].filter(Boolean) as string[];
-      message = `🌅 Morning Brief — ${dateLabel}\n\n${sections.join('\n\n')}\n\n— Xhaka`;
+    // Header
+    sections.push(`🌅 *Morning Brief — ${new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}*`);
+    sections.push('');
+
+    // 1. DECISIONS NEEDED
+    if (openDecisions.length > 0) {
+      sections.push('🔴 *Decisions Needed:*');
+      openDecisions.forEach(d => sections.push(`  • ${d}`));
+      sections.push('');
     }
+
+    // 2. ALERTS
+    if (alerts.length > 0) {
+      sections.push('⚠️ *Alerts:*');
+      alerts.forEach(a => sections.push(`  • ${a}`));
+      sections.push('');
+    }
+
+    // 3. TODAY'S FOCUS
+    if (focus) {
+      sections.push(focus);
+      sections.push('');
+    }
+
+    // 4. SYSTEM STATUS (one line)
+    if (load) sections.push(load);
+
+    // 5. COST (one line)
+    if (costData.jobCount > 0) {
+      sections.push(`💰 *Est. cost today:* ~$${costData.totalUsd}`);
+    }
+
+    let message = sections.join('\n');
 
     // Enforce Telegram 4096-char limit
     if (message.length > 4096) {
@@ -208,7 +156,6 @@ export async function runMorningBrief(): Promise<void> {
 
     await markJobSuccess('morning-brief', startTime);
   } catch (err) {
-    // Never rethrow — morning brief failure must not crash the scheduler
     console.error('[morning-brief] Fatal error:', (err as Error).message);
     await markJobFailed('morning-brief', startTime);
   }

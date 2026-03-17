@@ -3,6 +3,7 @@
 # Format: https://url.com/article  # optional note
 # Lines starting with # are ignored.
 ---
+---
 # How to Become an AI Engineer in 6 Months
 Source: pasted
 Submitted: 2026-03-14
@@ -174,3 +175,352 @@ The 5 files that separate an AI that waits vs one that works:
 **How to build it:** Start with SOUL.md (highest ROI). Add USER.md basics. Grow MEMORY.md from mistakes. Build TOOLS.md incrementally. Start HEARTBEAT.md with 2-3 checks.
 
 **Corey assessment:** We have all 5 files. The gap is depth and automation. HEARTBEAT.md is too passive — it's a checklist, not a proactive worker. The autonomous push behavior (Telegram messages without being asked) is what we're building now with the notification layer.
+
+---
+title: Niantic's 30 Billion Image Flywheel — Pokémon Go to Robot Navigation
+source: news/niantic
+date: 2026-03-15
+tags: [data-flywheels, niantic, ai-training, visual-navigation, stealth-data-collection]
+---
+# Niantic's 30 Billion Image Flywheel — Pokémon Go to Robot Navigation
+
+Niantic leveraged 500M Pokémon Go players to scan the real world, resulting in a dataset of 30 billion geo-tagged images. This data is now being used to train a 3D AI map that allows delivery robots and AR apps to navigate with centimeter-level precision without relying on GPS.
+
+## The Strategy: Stealth Data Collection
+- **Gamified Collection:** Users "played" while Niantic "collected." The game was the interface for a global mapping operation.
+- **Data Repurposing:** Data collected for a monster-catching game is now powering autonomous robotics and precision logistics.
+- **Accuracy:** Visual navigation within centimeters, far exceeding standard GPS.
+
+## The Lesson
+The best data collection doesn't feel like work. It's a byproduct of an engaging user experience (UX) that creates a secondary, much more valuable asset.
+---
+title: Building AI Agents with Claude — The Full Course
+source: article/course
+date: 2026-03-15
+tags: [ai-agents, claude-code, mcp, agent-teams, orchestration, systems-architecture]
+---
+# Building AI Agents with Claude — The Full Course
+
+A complete breakdown of the Claude Agent stack, from single-agent loops to multi-agent parallel teams.
+
+## The Agent Loop
+Think → Act → Observe → Repeat. An agent takes ownership of an outcome, not just a turn-based question.
+
+## The 4 Layers of the Stack
+1. **Claude Code:** The terminal agent for direct filesystem/terminal control.
+2. **Claude Agent SDK:** The engine (loop/tools/context) exposed for custom app development.
+3. **MCP (Model Context Protocol):** The connection layer for external tools (GitHub, DBs, browsers).
+4. **Agent Teams:** Multi-agent orchestration for parallel specialized workflows.
+
+## Critical Test: Chat vs. Agent
+- Single question/answer → Chat.
+- Multiple steps/iteration/tool usage → Agent.
+- Parallel components/specialists needed → Multi-agent.
+- Rule: If you are copy-pasting Claude output back into Claude for the next step, you need an agent.
+
+## Implementation Notes for Xhaka
+- We are currently using Layer 4 (Agent Teams) for Xhaka (Builder, Researcher, Auditor).
+- We are moving toward direct Layer 1 (Claude Code) integration for the Builder on Wednesday.
+---
+title: Claude + Obsidian — The Memory Stack That Compounds
+source: pasted
+date: 2026-03-16
+tags: [memory-architecture, obsidian, context-management, ai-systems, knowledge-graphs, session-continuity]
+---
+# Claude + Obsidian — The Memory Stack That Compounds
+
+Teams lose 30-40 min/session re-explaining context. That's a full workday per week. The fix isn't a bigger context window — it's a memory system.
+
+## The Core Problem: Context Amnesia
+- Every session starts from zero
+- 200k token windows don't solve this — scanning is not knowing
+- Cowan's research: active attention = 4 chunks ± 1. Structure beats volume.
+- Symptoms: re-asks answered questions, proposes rejected patterns, loses 3-session-old decisions
+
+## The 3-Layer Architecture
+```
+Layer 3: Ingestion Pipeline — video/audio → structured knowledge
+Layer 2: Knowledge Graph   — obsidian vault + MCP bridge
+Layer 1: Session Memory    — CLAUDE.md + auto-memory directory
+```
+They compound. Skip one, the others degrade.
+
+## Layer 1: Session Memory (CLAUDE.md)
+- Not a config file — a teaching document
+- Framing: "This vault is your exosuit. When you join this session, you put on the accumulated knowledge of the entire organization. You are not an assistant."
+- First thing Claude reads every session
+- Contains: architecture decisions, conventions, rejected patterns, edge cases already debugged
+
+## Layer 2: Knowledge Graph (Obsidian Vault + MCP)
+- Atomic notes that link to each other — composable, traversable
+- MCP bridge gives Claude direct read access to vault without copy-pasting
+- Map of Content (MOC) files give topology of entire knowledge domain
+- The Obsidian nerds accidentally engineered perfect LLM architecture
+
+## Layer 3: Ingestion Pipeline
+- Video/audio → structured knowledge (voice memos, recordings, meetings)
+- Feeds Layer 2 from the real world automatically
+- Closes the loop: real-world input → structured memory → session context
+
+## Key Insight
+The fix isn't a smarter model. It's giving the model a memory system so it can operate. Sessions stop resetting. Output compounds instead of plateauing.
+
+## Direct Application to Xhaka
+- Layer 1: We have this (MEMORY.md, SOUL.md, TOOLS.md, USER.md, AGENTS.md = our CLAUDE.md equivalent)
+- Layer 2: Partially built — memory/context/ is our knowledge graph but lacks MCP bridge for direct traversal
+- Layer 3: Partially built — article-inbox + session-capture feeds the system, but no audio/video ingestion yet
+- Gap: MCP bridge to GitHub so Claude can traverse memory files without being handed them explicitly
+- Gap: Voice memo ingestion → structured memory (Corey's 4AM sessions could auto-capture to Layer 2)
+
+---
+title: Claude + Obsidian — The Memory Stack That Compounds (Full Article)
+source: pasted
+date: 2026-03-16
+tags: [memory-architecture, obsidian, mcp, knowledge-graph, session-continuity, brain-ingest, claude-code, layer-architecture]
+---
+# Claude + Obsidian — The Memory Stack That Compounds (Full Article)
+
+## CLAUDE.md — What Belongs There
+- Architecture decisions that don't change weekly
+- Naming conventions and code patterns
+- Workflow preferences (tools, package managers)
+- Explicit boundaries (what to never do)
+- Framing: "This vault is your exosuit. You put on the accumulated knowledge of the entire organization."
+
+## Auto-Memory Directory Structure
+```
+~/.claude/projects/<project-hash>/memory/
+├── MEMORY.md        # always loaded — routing doc, stays under 200 lines
+├── debugging.md     # solutions to recurring problems
+├── patterns.md      # confirmed codebase conventions
+├── architecture.md  # key architectural decisions
+└── preferences.md   # user workflow preferences
+```
+Rule: MEMORY.md is a routing document, not a dump. Detailed notes go in topic files, linked from MEMORY.md.
+
+## Layer 2: Knowledge Graph + MCP Bridge
+Two MCP servers that matter:
+- **smart-connections** — semantic search over vault. Finds relevant notes even without exact title/path.
+- **qmd** — structured queries, collection management, metadata operations. Precision retrieval by path/tag.
+
+MCP config (for Claude settings):
+```json
+{
+  "mcpServers": {
+    "smart-connections": { "command": "python", "args": ["smart-connections-mcp/server.py"], "env": { "OBSIDIAN_VAULT_PATH": "~/obsidian/your-vault" } },
+    "qmd": { "command": "qmd", "args": ["mcp"] },
+    "obsidian": { "command": "npx", "args": ["-y", "obsidian-mcp"] }
+  }
+}
+```
+
+Vault structure principles:
+- Wikilinks as semantic connections (not organizational folders)
+- Atomic composable notes
+- Maps of Content (MOC) for navigation
+- **Prose-as-title**: "memory graphs beat giant memory files.md" not "memory-systems.md"
+- **Wiki-link-as-prose**: "we learned that [[memory graphs beat giant memory files]]" — the graph becomes self-documenting
+
+Four-level vault structure:
+```
+00-home/     # maps of content, daily, top-of-mind
+atlas/       # structural overview (projects, research, vault architecture)
+inbox/       # unprocessed captures
+knowledge/   # curated knowledge graph (graph/, memory/)
+sessions/    # raw session transcripts
+voice-notes/ # transcribed voice captures
+```
+
+## Layer 3: brain-ingest Pipeline
+From a 90-min talk, brain-ingest extracts:
+- 12–18 distinct claims worth preserving
+- 3–5 named frameworks or mental models
+- 5–8 actionable techniques
+- 2–4 concrete examples with context
+
+Commands:
+```
+brain-ingest "https://youtube.com/..." --apply
+brain-ingest "/path/to/recording.mp4" --apply
+brain-ingest --transcript "/path/to/notes.txt" --title "Team Retro" --apply
+```
+
+## The Self-Improving Graph
+- Agent notices contradictions between notes, flags tension
+- Agent notices when spec diverges from codebase
+- Friction signals accumulate → agent proposes structural changes to the system itself
+- Refactors its own instructions. Evolves its own architecture.
+
+## Setup Checklist
+1. Create CLAUDE.md with architecture decisions, conventions, boundaries
+2. Enable auto-memory in Claude Code (persist observations across sessions)
+3. Set up Obsidian vault with folder structure above
+4. Install Smart-Connections MCP: `pip install smart-connections-mcp`
+5. Install qmd MCP: `npx -y @tobilu/qmd mcp`
+6. Add MCP config JSON to Claude settings
+7. Run brain-ingest on last 3 most valuable video/audio sources
+8. Session rhythm: orient → work → persist
+
+## Application to Xhaka (Gap Analysis)
+- Layer 1 ✅ — MEMORY.md + SOUL.md + TOOLS.md + USER.md + AGENTS.md = our CLAUDE.md
+- Layer 2 🟡 — memory/context/ is our knowledge graph. Missing: MCP bridge (smart-connections + qmd) for runtime traversal
+- Layer 3 🟡 — article-inbox + session-capture covers text. Missing: brain-ingest for voice/audio (Corey's 4AM sessions)
+- MEMORY.md routing rule: we have 150-line limit ✅ but subfolder linking discipline needs tightening
+- Prose-as-title: our memory files use category names not claim names — low-hanging improvement
+- Self-improving graph: our proposed-changes pipeline IS this mechanism, partially built
+
+## Priority Gaps to Close
+1. MCP bridge to GitHub — Claude traverses memory/context/ natively without being handed files
+2. Voice ingestion — Corey drops a voice memo → brain-ingest equivalent → structured memory note
+3. Prose-as-title refactor — rename memory files from categories to claims
+
+---
+title: The Spec Is the New Code — Spec Driven Development
+source: pasted
+date: 2026-03-16
+tags: [spec-driven-development, agent-harness, ai-coding, builder-workflow, task-decomposition, claude-code]
+---
+# The Spec Is the New Code — Spec Driven Development
+
+## Core Thesis
+AI coding agents fail not because the model is weak — but because instructions are ambiguous and the harness is too weak. The fix: spec before code, every time.
+
+## The Ambiguity Problem
+"Add a feature to manage items from the backoffice" → agent guesses: which backoffice? which API contract? which auth model? which error handling? Each silent guess compounds. Complexity amplifies the gap between what you meant and what got built.
+
+## What SDD Is (4 Steps)
+1. **Specify** — what to build (functional, technology-agnostic, Given/When/Then acceptance criteria)
+2. **Plan** — how to build it (architecture decisions, data models, testing strategy, existing patterns)
+3. **Tasks** — break plan into small self-contained ordered tasks (each completable in one agent session)
+4. **Implement** — agent executes one task at a time with full context embedded
+
+## 3 Levels of Maturity
+- **Spec-First**: write spec before coding, discard after. Eliminates ambiguity for that cycle. Start here.
+- **Spec-Anchored**: spec lives in repo alongside code, evolves with it. Living documentation.
+- **Spec-as-Source**: spec IS the primary artifact. Code regenerated to match. Not fully there yet — but the trajectory.
+
+## The Key Insight: Spec = Context Engineering
+"When you hand an agent a well-written spec and plan, you're engineering its entire context window in one shot: architecture decisions, step-by-step guidance, and acceptance criteria — all in a single set of artifacts."
+
+## Spec vs Plan (Critical Distinction)
+- **Spec** = functional layer. WHAT it does. Technology-agnostic. No implementation details.
+- **Plan** = technical layer. HOW to achieve it. Architecture, patterns, constraints, MCPs to use.
+Mixing them forces the agent to juggle two concerns simultaneously → compounding ambiguity.
+
+## Tasks Unlock Two Things
+- **Parallelism** — independent tasks run simultaneously across multiple agents
+- **Agent agnosticism** — start with Claude Code, finish with Cursor, context travels with the task not the agent
+
+## When SDD Makes Sense
+- Complex multi-file changes ✅
+- Features touching multiple domains ✅
+- Legacy codebases ✅
+- Quick bug fix / config change ❌ — just prompt directly
+
+## Tradeoffs
+- 2-3x more tokens upfront vs direct prompting — worth it for complex features
+- Learning curve: shift from "describe code I want" to "describe behavior I need"
+
+## Ecosystem Convergence
+- GitHub Spec Kit (77k stars) — spec-plan-task-implement cycle, agent-agnostic
+- OpenAI Symphony — requires SPEC.md as contract per issue
+- Claude Code Plan Mode — lightweight spec-and-plan step built in
+- The Ralph Loop — PRD in infinite agent loop, progress in files not context window
+
+## Application to Xhaka Builder Workflow
+- Our Builder subagents currently receive task prompts that mix functional + technical — classic ambiguity source
+- Fix: Builder tasks should follow the Spec pattern: WHAT (behavior/acceptance criteria) separated from HOW (architecture/patterns/constraints)
+- AGENTS.md builder.md should encode the SDD pattern as the default workflow
+- Every Builder spawn should include: spec section + plan section + ordered task list
+- The "proof-of-work artifact" rule we already have maps to acceptance criteria — good foundation
+- Next step: update how Xhaka writes Builder prompts to follow Spec → Plan → Tasks structure
+
+---
+title: I Built 47 Micro-SaaS Tools in 90 Days With Claude Code
+source: pasted
+date: 2026-03-16
+tags: [micro-saas, portfolio-approach, claude-code, validation, vertical-saas, product-market-fit, pricing]
+---
+# I Built 47 Micro-SaaS Tools in 90 Days With Claude Code
+
+## Core Thesis
+Don't make one big bet. Build a portfolio. Let the market decide what works, then focus on what's proven. Focus is right — but only after you have evidence.
+
+## The Numbers
+- 47 tools built in 90 days
+- Total cost: ~$1,000 (Claude API + hosting + domains)
+- 38 tools: under $100
+- 5 tools: $100–$500
+- 3 tools: $500–$2,000
+- 1 tool: $4,200 MRR
+- Total: $11,340 in 90 days
+
+## What Won and Why
+**Vertical tools (industry-specific) outperformed by 3x.** The winner: proposal/estimate generator for residential contractors. 4.8% monthly churn vs 25%+ for generic AI tools.
+
+5 reasons it won:
+1. **Buyer has money** — contractors do $500K–$2M/yr, $39/mo is nothing
+2. **Daily problem** — estimates written multiple times per week, daily habit
+3. **High switching cost** — logo, pricing data, client history locked in over time
+4. **No good free alternative** — ChatGPT doesn't exist for this use case
+5. **Buyer can't build it themselves** — contractors frame houses, not code
+
+## What Failed and Why
+- **AI content tools**: saturated, competes with ChatGPT, 25%+ churn
+- **Generic developer tools**: developers just build it themselves
+- **One-time use tools**: no retention, no habit loop
+
+## The Scoring Formula (Before Building Anything)
+Score each factor 1–5, then multiply:
+1. Target customer income (broke creator=1, contractor=5)
+2. Usage frequency (once=1, daily=5)
+3. Existing alternatives (saturated=1, gap=5)
+4. Technical sophistication of buyer (developer=1, tradesperson=5)
+5. Integration depth (standalone=1, data accumulates=5)
+
+**>500: build it. 200–500: consider it. <200: skip.**
+- Contractor estimate tool: 5×5×4×5×5 = 2,500 ✅
+- AI blog writer: 1×3×1×2×1 = 6 ❌
+
+## Claude Code's Sweet Spot
+- Excellent at 0→MVP: scaffold, Stripe, auth, CRUD, UI — 80% there in hours
+- Productivity degrades with complexity: great at 5,000-line focused tools, struggles at 100,000-line platforms
+- CLAUDE.md accumulates patterns across builds — each product makes the next one faster
+- Micro-SaaS portfolio stays in Claude's sweet spot by design: never pushes past the complexity ceiling
+
+## The Portfolio Economics
+Traditional: 6 months, $30–50K, one bet, 90% fail rate
+Portfolio: 90 days, $1K, 47 bets, data by day 30, focus by day 60
+
+If 4 validated products grow 15% MoM from $1K MRR each → $40K+ MRR in 12 months without building anything new.
+
+## Application to Gunner
+- Gunner IS a vertical tool (sales call coaching, specific niche)
+- Scoring: buyer income (AM/LM doing deals = 4), frequency (daily calls = 5), alternatives (Gong/Chorus too expensive for SMB = 4), sophistication (sales reps can't build it = 5), integration depth (call history/scores compound = 5) = 4×5×4×5×5 = 2,000 ✅
+- The framework validates Gunner's positioning — stay vertical, stay SMB, don't go horizontal
+- The churn benchmark: 4.8% is healthy for vertical tools. Track Gunner against this.
+
+## Behavioral Rules for Xhaka
+- When Corey is evaluating a new product idea, run it through the 5-factor scoring formula before any other analysis
+- When Gunner features are being prioritized, ask: does this increase daily usage frequency and switching cost?
+- When assessing Gunner's competitive position, reference: vertical beats horizontal, SMB gap is the moat
+- https://www.jontsai.com/2026/02/12/building-mission-control-for-my-ai-workforce-introducing-openclaw-command-center | Jon Tsai OpenClaw Command Center — scheduling primitives, session cost tracking, Cerebro topic tracking, vanilla JS dashboard philosophy
+- Claude Subagents vs Agent Teams — context-centric decomposition, 5 orchestration patterns, when NOT to use multi-agent | source: direct paste 2026-03-16
+- AI Five-Layer Stack — Energy/Chips/Cloud/Models/Apps, infrastructure gravity thesis, $700B capex, picks-and-shovels phase | source: direct paste 2026-03-16
+- Rise of the AI Chief of Staff — solo consultant built morning briefs + automations with $100 Claude Max, no coding, 36 hours | source: direct paste 2026-03-16
+- AI Was Supposed to Free My Time It Consumed It — task expansion, context switching, always-on fatigue with multi-agent systems | source: direct paste 2026-03-16
+- Zero Human Company — Felix agent with Stripe account, crypto wallet, product portfolio (Nat Eliason / OpenClaw) | source: direct paste 2026-03-16
+- AI and the SMB 2026 — ground-level report on AI adoption across industries, physical services moat, SaaS commoditization risk, professional services play | source: direct paste 2026-03-16
+- Giving OpenClaw Its Own Identity — agentic-identity model (agent gets own M365 account), sandboxed runtime via iptables, observability — enterprise governance pattern | source: direct paste 2026-03-16
+- How I Manage Memory for My 24/7 OpenClaw Agent Team — 3-layer memory architecture: working memory (markdown files), session memory (ephemeral logs), long-term memory (Vertex AI Memory Bank cross-agent propagation). One correction fixes all agents. | source: direct paste 2026-03-16
+- How to Set Up Claude Cowork — full playbook: folder structure (ABOUT ME/PROJECTS/TEMPLATES), text files replace prompts, Skills for repeatable workflows, Connectors for Slack/Gmail/Calendar | source: direct paste 2026-03-16
+- Shorthand Guide to Agentic Security — attack vectors (Telegram/WhatsApp injection, PDF attachments, GitHub PR poisoning), CVE-2025-59536 + CVE-2026-21852 (Claude Code), prompt injection → shell execution, secret exposure, lateral movement | source: direct paste 2026-03-16
+- Shorthand Guide to Agentic Security (full) — lethal trifecta (private data + untrusted content + external comms), Claude Code CVEs, MCP Top 10, ToxicSkills (36% injection rate), minimum bar checklist, sandboxing, kill switches, memory poisoning, least agency principle | source: direct paste 2026-03-16
+- The Agent Research Loop — autoresearch pattern (hypothesis→experiment→measure→keep/discard loop), program.md as research spec primitive, PraxLab harness, 550 experiments zero babysitting, git as memory/lab notebook | source: direct paste 2026-03-16
+- Anthropic Claude Free Course Library — 6 courses: Claude 101, Claude Code in Action, Building with Claude API, Intro to MCP, MCP Advanced, Intro to Agent Skills. All free at anthropic.skilljar.com | source: direct paste 2026-03-16
+- $67k Reddit Niche Discovery — 22-min reddit scroll → pattern (homeowner pricing fear) → $27 PDF → $67k/8mo. Method: expensive service + information asymmetry + fear = willingness to pay. Validates info product + niche discovery pattern | source: direct paste 2026-03-16
+- Humanoid Legs 100 Days (Asimov1) — open source humanoid robot legs, modular design, decentralized manufacturing under $25k, MJF 3D printing. Robotics/hardware, low relevance to NAH/Gunner | source: direct paste 2026-03-16
+- [Sparkwave] Inter-Agent Communication and Task Orchestration in Paperclip — issues as coordination layer, polling loop model, Telegram→Paperclip conversion. Direct blueprint for our setup. HIGH PRIORITY.
+- [Paperclip Launch] How to build a company run entirely by AI agents — free, open source, 5-min setup. 1.6M views first week. Works with Claude Code, OpenClaw, Codex, Cursor. Org chart + budgets + dashboard. HIGH PRIORITY — fetch full article.
+- [How AI Agents Work — Morgan Linton] Non-technical explainer: tool definitions/schemas, tool call cycle, orchestration loop, stateless LLM calls, HTTP execution layer. Companion repo: https://github.com/morganlinton/SimpleAgent. Good reference for onboarding context.
+- [Reverse Engineering Claude Code — Full] KEY FACTS: (1) System prompt = 15+ modular sections assembled at runtime, not static. Collapses to 1 sentence with CLAUDE_CODE_SIMPLE=true. (2) "Tengu" = internal feature flag system — 37 flags via GrowthBook/Statsig, 560 telemetry events via OpenTelemetry to Datadog. (3) Anthropic ships features into binary WEEKS before enabling publicly — flags gate live code. (4) Prompt uses 10k+ tokens before user says anything; 15-20k tokens scaffolding per turn. (5) Bash sandbox is real — genuine allow/deny + network restrictions. (6) "The binary is packaging. The prompt is the product." HIGH PRIORITY — pairs with leaked Claude Code 2.0 prompt. Wednesday setup.
