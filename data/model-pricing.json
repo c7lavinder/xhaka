@@ -1,0 +1,8 @@
+{
+  "anthropic/claude-sonnet-4-6": { "input": 3.0, "output": 15.0, "tier": "strategic" },
+  "anthropic/claude-haiku-3-5": { "input": 0.8, "output": 4.0, "tier": "logical" },
+  "google/gemini-3-flash-preview": { "input": 0.1, "output": 0.4, "tier": "utility" },
+  "openai/gpt-4o": { "input": 2.5, "output": 10.0, "tier": "strategic" },
+  "openai/gpt-4o-mini": { "input": 0.15, "output": 0.6, "tier": "utility" },
+  "deepseek/deepseek-chat": { "input": 0.14, "output": 0.28, "tier": "logical" }
+}
