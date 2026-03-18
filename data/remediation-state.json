@@ -1,16 +1,16 @@
 {
-  "lastPersistedAt": "2026-03-18T14:18:02.359Z",
+  "lastPersistedAt": "2026-03-18T14:21:02.263Z",
   "lastInfraAlertAt": 0,
   "attempts": {
     "improve": {
       "count": 3,
       "firstAttemptAt": "2026-03-18T14:10:01.521Z",
-      "lastAttemptAt": "2026-03-18T14:18:02.359Z"
+      "lastAttemptAt": "2026-03-18T14:21:02.263Z"
     },
     "cleanup": {
-      "count": 2,
+      "count": 3,
       "firstAttemptAt": "2026-03-18T14:11:01.110Z",
-      "lastAttemptAt": "2026-03-18T14:18:02.359Z"
+      "lastAttemptAt": "2026-03-18T14:21:02.263Z"
     }
   },
   "activeRemediations": {
@@ -22,11 +22,11 @@
       "waitUntil": "2026-03-18T14:21:02.358Z"
     },
     "cleanup": {
-      "attempt": 2,
-      "startedAt": "2026-03-18T14:16:02.508Z",
+      "attempt": 3,
+      "startedAt": "2026-03-18T14:21:02.263Z",
       "failureType": "unknown",
-      "lastAction": "redeploy",
-      "waitUntil": "2026-03-18T14:19:02.508Z"
+      "lastAction": "rollback",
+      "waitUntil": "2026-03-18T14:24:02.263Z"
     }
   }
 }
