@@ -6918,9 +6918,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-18T12:59:28.320Z"
       },
-      "status": "running",
+      "status": "failed",
       "createdAt": "2026-03-18T12:59:28.838Z",
-      "startedAt": "2026-03-18T13:00:01.832Z"
+      "startedAt": "2026-03-18T13:00:01.832Z",
+      "completedAt": "2026-03-18T13:00:05.806Z",
+      "proofOfWork": "FAILED: is at 8fa0a5464e23467c4c2b04a446f2f32c7052b0cd but expected 255c9151ff1b950a7139747169f1aba1b1dc9902 - https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
     }
   ]
 }
