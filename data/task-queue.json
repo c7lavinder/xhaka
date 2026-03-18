@@ -5498,8 +5498,9 @@
         "trigger": "article-inbox-watch",
         "itemCount": 370
       },
-      "status": "pending",
-      "createdAt": "2026-03-18T02:05:02.034Z"
+      "status": "running",
+      "createdAt": "2026-03-18T02:05:02.034Z",
+      "startedAt": "2026-03-18T02:06:01.984Z"
     }
   ]
 }
