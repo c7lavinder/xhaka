@@ -445,3 +445,4 @@
 | 2026-03-18T13:07:02.680Z | improve | rollback | pending | 3 | failureType=unknown, waitUntil=2026-03-18T13:10:02.062Z |
 | 2026-03-18T13:09:02.485Z | cleanup | rollback | pending | 3 | failureType=unknown, waitUntil=2026-03-18T13:12:01.919Z |
 | 2026-03-18T14:10:08.820Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-18T14:13:08.820Z |
+| 2026-03-18T14:11:04.390Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-18T14:14:03.606Z |
