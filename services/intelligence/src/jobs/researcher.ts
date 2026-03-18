@@ -524,7 +524,7 @@ export async function runResearcher(): Promise<void> {
       }
     }
 
-    // 4. Rebuild inbox with only failed items
+    // 4. Rebuild inbox with only failed items — retry on SHA conflict
     let newInboxContent: string;
     if (failed.length === 0) {
       newInboxContent = `# Article Inbox\n# Add one URL per line. The researcher job processes this daily at 7:30 AM CST.\n# Format: https://url.com/article  # optional note\n# Lines starting with # are ignored.\n`;
@@ -533,13 +533,41 @@ export async function runResearcher(): Promise<void> {
       newInboxContent = `# Article Inbox\n# Add one URL per line. The researcher job processes this daily at 7:30 AM CST.\n# Format: https://url.com/article  # optional note\n# Lines starting with # are ignored.\n\n${failedLines}\n`;
     }
 
-    await updateFile(
-      XHAKA_REPO,
-      'intelligence/article-inbox.md',
-      newInboxContent,
-      `researcher: cleared ${processed.length} article(s) from inbox (${failed.length} failed, kept for retry)`,
-      inboxFile.sha,
-    );
+    // Retry inbox clear on GitHub SHA conflict (concurrent researcher runs)
+    {
+      const MAX_INBOX_RETRIES = 3;
+      let inboxSha = inboxFile.sha;
+      let cleared = false;
+      for (let attempt = 1; attempt <= MAX_INBOX_RETRIES; attempt++) {
+        try {
+          await updateFile(
+            XHAKA_REPO,
+            'intelligence/article-inbox.md',
+            newInboxContent,
+            `researcher: cleared ${processed.length} article(s) from inbox (${failed.length} failed, kept for retry)`,
+            inboxSha,
+          );
+          cleared = true;
+          break;
+        } catch (clearErr) {
+          const msg = (clearErr as Error).message ?? '';
+          if (msg.includes('but expected') && attempt < MAX_INBOX_RETRIES) {
+            const jitter = 100 + Math.floor(Math.random() * 200);
+            console.warn(`[researcher] SHA conflict clearing inbox on attempt ${attempt} — retrying in ${jitter}ms`);
+            await new Promise((r) => setTimeout(r, jitter));
+            // Fetch fresh SHA for next attempt
+            const freshInbox = await getFileContent(XHAKA_REPO, 'intelligence/article-inbox.md');
+            inboxSha = freshInbox?.sha ?? inboxSha;
+            continue;
+          }
+          console.warn(`[researcher] Failed to clear inbox after ${attempt} attempt(s): ${msg}`);
+          break;
+        }
+      }
+      if (!cleared) {
+        console.warn('[researcher] ⚠️ Inbox clear failed — items may be re-processed on next run');
+      }
+    }
 
     // 5. Alert if ALL failed
     if (failed.length > 0 && processed.length === 0) {

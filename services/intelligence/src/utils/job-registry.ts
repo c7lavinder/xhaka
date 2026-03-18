@@ -167,23 +167,23 @@ async function writeJobStatus(
     if (file) {
       // FIX 9: Wrap JSON.parse in try/catch
       try {
-        registry = JSON.parse(file.content) as JobRegistry;
+        const parsed = JSON.parse(file.content);
+        if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+          throw new Error('Registry root is not a JSON object');
+        }
+        registry = parsed as JobRegistry;
 
-        // FIX 9: Schema validation — verify expected keys exist
-        const hasValidStructure = typeof registry === 'object' &&
-          registry !== null &&
-          Object.keys(registry).length > 0 &&
-          EXPECTED_KEYS.every(k => k in registry);
-        
-        if (!hasValidStructure) {
-          console.error('[job-registry] Registry missing expected structure — schema invalid');
-          parseCorrupted = true;
-          // Alert but don't crash. Use default registry for this operation.
-          try {
-            const { sendAlert } = await import('./alert.js');
-            await sendAlert('⚠️ job-registry.json schema invalid — expected keys missing');
-          } catch { /* ignore */ }
-          registry = { ...DEFAULT_REGISTRY };
+        // Merge in defaults for any missing keys — do NOT treat missing keys as corruption.
+        // The live file may predate recently-added jobs; fill gaps from DEFAULT_REGISTRY.
+        let mergedCount = 0;
+        for (const key of EXPECTED_KEYS) {
+          if (!(key in registry)) {
+            registry[key] = { ...DEFAULT_REGISTRY[key] };
+            mergedCount++;
+          }
+        }
+        if (mergedCount > 0) {
+          console.log(`[job-registry] Merged ${mergedCount} missing key(s) from DEFAULT_REGISTRY — continuing normally`);
         }
       } catch (parseErr) {
         console.error('[job-registry] ⚠️ CORRUPTED — JSON.parse failed:', (parseErr as Error).message);

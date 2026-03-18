@@ -166,6 +166,16 @@ async function checkArticleInbox(): Promise<void> {
       return;
     }
 
+    // Guard: skip enqueue if a researcher task is already pending or running
+    const existingTasks = await getAllTasks();
+    const researcherInFlight = existingTasks.some(
+      (t) => t.agent === 'researcher' && (t.status === 'pending' || t.status === 'running'),
+    );
+    if (researcherInFlight) {
+      console.log(`[capture] 📰 article-inbox.md has ${lines.length} item(s) — researcher already in-flight, skipping enqueue`);
+      return;
+    }
+
     console.log(`[capture] 📰 article-inbox.md has ${lines.length} item(s) — enqueuing Researcher`);
     await safeEnqueue('researcher', 'process-article-inbox', {
       trigger: 'article-inbox-watch',
