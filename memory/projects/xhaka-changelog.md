@@ -113,3 +113,9 @@ Current State: The project has seen significant progress with new features and b
 ## 2026-03-17 (100 commits)
 ### ✅ Built
 - add Claude Code complete usage guide to KB
+## 2026-03-18 (100 commits)
+### 🐛 Fixed
+- Remove session-capture-2026-03-18-1146.md from inbox (parse error)
+- Route session-capture-2026-03-18-1146.md → general (parse error)
+### 🔄 Changed
+- Remediation-state update
