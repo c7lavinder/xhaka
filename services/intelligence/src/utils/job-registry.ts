@@ -83,6 +83,8 @@ const JOB_TIMEOUTS: Record<string, number> = {
   'dispatcher': 300000,      // 5 min (may chain into researcher runs)
   'auditor': 120000,         // 2 min
   'architect': 120000,       // 2 min
+  'improve': 600000,         // 10 min (multiple GitHub + OpenAI calls)
+  'cleanup': 600000,         // 10 min (GitHub file scan + optional OpenAI synthesis)
 };
 
 /**
