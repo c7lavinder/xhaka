@@ -432,3 +432,4 @@
 | 2026-03-18T12:22:01.388Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-03-18T12:47:01.177Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-03-18T12:50:01.851Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-18T12:57:02.220Z | improve | alert | escalated | 0 | Immediate escalation: code_bug |
