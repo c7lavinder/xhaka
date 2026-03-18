@@ -440,3 +440,4 @@
 | 2026-03-18T13:01:04.147Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-18T13:04:03.528Z |
 | 2026-03-18T13:03:03.087Z | improve | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-18T13:06:02.484Z |
 | 2026-03-18T13:03:03.911Z | improve | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
+| 2026-03-18T13:05:04.006Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-18T13:08:03.190Z |
