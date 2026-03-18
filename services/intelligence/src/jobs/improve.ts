@@ -36,7 +36,8 @@ export async function runImprove(): Promise<void> {
     await markJobFailed('improve', _startTime);
     // FIX 6: Send alert for OpenAI failures
     const alertMsg = (err instanceof Error)
-      ? `🚨 *Improve failed*\n${classifyOpenAIError(err)}`
+      ? `🚨 *Improve failed*
+${classifyOpenAIError(err)}`
       : '🚨 *Improve failed* — unknown error';
     await sendAlert(alertMsg);
     throw err;
@@ -123,7 +124,7 @@ async function runOperatorImprovement(since: Date, date: string): Promise<void> 
     return;
   }
 
-  if (failureSummary.startsWith('No failed deployments')) {
+  if (!failureSummary || failureSummary.startsWith('No failed deployments')) {
     console.log('[improve] No Railway failures to process.');
     return;
   }
@@ -163,13 +164,18 @@ function appendToBuilderTable(content: string, newRows: string[]): string {
   if (tableEnd === -1) {
     // No table found — fall back to appending a Lessons Learned section
     const section = ensureSection(content, LESSONS_HEADING);
-    const addition = '\n' + newRows.join('\n') + '\n';
+    const addition = '
+' + newRows.join('
+') + '
+';
     return section.trimEnd() + addition;
   }
 
   const before = content.slice(0, tableEnd);
   const after = content.slice(tableEnd);
-  return before + newRows.join('\n') + '\n' + after;
+  return before + newRows.join('
+') + '
+' + after;
 }
 
 function appendToOperatorKnownIssues(content: string, lesson: string): string {
@@ -178,9 +184,12 @@ function appendToOperatorKnownIssues(content: string, lesson: string): string {
   const insertAt = idx + KNOWN_ISSUES_HEADING.length;
   return (
     withSection.slice(0, insertAt) +
-    '\n\n' +
+    '
+
+' +
     lesson.trim() +
-    '\n' +
+    '
+' +
     withSection.slice(insertAt)
   );
 }
@@ -191,7 +200,8 @@ function findTableEnd(content: string, headingMarker: string): number {
 
   // Walk past the table — find the last | line before the next ## or end
   const afterHeading = content.slice(headingIdx);
-  const lines = afterHeading.split('\n');
+  const lines = afterHeading.split('
+');
 
   let lastTableLineIdx = -1;
   let charCount = headingIdx;
@@ -208,5 +218,8 @@ function findTableEnd(content: string, headingMarker: string): number {
 
 function ensureSection(content: string, heading: string): string {
   if (content.includes(heading)) return content;
-  return content.trimEnd() + `\n\n${heading}\n`;
+  return content.trimEnd() + `
+
+${heading}
+`;
 }
