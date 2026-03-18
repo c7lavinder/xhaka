@@ -4159,3 +4159,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-18T05:38:01.255Z	dispatcher	success	701		model=gpt-4o-mini cost=$0.001
 2026-03-18T05:39:01.467Z	dispatcher	success	838		model=gpt-4o-mini cost=$0.001
 2026-03-18T05:40:01.168Z	watchdog	success	475		model=gpt-4o-mini cost=$0.001
+2026-03-18T05:40:03.013Z	capture	success	2325		model=gpt-4o-mini cost=$0.001
