@@ -5932,9 +5932,11 @@
         "trigger": "article-inbox-watch",
         "itemCount": 370
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-18T05:10:01.547Z",
-      "startedAt": "2026-03-18T05:11:01.688Z"
+      "startedAt": "2026-03-18T05:11:01.688Z",
+      "completedAt": "2026-03-18T05:11:03.722Z",
+      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-18T05:11:03.506Z. Triggered by task task_1773810601547_fibtrum."
     }
   ]
 }
