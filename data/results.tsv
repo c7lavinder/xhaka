@@ -4266,3 +4266,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-18T07:00:03.114Z	capture	success	2455		model=gpt-4o-mini cost=$0.001
 2026-03-18T07:00:21.469Z	kb-indexer	success	19893		indexed=0 skipped=35 model=gpt-4o-mini cost=$0.001
 2026-03-18T07:00:26.567Z	librarian	success	25906		model=gpt-4o-mini cost=$0.001
+2026-03-18T07:01:01.525Z	dispatcher	success	790		model=gpt-4o-mini cost=$0.001
