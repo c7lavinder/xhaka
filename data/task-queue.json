@@ -6982,9 +6982,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-18T13:04:36.935Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-18T13:04:37.273Z",
-      "startedAt": "2026-03-18T13:05:02.327Z"
+      "startedAt": "2026-03-18T13:05:02.327Z",
+      "completedAt": "2026-03-18T13:05:06.684Z",
+      "proofOfWork": "Audit PASS for commit 088a8fca. 0 concern(s). Artifact: intelligence/audits/2026-03-18-088a8fca.md"
     }
   ]
 }
