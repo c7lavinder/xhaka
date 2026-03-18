@@ -182,5 +182,13 @@
     "grade": "LOW",
     "rationale": "The output provides a very high-level summary of the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role. It does not delve into how benchmarking can be implemented or its direct impact on research workflows.",
     "evaluatedAt": "2026-03-18T11:00:02.245Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-03-18T11:00:05.568Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a very general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role. It does not offer detailed guidance or steps to implement benchmarking effectively.",
+    "evaluatedAt": "2026-03-18T11:00:07.438Z"
   }
 ]
