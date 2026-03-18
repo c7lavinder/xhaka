@@ -443,3 +443,4 @@
 | 2026-03-18T13:05:04.006Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-18T13:08:03.190Z |
 | 2026-03-18T13:05:04.906Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-03-18T13:07:02.680Z | improve | rollback | pending | 3 | failureType=unknown, waitUntil=2026-03-18T13:10:02.062Z |
+| 2026-03-18T13:09:02.485Z | cleanup | rollback | pending | 3 | failureType=unknown, waitUntil=2026-03-18T13:12:01.919Z |
