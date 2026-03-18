@@ -434,3 +434,4 @@
 | 2026-03-18T12:50:01.851Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-03-18T12:57:02.220Z | improve | alert | escalated | 0 | Immediate escalation: code_bug |
 | 2026-03-18T12:57:05.933Z | cleanup | alert | escalated | 0 | Immediate escalation: code_bug |
+| 2026-03-18T12:58:02.860Z | improve | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-18T13:01:02.860Z |
