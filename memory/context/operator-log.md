@@ -453,3 +453,4 @@
 | 2026-03-18T14:16:03.260Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-18T14:19:02.508Z |
 | 2026-03-18T14:16:04.330Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-03-18T14:22:01.784Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-18T20:51:01.299Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
