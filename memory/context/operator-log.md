@@ -1019,3 +1019,4 @@
 | 2026-03-19T18:08:04.054Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-19T18:11:03.531Z |
 | 2026-03-19T18:08:04.868Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-03-19T18:10:02.364Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:13:01.467Z |
+| 2026-03-19T18:12:02.088Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:15:02.088Z |
