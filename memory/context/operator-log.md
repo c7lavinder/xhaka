@@ -1029,3 +1029,4 @@
 | 2026-03-19T18:22:02.580Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:25:02.580Z |
 | 2026-03-19T18:23:01.804Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:26:01.804Z |
 | 2026-03-19T18:24:03.171Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:27:03.171Z |
+| 2026-03-19T18:25:01.816Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:28:01.816Z |
