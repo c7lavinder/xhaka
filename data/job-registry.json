@@ -1,8 +1,8 @@
 {
   "capture": {
-    "lastRun": "2026-03-19T08:40:02.645Z",
-    "lastStatus": "success",
-    "durationMs": 1912,
+    "lastRun": "2026-03-19T14:40:00.337Z",
+    "lastStatus": "running",
+    "durationMs": 1818,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
@@ -14,16 +14,16 @@
     "gracePeriodMinutes": 60
   },
   "propagate": {
-    "lastRun": "2026-03-18T12:50:37.341Z",
+    "lastRun": "2026-03-19T11:00:18.498Z",
     "lastStatus": "success",
-    "durationMs": 12151,
+    "durationMs": 17222,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "tool-monitor": {
-    "lastRun": "2026-03-18T12:51:32.327Z",
+    "lastRun": "2026-03-19T11:05:25.663Z",
     "lastStatus": "success",
-    "durationMs": 23430,
+    "durationMs": 24713,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
@@ -63,9 +63,9 @@
     "gracePeriodMinutes": 10
   },
   "watchdog": {
-    "lastRun": "2026-03-19T08:40:01.808Z",
+    "lastRun": "2026-03-19T14:40:01.397Z",
     "lastStatus": "success",
-    "durationMs": 1073,
+    "durationMs": 1301,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 30
   },
@@ -84,9 +84,9 @@
     "gracePeriodMinutes": 90
   },
   "feedback": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
+    "lastRun": "2026-03-19T13:00:01.564Z",
+    "lastStatus": "success",
+    "durationMs": 1085,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
@@ -105,16 +105,16 @@
     "gracePeriodMinutes": 120
   },
   "morning-brief": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
+    "lastRun": "2026-03-19T11:00:04.737Z",
+    "lastStatus": "success",
+    "durationMs": 4069,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "heartbeat-check": {
-    "lastRun": "2026-03-19T08:30:03.102Z",
+    "lastRun": "2026-03-19T14:30:03.891Z",
     "lastStatus": "success",
-    "durationMs": 2929,
+    "durationMs": 3358,
     "expectedIntervalHours": 0.5,
     "gracePeriodMinutes": 10
   },
@@ -133,9 +133,9 @@
     "gracePeriodMinutes": 60
   },
   "behavior-sync": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
+    "lastRun": "2026-03-19T10:50:07.556Z",
+    "lastStatus": "success",
+    "durationMs": 7456,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
@@ -168,9 +168,9 @@
     "gracePeriodMinutes": 120
   },
   "dispatcher": {
-    "lastRun": "2026-03-19T08:39:02.286Z",
+    "lastRun": "2026-03-19T14:43:01.675Z",
     "lastStatus": "success",
-    "durationMs": 1605,
+    "durationMs": 1420,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 5
   },
