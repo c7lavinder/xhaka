@@ -187,5 +187,12 @@
     "durationMs": null,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
+  },
+  "librarian": {
+    "lastRun": "2026-03-19T06:41:02.916Z",
+    "lastStatus": "running",
+    "durationMs": null,
+    "expectedIntervalHours": 24,
+    "gracePeriodMinutes": 60
   }
 }
