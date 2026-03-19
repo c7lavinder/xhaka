@@ -78,7 +78,7 @@
   },
   "researcher": {
     "lastRun": "2026-03-19T00:00:00.378Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1134,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 90
