@@ -36,9 +36,8 @@ export async function runImprove(): Promise<void> {
     await markJobFailed('improve', _startTime);
     // FIX 6: Send alert for OpenAI failures
     const alertMsg = (err instanceof Error)
-      ? `🚨 *Improve failed*
-${classifyOpenAIError(err)}`
-      : '🚨 *Improve failed* — unknown error';
+      ? '\u{1F6A8} *Improve failed*\n' + classifyOpenAIError(err)
+      : '\u{1F6A8} *Improve failed* \u2014 unknown error';
     await sendAlert(alertMsg);
     throw err;
   }
