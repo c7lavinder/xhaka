@@ -26,6 +26,12 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **Council pre-check (architecture decisions):** Before finalizing any SDD that involves schema design, system architecture, build-vs-buy, or strategic product decisions — run the relevant council triad in Claude Code (`/council --triad architecture "question"`) and incorporate the minority report into the PLAN section. Use the pre-built triads: `architecture` (Aristotle+Ada+Feynman), `product` (Torvalds+Machiavelli+Watts), `shipping` (Torvalds+Musashi+Feynman), `risk` (SunTzu+Aurelius+Feynman). Skip this only for pure implementation tasks with no meaningful trade-offs.
 
+**Every new agent/job SDD must include — non-negotiable:**
+1. **Observability** — structured logging of what ran, what it found, what it skipped, why it failed. Wired into job-registry and evaluation-log from day one.
+2. **Watchdog alert** — if the job hasn't run successfully within its expected window, send a Telegram alert to Corey. Silent failure is unacceptable.
+3. **Quality gate** — output is validated before being written (no duplicates, no broken links, relevance check). Garbage in = garbage out is prevented at the source, not cleaned up later.
+4. **Improve-job hook** — new agent is registered so the Monday improve job audits it automatically. No manual review required.
+
 ---
 
 ## Core Truths
