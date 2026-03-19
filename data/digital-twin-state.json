@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastSync": "2026-03-19T23:14:00Z",
+    "lastSync": "2026-03-19T23:44:00Z",
     "syncedBy": "control-room-sync cron",
     "version": "2"
   },
@@ -14,18 +14,19 @@
           "url": "https://xhaka-production.up.railway.app",
           "httpStatus": 200,
           "status": "online",
-          "lastDeployment": "2026-03-17T03:56:56Z",
-          "lastDeploymentStatus": "SUCCESS"
+          "lastDeployment": "2026-03-11T22:38:03Z",
+          "lastDeploymentStatus": "FAILED",
+          "note": "HTTP 200 despite Railway showing FAILED deploy — service is running an older successful build."
         },
         {
           "id": "629682d3-c8d4-4907-9845-304587be36b2",
           "name": "xhaka-control-room",
           "url": "https://xhaka-control-room-production.up.railway.app",
           "httpStatus": 200,
-          "status": "building",
-          "lastDeployment": "2026-03-19T23:15:05Z",
-          "lastDeploymentStatus": "BUILDING",
-          "note": "⚠️ Deploy in progress at sync time (23:15 UTC). Persistent issue: all /api/* routes return 404 — serves static HTML from xhaka repo /services/control-room only. Next.js app (openclaw-control-room repo) not connected. Builder needed to resolve."
+          "status": "degraded",
+          "lastDeployment": "2026-03-18T12:58:03Z",
+          "lastDeploymentStatus": "FAILED",
+          "note": "⚠️ HTTP 200 but API routes broken — serving static HTML from xhaka repo /services/control-room. Next.js app (openclaw-control-room repo) not connected. All /api/* routes return 404. Builder needed."
         },
         {
           "id": "e6a33162-f5ff-4916-a875-0a4fb86c934c",
@@ -34,7 +35,8 @@
           "httpStatus": null,
           "status": "online",
           "lastDeployment": "2026-03-19T18:08:03Z",
-          "lastDeploymentStatus": "SUCCESS"
+          "lastDeploymentStatus": "SUCCESS",
+          "note": "No HTTP endpoint (background worker). Dispatcher running clean every ~1 min per results.tsv. Last confirmed: 2026-03-19T23:16Z."
         },
         {
           "id": "120da791-ab76-4b9d-9f35-32789b6ae390",
@@ -44,7 +46,7 @@
           "status": "degraded",
           "lastDeployment": "2026-03-16T09:21:19Z",
           "lastDeploymentStatus": "SUCCESS",
-          "note": "Persistent 404 — deploy SUCCESS but service returns nothing. Likely stub or misconfigured routing. Ask Corey what this service is for."
+          "note": "Persistent 404 — deploy SUCCESS but HTTP 404. Purpose unclear. Ask Corey."
         },
         {
           "id": "0498adcb-0b20-477e-b1a5-83c3673e79cf",
@@ -63,11 +65,12 @@
         {
           "id": "9890f22c-5b08-46ca-b3d9-153bd2beba57",
           "name": "gunner-v2",
-          "url": null,
-          "httpStatus": null,
+          "url": "https://getgunner.ai",
+          "httpStatus": 200,
           "status": "online",
-          "lastDeployment": "2026-03-13T16:10:08Z",
-          "lastDeploymentStatus": "SUCCESS"
+          "lastDeployment": "2026-03-10T16:34:36Z",
+          "lastDeploymentStatus": "FAILED",
+          "note": "Railway shows FAILED deploy but getgunner.ai returns HTTP 200 — running older build. Live and accessible."
         },
         {
           "id": "d3d05a46-5eff-4576-92c1-8a4f2049af3e",
@@ -84,27 +87,28 @@
   "jobs": {
     "healthy": [
       "capture",
-      "organize",
       "propagate",
       "tool-monitor",
-      "scribe",
-      "operator",
       "watchdog",
       "daily-log",
       "researcher",
       "feedback",
       "morning-brief",
-      "heartbeat-check",
       "behavior-sync",
-      "change-evaluator",
       "dispatcher",
       "librarian",
       "kb-indexer"
     ],
     "stale": [
-      { "job": "synthesize", "lastRun": "2026-03-12T04:23:44Z", "hoursAgo": 186.8 },
-      { "job": "improve", "lastRun": "2026-03-12T04:24:14Z", "hoursAgo": 186.8 },
-      { "job": "cleanup", "lastRun": "2026-03-12T04:24:17Z", "hoursAgo": 186.8 }
+      { "job": "organize", "lastRun": "2026-03-18T12:49:53Z", "hoursAgo": 34.9, "expectedHours": 24 },
+      { "job": "scribe", "lastRun": "2026-03-18T12:52:23Z", "hoursAgo": 34.9, "expectedHours": 24 },
+      { "job": "operator", "lastRun": "2026-03-19T19:10:03Z", "hoursAgo": 4.6, "expectedHours": 1 },
+      { "job": "change-evaluator", "lastRun": "2026-03-18T20:00:01Z", "hoursAgo": 27.7, "expectedHours": 24 },
+      { "job": "synthesize", "lastRun": "2026-03-12T04:23:44Z", "hoursAgo": 187.3, "expectedHours": 130 }
+    ],
+    "failed": [
+      { "job": "improve", "lastRun": "2026-03-12T04:24:14Z", "hoursAgo": 187.3 },
+      { "job": "cleanup", "lastRun": "2026-03-12T04:24:17Z", "hoursAgo": 187.3 }
     ],
     "never_run": [
       "inspect",
@@ -122,27 +126,32 @@
     {
       "level": "warn",
       "service": "xhaka-control-room",
-      "msg": "Deploy in progress at sync time (23:15 UTC) — BUILDING status. Also: /api/* routes return 404 (long-standing, Builder needed)"
+      "msg": "API routes return 404 — serving static HTML from wrong source (xhaka/services/control-room). Next.js openclaw-control-room not wired. Builder needed."
     },
     {
       "level": "warn",
       "service": "xhaka-hindsight",
-      "msg": "Persistent 404 — deploy SUCCESS but HTTP 404. Purpose unclear."
+      "msg": "Persistent HTTP 404 despite SUCCESS deploy. Purpose unknown."
+    },
+    {
+      "level": "warn",
+      "job": "operator",
+      "msg": "operator stale — last ran 4.6h ago (expected every 1h). Intelligence may not be self-healing."
+    },
+    {
+      "level": "warn",
+      "job": "scribe+organize",
+      "msg": "scribe and organize last ran ~35h ago — skipped overnight cycle on 2026-03-19."
     },
     {
       "level": "warn",
       "job": "synthesize",
-      "msg": "synthesize last ran 2026-03-12 — stale (186h ago)"
+      "msg": "synthesize last ran 2026-03-12 (187h ago, expected 130h). Memory synthesis overdue."
     },
     {
-      "level": "info",
-      "job": "improve",
-      "msg": "improve job stale since 2026-03-12 (long-standing)"
-    },
-    {
-      "level": "info",
-      "job": "cleanup",
-      "msg": "cleanup job stale since 2026-03-12 (long-standing)"
+      "level": "error",
+      "job": "improve+cleanup",
+      "msg": "improve + cleanup stuck on FAILED since 2026-03-12. Long-standing bug, 187h stale."
     }
   ]
 }
