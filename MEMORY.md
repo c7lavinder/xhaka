@@ -64,6 +64,7 @@ See `memory/decisions/` for full decision logs.
 - **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
 - **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
 - **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
+- **2026-03-19:** Saved NemoClaw (NVIDIA sandbox for OpenClaw) and Matt Pocock's Claude skills to context.
 - **2026-03-16:** Pre-deploy TypeScript check added to GitHub Actions — prevents broken deploys.
 - **2026-03-16:** Tool Knowledge Hub adopted — every tool gets overview, setup, best practices, gotchas, integrations.
 - **2026-03-16:** SDD enforcement added to SOUL.md — Builder prompts must have SPEC + PLAN + TASKS. No exceptions.
