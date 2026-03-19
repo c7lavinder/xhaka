@@ -1,0 +1,1 @@
+0 3 * * * /Users/wholesaleai/.openclaw/workspace/scripts/cleanup-sessions.sh >> /Users/wholesaleai/.openclaw/workspace/scripts/cleanup.log 2>&1

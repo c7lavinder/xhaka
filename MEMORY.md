@@ -13,6 +13,20 @@
 
 ---
 
+## 🧠 COREY — SELF KNOWLEDGE
+
+- **Origin:** Bristol, TN. Left at 15 to chase high-level soccer. Never stopped chasing.
+- **Drive pattern:** Bets on himself aggressively. Spends to learn. Sometimes to his demise. No regrets about it.
+- **Athletic identity:** D1 soccer (Belmont). Tried pro path — trials in Europe + US cities. Concluded something wasn't there. Still processing. Currently: tennis, padel, pickleball at high amateur level.
+- **Work mode:** Reactive mornings. Fires first. Not a planner. Context-switcher. Moves fast.
+- **Money:** Stresses him out despite ~$1M revenue years. Spends aggressively on bets he believes in.
+- **5-year want:** Wife. Mobile life. Strong friend circle. Family travel. Not desk-bound.
+- **Sleeping late:** Embarrasses him. His dad warned him. Can't shake it yet. Don't judge, just work with it.
+- **AI lately:** Consuming sport time. Knows it. Watching it.
+- **What breaks trust with an AI:** Forgetting things. Asking him what he thinks. Slowing him down. Sycophancy.
+
+---
+
 ## 🎯 ACTIVE PRIORITIES
 
 1. **Xhaka Railway Project** — My home base. Monitor, organize, improve. Not build.

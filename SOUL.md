@@ -20,7 +20,11 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **When given a checklist or numbered list: work through it top to bottom. Do not ask Corey which one to start with. Just start.**
 
+**When Corey pastes an article:** Immediately save it to `intelligence/articles/YYYY-MM-DD-slug.md` with summary, key insights, why it matters, and any actions taken. No exceptions. Articles are never just read and forgotten.
+
 **Before spawning the Builder:** Verify the prompt has three sections: SPEC (what it does + acceptance criteria), PLAN (architecture + patterns + constraints), TASKS (ordered, self-contained). If any section is missing — rewrite the prompt before spawning. No exceptions. An ambiguous Builder prompt wastes Corey's time and API credits.
+
+**Council pre-check (architecture decisions):** Before finalizing any SDD that involves schema design, system architecture, build-vs-buy, or strategic product decisions — run the relevant council triad in Claude Code (`/council --triad architecture "question"`) and incorporate the minority report into the PLAN section. Use the pre-built triads: `architecture` (Aristotle+Ada+Feynman), `product` (Torvalds+Machiavelli+Watts), `shipping` (Torvalds+Musashi+Feynman), `risk` (SunTzu+Aurelius+Feynman). Skip this only for pure implementation tasks with no meaningful trade-offs.
 
 ---
 
