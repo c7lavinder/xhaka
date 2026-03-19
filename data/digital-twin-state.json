@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastSync": "2026-03-19T21:14:00Z",
+    "lastSync": "2026-03-19T23:14:00Z",
     "syncedBy": "control-room-sync cron",
     "version": "2"
   },
@@ -22,10 +22,10 @@
           "name": "xhaka-control-room",
           "url": "https://xhaka-control-room-production.up.railway.app",
           "httpStatus": 200,
-          "status": "online",
-          "lastDeployment": "2026-03-19T21:17:05Z",
-          "lastDeploymentStatus": "SUCCESS",
-          "note": "⚠️ Persistent issue: deploys succeed but all /api/* routes return 404. Serves static HTML from xhaka repo /services/control-room only. Next.js app (openclaw-control-room repo) not connected. Builder needed to resolve."
+          "status": "building",
+          "lastDeployment": "2026-03-19T23:15:05Z",
+          "lastDeploymentStatus": "BUILDING",
+          "note": "⚠️ Deploy in progress at sync time (23:15 UTC). Persistent issue: all /api/* routes return 404 — serves static HTML from xhaka repo /services/control-room only. Next.js app (openclaw-control-room repo) not connected. Builder needed to resolve."
         },
         {
           "id": "e6a33162-f5ff-4916-a875-0a4fb86c934c",
@@ -63,70 +63,86 @@
         {
           "id": "9890f22c-5b08-46ca-b3d9-153bd2beba57",
           "name": "gunner-v2",
-          "url": "https://gunner-v2-production.up.railway.app",
-          "httpStatus": 200,
+          "url": null,
+          "httpStatus": null,
           "status": "online",
           "lastDeployment": "2026-03-13T16:10:08Z",
-          "lastDeploymentStatus": "SUCCESS",
-          "note": "HTTP 200 — service live. No public /api/status endpoint."
+          "lastDeploymentStatus": "SUCCESS"
         },
         {
           "id": "d3d05a46-5eff-4576-92c1-8a4f2049af3e",
           "name": "gunner-postgres",
+          "url": null,
+          "httpStatus": null,
           "status": "online",
-          "note": "No public domain — internal DB"
-        },
-        {
-          "id": "6a11c690-3dca-4ed9-ad43-3d6b6809c2c1",
-          "name": "xhaka-brain",
-          "status": "online",
-          "note": "Wrongly named Postgres DB — ignore"
+          "lastDeployment": "2026-03-09T19:13:19Z",
+          "lastDeploymentStatus": "SUCCESS"
         }
       ]
     }
   },
-  "intelligenceJobs": {
-    "capture": { "lastRun": "2026-03-19T14:45:02Z", "status": "success", "durationMs": 2136 },
-    "organize": { "lastRun": "2026-03-18T12:49:53Z", "status": "success", "durationMs": 928 },
-    "propagate": { "lastRun": "2026-03-19T11:00:18Z", "status": "success", "durationMs": 17222 },
-    "tool-monitor": { "lastRun": "2026-03-19T11:05:25Z", "status": "success", "durationMs": 24713 },
-    "scribe": { "lastRun": "2026-03-18T12:52:23Z", "status": "success", "durationMs": 19553 },
-    "watchdog": { "lastRun": "2026-03-19T14:40:01Z", "status": "success", "durationMs": 1301 },
-    "daily-log": { "lastRun": "2026-03-19T05:00:06Z", "status": "success", "durationMs": 5743 },
-    "morning-brief": { "lastRun": "2026-03-19T11:00:04Z", "status": "success", "durationMs": 4069 },
-    "dispatcher": { "lastRun": "2026-03-19T14:47:02Z", "status": "success", "durationMs": 1888 },
-    "feedback": { "lastRun": "2026-03-19T13:00:01Z", "status": "success", "durationMs": 1085 },
-    "heartbeat-check": { "lastRun": "2026-03-19T14:30:03Z", "status": "success", "durationMs": 3358 },
-    "behavior-sync": { "lastRun": "2026-03-19T10:50:07Z", "status": "success", "durationMs": 7456 },
-    "librarian": { "lastRun": "2026-03-19T07:00:31Z", "status": "success", "durationMs": 30998 },
-    "kb-indexer": { "lastRun": "2026-03-19T07:00:21Z", "status": "success", "durationMs": 20717 },
-    "change-evaluator": { "lastRun": "2026-03-18T20:00:01Z", "status": "success", "durationMs": 1064 },
-    "synthesize": { "lastRun": "2026-03-12T04:23:44Z", "status": "success", "durationMs": 10241 },
-    "improve": { "lastRun": "2026-03-12T04:24:14Z", "status": "failed", "durationMs": 0, "note": "weekly job — next run Monday 6AM CST" },
-    "cleanup": { "lastRun": "2026-03-12T04:24:17Z", "status": "failed", "durationMs": 0, "note": "weekly job — next run Sunday 6AM CST" },
-    "researcher": { "lastRun": "2026-03-19T00:00:00Z", "status": "failed", "durationMs": 1134 },
-    "operator": { "lastRun": "2026-03-18T14:21:04Z", "status": "stale", "durationMs": 2810, "note": "expected hourly — last run ~31h ago" }
+  "jobs": {
+    "healthy": [
+      "capture",
+      "organize",
+      "propagate",
+      "tool-monitor",
+      "scribe",
+      "operator",
+      "watchdog",
+      "daily-log",
+      "researcher",
+      "feedback",
+      "morning-brief",
+      "heartbeat-check",
+      "behavior-sync",
+      "change-evaluator",
+      "dispatcher",
+      "librarian",
+      "kb-indexer"
+    ],
+    "stale": [
+      { "job": "synthesize", "lastRun": "2026-03-12T04:23:44Z", "hoursAgo": 186.8 },
+      { "job": "improve", "lastRun": "2026-03-12T04:24:14Z", "hoursAgo": 186.8 },
+      { "job": "cleanup", "lastRun": "2026-03-12T04:24:17Z", "hoursAgo": 186.8 }
+    ],
+    "never_run": [
+      "inspect",
+      "routing-review",
+      "benchmark",
+      "pre-deploy-test",
+      "proactive-scan",
+      "agent-scorecard",
+      "pattern-miner",
+      "auditor",
+      "architect"
+    ]
   },
   "alerts": [
     {
-      "level": "warning",
+      "level": "warn",
       "service": "xhaka-control-room",
-      "message": "API routes (Next.js) not serving — /api/* returns 404. Static HTML only. Builder needed."
+      "msg": "Deploy in progress at sync time (23:15 UTC) — BUILDING status. Also: /api/* routes return 404 (long-standing, Builder needed)"
     },
     {
-      "level": "warning",
+      "level": "warn",
       "service": "xhaka-hindsight",
-      "message": "Persistent 404 since 2026-03-16. Purpose unknown. Confirm with Corey."
+      "msg": "Persistent 404 — deploy SUCCESS but HTTP 404. Purpose unclear."
     },
     {
-      "level": "warning",
-      "job": "researcher",
-      "message": "researcher job failed at midnight 2026-03-19. No research output since yesterday."
+      "level": "warn",
+      "job": "synthesize",
+      "msg": "synthesize last ran 2026-03-12 — stale (186h ago)"
     },
     {
       "level": "info",
-      "job": "operator",
-      "message": "operator job stale — last ran 31h ago, expected hourly. May need attention."
+      "job": "improve",
+      "msg": "improve job stale since 2026-03-12 (long-standing)"
+    },
+    {
+      "level": "info",
+      "job": "cleanup",
+      "msg": "cleanup job stale since 2026-03-12 (long-standing)"
     }
   ]
 }
