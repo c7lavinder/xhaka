@@ -18,10 +18,12 @@ The project is stable with all services online and functioning as expected. Rece
 |---|---|---|---|
 | xhaka | e6f2c6d7-75a4-4573-b142-63869d0e1b4c | xhaka-production.up.railway.app | ✅ Online |
 | xhaka-intelligence | e6a33162-f5ff-4916-a875-0a4fb86c934c | (background service) | ✅ Online |
-| xhaka-control-room | 629682d3-c8d4-4907-9845-304587be36b2 | (control room dashboard) | ✅ Online |
-| Links and Docs | 0498adcb-0b20-477e-b1a5-83c3673e79cf | — | ✅ Online |
+| xhaka-control-room | 629682d3-c8d4-4907-9845-304587be36b2 | xhaka-control-room-production.up.railway.app | ✅ Online |
+| xhaka-hindsight | 120da791-ab76-4b9d-9f35-32789b6ae390 | xhaka-hindsight-production.up.railway.app | ⚠️ 404 — New, unknown |
+| Links and Docs | 0498adcb-0b20-477e-b1a5-83c3673e79cf | links-and-docs-production.up.railway.app | ✅ Online |
 
 > **Note:** `xhaka-brain` in the Gunner project is a wrongly-named Postgres DB — it is NOT the intelligence service. Ignore it.
+> **New 2026-03-19:** `xhaka-hindsight` service appeared — deployed 2026-03-16, returning 404. Ask Corey what this is.
 
 ## Intelligence Jobs
 | Job | Schedule | Purpose |
