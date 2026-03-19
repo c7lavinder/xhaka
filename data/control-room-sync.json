@@ -1,0 +1,42 @@
+{
+  "lastSync": "2026-03-19T22:44:00.000Z",
+  "syncBy": "xhaka-cron-control-room-sync",
+  "services": {
+    "xhaka-intelligence": {
+      "serviceId": "e6a33162-f5ff-4916-a875-0a4fb86c934c",
+      "status": "SUCCESS",
+      "lastDeployedAt": "2026-03-19T18:08:03.158Z",
+      "health": "healthy"
+    },
+    "xhaka-control-room": {
+      "serviceId": "629682d3-c8d4-4907-9845-304587be36b2",
+      "status": "SUCCESS",
+      "lastDeployedAt": "2026-03-19T22:48:04.790Z",
+      "health": "degraded",
+      "issue": "Serving old Express/vanilla HTML server.js from xhaka repo /services/control-room — Next.js API routes unreachable. Root cause: Railway service points to wrong repo/path."
+    }
+  },
+  "workspace": {
+    "memoryLines": 126,
+    "memoryStatus": "ok",
+    "gitStatus": "clean",
+    "lastCommit": "2c4854ceb — chore: control-room-sync [2026-03-19 17:14 CST]"
+  },
+  "jobs": {
+    "healthy": ["capture", "dispatcher", "watchdog", "heartbeat-check", "operator", "researcher", "daily-log", "feedback", "tool-monitor", "propagate", "morning-brief", "behavior-sync", "librarian", "kb-indexer"],
+    "stale": {
+      "change-evaluator": "26.8h ago",
+      "scribe": "33.9h ago",
+      "organize": "34.0h ago",
+      "synthesize": "186.4h ago",
+      "improve": "186.4h ago",
+      "cleanup": "186.4h ago"
+    },
+    "neverRan": ["inspect", "routing-review", "benchmark", "pre-deploy-test", "proactive-scan", "agent-scorecard", "pattern-miner", "auditor", "architect"]
+  },
+  "alerts": [
+    "xhaka-control-room: API routes returning 404 — serving Express app from wrong source (xhaka/services/control-room instead of openclaw-control-room repo). Needs fix.",
+    "synthesize/improve/cleanup: Last ran 7.8 days ago — overdue.",
+    "scribe/organize: ~34h stale — should have run overnight."
+  ]
+}
