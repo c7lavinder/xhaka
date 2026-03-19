@@ -1,0 +1,295 @@
+{
+  "meta": {
+    "lastSync": "2026-03-19T14:44:00Z",
+    "syncedBy": "control-room-sync cron",
+    "version": "2"
+  },
+
+  "services": {
+    "xhaka_project": {
+      "projectId": "84c0d035-cf53-4edd-b29c-31aeb42caac9",
+      "services": [
+        {
+          "id": "e6f2c6d7-75a4-4573-b142-63869d0e1b4c",
+          "name": "xhaka",
+          "url": "https://xhaka-production.up.railway.app",
+          "httpStatus": 200,
+          "status": "online",
+          "lastDeployment": "2026-03-17T03:56:56Z",
+          "lastDeploymentStatus": "SUCCESS"
+        },
+        {
+          "id": "629682d3-c8d4-4907-9845-304587be36b2",
+          "name": "xhaka-control-room",
+          "url": "https://xhaka-control-room-production.up.railway.app",
+          "httpStatus": 200,
+          "status": "degraded",
+          "lastDeployment": "2026-03-19T14:45:05Z",
+          "lastDeploymentStatus": "SUCCESS",
+          "note": "🔄 New deploy SUCCESS at 14:45 UTC today — but API routes still 404. Multiple INITIALIZING deploys queued. Builder fix in progress. Site serves old static HTML."
+        },
+        {
+          "id": "e6a33162-f5ff-4916-a875-0a4fb86c934c",
+          "name": "xhaka-intelligence",
+          "url": null,
+          "httpStatus": null,
+          "status": "online",
+          "lastDeployment": "2026-03-19T06:43:34Z",
+          "lastDeploymentStatus": "SUCCESS"
+        },
+        {
+          "id": "120da791-ab76-4b9d-9f35-32789b6ae390",
+          "name": "xhaka-hindsight",
+          "url": "https://xhaka-hindsight-production.up.railway.app",
+          "httpStatus": 404,
+          "status": "degraded",
+          "lastDeployment": "2026-03-16T09:21:19Z",
+          "lastDeploymentStatus": "SUCCESS",
+          "note": "Persistent 404 — deploy succeeds but service returns nothing. Likely stub or misconfigured routing."
+        },
+        {
+          "id": "0498adcb-0b20-477e-b1a5-83c3673e79cf",
+          "name": "links-and-docs",
+          "url": "https://links-and-docs-production.up.railway.app",
+          "httpStatus": 200,
+          "status": "online"
+        }
+      ]
+    },
+    "gunner_project": {
+      "projectId": "f379b683-e34d-4e0e-a91a-f64d0ab499ea",
+      "services": [
+        {
+          "id": "9890f22c-5b08-46ca-b3d9-153bd2beba57",
+          "name": "gunner-v2",
+          "url": "https://gunner-production.up.railway.app",
+          "httpStatus": 200,
+          "status": "degraded",
+          "lastDeployment": "2026-03-13T16:10:08Z",
+          "lastDeploymentStatus": "SUCCESS",
+          "crmStatus": "degraded",
+          "note": "HTTP 200 — service live. crmStatus: degraded (confirmed live at 14:46 UTC). Last deploy SUCCESS 2026-03-13."
+        },
+        {
+          "id": "d3d05a46-5eff-4576-92c1-8a4f2049af3e",
+          "name": "gunner-postgres",
+          "status": "online",
+          "note": "No public domain — internal DB"
+        },
+        {
+          "id": "6a11c690-3dca-4ed9-ad43-3d6b6809c2c1",
+          "name": "xhaka-brain",
+          "status": "online",
+          "note": "Wrongly named — is a Postgres DB, not intelligence service. Ignore."
+        }
+      ]
+    }
+  },
+
+  "intelligence_jobs": {
+    "capture": {
+      "lastRun": "2026-03-19T14:40:00Z",
+      "lastStatus": "running",
+      "durationMs": 1818,
+      "health": "ok"
+    },
+    "dispatcher": {
+      "lastRun": "2026-03-19T14:43:01Z",
+      "lastStatus": "success",
+      "durationMs": 1420,
+      "health": "ok"
+    },
+    "watchdog": {
+      "lastRun": "2026-03-19T14:40:01Z",
+      "lastStatus": "success",
+      "durationMs": 1301,
+      "health": "ok"
+    },
+    "heartbeat-check": {
+      "lastRun": "2026-03-19T14:30:03Z",
+      "lastStatus": "success",
+      "durationMs": 3358,
+      "health": "ok"
+    },
+    "daily-log": {
+      "lastRun": "2026-03-19T05:00:06Z",
+      "lastStatus": "success",
+      "durationMs": 5743,
+      "health": "ok"
+    },
+    "morning-brief": {
+      "lastRun": "2026-03-19T11:00:04Z",
+      "lastStatus": "success",
+      "durationMs": 4069,
+      "health": "ok"
+    },
+    "librarian": {
+      "lastRun": "2026-03-19T07:00:31Z",
+      "lastStatus": "success",
+      "durationMs": 30998,
+      "health": "ok"
+    },
+    "kb-indexer": {
+      "lastRun": "2026-03-19T07:00:21Z",
+      "lastStatus": "success",
+      "durationMs": 20717,
+      "health": "ok"
+    },
+    "propagate": {
+      "lastRun": "2026-03-19T11:00:18Z",
+      "lastStatus": "success",
+      "durationMs": 17222,
+      "health": "ok"
+    },
+    "tool-monitor": {
+      "lastRun": "2026-03-19T11:05:25Z",
+      "lastStatus": "success",
+      "durationMs": 24713,
+      "health": "ok"
+    },
+    "behavior-sync": {
+      "lastRun": "2026-03-19T10:50:07Z",
+      "lastStatus": "success",
+      "durationMs": 7456,
+      "health": "ok"
+    },
+    "feedback": {
+      "lastRun": "2026-03-19T13:00:01Z",
+      "lastStatus": "success",
+      "durationMs": 1085,
+      "health": "ok"
+    },
+    "change-evaluator": {
+      "lastRun": "2026-03-18T20:00:01Z",
+      "lastStatus": "success",
+      "durationMs": 1064,
+      "health": "ok"
+    },
+    "organize": {
+      "lastRun": "2026-03-18T12:49:53Z",
+      "lastStatus": "success",
+      "durationMs": 928,
+      "health": "ok"
+    },
+    "scribe": {
+      "lastRun": "2026-03-18T12:52:23Z",
+      "lastStatus": "success",
+      "durationMs": 19553,
+      "health": "ok"
+    },
+    "operator": {
+      "lastRun": "2026-03-18T14:21:04Z",
+      "lastStatus": "success",
+      "durationMs": 2810,
+      "health": "ok"
+    },
+    "researcher": {
+      "lastRun": "2026-03-19T00:00:00Z",
+      "lastStatus": "failed",
+      "durationMs": 1134,
+      "health": "degraded",
+      "alert": "Failed at midnight — fast fail (1134ms). Likely env or config issue. Needs investigation."
+    },
+    "improve": {
+      "lastRun": "2026-03-12T04:24:14Z",
+      "lastStatus": "failed",
+      "durationMs": 0,
+      "health": "stale",
+      "alert": "Failed 2026-03-12, weekly job — overdue for re-run"
+    },
+    "cleanup": {
+      "lastRun": "2026-03-12T04:24:17Z",
+      "lastStatus": "failed",
+      "durationMs": 0,
+      "health": "stale",
+      "alert": "Failed 2026-03-12, weekly job — overdue for re-run"
+    },
+    "synthesize": {
+      "lastRun": "2026-03-12T04:23:44Z",
+      "lastStatus": "success",
+      "durationMs": 10241,
+      "health": "ok",
+      "note": "Weekly — runs when improve/cleanup trigger it"
+    }
+  },
+
+  "openclaw_crons": [
+    {
+      "id": "1d0094d8-fd62-4e02-895b-5ac69a670d13",
+      "name": "control-room-sync",
+      "schedule": "every 30m",
+      "status": "running"
+    },
+    {
+      "id": "8aead9b0-924e-4b3a-b26c-2347f1dd8fea",
+      "name": "workspace-sync",
+      "schedule": "every 30m",
+      "status": "ok"
+    },
+    {
+      "id": "4e6ea70d-b1b3-410c-8d41-bf7b7d2e75eb",
+      "name": "paperclip-sync",
+      "schedule": "every 1h",
+      "status": "ok"
+    },
+    {
+      "id": "0bc114f3-c3e2-4684-ba46-708d97ff9d93",
+      "name": "session-memory-capture",
+      "schedule": "every 4h",
+      "status": "ok"
+    },
+    {
+      "id": "93ae54ec-ec3d-473a-9d0f-0bdb82ec6d94",
+      "name": "daily-personal-question",
+      "schedule": "daily 9am CST",
+      "status": "idle"
+    },
+    {
+      "id": "3f84bd7c-eff7-4316-b259-b7eb749b1cdc",
+      "name": "session-storage-cleanup",
+      "schedule": "every 1d",
+      "status": "idle"
+    }
+  ],
+
+  "system_health": {
+    "memoryLines": 126,
+    "memoryLimit": 150,
+    "memoryWarning": false,
+    "githubSyncRepo": "c7lavinder/xhaka",
+    "githubSyncStatus": "ok"
+  },
+
+  "alerts": [
+    {
+      "level": "critical",
+      "service": "xhaka-control-room",
+      "message": "API routes still 404 despite new deploy SUCCESS at 14:45 UTC. Multiple deploys queuing. Builder fix in progress — still serving old static HTML."
+    },
+    {
+      "level": "warning",
+      "service": "gunner-v2",
+      "message": "crmStatus: degraded (confirmed live check 14:46 UTC). Service is up on HTTP 200. GHL connection degraded."
+    },
+    {
+      "level": "warning",
+      "service": "xhaka-hindsight",
+      "message": "Persistent 404 — deploy SUCCESS but service returns nothing. Stub or misconfigured routing."
+    },
+    {
+      "level": "warning",
+      "job": "researcher",
+      "message": "Failed midnight 2026-03-19T00:00:00Z — fast fail (1134ms). Likely env/config issue."
+    },
+    {
+      "level": "info",
+      "job": "improve",
+      "message": "Failed 2026-03-12, weekly cadence — verify fires next Monday."
+    },
+    {
+      "level": "info",
+      "job": "cleanup",
+      "message": "Failed 2026-03-12, weekly cadence — same window as improve."
+    }
+  ]
+}
