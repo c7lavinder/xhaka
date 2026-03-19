@@ -23,7 +23,7 @@ export interface RailwayApiResponse<T> {
 const GET_LATEST_DEPLOYMENT_QUERY = `
   query GetLatestDeployment($serviceId: String!, $environmentId: String!) {
     deployments(
-      first: 2
+      first: 5
       input: {
         serviceId: $serviceId
         environmentId: $environmentId
@@ -132,11 +132,24 @@ export async function getLatestDeployment(
     url: node.staticUrl,
   });
 
-  const edges = data.deployments.edges;
-  return {
-    current: edges[0] ? mapNode(edges[0].node) : (null as unknown as DeploymentInfo),
-    prior: edges[1] ? mapNode(edges[1].node) : null,
-  };
+  // Sort by createdAt descending — Railway may return deployments ordered by
+  // updatedAt (status-change time), which causes superseded FAILED deployments
+  // to appear before the active SUCCESS one. We always want the most recently
+  // CREATED deployment as current, then find the first prior SUCCESS.
+  const sorted = data.deployments.edges
+    .slice()
+    .sort((a, b) => new Date(b.node.createdAt).getTime() - new Date(a.node.createdAt).getTime());
+
+  const current = sorted[0] ? mapNode(sorted[0].node) : (null as unknown as DeploymentInfo);
+
+  // prior = most recent non-current deployment that was active (SUCCESS/SLEEPING)
+  // Used for rollback target — skip FAILED superseded deployments
+  const priorNode = sorted.slice(1).find(
+    (e) => e.node.status === 'SUCCESS' || e.node.status === 'SLEEPING',
+  );
+  const prior = priorNode ? mapNode(priorNode.node) : null;
+
+  return { current, prior };
 }
 
 export async function getDeploymentLogs(

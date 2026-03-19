@@ -78,6 +78,10 @@ let lastStatePersistAt = 0; // epoch ms — hydrated from persisted state on eac
 const INFRA_ALERT_COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 let lastInfraAlertAt = 0; // epoch ms — hydrated from persisted state on each run
 
+// Dedup: track the last deploymentId we alerted on — don't re-alert for the same deploy
+// Persisted to remediation-state so it survives Railway restarts
+let lastDeployAlertId = ''; // persisted via remediation-state
+
 const WAIT_BETWEEN_ATTEMPTS_MS = 3 * 60 * 1000; // 3 minutes
 const MAX_ATTEMPTS_PER_24H = 3;
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
@@ -143,6 +147,7 @@ async function persistCurrentState(): Promise<void> {
   const state = {
     lastPersistedAt: new Date(now).toISOString(),
     lastInfraAlertAt,
+    lastDeployAlertId,
     attempts: Object.fromEntries(
       [...attemptTracker.entries()].map(([k, v]) => [k, {
         count: v.count,
@@ -465,10 +470,20 @@ export async function runOperator(): Promise<void> {
       if (!isNaN(savedInfraAt)) lastInfraAlertAt = savedInfraAt;
     }
 
+    // Hydrate deploy-alert dedup — persisted so it survives Railway restarts
+    if (typeof persistedStateRaw.lastDeployAlertId === 'string') {
+      lastDeployAlertId = persistedStateRaw.lastDeployAlertId;
+    }
+
     // ─── Railway Deployment Health Check ─────────────────────────────────────
     // Check the deployment status BEFORE touching the job registry.
     // If the service itself is FAILED/CRASHED, there's no point running jobs —
     // alert immediately and bail out.
+    //
+    // IMPORTANT: Only alert if the MOST RECENTLY CREATED deployment is FAILED.
+    // Railway marks superseded old deployments as FAILED when a new one takes
+    // over — this is normal and should NOT trigger an alert. The sort in
+    // getLatestDeployment() ensures current = most recently created deployment.
     const railwayServiceId = process.env.RAILWAY_SERVICE_ID ?? '';
     const railwayEnvironmentId = process.env.RAILWAY_ENVIRONMENT_ID ?? '';
 
@@ -478,27 +493,44 @@ export async function runOperator(): Promise<void> {
       const deployId = deploymentHealth.current?.id ?? 'unknown';
 
       if (deployStatus === 'FAILED' || deployStatus === 'CRASHED') {
-        const alertMsg =
-          `🚨 *Railway Deploy Failed* — xhaka-intelligence\n` +
-          `Status: ${deployStatus}\n` +
-          `Deployment ID: ${deployId}\n` +
-          `This is a build/code failure — manual intervention needed.\n` +
-          `Check: https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9`;
-        await sendAlert(alertMsg);
-        await appendOperatorLog({
-          timestamp: new Date().toISOString(),
-          job: 'railway-deploy',
-          action: 'alert',
-          outcome: 'escalated',
-          attempt: 0,
-          detail: `status=${deployStatus}, deploymentId=${deployId}`,
-        });
-        console.error(`[operator] Railway deployment ${deployStatus} (id=${deployId}) — returning early`);
+        // Dedup: skip if we already alerted for this exact deploymentId
+        if (deployId === lastDeployAlertId) {
+          console.log(
+            `[operator] Deploy alert already sent for deploymentId=${deployId} — skipping`,
+          );
+          // Still continue to job registry check — the service may have recovered
+        } else {
+          const alertMsg =
+            `🚨 *Railway Deploy Failed* — xhaka-intelligence\n` +
+            `Status: ${deployStatus}\n` +
+            `Deployment ID: ${deployId}\n` +
+            `This is a build/code failure — manual intervention needed.\n` +
+            `Check: https://railway.app/project/84c0d035-cf53-4edd-b29c-31aeb42caac9`;
+          await sendAlert(alertMsg);
+          await appendOperatorLog({
+            timestamp: new Date().toISOString(),
+            job: 'railway-deploy',
+            action: 'alert',
+            outcome: 'escalated',
+            attempt: 0,
+            detail: `status=${deployStatus}, deploymentId=${deployId}`,
+          });
+          console.error(`[operator] Railway deployment ${deployStatus} (id=${deployId}) — alert sent`);
+
+          // Persist dedup state immediately (bypass cooldown) so restarts don't re-alert
+          lastDeployAlertId = deployId;
+          lastStatePersistAt = 0;
+          await persistCurrentState();
+        }
         return;
       } else if (deployStatus === 'SLEEPING' || deployStatus === 'BUILDING') {
         console.log(`[operator] Railway deployment status: ${deployStatus} — normal state, continuing`);
       } else if (deployStatus === 'SUCCESS') {
         console.log(`[operator] Railway deployment healthy (${deployStatus}) — proceeding to job registry check`);
+        // Clear stale deploy alert dedup when service is healthy again
+        if (lastDeployAlertId) {
+          lastDeployAlertId = '';
+        }
       }
     } catch (err) {
       console.warn(
@@ -570,5 +602,3 @@ export async function runOperator(): Promise<void> {
     isRunning = false;
   }
 }
-
-
