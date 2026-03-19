@@ -996,3 +996,4 @@
 | 2026-03-19T06:40:00.794Z | railway-deploy | alert | escalated | 0 | status=FAILED, deploymentId=a9caa523-fced-4e54-8c33-ac94a814820d |
 | 2026-03-19T06:42:00.908Z | railway-deploy | alert | escalated | 0 | status=FAILED, deploymentId=ba82695d-210d-4dee-b54a-289853164fb9 |
 | 2026-03-19T06:43:00.997Z | railway-deploy | alert | escalated | 0 | status=FAILED, deploymentId=ba82695d-210d-4dee-b54a-289853164fb9 |
+| 2026-03-19T06:45:01.418Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
