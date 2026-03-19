@@ -1,0 +1,99 @@
+{
+  "syncedAt": "2026-03-19T22:14:00.000Z",
+  "syncedBy": "control-room-sync cron",
+  "railway": {
+    "xhaka_project": {
+      "id": "84c0d035-cf53-4edd-b29c-31aeb42caac9",
+      "services": {
+        "xhaka-control-room": {
+          "id": "629682d3-c8d4-4907-9845-304587be36b2",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-19T22:14:05.302Z",
+          "url": "https://xhaka-control-room-production.up.railway.app",
+          "httpStatus": 200
+        },
+        "xhaka-intelligence": {
+          "id": "e6a33162-f5ff-4916-a875-0a4fb86c934c",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-19T18:08:03.158Z"
+        },
+        "xhaka": {
+          "id": "e6f2c6d7-75a4-4573-b142-63869d0e1b4c",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-17T03:56:56.653Z"
+        },
+        "xhaka-hindsight": {
+          "id": "120da791-ab76-4b9d-9f35-32789b6ae390",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-16T09:21:19.799Z"
+        },
+        "links-and-docs": {
+          "id": "0498adcb-0b20-477e-b1a5-83c3673e79cf",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-12T05:03:30.834Z"
+        }
+      }
+    },
+    "gunner_project": {
+      "id": "f379b683-e34d-4e0e-a91a-f64d0ab499ea",
+      "services": {
+        "gunner-v2": {
+          "id": "9890f22c-5b08-46ca-b3d9-153bd2beba57",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-13T16:10:08.691Z"
+        },
+        "gunner-postgres": {
+          "id": "d3d05a46-5eff-4576-92c1-8a4f2049af3e",
+          "status": "SUCCESS",
+          "lastDeploy": "2026-03-09T19:13:19.797Z"
+        }
+      }
+    }
+  },
+  "jobs": {
+    "healthy": ["capture", "organize", "propagate", "tool-monitor", "scribe", "watchdog", "daily-log", "morning-brief", "heartbeat-check", "behavior-sync", "feedback", "dispatcher", "synthesize", "librarian", "kb-indexer", "change-evaluator"],
+    "failed": ["improve", "cleanup", "researcher"],
+    "never_run": ["inspect", "routing-review", "benchmark", "pre-deploy-test", "proactive-scan", "agent-scorecard", "pattern-miner", "auditor", "architect"],
+    "operator": {
+      "lastRun": "2026-03-18T14:21:04.000Z",
+      "status": "success",
+      "note": "Overdue by ~8h (expected every 1h)"
+    }
+  },
+  "crons": {
+    "control-room-sync": "running",
+    "workspace-sync": "ok",
+    "session-memory-capture": "ok",
+    "session-storage-cleanup": "idle",
+    "daily-personal-question": "ok"
+  },
+  "memory": {
+    "lineCount": 126,
+    "underLimit": true,
+    "limit": 150,
+    "lastGitCommit": "5c8b98764",
+    "lastCommitMsg": "chore: control-room-sync [2026-03-19 09:44 CST]"
+  },
+  "alerts": [
+    {
+      "level": "warn",
+      "job": "researcher",
+      "msg": "researcher job failed at 2026-03-19T00:00:00Z"
+    },
+    {
+      "level": "warn",
+      "job": "operator",
+      "msg": "operator last ran 2026-03-18T14:21 — overdue by ~8h (expected hourly)"
+    },
+    {
+      "level": "info",
+      "job": "improve",
+      "msg": "improve job has status=failed since 2026-03-12 (long-standing)"
+    },
+    {
+      "level": "info",
+      "job": "cleanup",
+      "msg": "cleanup job has status=failed since 2026-03-12 (long-standing)"
+    }
+  ]
+}
