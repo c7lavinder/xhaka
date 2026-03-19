@@ -4,52 +4,80 @@
 
 ---
 
+## What This Call Actually Was
+
+**Corey was presenting his system to his dad's team.** He demoed the call grading tool, walked through the architecture, and explained Xhaka. This was not a peer brainstorm — it was a show-and-tell. Matt's team is earlier stage and learning from Corey.
+
+---
+
 ## Full Detail (timestamped)
 
-**Rohan intro (00:00)** — Intern from King, strong math background, brought in for algorithms + AI education.
+**Rohan intro (00:00)** — Intern from King, math background, brought in for algorithms + AI education.
 
-**Corey on AI overwhelm (00:01:57)** — Twitter moves fast, makes it hard to stay disciplined on one project. Finishing is the hard part. Thousands of lines of code with no visual confirmation it's working — especially hard as a visual learner.
+**Corey on AI overwhelm (00:01:57)** — Hard to stay disciplined when Twitter moves fast. Finishing is the hardest part. As a visual learner, can't easily confirm AI code is working across thousands of lines.
 
-**Ben on complexity (00:03:14)** — "Drinking from the fire hose." Fix: break software into Lego blocks. Even after 20 years, his personal method is printing source code, highlighting it, reading with a separate notepad.
+**Ben on complexity (00:03:14)** — "Drinking from the fire hose." Strategy: Lego blocks. Single responsibility. Even after 20 years he prints source code and reads it with a notepad.
 
-**Corey on trusting AI code (00:05:35)** — Often has to trust it because he can't fully review it. Most progress has come from external resources: YouTube, GitHub repos, well-respected articles. Uses these to train Clawbot — pulls important info, updates repo and database.
+**Clawbot memory limitation (00:08:20)** — Prioritizes recent conversations, forgets old context. Matt's fix: three-tiered memory segmentation — "narrow and deep."
 
-**Clawbot development (00:06:54)** — Corey has Clawbot analyze trending GitHub repos daily to keep learning. Current limitation: can't memorize everything, prioritizes recent conversations over older context.
+**Ben: single responsibility principle (00:12:07)** — SOLID applied to agents. One agent, one job. More reliable, easier to trust.
 
-**Matt on memory structure (00:09:28)** — Three-tiered memory system to segment context and prevent agent confusion. "Narrow and deep" — segmentation prevents the agent from drowning in a mass of context.
+**Ben: trust broadly adopted software (00:14:37)** — Wide adoption = more tested. Don't rebuild what already works.
 
-**Ben on single responsibility (00:12:07)** — SOLID principles applied to agents: one agent, one job. More reliable, easier to debug, easier to trust.
+**Semi-assisted automation (00:18:04)** — Corey tried full automation, hit limits, shifted to: system grades → human edits → human sends. RAG layer pushes edits back in. Goal: compound toward full automation.
 
-**Ben on trusting software (00:14:37)** — Use broadly adopted tools (Auntu Linux, WordPress equivalents). Wide adoption = more tested = more reliable. Don't build what already exists and works.
+**MiroFish / Myrrofish (00:21:56)** — Corey's concept: collect massive proprietary business data to predict daily events and problems before they happen. Example data points for franchises: cabinet colors, house sale speed. Every possible signal. This is the prediction/simulation engine.
 
-**Corey on semi-assisted automation (00:18:04)** — Started trying to fully automate. Hit Clawbot limitations. Shifted to: system grades calls and suggests next steps → human reviews and edits → human sends. Semi-assisted.
+**Technical stack (00:27:42 - 00:29:57):**
+- Backend engine: **Go High Level**
+- Code: **GitHub → Railway → Supabase** (full Postgres)
+- Clawbot name: **Jaca** (COO function)
+- Sub-agents: Builder, Researcher, Auditor, Architect, Librarian, Operator (7 total)
 
-**RAG feedback loop (00:20:50)** — User edits get pushed back into the AI. Each correction makes it smarter. Goal: compound toward full automation over time. Not there yet — building the data layer first.
+**Call grading demo (00:33:07)** — Showed the tool: summaries, coaching tips, objection replies, next steps.
 
-**Matt on revenue focus (00:24:56)** — Short-term: generate revenue from FranDev acquisitions and improve coaching. Starting with FranDev agent use case because it's simpler. Proving ROI before expanding.
+**Dev workflow (00:35:03)** — VS Code + Claude Chat (web app). Talk through issues in Claude → Claude generates prompts → prompts go to VS Code → push to GitHub.
+
+**Agent-assisted setup (00:37:42)** — Agents configured most of the infrastructure. Corey didn't manually figure it out — agents did it using refined external materials.
+
+**Whisper Flow (00:39:01)** — Voice dictation tool. Dictates issues → transcribed into chat.
+
+**Testing method (00:40:42)** — Primarily team feedback. Local testing is hard.
+
+**Supabase via plain English (00:41:53)** — Clawbot can modify database structure through natural language API calls.
+
+**Co-work / Claude Code (00:41:53)** — Corey uses Anthropic's browser control (Claude Code) to automate tasks like setting Railway env vars after showing it once.
+
+**Compliance: webhooks over scraping (00:42:56 - 00:45:01)** — Will flagged ToS concerns on screen scraping. Corey confirmed: they use webhooks and APIs only, not direct scraping. Matt: if SaaS products block agents, they won't last — will need to replicate internally or add a UI layer over GHL.
+
+**GHL as permanent backbone (00:49:15)** — GHL must be the backend due to functionality and ongoing investment. Not going anywhere.
+
+**OpenClaw analogy (00:52:57)** — Matt described it: LLM = brain living in the Mac Mini. OpenClaw = the hands that take information and execute tasks.
+
+**Corey on model choice (00:55:38)** — Clawbot primarily uses OpenAI (cheaper) for personal/business org. Anthropic Claude Code is for productivity and building. Two separate use cases, two different tools.
 
 ---
 
-## Key Insights
+## Key Revelations (Updated)
 
-1. **Corey is in this group.** He's not just listening — he's building Clawbot alongside Matt's team. Same architecture, different domain. This is a peer group, not a client call.
+1. **Jaca = Xhaka.** The Clawbot is named Jaca. It functions as COO. It has 7 sub-agents with identical roles to our AGENTS.md. Corey was presenting *this system* to his dad's team. Same name, same architecture, same purpose.
 
-2. **The RAG feedback loop is the most important idea here.** Semi-assisted → corrections feed back in → model improves → automation increases over time. This is exactly what Gunner needs. A manager overrides a call grade → that override trains the next grade. Proprietary data moat compounds with every human edit.
+2. **MiroFish is now fully defined.** It's a data collection + prediction layer — gather every possible signal from a business (franchise or NAH) and predict what's going to happen before it does. Cabinet colors, deal velocity, every touchpoint. This is the long game. MEMORY.md correctly flagged it as deferred until Gunner hits 100 users.
 
-3. **Corey's core constraint is visual confirmation.** He can't see if AI code is working. This isn't a knowledge gap — it's a workflow gap. Better observability (logs, dashboards, health checks) directly addresses this. Xhaka's Control Room is the right answer.
+3. **Corey was the expert in the room.** Matt's team is learning from Corey, not the other way around. Rohan is an intern. Ben has engineering depth but not agent-building experience. Corey is ahead.
 
-4. **Clawbot has a memory problem Xhaka has already solved.** Corey's Clawbot prioritizes recent context over old. Xhaka's tiered memory system (MEMORY.md + daily logs + project files) is the architecture fix. Matt described the same solution.
+4. **Two Claude products, two jobs:** OpenAI = Xhaka's brain (cheaper, good enough for orchestration). Claude Code = building tool (Anthropic, used in VS Code via web app). This is the actual split.
 
-5. **Single responsibility principle is already embedded in AGENTS.md.** Builder, Auditor, Researcher, Operator — all single-purpose. This validates the org chart design.
+5. **The stack is locked:** GHL → GitHub → Railway → Supabase. Not changing. Any future build happens within this constraint.
 
-6. **The daily GitHub repo analysis Corey runs on Clawbot** is the same thing as Xhaka's intelligence jobs (capture, propagate, researcher). Same instinct. Corey is solving this problem from multiple directions simultaneously.
+6. **Whisper Flow** — Corey dictates into chat using voice. This is how he operates. Xhaka should be optimized for short, voice-transcribed inputs that may be rough or clipped.
 
-7. **FranDev is Matt's revenue wedge — not Corey's.** Corey's equivalent is Gunner + NAH. Don't conflate the two businesses.
+7. **Will Riddle is the skeptic/visual thinker.** Asked for a session to map out all the connections. Could be a useful forcing function for documentation.
 
 ---
 
-## Actions / Follow-Up
-- [ ] **Apply RAG feedback loop to Gunner** — when a manager overrides a call grade, capture that override and feed it back. Add to Builder backlog.
-- [ ] **Show Corey the Control Room as the visual confirmation layer** — directly addresses his stated pain point.
-- [ ] **Understand Clawbot vs Xhaka overlap** — are these separate systems or converging?
-- [ ] **Ben Harrison is worth knowing** — 20+ years engineering, SOLID principles mindset, practical. Could be a resource.
+## Actions
+- [ ] **MiroFish:** Flag for after Gunner 100-user milestone — data collection architecture needs to be designed now so it's ready
+- [ ] **Optimize Xhaka responses for Whisper Flow input** — assume clipped, voice-transcribed messages sometimes
+- [ ] **Will Riddle session:** If Matt's team wants a visual map, the Control Room is the answer — worth offering
+- [ ] **RAG feedback loop:** Add to Gunner Builder backlog — user grade overrides feed back into model
