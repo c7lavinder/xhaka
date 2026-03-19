@@ -14,9 +14,9 @@
     "gracePeriodMinutes": 60
   },
   "propagate": {
-    "lastRun": "2026-03-19T11:00:01.455Z",
-    "lastStatus": "running",
-    "durationMs": 12151,
+    "lastRun": "2026-03-19T11:00:18.498Z",
+    "lastStatus": "success",
+    "durationMs": 17222,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
