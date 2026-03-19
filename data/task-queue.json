@@ -7321,6 +7321,17 @@
       "startedAt": "2026-03-18T20:59:01.830Z",
       "completedAt": "2026-03-18T20:59:05.698Z",
       "proofOfWork": "Audit PASS for commit 945eabce. 0 concern(s). Artifact: intelligence/audits/2026-03-18-945eabce.md"
+    },
+    {
+      "id": "task_1773902402135_x4kpbma",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-19T06:40:01.964Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-19T06:40:02.135Z"
     }
   ]
 }
