@@ -1039,3 +1039,4 @@
 | 2026-03-19T18:34:02.377Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-03-19T18:35:02.545Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-03-19T18:36:06.386Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-03-19T18:37:01.616Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:40:01.616Z |
