@@ -1037,3 +1037,4 @@
 | 2026-03-19T18:30:01.842Z | cleanup | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-19T18:33:01.842Z |
 | 2026-03-19T18:31:01.908Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T18:34:01.908Z |
 | 2026-03-19T18:34:02.377Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-03-19T18:35:02.545Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
