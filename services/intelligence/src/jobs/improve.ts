@@ -163,18 +163,13 @@ function appendToBuilderTable(content: string, newRows: string[]): string {
   if (tableEnd === -1) {
     // No table found — fall back to appending a Lessons Learned section
     const section = ensureSection(content, LESSONS_HEADING);
-    const addition = '
-' + newRows.join('
-') + '
-';
+    const addition = '\n' + newRows.join('\n') + '\n';
     return section.trimEnd() + addition;
   }
 
   const before = content.slice(0, tableEnd);
   const after = content.slice(tableEnd);
-  return before + newRows.join('
-') + '
-' + after;
+  return before + newRows.join('\n') + '\n' + after;
 }
 
 function appendToOperatorKnownIssues(content: string, lesson: string): string {
@@ -183,12 +178,9 @@ function appendToOperatorKnownIssues(content: string, lesson: string): string {
   const insertAt = idx + KNOWN_ISSUES_HEADING.length;
   return (
     withSection.slice(0, insertAt) +
-    '
-
-' +
+    '\n\n' +
     lesson.trim() +
-    '
-' +
+    '\n' +
     withSection.slice(insertAt)
   );
 }
@@ -199,8 +191,7 @@ function findTableEnd(content: string, headingMarker: string): number {
 
   // Walk past the table — find the last | line before the next ## or end
   const afterHeading = content.slice(headingIdx);
-  const lines = afterHeading.split('
-');
+  const lines = afterHeading.split('\n');
 
   let lastTableLineIdx = -1;
   let charCount = headingIdx;
