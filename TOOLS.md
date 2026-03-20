@@ -141,3 +141,9 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 ---
 
 Add more tools/access as we go.
+
+### ngrok (Paperclip Tunnel)
+- **Account:** xhakalavinder@gmail.com (Google auth)
+- **Auth token:** 3BCnXPucecXG6daNGge1obWEfD5_4s8wn7uttPSsR175w8LzB
+- **Permanent Paperclip URL:** https://nonuterine-unprickly-rosalba.ngrok-free.dev
+- **launchd:** ai.xhaka.paperclip-tunnel (auto-restarts on reboot)
