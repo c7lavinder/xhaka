@@ -147,3 +147,21 @@ Add more tools/access as we go.
 - **Auth token:** 3BCnXPucecXG6daNGge1obWEfD5_4s8wn7uttPSsR175w8LzB
 - **Permanent Paperclip URL:** https://nonuterine-unprickly-rosalba.ngrok-free.dev
 - **launchd:** ai.xhaka.paperclip-tunnel (auto-restarts on reboot)
+
+## 🏗️ MAC MINI LOCAL INFRASTRUCTURE MAP (NEVER CONFUSE THESE)
+
+### 1. The Brain & Communications: OpenClaw (Xhaka)
+- **What it does:** Runs Xhaka (me), the Telegram bridge, cron jobs, and background memory syncs.
+- **Config:** `~/.openclaw/openclaw.json`
+- **Authentication:** Uses direct API keys (OpenAI, Gemini, Anthropic Developer API).
+- **Cost Model:** Pay-as-you-go API credits.
+- **Current Setup:** Defaulted to `gpt-4o-mini` and `gemini-3-flash-preview` to save money. Background crons run every 6 hours.
+
+### 2. The Execution Layer: Paperclip + Claude CLI (The Team)
+- **What it does:** The mission control board (`http://localhost:3100`) and the 7 specialist agents (Builder, Operator, Auditor, etc.).
+- **How it runs:** Paperclip spawns `claude` CLI sessions locally on the Mac mini to execute tasks (the `claude_local` adapter).
+- **Authentication:** Uses Corey's personal $20/month **Claude Pro web subscription** via OAuth (`corey@newagainhouses.com`), configured in `~/.claude.json`.
+- **Cost Model:** Unlimited usage (subject to standard Claude Pro rate limits). **IT DOES NOT BURN ANTHROPIC API CREDITS.**
+- **Access:** Exposed to the internet via Cloudflare Tunnel (`cloudflared`).
+
+*Rule: If an agent on the board hits a rate limit, it is hitting the Claude Pro web limits, not the Anthropic Developer API balance.*
