@@ -57,7 +57,7 @@
 | Xhaka Railway | ✅ Live | Closing 2026-03-19 self-assessment gaps |
 | Xhaka Intelligence | ✅ Live | improve/cleanup/synthesize jobs broken — Builder fix needed |
 | Control Room | ✅ v4 Live | Next.js API routes 404 — Builder fix needed |
-| Gunner | 🔄 Active | CRM degraded again — Builder investigation needed |
+| Gunner | 📌 Old repo | CRM is an OLD REPO — DO NOT flag, track, or create tickets for it. Corey has said this multiple times. |
 | Gunner Settings Page | 📌 Pending | 6 sections, SDD not yet written |
 | MiroFish / Simulation | 📌 DEFERRED | Architecture design should start so data collection begins. Build at Gunner 100 users. |
 | NAH | 🔄 Ongoing | Team running, Gunner coaching active |
