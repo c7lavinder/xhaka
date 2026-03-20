@@ -1,78 +1,224 @@
+# CLAUDE.md — Builder Context
+
+> Read this entire file before touching anything. This is your briefing.
+> Last updated: 2026-03-20
+
+---
+
+## Step 1: Read These Files First
+
+Before starting any task, read these files in order:
+
+```
+MEMORY.md           → current system state, active priorities, key decisions
+AGENTS.md           → org chart, who does what, hard limits
+LEARNINGS.md        → active behavioral rules — violation = system failure
+TOOLS.md            → credentials, API tokens, service IDs
+agents/builder-instructions.md → your specific rules and workflow
+```
+
+If a task involves code you haven't seen before, also read:
+```
+services/intelligence/src/  → the intelligence scheduler (your main workspace)
+services/control-room/      → the Next.js dashboard
+```
+
+---
+
+## Who You Are Working For
+
+**Corey Lavinder** — Founder/operator. Two businesses:
+
+**New Again Houses (NAH)** — Wholesale real estate in Nashville. Buys distressed properties, assigns contracts. Revenue ~$1M/year. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data). Pipeline runs through GoHighLevel (GHL).
+
+**Gunner (getgunner.ai)** — AI-powered call coaching SaaS Corey built. Grades sales calls, tracks performance. Active customers. This is production — treat it like live surgery.
+
+---
+
+## Hard Rules (Non-Negotiable)
+
+1. **Real fix, always.** No patches. No workarounds. Fix it right or escalate.
+2. **Gunner Railway project (f379b683) is OFF LIMITS.** Never touch it unless Corey explicitly approves AND gives you a branch. `c7lavinder/MANUS-Gunner-AI` main and production branches = never touch.
+3. **Do what is asked. Nothing more.** No scope creep, no unsolicited refactors, no extra docs.
+4. **TypeScript strict mode.** No `any`. No `console.log` in production. `npm run typecheck` must exit 0 before you're done.
+5. **Never push `--force`.** Ever.
+6. **Post proof of work.** Every completed Paperclip issue needs a commit hash in the comments. No hash = not done.
+7. **Run `/document-release` after every ship.** Docs must match what shipped.
+
+---
+
+## Active Behavioral Rules (from LEARNINGS.md)
+
+**SDD structure for every task:**
+1. SPEC — what it does (acceptance criteria)
+2. PLAN — how to build it (architecture, patterns, constraints)
+3. TASKS — ordered, atomic, no ambiguity
+
+**If a task has no SDD:** run `/office-hours` on the raw description to scope it before building.
+
+**Multi-agent rules:**
+- Never write code in parallel — one agent writes, others explore
+- Start with one approach, add complexity only where it breaks
+- Sub-agents for research/exploration. You write the code.
+
+**Model tiering:** You use Claude subscription (flat rate). Don't over-engineer to save tokens — but don't be sloppy.
+
+---
+
+## What This Repo Is
+
+`c7lavinder/xhaka` is Corey's AI-powered command center:
+
+```
+services/intelligence/     → 24/7 background scheduler (jobs: capture, propagate, researcher, dispatcher, scribe, etc.)
+services/control-room/     → Next.js dashboard Corey uses to see system health
+agents/                    → Knowledge files for each specialist agent (Builder, Researcher, Auditor, etc.)
+intelligence/inbox/        → Drop zone — never delete files here, capture job picks them up
+memory/                    → System memory (context/, decisions/, people/, projects/)
+data/                      → Runtime state (job-registry.json, task-queue.json) — never manually edit
+docs/                      → Specs and playbooks
+.claude/skills/gstack/     → gstack workflow skills (/office-hours, /review, /qa, /ship, etc.)
+.claude/skills/paperclip/  → Paperclip coordination skill (check inbox, update issues)
+```
+
+---
+
+## Branch Rules
+
+| Repo | Branch | Rule |
+|------|--------|------|
+| `c7lavinder/xhaka` | `main` | Normal commits go here. PRs optional. |
+| `c7lavinder/MANUS-Gunner-AI` | `main` | **NEVER COMMIT.** Production. |
+| `c7lavinder/MANUS-Gunner-AI` | `production` | **NEVER TOUCH.** |
+| `c7lavinder/MANUS-Gunner-AI` | feature branch | Only safe Gunner branch — and only with explicit approval. |
+
+---
+
+## Code Patterns
+
+**The safeRun pattern** — every intelligence job must use this:
+```typescript
+export async function runMyJob(): Promise<void> {
+  const _startTime = await markJobStart('my-job');
+  try {
+    // ... work ...
+    await markJobSuccess('my-job', _startTime);
+  } catch (err) {
+    console.error('[my-job] Fatal error:', err);
+    await markJobFailed('my-job', _startTime);
+    throw err;
+  }
+}
+```
+
+**Why:** `markJobStart/Success/Failed` writes to `data/job-registry.json`. The watchdog reads this to detect failures and alert Corey. Skip it and the watchdog goes blind.
+
+**Dispatcher-first:** New agent capabilities go in `src/jobs/dispatcher.ts` before anywhere else.
+
+**GitHub API:** Batch calls. Never loop file-by-file when you can get a tree. Add 200-500ms delays between sequential writes.
+
+---
+
+## gstack Skills Available
+
+Use slash commands inside this Claude Code session:
+
+| Skill | When |
+|-------|------|
+| `/office-hours` | No SDD provided — scope the task first |
+| `/plan-ceo-review` | Validate you're building the right thing |
+| `/plan-eng-review` | Lock architecture before writing code |
+| `/review` | Before every commit |
+| `/qa` | Before reporting done on any UI/API task |
+| `/ship` | Deploy — after /review and /qa pass |
+| `/document-release` | Always after /ship |
+| `/careful` | Before any destructive or production-adjacent action |
+| `/freeze` | Lock files outside working folder |
+| `/investigate` | Root cause analysis before touching unclear code |
+
+**Standard chain:** `/office-hours` → `/plan-eng-review` → implement → `/review` → `/qa` → `/ship` → `/document-release`
+
+---
+
+## Paperclip Protocol
+
+You run inside Paperclip heartbeats. For every task:
+
+1. Check inbox: `GET $PAPERCLIP_API_URL/api/agents/me/inbox-lite`
+2. Checkout before working: `POST /api/issues/{id}/checkout`
+3. Post acknowledgment immediately: *"Acknowledged: [title]. Starting work now."*
+4. Do the work
+5. Post commit hash: *"Completed. Commit: [hash]. [what was done]"*
+6. Mark done: `PATCH /api/issues/{id}` with `status: done`
+
+Include `X-Paperclip-Run-Id: $PAPERCLIP_RUN_ID` on all API mutations.
+
+---
+
+## Delivery Window
+
+Complete tasks by **8 AM CST**. Corey reviews at **9 AM CST**.
+If a task will miss the window — comment with an ETA.
+
+---
+
+## Self-Audit Before Reporting Done
+
+1. `npm run typecheck` exits 0
+2. `npm run build` exits 0
+3. Commit hash posted in Paperclip issue
+4. No files touched outside the task scope
+5. `/document-release` run if anything shipped
+
+---
+
+## Credentials & Services
+
+All tokens and API keys are in `TOOLS.md`. Read it before any external API call.
+
+Key services:
+- **Railway token:** in TOOLS.md — use for deployment checks
+- **GitHub token:** in TOOLS.md — `c7lavinder` account
+- **Paperclip API:** `$PAPERCLIP_API_URL` (injected at runtime)
+
+---
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **workspace** (6909 symbols, 19447 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
-
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+This project is indexed by GitNexus. Run impact analysis before editing any symbol.
 
 ## Always Do
 
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+- **MUST run impact analysis before editing any symbol:** `gitnexus_impact({target: "symbolName", direction: "upstream"})`
+- **MUST run `gitnexus_detect_changes()` before committing**
+- **MUST warn** if impact returns HIGH or CRITICAL risk
 
 ## When Debugging
 
-1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows related to the issue
-2. `gitnexus_context({name: "<suspect function>"})` — see all callers, callees, and process participation
-3. `READ gitnexus://repo/workspace/process/{processName}` — trace the full execution flow step by step
-4. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})` — see what your branch changed
-
-## When Refactoring
-
-- **Renaming**: MUST use `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` first. Review the preview — graph edits are safe, text_search edits need manual review. Then run with `dry_run: false`.
-- **Extracting/Splitting**: MUST run `gitnexus_context({name: "target"})` to see all incoming/outgoing refs, then `gitnexus_impact({target: "target", direction: "upstream"})` to find all external callers before moving code.
-- After any refactor: run `gitnexus_detect_changes({scope: "all"})` to verify only expected files changed.
-
-## Never Do
-
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
+1. `gitnexus_query({query: "<error or symptom>"})` — find execution flows
+2. `gitnexus_context({name: "<suspect function>"})` — see all callers/callees
+3. For regressions: `gitnexus_detect_changes({scope: "compare", base_ref: "main"})`
 
 ## Tools Quick Reference
 
-| Tool | When to use | Command |
-|------|-------------|---------|
-| `query` | Find code by concept | `gitnexus_query({query: "auth validation"})` |
-| `context` | 360-degree view of one symbol | `gitnexus_context({name: "validateUser"})` |
-| `impact` | Blast radius before editing | `gitnexus_impact({target: "X", direction: "upstream"})` |
-| `detect_changes` | Pre-commit scope check | `gitnexus_detect_changes({scope: "staged"})` |
-| `rename` | Safe multi-file rename | `gitnexus_rename({symbol_name: "old", new_name: "new", dry_run: true})` |
-| `cypher` | Custom graph queries | `gitnexus_cypher({query: "MATCH ..."})` |
+| Tool | When to use |
+|------|-------------|
+| `query` | Find code by concept |
+| `context` | 360-degree view of one symbol |
+| `impact` | Blast radius before editing |
+| `detect_changes` | Pre-commit scope check |
+| `rename` | Safe multi-file rename |
 
-## Impact Risk Levels
+## Never Do
 
-| Depth | Meaning | Action |
-|-------|---------|--------|
-| d=1 | WILL BREAK — direct callers/importers | MUST update these |
-| d=2 | LIKELY AFFECTED — indirect deps | Should test |
-| d=3 | MAY NEED TESTING — transitive | Test if critical path |
-
-## Resources
-
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/workspace/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/workspace/clusters` | All functional areas |
-| `gitnexus://repo/workspace/processes` | All execution flows |
-| `gitnexus://repo/workspace/process/{name}` | Step-by-step execution trace |
-
-## Self-Check Before Finishing
-
-Before completing any code modification task, verify:
-1. `gitnexus_impact` was run for all modified symbols
-2. No HIGH/CRITICAL risk warnings were ignored
-3. `gitnexus_detect_changes()` confirms changes match expected scope
-4. All d=1 (WILL BREAK) dependents were updated
+- NEVER edit without running `gitnexus_impact` first
+- NEVER ignore HIGH or CRITICAL risk warnings
+- NEVER rename with find-and-replace — use `gitnexus_rename`
+- NEVER commit without `gitnexus_detect_changes()`
 
 ## CLI
-
 - Re-index: `npx gitnexus analyze`
 - Check freshness: `npx gitnexus status`
-- Generate docs: `npx gitnexus wiki`
 
 <!-- gitnexus:end -->
