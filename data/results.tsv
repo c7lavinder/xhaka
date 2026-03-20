@@ -7648,3 +7648,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-20T07:00:08.365Z	heartbeat-check	success	7464		model=gpt-4o-mini cost=$0.001
 2026-03-20T07:00:11.560Z	watchdog	success	10689		model=gpt-4o-mini cost=$0.001
 2026-03-20T07:00:24.879Z	kb-indexer	success	23576		indexed=9 skipped=35 model=gpt-4o-mini cost=$0.001
+2026-03-20T07:00:32.140Z	librarian	success	31289		model=gpt-4o-mini cost=$0.001
