@@ -58,6 +58,20 @@ If you need data or work from another agent mid-task:
 
 ---
 
+## Default: /office-hours First
+
+**If a task doesn't come with a pre-written SPEC + PLAN + TASKS, start with `/office-hours`.**
+
+Don't wait for a fully scoped spec. If the issue description is a rough ask ("fix the CRM bug", "add export to the dashboard"), run `/office-hours` on it immediately:
+1. `/office-hours` scopes the work, proposes 3 approaches with effort estimates
+2. Pick the best approach (or post approaches as a comment if the choice requires judgment)
+3. Run `/plan-eng-review` to lock architecture
+4. Build
+
+This is how the system scales. You do the planning, not Xhaka.
+
+---
+
 ## gstack Standard Workflow
 
 gstack skills are available as slash commands inside Claude Code. Use this chain for every task:
