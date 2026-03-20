@@ -1,7 +1,7 @@
 # Knowledge Quality Report
-_Generated: 2026-03-19T07:00:30.244Z_
+_Generated: 2026-03-20T07:00:31.104Z_
 
-## Issues Found (37)
+## Issues Found (39)
 
 - ⚠️ NO_FRONTMATTER: memory/context/concepts/ai-learning-repos-analysis.md — missing metadata header
 - ⚠️ NO_FRONTMATTER: memory/context/technology/ai-tool-prompts-comparison.md — missing metadata header
@@ -32,9 +32,11 @@ _Generated: 2026-03-19T07:00:30.244Z_
 - ⚠️ NO_FRONTMATTER: memory/context/books/the-road.md — missing metadata header
 - ⚠️ NO_FRONTMATTER: memory/context/books/think-and-grow-rich.md — missing metadata header
 - ⚠️ NO_FRONTMATTER: memory/decisions/key-decisions.md — missing metadata header
+- ⚠️ NO_FRONTMATTER: memory/people/README.md — missing metadata header
 - ⚠️ NO_FRONTMATTER: memory/people/corey.md — missing metadata header
 - ⚠️ THIN: memory/people/matt.md (251 chars) — needs content
 - ⚠️ NO_FRONTMATTER: memory/people/nah-team.md — missing metadata header
+- ⚠️ THIN: memory/people/pablo.md (389 chars) — needs content
 - ⚠️ THIN: memory/people/will-riddle.md (206 chars) — needs content
 - ⚠️ NO_FRONTMATTER: memory/projects/gunner-changelog.md — missing metadata header
 - ⚠️ NO_FRONTMATTER: memory/projects/gunner.md — missing metadata header

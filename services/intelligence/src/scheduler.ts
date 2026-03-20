@@ -100,8 +100,8 @@ export function startScheduler(): void {
     })();
   }, { timezone: TIMEZONE });
 
-  // --- Improve: every Monday at 6:00 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
-  cron.schedule('0 6 * * 1', () => {
+  // --- Improve: every Monday at 6:30 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('30 6 * * 1', () => {
     console.log('[scheduler] Triggering job: improve');
     (async () => {
       if (shouldSkipDueToConflict('improve')) return;
@@ -114,8 +114,8 @@ export function startScheduler(): void {
     })();
   }, { timezone: TIMEZONE });
 
-  // --- Cleanup: every Sunday at 6:00 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
-  cron.schedule('0 6 * * 0', () => {
+  // --- Cleanup: every Sunday at 6:30 AM CST (smart-scheduled: run-if-not-run-since 20h + conflict-avoidance) ---
+  cron.schedule('30 6 * * 0', () => {
     console.log('[scheduler] Triggering job: cleanup');
     (async () => {
       if (shouldSkipDueToConflict('cleanup')) return;
@@ -315,8 +315,8 @@ export function startScheduler(): void {
   console.log('[scheduler] Jobs registered:');
   console.log('  ✓ capture          — every 5 minutes');
   console.log('  ✓ propagate        — daily at 6:00 AM CST');
-  console.log('  ✓ improve          — every Monday at 6:00 AM CST');
-  console.log('  ✓ cleanup          — every Sunday at 6:00 AM CST');
+  console.log('  ✓ improve          — every Monday at 6:30 AM CST');
+  console.log('  ✓ cleanup          — every Sunday at 6:30 AM CST');
   console.log('  ✓ organize         — daily at 11:00 PM CST');
   console.log('  ✓ synthesize       — 1st,6th,11th,16th,21st,26th at 7:00 AM CST');
   console.log('  ✓ tool-monitor     — daily at 6:05 AM CST');

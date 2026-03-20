@@ -1,14 +1,14 @@
 {
   "capture": {
-    "lastRun": "2026-03-20T01:45:02.934Z",
-    "lastStatus": "success",
-    "durationMs": 1937,
+    "lastRun": "2026-03-20T07:40:02.374Z",
+    "lastStatus": "failed",
+    "durationMs": 1825,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "organize": {
-    "lastRun": "2026-03-18T12:49:53.721Z",
-    "lastStatus": "success",
+    "lastRun": "2026-03-20T04:00:01.027Z",
+    "lastStatus": "failed",
     "durationMs": 928,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -49,9 +49,9 @@
     "gracePeriodMinutes": 120
   },
   "scribe": {
-    "lastRun": "2026-03-18T12:52:23.587Z",
+    "lastRun": "2026-03-20T05:00:07.882Z",
     "lastStatus": "success",
-    "durationMs": 19553,
+    "durationMs": 6784,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
   },
@@ -63,16 +63,16 @@
     "gracePeriodMinutes": 10
   },
   "watchdog": {
-    "lastRun": "2026-03-20T01:40:01.583Z",
+    "lastRun": "2026-03-20T07:40:01.644Z",
     "lastStatus": "success",
-    "durationMs": 958,
+    "durationMs": 1093,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 30
   },
   "daily-log": {
-    "lastRun": "2026-03-19T17:00:07.696Z",
-    "lastStatus": "success",
-    "durationMs": 7545,
+    "lastRun": "2026-03-20T05:00:02.580Z",
+    "lastStatus": "failed",
+    "durationMs": 2204,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
   },
@@ -112,9 +112,9 @@
     "gracePeriodMinutes": 60
   },
   "heartbeat-check": {
-    "lastRun": "2026-03-20T01:30:03.616Z",
+    "lastRun": "2026-03-20T07:30:03.727Z",
     "lastStatus": "success",
-    "durationMs": 2674,
+    "durationMs": 2741,
     "expectedIntervalHours": 0.5,
     "gracePeriodMinutes": 10
   },
@@ -168,9 +168,9 @@
     "gracePeriodMinutes": 120
   },
   "dispatcher": {
-    "lastRun": "2026-03-20T01:47:01.469Z",
+    "lastRun": "2026-03-20T07:43:01.926Z",
     "lastStatus": "success",
-    "durationMs": 1323,
+    "durationMs": 1198,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 5
   },
@@ -189,16 +189,16 @@
     "gracePeriodMinutes": 60
   },
   "librarian": {
-    "lastRun": "2026-03-19T07:00:31.081Z",
+    "lastRun": "2026-03-20T07:00:31.757Z",
     "lastStatus": "success",
-    "durationMs": 30998,
+    "durationMs": 31436,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
   "kb-indexer": {
-    "lastRun": "2026-03-19T07:00:21.463Z",
+    "lastRun": "2026-03-20T07:00:24.444Z",
     "lastStatus": "success",
-    "durationMs": 20717,
+    "durationMs": 23730,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   }
