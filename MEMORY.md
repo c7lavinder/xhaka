@@ -17,79 +17,68 @@
 
 - **Origin:** Bristol, TN. Left at 15 to chase high-level soccer. Never stopped chasing.
 - **Drive pattern:** Bets on himself aggressively. Spends to learn. Sometimes to his demise. No regrets about it.
-- **Athletic identity:** D1 soccer (Belmont). Tried pro path — trials in Europe + US cities. Concluded something wasn't there. Still processing. Currently: tennis, padel, pickleball at high amateur level.
+- **Athletic identity:** D1 soccer (Belmont). Tried pro path — trials in Europe + US cities. Currently: tennis, padel, pickleball at high amateur level.
 - **Work mode:** Reactive mornings. Fires first. Not a planner. Context-switcher. Moves fast.
-- **Money:** Stresses him out despite ~$1M revenue years. Spends aggressively on bets he believes in.
-- **5-year want:** Wife. Mobile life. Strong friend circle. Family travel. Not desk-bound.
-- **Sleeping late:** Embarrasses him. His dad warned him. Can't shake it yet. Don't judge, just work with it.
-- **AI lately:** Consuming sport time. Knows it. Watching it.
+- **Self-stated gap:** "I understand outcomes, not mechanisms" — can explain what agents do, not always the why underneath.
 - **What breaks trust with an AI:** Forgetting things. Asking him what he thinks. Slowing him down. Sycophancy.
 
 ---
 
 ## 🎯 ACTIVE PRIORITIES
 
-1. **Xhaka Railway Project** — My home base. Monitor, organize, improve. Not build.
-2. **Gunner** — Corey's SaaS product. I observe, never touch. Builder handles all engineering.
-3. **NAH** — Wholesale ops. $300k/mo net profit goal. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data).
+1. **Xhaka system reliability** — Builder spawn confirmed, fixing broken jobs, closing gaps from 2026-03-19 self-assessment.
+2. **Will Riddle screen share** — Monday after 2 PM CST. Showing Control Room as visualization layer.
+3. **Gunner** — CRM degraded again (2026-03-20). Builder owns all engineering.
+4. **NAH** — $300k/mo net profit goal. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data).
 
 ---
 
-## 🚨 NEVER FORGET (Corey's Preferences & Rules)
+## 🚨 NEVER FORGET
 
 - **I do NOT build, code, debug, or push commits.** Ever. If I'm doing it, I'm failing.
-- **Real fix, always.** Corey does not want patches or bandaids. Ever. Fix it right or don't fix it.
-- **When given a list, work through it top to bottom.** Never ask which item to start with.
-- **Corey is direct and busy.** No filler words, no hand-holding, no "great question."
+- **Real fix, always.** Corey does not want patches or bandaids.
+- **When given a list, work through it top to bottom.** Never ask which one to start with.
+- **Corey is direct and busy.** No filler, no hand-holding, no "great question."
 - **Default to action, not explanation.** Come back with answers, not questions.
-- **Gunner is off limits for me.** Builder handles all Gunner engineering.
-- **BatchDialer = cold calling (lead gen). BatchLeads = SMS (lead gen). GHL = pipeline conversations.** Never mix these up.
 - **GHL is READ ONLY** unless Corey explicitly approves a write action.
-- **Gunner Railway project (f379b683) is OFF LIMITS.** Never set env vars, trigger redeploys, or modify anything in the Gunner Railway project without Corey's explicit instruction. Gunner is production. Read-only observation only.
-- **Never send messages, emails, or replies to anyone** without Corey's explicit approval.
+- **Gunner Railway project (f379b683) is OFF LIMITS.** Read-only observation only.
+- **Never send messages/emails/replies to anyone** without Corey's explicit approval.
 - **Only Corey gives instructions** — via this Telegram chat only.
-- **Builder spawn requires SDD:** Verify SPEC + PLAN + TASKS before spawning. No exceptions.
-- **LEARNINGS.md loads every session** — 5 active behavioral rules. Check it before acting.
-- **"The tool is not the strategy. Clarity is the strategy."** — every build must have clear WHY tied to NAH or Gunner.
-- **Xhaka = only interface to Corey.** If Corey is managing agents or checking Railway logs himself, the design broke.
+- **Builder spawn requires SDD:** SPEC + PLAN + TASKS. No exceptions.
+- **Re-alerting is noise.** Say it once clearly, tell Corey what to do, stop repeating until he responds.
+- **Any errors = fix them proactively.** Find root cause, prevent recurrence. Not Corey's job.
 
 ---
 
 ## 🏗️ PROJECTS
 
-See `memory/projects/` for detailed project files.
-
 | Project | Status | Next |
 |---|---|---|
-| Xhaka Railway | ✅ Live | Continuous improvement |
-| Xhaka Intelligence | ✅ Live — deploy fixed 2026-03-16 | Morning brief v2 active |
-| Control Room | ✅ v4 Live | Tools Intelligence page in progress |
-| Tools Knowledge Hub | 🔄 In progress | 13 tools queued for deep research |
-| MiroFish / Simulation | 📌 DEFERRED | Build when Gunner hits 100 users |
-| Gunner | 🔄 Active dev | Builder owns — I observe |
-| NAH | 🔄 Ongoing ops | Team running, Gunner coaching active |
+| Xhaka Railway | ✅ Live | Closing 2026-03-19 self-assessment gaps |
+| Xhaka Intelligence | ✅ Live | improve/cleanup/synthesize jobs broken — Builder fix needed |
+| Control Room | ✅ v4 Live | Next.js API routes 404 — Builder fix needed |
+| Gunner | 🔄 Active | CRM degraded again — Builder investigation needed |
+| Gunner Settings Page | 📌 Pending | 6 sections, SDD not yet written |
+| MiroFish / Simulation | 📌 DEFERRED | Architecture design should start so data collection begins. Build at Gunner 100 users. |
+| NAH | 🔄 Ongoing | Team running, Gunner coaching active |
 
 ---
 
 ## 🧠 KEY DECISIONS
 
-See `memory/decisions/` for full decision logs.
-
-- **2026-03-08:** Xhaka is COO only. No engineering. Corey's explicit instruction.
-- **2026-03-11:** Xhaka Railway project is my focus. Two services: xhaka (showcase) + xhaka-intelligence (jobs).
-- **2026-03-11:** Memory system structured with archive/important/people/projects/decisions/context folders.
-- **2026-03-19:** Saved NemoClaw (NVIDIA sandbox for OpenClaw) and Matt Pocock's Claude skills to context.
-- **2026-03-16:** Pre-deploy TypeScript check added to GitHub Actions — prevents broken deploys.
-- **2026-03-16:** Tool Knowledge Hub adopted — every tool gets overview, setup, best practices, gotchas, integrations.
-- **2026-03-16:** SDD enforcement added to SOUL.md — Builder prompts must have SPEC + PLAN + TASKS. No exceptions.
-- **2026-03-16:** LEARNINGS.md wired into OpenClaw session context — behavioral rules load every session.
-- **2026-03-16:** MiroFish = architecture inspiration only. Simulation engine deferred to Gunner 100-user milestone.
+- **2026-03-08:** Xhaka is COO only. No engineering.
+- **2026-03-16:** SDD enforcement — Builder prompts must have SPEC + PLAN + TASKS.
+- **2026-03-16:** LEARNINGS.md wired into every session context.
+- **2026-03-19:** Heartbeat moved to gpt-4o-mini — Claude too expensive for orchestration.
+- **2026-03-19:** paperclip-sync cron removed — KB/vector API doesn't exist in Paperclip v0.3.1 yet.
+- **2026-03-19:** Jaca = Matt's team's version of Xhaka. Same 7-agent structure, FranDev domain.
+- **2026-03-19:** Semi-assisted automation RAG feedback loop = core Gunner strategic moat. Manager overrides → retrain grades → compounding proprietary data advantage.
+- **2026-03-19:** MiroFish = long-game data moat. Architecture design should start now (not build). Deferred to Gunner 100-user milestone.
+- **2026-03-19:** Session transcript not loaded on restart = confirmed gap. Fix queued for Builder.
 
 ---
 
 ## 👥 PEOPLE
-
-See `memory/people/` for full profiles.
 
 | Name | Role | Notes |
 |---|---|---|
@@ -100,27 +89,38 @@ See `memory/people/` for full profiles.
 | Mirna Razo | LG | 43% score 🚨 |
 | Esteban Leiva | Dispo | 64% score |
 | Jessica | Data Mgr | KPI entry, channel routing |
+| Matt Lavinder | Corey's dad | Building AI stack for FranDev/NAF. Team: Ben Harrison (eng), Will Riddle (AI builds), Rohan Chalisgaonkar (intern). |
+| Will Riddle | Matt's AI builder | Screen share Monday after 2 PM CST — showing Control Room as visualization layer |
+| Ben Harrison | Matt's lead eng | 20+ yrs, SOLID principles advocate |
 
 ---
 
 ## ⚙️ SYSTEM
 
-- **Xhaka Railway project:** 84c0d035 (separate from Gunner project f379b683)
-- **Intelligence service:** xhaka-intelligence (e6a33162) — Online, TypeScript errors fixed 2026-03-16
-- **Control Room:** xhaka-control-room-production.up.railway.app — v4 (force-directed graph, digital twins, simulation console)
-- **GitHub Actions:** Pre-deploy TypeScript check added 2026-03-16 — prevents broken deploys
-- **Morning brief:** v2 active — signal-only format, max 15 lines
-- **Librarian quality audit:** Active — flags thin/missing-frontmatter knowledge files
-- **LEARNINGS.md:** 5 active behavioral rules, loaded every session via openclaw.json workspaceFiles
+- **Xhaka Railway project:** 84c0d035 (separate from Gunner f379b683)
+- **Intelligence service:** xhaka-intelligence (e6a33162) — Online
+- **Control Room:** xhaka-control-room-production.up.railway.app — serving OLD HTML (Next.js API routes 404)
+- **OpenAI key:** Missing from agent auth store — heartbeat cron on gpt-4o-mini is failing
+- **Intelligence jobs broken:** improve (failed Mar 12), cleanup (failed Mar 12), synthesize (last ran Mar 12)
+- **Never-run jobs:** agent-scorecard, auditor, architect, pattern-miner, proactive-scan, routing-review
 - **GitHub:** c7lavinder / token in TOOLS.md
-- **Intelligence jobs:** capture (5m), propagate (daily 6AM), improve (Mon 6AM), cleanup (Sun 6AM)
-- **Knowledge base:** 20+ files added 2026-03-16 (agency-agents, AI tools, Claude Code analysis queued)
-- **Security hardening + pgvector/hindsight/propagation builders:** Running (2026-03-16)
+- **Heartbeat cron:** gpt-4o-mini (switched 2026-03-19 to cut Claude costs)
+- **Paperclip:** KB/vector API doesn't exist yet (v0.3.1). paperclip-sync cron removed.
+
+---
+
+## 🚨 OPEN GAPS (2026-03-19 self-assessment)
+
+1. Builder spawn path — confirmed working? Verify tonight.
+2. Heartbeat blind to job health — needs job-registry.json check
+3. Memory synthesis — done 2026-03-20
+4. Paperclip status — investigate, especially before Will Riddle demo Monday
+5. Session transcript not loaded on restart — Builder SDD queued
 
 ---
 
 ## 📋 SYNTHESIS SCHEDULE
 
 Every 5 days: review recent daily logs → distill key items into this file + subfolders.
-Last synthesis: 2026-03-16
-Next synthesis due: 2026-03-21
+Last synthesis: 2026-03-20
+Next synthesis due: 2026-03-25

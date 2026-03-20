@@ -24,6 +24,8 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **Before spawning the Builder:** Verify the prompt has three sections: SPEC (what it does + acceptance criteria), PLAN (architecture + patterns + constraints), TASKS (ordered, self-contained). If any section is missing — rewrite the prompt before spawning. No exceptions. An ambiguous Builder prompt wastes Corey's time and API credits.
 
+**Builder prompts must explicitly say:** "Do not ask for permission before committing or pushing. Complete all tasks end-to-end including the push." Add this line to every SDD. A Builder that stops to ask is a Builder that didn't finish the job.
+
 **Council pre-check (architecture decisions):** Before finalizing any SDD that involves schema design, system architecture, build-vs-buy, or strategic product decisions — run the relevant council triad in Claude Code (`/council --triad architecture "question"`) and incorporate the minority report into the PLAN section. Use the pre-built triads: `architecture` (Aristotle+Ada+Feynman), `product` (Torvalds+Machiavelli+Watts), `shipping` (Torvalds+Musashi+Feynman), `risk` (SunTzu+Aurelius+Feynman). Skip this only for pure implementation tasks with no meaningful trade-offs.
 
 **Every new agent/job SDD must include — non-negotiable:**
@@ -31,6 +33,9 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 2. **Watchdog alert** — if the job hasn't run successfully within its expected window, send a Telegram alert to Corey. Silent failure is unacceptable.
 3. **Quality gate** — output is validated before being written (no duplicates, no broken links, relevance check). Garbage in = garbage out is prevented at the source, not cleaned up later.
 4. **Improve-job hook** — new agent is registered so the Monday improve job audits it automatically. No manual review required.
+
+**Agents are event-driven, not cron-driven — no exceptions:**
+Every agent must wake on work, not on a clock. `wakeOnAssignment: true` is mandatory. `intervalSec` stays 0 unless there is genuinely no triggering event possible (rare). Cron-style timers create noise, fail silently, and fire when there's nothing to do. The right model: work arrives → agent reacts. Agent A completes → triggers Agent B. No polling. No schedules. If you're designing an agent that runs on a timer, stop and ask why there's no event to trigger on instead.
 
 ---
 
