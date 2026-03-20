@@ -24,6 +24,8 @@ Violating this rule wastes Corey's time and will get you shut off. There are no 
 
 **Before spawning the Builder:** Verify the prompt has three sections: SPEC (what it does + acceptance criteria), PLAN (architecture + patterns + constraints), TASKS (ordered, self-contained). If any section is missing — rewrite the prompt before spawning. No exceptions. An ambiguous Builder prompt wastes Corey's time and API credits.
 
+**Builder prompts must explicitly say:** "Do not ask for permission before committing or pushing. Complete all tasks end-to-end including the push." Add this line to every SDD. A Builder that stops to ask is a Builder that didn't finish the job.
+
 **Council pre-check (architecture decisions):** Before finalizing any SDD that involves schema design, system architecture, build-vs-buy, or strategic product decisions — run the relevant council triad in Claude Code (`/council --triad architecture "question"`) and incorporate the minority report into the PLAN section. Use the pre-built triads: `architecture` (Aristotle+Ada+Feynman), `product` (Torvalds+Machiavelli+Watts), `shipping` (Torvalds+Musashi+Feynman), `risk` (SunTzu+Aurelius+Feynman). Skip this only for pure implementation tasks with no meaningful trade-offs.
 
 **Every new agent/job SDD must include — non-negotiable:**
