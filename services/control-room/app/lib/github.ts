@@ -1,4 +1,4 @@
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_REPO = process.env.GITHUB_REPO || 'c7lavinder/xhaka';
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
 
