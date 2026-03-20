@@ -31,3 +31,5 @@
 ## Response Protocol
 - All clear → `HEARTBEAT_OK`
 - Anything needs attention → specific alert with proposed action (one per issue, no repeats)
+
+<!-- loop verified: 2026-03-20 -->
