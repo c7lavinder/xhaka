@@ -1069,3 +1069,4 @@
 | 2026-03-19T19:08:01.892Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T19:11:01.892Z |
 | 2026-03-19T19:09:02.077Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T19:12:02.077Z |
 | 2026-03-19T19:10:02.474Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-19T19:13:01.824Z |
+| 2026-03-20T05:01:01.646Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
