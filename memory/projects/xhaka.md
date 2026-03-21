@@ -6,7 +6,7 @@ My home base. The Xhaka Railway project is the system that runs me — my memory
 ## Status: Active — Critical Issues Detected 🚨
 
 ## Current State
-The xhaka-control-room service is experiencing a redeploy loop due to a Railway crash, causing continuous redeployments. This issue is critical as it affects the stability of the control room, which is currently serving outdated HTML. Immediate attention is required to resolve the crash loop and restore full functionality.
+The xhaka-control-room service remains in a redeploy loop due to a Railway crash, affecting the stability of the control room. The service is serving outdated HTML, and APIs are returning 404 errors. Immediate attention is needed to resolve the crash loop and restore full functionality.
 
 ## Infrastructure
 - **Repo:** c7lavinder/xhaka (GitHub — single source of truth)
@@ -58,4 +58,4 @@ workspace-sync cron runs every 30 minutes (16 workspace files covered).
 │   └── processed/      ← Processed intel items
 ├── memory/             ← Daily logs + subfolders
 │   ├── archive/        ← Auto-archived old files
-│   ├── important/      ← Permanently important items
+│   ├── i
