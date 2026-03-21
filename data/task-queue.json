@@ -7573,6 +7573,17 @@
       "startedAt": "2026-03-21T04:09:02.027Z",
       "completedAt": "2026-03-21T04:09:05.971Z",
       "proofOfWork": "Audit PASS for commit 946b305b. 0 concern(s). Artifact: intelligence/audits/2026-03-21-946b305b.md"
+    },
+    {
+      "id": "task_1774075802646_npz5n3r",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-21T06:50:02.452Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-21T06:50:02.646Z"
     }
   ]
 }
