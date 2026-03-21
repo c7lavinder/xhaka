@@ -49,8 +49,8 @@
     "gracePeriodMinutes": 120
   },
   "scribe": {
-    "lastRun": "2026-03-21T05:00:01.192Z",
-    "lastStatus": "running",
+    "lastRun": "2026-03-21T05:00:19.406Z",
+    "lastStatus": "LOW_QUALITY",
     "durationMs": 6784,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
