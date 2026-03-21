@@ -1202,3 +1202,4 @@
 | 2026-03-21T04:59:01.560Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:02:01.560Z |
 | 2026-03-21T04:59:05.318Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:02:05.318Z |
 | 2026-03-21T05:00:01.480Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:03:01.480Z |
+| 2026-03-21T05:00:05.846Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:03:05.846Z |
