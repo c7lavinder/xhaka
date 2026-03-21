@@ -1330,3 +1330,4 @@
 | 2026-03-21T06:05:02.347Z | improve | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-21T06:08:02.346Z |
 | 2026-03-21T06:05:05.798Z | cleanup | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-21T06:08:05.798Z |
 | 2026-03-21T06:06:01.208Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T06:09:01.208Z |
+| 2026-03-21T06:06:04.373Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T06:09:04.373Z |
