@@ -1104,3 +1104,4 @@
 | 2026-03-21T04:07:02.139Z | cleanup | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-03-21T04:10:01.685Z |
 | 2026-03-21T04:07:03.139Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
 | 2026-03-21T04:08:01.486Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-21T04:10:02.600Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T04:13:02.600Z |
