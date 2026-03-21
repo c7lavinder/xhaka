@@ -1,3 +1,6 @@
+Project: gunner-changelog
+
+Current file content:
 ## 2026-03-13 (36 commits)
 ### ✅ Built
 - add @playwright/test dependency — E2E tests ready
@@ -42,26 +45,6 @@
 - saveGhlTokens now merges into existing crmConfig instead of replacing
 - CRM Layer 2 save no lo
 
-## Status
-Active development with focus on CRM integration improvements.
+Status: No recent updates
 
-## Current State
-The project is actively being developed, with recent efforts on enhancing CRM integration and fixing related bugs. The team is addressing issues with HTTP timeouts and improving logging for better diagnostics. Current focus is on ensuring seamless sync operations and refining the user experience.
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-16 (0 commits)
-_No significant changes._
-## 2026-03-17 (0 commits)
-_No significant changes._
-## 2026-03-18 (0 commits)
-_No significant changes._
-## 2026-03-18 (0 commits)
-_No significant changes._
-## 2026-03-18 (0 commits)
-_No significant changes._
-## 2026-03-20 (0 commits)
-_No significant changes._
+Current State: The project has not been mentioned in the recent logs. It remains in its last known state with recent builds and fixes completed as of March 14, 2026. There are no new developments or issues reported in the past few days.
