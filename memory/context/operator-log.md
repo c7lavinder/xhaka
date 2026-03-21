@@ -1335,3 +1335,4 @@
 | 2026-03-21T06:07:04.964Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T06:10:04.964Z |
 | 2026-03-21T06:08:01.494Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T06:11:01.494Z |
 | 2026-03-21T06:08:05.692Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T06:11:05.128Z |
+| 2026-03-21T10:36:01.573Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
