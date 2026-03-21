@@ -7520,8 +7520,9 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-21T04:04:05.385Z"
       },
-      "status": "pending",
-      "createdAt": "2026-03-21T04:04:05.798Z"
+      "status": "running",
+      "createdAt": "2026-03-21T04:04:05.798Z",
+      "startedAt": "2026-03-21T04:05:02.131Z"
     }
   ]
 }
