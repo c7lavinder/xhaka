@@ -7504,9 +7504,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-21T04:03:23.780Z"
       },
-      "status": "running",
+      "status": "failed",
       "createdAt": "2026-03-21T04:03:24.170Z",
-      "startedAt": "2026-03-21T04:04:02.552Z"
+      "startedAt": "2026-03-21T04:04:02.552Z",
+      "completedAt": "2026-03-21T04:04:07.067Z",
+      "proofOfWork": "FAILED: data/task-queue.json does not match 35b38790a4f5ad50bf7655e50e7ccc657cc21832 - https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
     },
     {
       "id": "task_1774065845798_45jt71n",
