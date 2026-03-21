@@ -1,6 +1,5 @@
 Project: gunner-changelog
 
-Current file content:
 ## 2026-03-13 (36 commits)
 ### ✅ Built
 - add @playwright/test dependency — E2E tests ready
@@ -42,11 +41,7 @@ Current file content:
 - run triggerSync in background to prevent HTTP timeout
 - add diagnostic logging to GHL call ingestion
 - rewrite getCallRecordings to use GHL messages/export endpoint
-- saveGhlTokens now merges into existing crmConfig instead of replacing
-- CRM Layer 2 save no lo
+- saveGhlTokens now merges into existing crmCon
 
 Status: No recent updates
-
-Current State: The project has not been mentioned in the recent logs. It remains in its last known state with recent builds and fixes completed as of March 14, 2026. There are no new developments or issues reported in the past few days.
-## 2026-03-21 (0 commits)
-_No significant changes._
+Current State: The project has not been mentioned in the recent logs, indicating no new developments or issues have been reported. The last recorded updates were on 2026-03-14, focusing on CRM synchronization features and bug fixes.
