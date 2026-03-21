@@ -1299,3 +1299,4 @@
 | 2026-03-21T05:49:01.415Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:52:01.414Z |
 | 2026-03-21T05:49:05.297Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:52:05.297Z |
 | 2026-03-21T05:50:01.198Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:53:01.198Z |
+| 2026-03-21T05:50:04.389Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-21T05:53:04.389Z |
