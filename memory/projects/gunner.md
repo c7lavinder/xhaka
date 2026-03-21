@@ -52,4 +52,4 @@ Gunner Railway project (f379b683) is **OFF LIMITS** — never touch without expl
 - 11+ DRY_RUN investigations and feedback loops with Corey
 
 ### Feb 18, 2026 — Bug Audit (3 AM)
-- 2 critical bugs found and fixed: Pipeline Poller/Data Hygiene call signature mismatch, New Lead R
+- 2 critical bugs found and fixed: Pipeline Poller/Data Hygiene call signature m
