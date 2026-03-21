@@ -26,9 +26,9 @@
 
 ## 🎯 ACTIVE PRIORITIES
 
-1. **Xhaka system reliability** — Builder spawn confirmed, fixing broken jobs, closing gaps from 2026-03-19 self-assessment.
+1. **Xhaka system reliability** — Confirm Builder spawn works, add job-registry health check to HEARTBEAT.
 2. **Will Riddle screen share** — Monday after 2 PM CST. Showing Control Room as visualization layer.
-3. **Gunner** — CRM degraded again (2026-03-20). Builder owns all engineering.
+3. **Gunner** — CRM degraded again. Builder owns all engineering.
 4. **NAH** — $300k/mo net profit goal. Team: Kyle (AM), Daniel/Chris (LM), Esteban (Dispo), Jessica (Data).
 
 ---
@@ -66,15 +66,9 @@
 
 ## 🧠 KEY DECISIONS
 
-- **2026-03-08:** Xhaka is COO only. No engineering.
-- **2026-03-16:** SDD enforcement — Builder prompts must have SPEC + PLAN + TASKS.
-- **2026-03-16:** LEARNINGS.md wired into every session context.
+- **2026-03-20:** Paperclip overhaul completed. Agents configured with `claude_local` and `adapterConfig.cwd`.
 - **2026-03-19:** Heartbeat moved to gpt-4o-mini — Claude too expensive for orchestration.
-- **2026-03-19:** paperclip-sync cron removed — KB/vector API doesn't exist in Paperclip v0.3.1 yet.
-- **2026-03-19:** Jaca = Matt's team's version of Xhaka. Same 7-agent structure, FranDev domain.
-- **2026-03-19:** Semi-assisted automation RAG feedback loop = core Gunner strategic moat. Manager overrides → retrain grades → compounding proprietary data advantage.
 - **2026-03-19:** MiroFish = long-game data moat. Architecture design should start now (not build). Deferred to Gunner 100-user milestone.
-- **2026-03-19:** Session transcript not loaded on restart = confirmed gap. Fix queued for Builder.
 
 ---
 
@@ -113,14 +107,6 @@
 
 1. Builder spawn path — confirmed working? Verify tonight.
 2. Heartbeat blind to job health — needs job-registry.json check
-3. Memory synthesis — done 2026-03-20
-4. Paperclip status — investigate, especially before Will Riddle demo Monday
-5. Session transcript not loaded on restart — Builder SDD queued
+3. Paperclip status — invest
 
 ---
-
-## 📋 SYNTHESIS SCHEDULE
-
-Every 5 days: review recent daily logs → distill key items into this file + subfolders.
-Last synthesis: 2026-03-20
-Next synthesis due: 2026-03-25
