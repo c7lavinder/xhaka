@@ -1403,3 +1403,4 @@
 | 2026-03-22T04:35:01.957Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-22T04:35:05.673Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-22T04:36:02.087Z | improve | alert | escalated | 3 | Immediate escalation: code_bug |
+| 2026-03-22T04:36:05.703Z | cleanup | alert | escalated | 3 | Immediate escalation: code_bug |
