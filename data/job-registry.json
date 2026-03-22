@@ -147,8 +147,8 @@
     "gracePeriodMinutes": 120
   },
   "agent-scorecard": {
-    "lastRun": null,
-    "lastStatus": null,
+    "lastRun": "2026-03-22T13:00:00.494Z",
+    "lastStatus": "running",
     "durationMs": null,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
