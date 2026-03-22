@@ -1,7 +1,7 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-21T11:05:18.530Z
-**Total Findings:** 6
+**Last Run:** 2026-03-22T11:05:15.521Z
+**Total Findings:** 1
 
 ## Registry Repos Monitored
 
@@ -16,17 +16,6 @@
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
 | Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.81` |
-
-## 🚀 New Releases Detected
-
-- **PostHog**: `posthog-cli-v0.7.2` → `posthog-cli/v0.7.3` — [view release](https://github.com/PostHog/posthog/releases/tag/posthog-cli/v0.7.3)
-- **Claude Code**: `2.1.80` → `2.1.81` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.81)
-
-## 📦 Dependency Updates
-
-- `@supabase/supabase-js`: 2.100.0-canary.2 → 2.100.0-canary.3
-- `@trpc/client`: 11.13.4 → 11.14.1
-- `@trpc/server`: 11.13.4 → 11.14.1
 
 ## 📝 Changelog Activity
 
