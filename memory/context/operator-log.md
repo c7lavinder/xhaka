@@ -1471,3 +1471,4 @@
 | 2026-03-22T11:03:05.574Z | cleanup | alert | escalated | 0 | Immediate escalation: code_bug |
 | 2026-03-22T11:04:01.802Z | improve | alert | escalated | 0 | Immediate escalation: code_bug |
 | 2026-03-22T11:04:05.419Z | cleanup | alert | escalated | 0 | Immediate escalation: code_bug |
+| 2026-03-22T11:05:02.158Z | improve | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-22T11:08:02.158Z |
