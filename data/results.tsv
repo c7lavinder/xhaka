@@ -11427,3 +11427,4 @@ timestamp	jobName	status	durationMs	score	notes
 2026-03-22T11:00:01.347Z	watchdog	success	760		model=gpt-4o-mini cost=$0.001
 2026-03-22T11:00:03.169Z	morning-brief	success	2450		model=gpt-4o cost=$0.025
 2026-03-22T11:00:27.123Z	propagate	success	25799		model=gpt-4o-mini cost=$0.003
+2026-03-22T11:01:02.656Z	operator	success	1470		model=gpt-4o-mini cost=$0.001
