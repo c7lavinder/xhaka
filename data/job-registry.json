@@ -106,7 +106,7 @@
   },
   "morning-brief": {
     "lastRun": "2026-03-21T11:00:01.135Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 2681,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
