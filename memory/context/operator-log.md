@@ -1408,3 +1408,4 @@
 | 2026-03-22T04:37:05.840Z | cleanup | alert | escalated | 3 | Immediate escalation: code_bug |
 | 2026-03-22T04:38:02.077Z | improve | alert | escalated | 3 | Immediate escalation: code_bug |
 | 2026-03-22T04:38:05.822Z | cleanup | alert | escalated | 3 | Immediate escalation: code_bug |
+| 2026-03-22T04:39:01.301Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
