@@ -270,5 +270,13 @@
     "grade": "LOW",
     "rationale": "The output does not provide any genuinely important information for MEMORY.md. It only gives a summary of the scribe's activities without any specific insights or details that could be useful for future reference.",
     "evaluatedAt": "2026-03-21T05:00:18.536Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-22T05:00:15.435Z",
+    "score": 30,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of activities but lacks detail on the significance or impact of these activities, making it low-signal for memory retention.",
+    "evaluatedAt": "2026-03-22T05:00:16.691Z"
   }
 ]
