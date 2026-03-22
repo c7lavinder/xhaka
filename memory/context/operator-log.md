@@ -1457,3 +1457,4 @@
 | 2026-03-22T05:02:05.161Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
 | 2026-03-22T05:03:02.637Z | improve | restart | pending | 1 | failureType=rate_limit, waitUntil=2026-03-22T05:06:02.637Z |
 | 2026-03-22T05:03:06.103Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-22T05:06:06.103Z |
+| 2026-03-22T05:04:01.439Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
