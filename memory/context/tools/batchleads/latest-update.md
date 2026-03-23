@@ -1,3 +1,3 @@
-Last scanned: 2026-03-22T11:05:19.570Z
+Last scanned: 2026-03-23T11:05:26.656Z
 Service: BatchLeads
 Changelog activity: none detected
