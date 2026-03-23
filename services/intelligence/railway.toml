@@ -6,3 +6,4 @@ buildCommand = "npm install && npm run build"
 startCommand = "npm start"
 restartPolicyType = "always"
 healthcheckPath = "/health"
+watchPatterns = ["services/intelligence/**"]
