@@ -1703,3 +1703,4 @@
 | 2026-03-23T06:57:02.224Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
 | 2026-03-23T06:57:07.306Z | cleanup | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-23T07:00:07.306Z |
 | 2026-03-23T06:58:02.272Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-03-23T06:58:05.358Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-23T07:01:05.358Z |
