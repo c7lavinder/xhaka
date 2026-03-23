@@ -1712,3 +1712,4 @@
 | 2026-03-23T07:02:01.500Z | improve | alert | escalated | 3 | Immediate escalation: code_bug |
 | 2026-03-23T07:02:06.024Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-03-23T07:03:01.862Z | improve | alert | escalated | 0 | Immediate escalation: code_bug |
+| 2026-03-23T07:03:05.308Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-23T07:06:05.308Z |
