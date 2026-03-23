@@ -8,7 +8,7 @@
   },
   "organize": {
     "lastRun": "2026-03-23T04:00:01.341Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 717,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -148,7 +148,7 @@
   },
   "agent-scorecard": {
     "lastRun": "2026-03-22T13:00:00.494Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": null,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
