@@ -1,50 +1,6 @@
 {
   "tasks": [
     {
-      "id": "task_1773645601036_ep1bwyq",
-      "agent": "researcher",
-      "task": "process-article-inbox",
-      "payload": {
-        "trigger": "article-inbox-watch",
-        "itemCount": 350
-      },
-      "status": "completed",
-      "createdAt": "2026-03-16T07:20:01.036Z",
-      "startedAt": "2026-03-16T07:21:01.250Z",
-      "completedAt": "2026-03-16T07:21:03.118Z",
-      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:21:02.945Z. Triggered by task task_1773645601036_ep1bwyq."
-    },
-    {
-      "id": "task_1773645610229_8er2v83",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "b7d847ce",
-        "commitMessage": "chore: results-log [scribe=success]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-16T07:20:10.040Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-16T07:20:10.229Z",
-      "startedAt": "2026-03-16T07:21:03.765Z",
-      "completedAt": "2026-03-16T07:21:06.536Z",
-      "proofOfWork": "Audit PASS for commit b7d847ce. 0 concern(s). Artifact: intelligence/audits/2026-03-16-b7d847ce.md"
-    },
-    {
-      "id": "task_1773645901526_yr3pau4",
-      "agent": "researcher",
-      "task": "process-article-inbox",
-      "payload": {
-        "trigger": "article-inbox-watch",
-        "itemCount": 350
-      },
-      "status": "completed",
-      "createdAt": "2026-03-16T07:25:01.526Z",
-      "startedAt": "2026-03-16T07:26:01.581Z",
-      "completedAt": "2026-03-16T07:26:03.500Z",
-      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-16T07:26:03.328Z. Triggered by task task_1773645901526_yr3pau4."
-    },
-    {
       "id": "task_1773647101902_f3kt09p",
       "agent": "researcher",
       "task": "process-article-inbox",
