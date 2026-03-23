@@ -238,7 +238,7 @@ async function writeJobStatus(
         REPO,
         REGISTRY_PATH,
         updatedContent,
-        `chore: job-registry [${jobName}=${status}]`,
+        `chore: job-registry [${jobName}=${status}] [railway skip]`,
         file.sha,
       );
     } else {
@@ -246,7 +246,7 @@ async function writeJobStatus(
         REPO,
         REGISTRY_PATH,
         updatedContent,
-        `chore: job-registry [${jobName}=${status}]`,
+        `chore: job-registry [${jobName}=${status}] [railway skip]`,
       );
     }
   } catch (err) {
