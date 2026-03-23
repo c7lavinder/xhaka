@@ -1716,3 +1716,4 @@
 | 2026-03-23T07:04:02.022Z | improve | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-23T07:07:02.022Z |
 | 2026-03-23T07:04:05.707Z | cleanup | rollback | pending | 3 | failureType=railway_infra, waitUntil=2026-03-23T07:07:05.707Z |
 | 2026-03-23T07:23:01.224Z | railway-deploy | alert | escalated | 0 | status=FAILED, deploymentId=578a1f94-530f-442c-b2fc-f7557a8430cc |
+| 2026-03-23T07:24:01.313Z | railway-deploy | alert | escalated | 0 | status=FAILED, deploymentId=578a1f94-530f-442c-b2fc-f7557a8430cc |
