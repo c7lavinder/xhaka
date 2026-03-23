@@ -278,5 +278,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks detail on the significance or impact of these activities, making it low-signal for memory retention.",
     "evaluatedAt": "2026-03-22T05:00:16.691Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-23T05:00:06.050Z",
+    "score": 0,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important information that should be promoted to memory. It simply states a summary of activities without any significant insights or details.",
+    "evaluatedAt": "2026-03-23T05:00:07.438Z"
   }
 ]
