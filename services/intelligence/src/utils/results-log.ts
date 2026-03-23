@@ -6,7 +6,7 @@ import { getFileContent, updateFile, createFile } from '../lib/github.js';
 
 const REPO = process.env.GITHUB_REPO ?? 'c7lavinder/xhaka';
 const RESULTS_PATH = 'data/results.tsv';
-const HEADER = 'timestamp\tjobName\tstatus\tdurationMs\tscore\tnotes';
+const HEADER = 'timestamp	jobName	status	durationMs	score	notes';
 
 export interface ResultEntry {
   jobName: string;
@@ -29,7 +29,7 @@ export async function appendResult(entry: ResultEntry): Promise<void> {
     String(entry.durationMs),
     entry.score !== undefined ? String(entry.score) : '',
     entry.notes ?? '',
-  ].join('\t');
+  ].join('	');
 
   const MAX_RETRIES = 3;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -37,22 +37,27 @@ export async function appendResult(entry: ResultEntry): Promise<void> {
       const file = await getFileContent(REPO, RESULTS_PATH);
 
       if (file) {
-        const base = file.content.endsWith('\n') ? file.content : file.content + '\n';
-        const newContent = base + row + '\n';
+        const base = file.content.endsWith('
+') ? file.content : file.content + '
+';
+        const newContent = base + row + '
+';
         await updateFile(
           REPO,
           RESULTS_PATH,
           newContent,
-          `chore: results-log [${entry.jobName}=${entry.status}]`,
+          `chore: results-log [${entry.jobName}=${entry.status}] [railway skip]`,
           file.sha,
         );
       } else {
-        const content = HEADER + '\n' + row + '\n';
+        const content = HEADER + '
+' + row + '
+';
         await createFile(
           REPO,
           RESULTS_PATH,
           content,
-          `chore: results-log init`,
+          `chore: results-log init [railway skip]`,
         );
       }
       return; // success
