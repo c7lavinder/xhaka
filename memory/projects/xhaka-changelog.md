@@ -117,3 +117,7 @@ Current State: The xhaka-control-room is experiencing a crash loop, redeploying 
 - chore: results-log [operator=success]
 - chore: results-log [dispatcher=success]
 - chore: operator-log [improve=alert]
+## 2026-03-23 (100 commits)
+### 🐛 Fixed
+- remove session-capture-2026-03-22-2331.md from inbox (parse error)
+- route session-capture-2026-03-22-2331.md → general (parse error)
