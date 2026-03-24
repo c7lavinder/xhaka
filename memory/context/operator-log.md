@@ -1785,3 +1785,4 @@
 | 2026-03-24T04:47:01.852Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-03-24T04:49:01.959Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-24T04:52:01.959Z |
 | 2026-03-24T04:50:03.867Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-24T04:53:03.867Z |
+| 2026-03-24T04:52:01.498Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-24T04:55:01.498Z |
