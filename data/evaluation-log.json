@@ -286,5 +286,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important information that should be promoted to memory. It simply states a summary of activities without any significant insights or details.",
     "evaluatedAt": "2026-03-23T05:00:07.438Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-24T05:00:03.523Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output contains mostly procedural or error information that is not of high importance for long-term memory. It lacks concise, high-signal entries that would be valuable for future reference.",
+    "evaluatedAt": "2026-03-24T05:00:04.983Z"
   }
 ]
