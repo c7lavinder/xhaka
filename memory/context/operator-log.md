@@ -1742,3 +1742,4 @@
 | 2026-03-24T04:01:06.410Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-24T04:04:06.410Z |
 | 2026-03-24T04:02:02.731Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-24T04:05:02.214Z |
 | 2026-03-24T04:02:06.309Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-24T04:05:06.309Z |
+| 2026-03-24T04:03:02.934Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-24T04:06:02.424Z |
