@@ -4952,9 +4952,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-24T04:08:14.213Z"
       },
-      "status": "running",
+      "status": "failed",
       "createdAt": "2026-03-24T04:08:14.570Z",
-      "startedAt": "2026-03-24T04:09:01.670Z"
+      "startedAt": "2026-03-24T04:09:01.670Z",
+      "completedAt": "2026-03-24T04:09:05.269Z",
+      "proofOfWork": "FAILED: is at fb5725fb283744dfd7ac90d6126602c32b88660b but expected 6f086f4e382f8b90bd25040a314db1f5c9a4ba9d - https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
     }
   ]
 }
