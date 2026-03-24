@@ -1,13 +1,13 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-23T11:05:21.456Z
-**Total Findings:** 1
+**Last Run:** 2026-03-24T11:05:17.253Z
+**Total Findings:** 6
 
 ## Registry Repos Monitored
 
 | Tool | Repo | Latest Release |
 |---|---|---|
-| OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | `2026.3.13-1` |
+| OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | `2026.3.23` |
 | Railway CLI | [railwayapp/railway-cli](https://github.com/railwayapp/railway-cli) | `—` |
 | Supabase | [supabase/supabase](https://github.com/supabase/supabase) | `1.26.03` |
 | Gunner | [c7lavinder/MANUS-Gunner-AI](https://github.com/c7lavinder/MANUS-Gunner-AI) | `—` |
@@ -16,6 +16,17 @@
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
 | Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.81` |
+
+## 🚀 New Releases Detected
+
+- **OpenClaw**: `2026.3.13-1` → `2026.3.23` — [view release](https://github.com/openclaw/openclaw/releases/tag/2026.3.23)
+
+## 📦 Dependency Updates
+
+- `@supabase/supabase-js`: 2.100.0-canary.3 → 2.100.0
+- `@trpc/client`: 11.14.1 → 11.15.0
+- `@trpc/server`: 11.14.1 → 11.15.0
+- `drizzle-orm`: 1.0.0-beta.18 → 1.0.0-beta.19
 
 ## 📝 Changelog Activity
 
