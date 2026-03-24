@@ -1,20 +1,6 @@
 {
   "tasks": [
     {
-      "id": "task_1773720301831_5nfozxo",
-      "agent": "researcher",
-      "task": "process-article-inbox",
-      "payload": {
-        "trigger": "article-inbox-watch",
-        "itemCount": 370
-      },
-      "status": "completed",
-      "createdAt": "2026-03-17T04:05:01.831Z",
-      "startedAt": "2026-03-17T04:06:01.180Z",
-      "completedAt": "2026-03-17T04:06:03.392Z",
-      "proofOfWork": "Researcher processed article-inbox.md at 2026-03-17T04:06:03.233Z. Triggered by task task_1773720301831_5nfozxo."
-    },
-    {
       "id": "task_1773720901907_b1whmjf",
       "agent": "researcher",
       "task": "process-article-inbox",
