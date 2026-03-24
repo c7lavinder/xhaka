@@ -1782,3 +1782,4 @@
 | 2026-03-24T04:42:01.612Z | agent-scorecard | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-24T04:45:01.612Z |
 | 2026-03-24T04:44:01.680Z | agent-scorecard | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-24T04:47:01.680Z |
 | 2026-03-24T04:46:01.740Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-03-24T04:47:01.852Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
