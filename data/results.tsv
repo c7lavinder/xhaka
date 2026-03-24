@@ -1042,3 +1042,4 @@
 2026-03-24T04:59:03.354Z	operator	success	1751		model=gpt-4o-mini cost=$0.001
 2026-03-24T05:00:01.952Z	dispatcher	success	1006		model=gpt-4o-mini cost=$0.001
 2026-03-24T05:00:04.045Z	heartbeat-check	success	2986		model=gpt-4o-mini cost=$0.001
+2026-03-24T05:00:07.238Z	scribe	success	5812		model=gpt-4o cost=$0.025
