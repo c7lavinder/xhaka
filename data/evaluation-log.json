@@ -302,5 +302,13 @@
     "grade": "MEDIUM",
     "rationale": "The log captures specific activities such as initiating an automated session memory capture and using a specific GitHub API command. However, it lacks detailed context or outcomes related to these actions, making it somewhat generic.",
     "evaluatedAt": "2026-03-25T05:00:11.330Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-25T05:00:09.566Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The output provides a concise summary of the scribe's activities, highlighting key metrics such as decisions filed, commits digested, and rules captured. However, it lacks context or details on the significance of these activities, which would enhance the signal of the information.",
+    "evaluatedAt": "2026-03-25T05:00:18.841Z"
   }
 ]
