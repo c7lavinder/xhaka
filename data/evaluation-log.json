@@ -342,5 +342,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization is somewhat correct as it identifies key actions and decisions, but lacks specificity in categorizing the memory entries into more detailed categories such as 'Evaluation Metrics', 'Builder Improvements', and 'Key Decisions'. The categories could be more useful if they were more specific.",
     "evaluatedAt": "2026-03-25T11:00:19.844Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-25T11:00:20.691Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise and emphasizes the importance of adhering to all non-negotiables, which is a high-signal directive for the role. However, it lacks specific details on what these non-negotiables are, which would enhance its utility.",
+    "evaluatedAt": "2026-03-25T11:00:22.181Z"
   }
 ]
