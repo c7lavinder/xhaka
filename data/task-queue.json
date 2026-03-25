@@ -2177,6 +2177,17 @@
       "startedAt": "2026-03-25T04:05:01.386Z",
       "completedAt": "2026-03-25T04:05:05.208Z",
       "proofOfWork": "Audit PASS for commit 270129e8. 0 concern(s). Artifact: intelligence/audits/2026-03-25-270129e8.md"
+    },
+    {
+      "id": "task_1774422901775_hdkpye0",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-25T07:15:01.388Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-25T07:15:01.775Z"
     }
   ]
 }
