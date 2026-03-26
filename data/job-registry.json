@@ -161,9 +161,9 @@
     "gracePeriodMinutes": 120
   },
   "pattern-miner": {
-    "lastRun": null,
-    "lastStatus": null,
-    "durationMs": null,
+    "lastRun": "2026-03-26T11:00:10.720Z",
+    "lastStatus": "success",
+    "durationMs": 10193,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
