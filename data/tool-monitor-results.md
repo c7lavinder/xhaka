@@ -1,13 +1,13 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-25T11:05:16.665Z
-**Total Findings:** 3
+**Last Run:** 2026-03-26T11:05:17.996Z
+**Total Findings:** 6
 
 ## Registry Repos Monitored
 
 | Tool | Repo | Latest Release |
 |---|---|---|
-| OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | `2026.3.23` |
+| OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | `2026.3.24` |
 | Railway CLI | [railwayapp/railway-cli](https://github.com/railwayapp/railway-cli) | `—` |
 | Supabase | [supabase/supabase](https://github.com/supabase/supabase) | `1.26.03` |
 | Gunner | [c7lavinder/MANUS-Gunner-AI](https://github.com/c7lavinder/MANUS-Gunner-AI) | `—` |
@@ -15,12 +15,18 @@
 | Sentry | [getsentry/sentry](https://github.com/getsentry/sentry) | `26.3.1` |
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
-| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.83` |
+| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.84` |
 
 ## 🚀 New Releases Detected
 
-- **PostHog**: `posthog-cli/v0.7.3` → `posthog-cli/v0.7.4` — [view release](https://github.com/PostHog/posthog/releases/tag/posthog-cli/v0.7.4)
-- **Claude Code**: `2.1.81` → `2.1.83` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.83)
+- **OpenClaw**: `2026.3.23` → `2026.3.24` — [view release](https://github.com/openclaw/openclaw/releases/tag/2026.3.24)
+- **Claude Code**: `2.1.83` → `2.1.84` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.84)
+
+## 📦 Dependency Updates
+
+- `openai`: 6.32.0 → 6.33.0
+- `@sentry/node`: 10.45.0 → 10.46.0
+- `@supabase/supabase-js`: 2.100.0 → 2.100.0-canary.5
 
 ## 📝 Changelog Activity
 
