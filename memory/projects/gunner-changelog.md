@@ -44,12 +44,5 @@ Project: gunner-changelog
 - saveGhlTokens now merges into existing crmCon
 
 Status: No recent updates
-Current State: The project has not been mentioned in the recent logs, indicating no new developments or issues have been reported. The last recorded updates were on 2026-03-14, focusing on CRM synchronization features and bug fixes.
-## 2026-03-22 (0 commits)
-_No significant changes._
-## 2026-03-23 (0 commits)
-_No significant changes._
-## 2026-03-25 (0 commits)
-_No significant changes._
-## 2026-03-26 (0 commits)
-_No significant changes._
+
+Current State: The project has not seen any updates in the recent logs. The last recorded activities involved enhancements to the CRM sync functionalities and bug fixes related to HTTP timeouts and logging improvements. Further actions or updates are pending based on new requirements or issues.
