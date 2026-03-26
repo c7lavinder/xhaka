@@ -66,15 +66,10 @@
 
 ## 🧠 KEY DECISIONS
 
-- **2026-03-08:** Xhaka is COO only. No engineering.
+- **2026-03-24:** Initiate automated session memory capture via cron job.
 - **2026-03-16:** SDD enforcement — Builder prompts must have SPEC + PLAN + TASKS.
-- **2026-03-16:** LEARNINGS.md wired into every session context.
 - **2026-03-19:** Heartbeat moved to gpt-4o-mini — Claude too expensive for orchestration.
 - **2026-03-19:** paperclip-sync cron removed — KB/vector API doesn't exist in Paperclip v0.3.1 yet.
-- **2026-03-19:** Jaca = Matt's team's version of Xhaka. Same 7-agent structure, FranDev domain.
-- **2026-03-19:** Semi-assisted automation RAG feedback loop = core Gunner strategic moat. Manager overrides → retrain grades → compounding proprietary data advantage.
-- **2026-03-19:** MiroFish = long-game data moat. Architecture design should start now (not build). Deferred to Gunner 100-user milestone.
-- **2026-03-19:** Session transcript not loaded on restart = confirmed gap. Fix queued for Builder.
 
 ---
 
@@ -114,13 +109,4 @@
 1. Builder spawn path — confirmed working? Verify tonight.
 2. Heartbeat blind to job health — needs job-registry.json check
 3. Memory synthesis — done 2026-03-20
-4. Paperclip status — investigate, especially before Will Riddle demo Monday
-5. Session transcript not loaded on restart — Builder SDD queued
-
----
-
-## 📋 SYNTHESIS SCHEDULE
-
-Every 5 days: review recent daily logs → distill key items into this file + subfolders.
-Last synthesis: 2026-03-20
-Next synthesis due: 2026-03-25
+4. Paperclip status — invest
