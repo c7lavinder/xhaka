@@ -1822,8 +1822,9 @@
         "trigger": "daily-capture-check",
         "queuedAt": "2026-03-26T07:25:01.710Z"
       },
-      "status": "pending",
-      "createdAt": "2026-03-26T07:25:01.965Z"
+      "status": "running",
+      "createdAt": "2026-03-26T07:25:01.965Z",
+      "startedAt": "2026-03-26T07:26:01.496Z"
     }
   ]
 }
