@@ -1974,3 +1974,4 @@
 | 2026-03-27T14:04:06.221Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:07:06.221Z |
 | 2026-03-27T14:05:02.067Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:08:02.067Z |
 | 2026-03-27T14:05:06.024Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:08:06.023Z |
+| 2026-03-27T14:06:03.066Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:09:03.066Z |
