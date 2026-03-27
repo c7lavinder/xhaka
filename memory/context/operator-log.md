@@ -1957,3 +1957,4 @@
 | 2026-03-27T13:54:06.813Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:57:06.813Z |
 | 2026-03-27T13:55:03.399Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:58:03.399Z |
 | 2026-03-27T13:55:07.450Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:58:07.450Z |
+| 2026-03-27T13:56:03.582Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:59:03.582Z |
