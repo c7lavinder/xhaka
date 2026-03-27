@@ -63,8 +63,8 @@
     "gracePeriodMinutes": 10
   },
   "watchdog": {
-    "lastRun": "2026-03-27T06:30:01.252Z",
-    "lastStatus": "success",
+    "lastRun": "2026-03-27T06:40:01.056Z",
+    "lastStatus": "running",
     "durationMs": 993,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 30
