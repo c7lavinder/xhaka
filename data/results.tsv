@@ -6418,3 +6418,4 @@
 2026-03-27T13:02:02.102Z	dispatcher	success	1055		model=gpt-4o-mini cost=$0.001
 2026-03-27T13:02:04.591Z	operator	success	3131		model=gpt-4o-mini cost=$0.001
 2026-03-27T13:02:10.061Z	operator	success	3235		model=gpt-4o-mini cost=$0.001
+2026-03-27T13:03:02.585Z	dispatcher	failed	1598		
