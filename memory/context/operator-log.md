@@ -1862,3 +1862,4 @@
 | 2026-03-27T13:03:03.505Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-27T13:06:02.849Z |
 | 2026-03-27T13:06:02.084Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-03-27T13:07:03.527Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-27T13:10:03.527Z |
+| 2026-03-27T13:07:04.669Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
