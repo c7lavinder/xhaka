@@ -1855,3 +1855,4 @@
 | 2026-03-27T10:26:01.626Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-03-27T11:26:01.970Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-03-27T12:27:01.589Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-27T13:01:02.214Z | cleanup | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-27T13:04:02.214Z |
