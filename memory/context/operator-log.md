@@ -1994,3 +1994,4 @@
 | 2026-03-27T14:20:01.574Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:23:01.574Z |
 | 2026-03-27T14:21:01.861Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:24:01.861Z |
 | 2026-03-27T14:22:01.741Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:25:01.741Z |
+| 2026-03-27T14:23:01.972Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:26:01.972Z |
