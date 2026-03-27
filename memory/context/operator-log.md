@@ -1948,3 +1948,4 @@
 | 2026-03-27T13:49:05.649Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:52:05.649Z |
 | 2026-03-27T13:50:05.917Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:53:05.916Z |
 | 2026-03-27T13:51:02.785Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:54:02.785Z |
+| 2026-03-27T13:51:08.467Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T13:54:08.467Z |
