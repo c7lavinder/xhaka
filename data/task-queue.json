@@ -602,9 +602,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-27T13:09:12.802Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-27T13:09:13.036Z",
-      "startedAt": "2026-03-27T13:10:05.395Z"
+      "startedAt": "2026-03-27T13:10:05.395Z",
+      "completedAt": "2026-03-27T13:10:08.671Z",
+      "proofOfWork": "Audit PASS for commit fcbc7646. 0 concern(s). Artifact: intelligence/audits/2026-03-27-fcbc7646.md"
     },
     {
       "id": "task_1774616981584_r6ie5zl",
