@@ -1972,3 +1972,4 @@
 | 2026-03-27T14:03:06.027Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:06:06.027Z |
 | 2026-03-27T14:04:01.816Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:07:01.816Z |
 | 2026-03-27T14:04:06.221Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:07:06.221Z |
+| 2026-03-27T14:05:02.067Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:08:02.067Z |
