@@ -1,7 +1,7 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-26T11:05:17.996Z
-**Total Findings:** 6
+**Last Run:** 2026-03-27T11:05:18.689Z
+**Total Findings:** 5
 
 ## Registry Repos Monitored
 
@@ -15,18 +15,17 @@
 | Sentry | [getsentry/sentry](https://github.com/getsentry/sentry) | `26.3.1` |
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
-| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.84` |
+| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.85` |
 
 ## 🚀 New Releases Detected
 
-- **OpenClaw**: `2026.3.23` → `2026.3.24` — [view release](https://github.com/openclaw/openclaw/releases/tag/2026.3.24)
-- **Claude Code**: `2.1.83` → `2.1.84` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.84)
+- **Claude Code**: `2.1.84` → `2.1.85` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.85)
 
 ## 📦 Dependency Updates
 
-- `openai`: 6.32.0 → 6.33.0
-- `@sentry/node`: 10.45.0 → 10.46.0
-- `@supabase/supabase-js`: 2.100.0 → 2.100.0-canary.5
+- `@supabase/supabase-js`: 2.100.0-canary.5 → 2.100.1
+- `@trpc/client`: 11.15.0 → 11.15.1
+- `@trpc/server`: 11.15.0 → 11.15.1
 
 ## 📝 Changelog Activity
 
