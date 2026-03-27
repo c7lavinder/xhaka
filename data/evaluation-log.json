@@ -366,5 +366,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important or high-signal information that should be added to MEMORY.md. It simply states the number of decisions, commits, and rules, which are not inherently significant without context or details.",
     "evaluatedAt": "2026-03-26T05:00:06.229Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-27T05:00:06.642Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output lacks important details and context about the job, such as the nature of the commits or the significance of the work done. It is too vague to be considered high-signal information for MEMORY.md.",
+    "evaluatedAt": "2026-03-27T05:00:08.125Z"
   }
 ]
