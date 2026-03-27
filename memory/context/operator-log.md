@@ -1989,3 +1989,4 @@
 | 2026-03-27T14:15:06.915Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:18:06.915Z |
 | 2026-03-27T14:16:01.415Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:19:01.415Z |
 | 2026-03-27T14:17:01.822Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:20:01.822Z |
+| 2026-03-27T14:18:01.669Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T14:21:01.669Z |
