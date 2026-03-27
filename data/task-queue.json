@@ -522,9 +522,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-27T13:03:26.790Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-27T13:03:26.987Z",
-      "startedAt": "2026-03-27T13:04:01.976Z"
+      "startedAt": "2026-03-27T13:04:01.976Z",
+      "completedAt": "2026-03-27T13:04:06.252Z",
+      "proofOfWork": "Audit PASS for commit 346eb5fa. 0 concern(s). Artifact: intelligence/audits/2026-03-27-346eb5fa.md"
     },
     {
       "id": "task_1774616632971_vvqq9p9",
