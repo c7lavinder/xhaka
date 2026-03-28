@@ -639,6 +639,17 @@
       "startedAt": "2026-03-27T13:11:01.425Z",
       "completedAt": "2026-03-27T13:11:04.108Z",
       "proofOfWork": "Audit PASS for commit 6c79ea52. 0 concern(s). Artifact: intelligence/audits/2026-03-27-6c79ea52.md"
+    },
+    {
+      "id": "task_1774683602180_libzm3o",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-28T07:40:02.027Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-28T07:40:02.180Z"
     }
   ]
 }
