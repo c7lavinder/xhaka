@@ -8,7 +8,7 @@
   },
   "organize": {
     "lastRun": "2026-03-28T04:00:01.113Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 640,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -71,7 +71,7 @@
   },
   "daily-log": {
     "lastRun": "2026-03-27T17:00:00.764Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1861,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
