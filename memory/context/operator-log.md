@@ -2036,3 +2036,4 @@
 | 2026-03-27T15:09:01.665Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T15:12:01.665Z |
 | 2026-03-27T15:11:02.612Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-27T15:14:02.031Z |
 | 2026-03-28T11:11:01.675Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-28T13:02:01.933Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
