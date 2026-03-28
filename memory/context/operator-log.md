@@ -2039,3 +2039,4 @@
 | 2026-03-28T13:02:01.933Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-28T13:03:02.577Z | cleanup | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-28T13:06:02.577Z |
 | 2026-03-28T13:03:05.919Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
+| 2026-03-28T13:04:02.144Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-28T13:07:02.144Z |
