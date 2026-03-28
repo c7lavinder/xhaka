@@ -1,22 +1,22 @@
 {
-  "lastPersistedAt": "2026-03-28T18:08:00.585Z",
-  "lastInfraAlertAt": 1774721280585,
+  "lastPersistedAt": "2026-03-28T19:08:01.016Z",
+  "lastInfraAlertAt": 1774724881016,
   "lastDeployAlertId": "",
   "attempts": {
     "improve": {
       "count": 1,
       "firstAttemptAt": "2026-03-23T06:02:00.754Z",
-      "lastAttemptAt": "2026-03-28T18:08:00.585Z"
+      "lastAttemptAt": "2026-03-28T19:08:01.017Z"
     },
     "cleanup": {
       "count": 1,
       "firstAttemptAt": "2026-03-28T13:02:00.988Z",
-      "lastAttemptAt": "2026-03-28T18:08:00.585Z"
+      "lastAttemptAt": "2026-03-28T19:08:01.017Z"
     },
     "agent-scorecard": {
       "count": 3,
       "firstAttemptAt": "2026-03-27T13:03:01.482Z",
-      "lastAttemptAt": "2026-03-28T18:08:00.585Z"
+      "lastAttemptAt": "2026-03-28T19:08:01.017Z"
     }
   },
   "activeRemediations": {}
