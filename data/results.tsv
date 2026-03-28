@@ -8068,3 +8068,4 @@
 2026-03-28T11:00:02.255Z	dispatcher	success	1008		model=gpt-4o-mini cost=$0.001
 2026-03-28T11:00:03.889Z	morning-brief	success	2433		model=gpt-4o cost=$0.025
 2026-03-28T11:00:03.956Z	heartbeat-check	success	2717		model=gpt-4o-mini cost=$0.001
+2026-03-28T11:00:37.977Z	propagate	success	35777		model=gpt-4o-mini cost=$0.003
