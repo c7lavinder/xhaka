@@ -1,6 +1,6 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-27T11:05:18.689Z
+**Last Run:** 2026-03-28T11:05:17.422Z
 **Total Findings:** 5
 
 ## Registry Repos Monitored
@@ -15,17 +15,17 @@
 | Sentry | [getsentry/sentry](https://github.com/getsentry/sentry) | `26.3.1` |
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
-| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.85` |
+| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.86` |
 
 ## 🚀 New Releases Detected
 
-- **Claude Code**: `2.1.84` → `2.1.85` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.85)
+- **Claude Code**: `2.1.85` → `2.1.86` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.86)
 
 ## 📦 Dependency Updates
 
-- `@supabase/supabase-js`: 2.100.0-canary.5 → 2.100.1
-- `@trpc/client`: 11.15.0 → 11.15.1
-- `@trpc/server`: 11.15.0 → 11.15.1
+- `@trpc/client`: 11.15.1 → 11.16.0
+- `@trpc/server`: 11.15.1 → 11.16.0
+- `drizzle-orm`: 1.0.0-beta.19 → 0.45.2
 
 ## 📝 Changelog Activity
 
