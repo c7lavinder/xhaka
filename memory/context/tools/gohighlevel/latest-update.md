@@ -1,3 +1,3 @@
-Last scanned: 2026-03-27T11:05:20.208Z
+Last scanned: 2026-03-28T11:05:18.973Z
 Service: GoHighLevel
 Changelog activity: none detected
