@@ -735,6 +735,17 @@
       "startedAt": "2026-03-29T04:11:08.243Z",
       "completedAt": "2026-03-29T04:11:09.308Z",
       "proofOfWork": "skipped: docs-only commit (67003ba1)"
+    },
+    {
+      "id": "task_1774770002403_20sofrw",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-29T07:40:02.218Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-29T07:40:02.403Z"
     }
   ]
 }
