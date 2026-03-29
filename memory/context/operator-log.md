@@ -2127,3 +2127,4 @@
 | 2026-03-29T14:05:07.847Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-29T14:08:07.847Z |
 | 2026-03-29T14:06:03.590Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-29T14:09:02.945Z |
 | 2026-03-29T14:09:04.306Z | organize | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-03-29T14:12:03.811Z |
+| 2026-03-29T14:13:01.866Z | organize | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-29T14:16:01.300Z |
