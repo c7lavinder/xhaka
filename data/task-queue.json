@@ -698,9 +698,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-29T14:06:45.938Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-29T14:06:46.180Z",
-      "startedAt": "2026-03-29T14:07:05.881Z"
+      "startedAt": "2026-03-29T14:07:05.881Z",
+      "completedAt": "2026-03-29T14:07:06.793Z",
+      "proofOfWork": "skipped: docs-only commit (209830e8)"
     }
   ]
 }
