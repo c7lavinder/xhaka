@@ -634,9 +634,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-29T04:04:01.217Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-29T04:04:01.361Z",
-      "startedAt": "2026-03-29T04:05:05.699Z"
+      "startedAt": "2026-03-29T04:05:05.699Z",
+      "completedAt": "2026-03-29T04:05:06.603Z",
+      "proofOfWork": "skipped: docs-only commit (151ec43d)"
     },
     {
       "id": "task_1774757072328_50whl1l",
