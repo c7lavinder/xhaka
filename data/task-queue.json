@@ -1,54 +1,6 @@
 {
   "tasks": [
     {
-      "id": "task_1774177580649_qelt7i9",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "d6cc9b14",
-        "commitMessage": "chore: results-log [operator=success]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-22T11:06:20.129Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-22T11:06:20.649Z",
-      "startedAt": "2026-03-22T11:07:02.088Z",
-      "completedAt": "2026-03-22T11:07:05.285Z",
-      "proofOfWork": "Audit PASS for commit d6cc9b14. 0 concern(s). Artifact: intelligence/audits/2026-03-22-d6cc9b14.md"
-    },
-    {
-      "id": "task_1774177638645_d36rzi7",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "04c0c4ee",
-        "commitMessage": "chore: results-log [dispatcher=success]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-22T11:07:18.245Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-22T11:07:18.645Z",
-      "startedAt": "2026-03-22T11:08:01.792Z",
-      "completedAt": "2026-03-22T11:08:04.637Z",
-      "proofOfWork": "Audit PASS for commit 04c0c4ee. 0 concern(s). Artifact: intelligence/audits/2026-03-22-04c0c4ee.md"
-    },
-    {
-      "id": "task_1774177695204_fra01se",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "45b82310",
-        "commitMessage": "chore: results-log [dispatcher=success]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-22T11:08:14.872Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-22T11:08:15.204Z",
-      "startedAt": "2026-03-22T11:09:01.860Z",
-      "completedAt": "2026-03-22T11:09:05.284Z",
-      "proofOfWork": "Audit PASS for commit 45b82310. 0 concern(s). Artifact: intelligence/audits/2026-03-22-45b82310.md"
-    },
-    {
       "id": "task_1774177873174_tuakbay",
       "agent": "auditor",
       "task": "verify-build",
@@ -61,38 +13,6 @@
       "status": "running",
       "createdAt": "2026-03-22T11:11:13.174Z",
       "startedAt": "2026-03-22T11:12:02.154Z"
-    },
-    {
-      "id": "task_1774177901026_2kz2h5n",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "3c39bc38",
-        "commitMessage": "task-queue: push auditor/verify-build [task_1774177873174_tuakbay]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-22T11:11:40.677Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-22T11:11:41.026Z",
-      "startedAt": "2026-03-22T11:13:02.369Z",
-      "completedAt": "2026-03-22T11:13:03.462Z",
-      "proofOfWork": "skipped: docs-only commit (3c39bc38)"
-    },
-    {
-      "id": "task_1774177948904_14ff8z7",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "61d3f93e",
-        "commitMessage": "chore: results-log [dispatcher=failed]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-22T11:12:28.435Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-22T11:12:28.904Z",
-      "startedAt": "2026-03-22T11:14:02.539Z",
-      "completedAt": "2026-03-22T11:14:05.622Z",
-      "proofOfWork": "Audit PASS for commit 61d3f93e. 0 concern(s). Artifact: intelligence/audits/2026-03-22-61d3f93e.md"
     },
     {
       "id": "task_1774249201888_vcqpez2",
