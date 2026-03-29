@@ -2077,3 +2077,4 @@
 | 2026-03-29T13:07:01.685Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-29T13:08:01.987Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-29T13:11:02.113Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-03-29T13:12:02.094Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
