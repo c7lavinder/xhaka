@@ -2075,3 +2075,4 @@
 | 2026-03-29T04:13:02.704Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-29T04:16:02.158Z |
 | 2026-03-29T13:02:03.113Z | cleanup | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-29T13:05:02.573Z |
 | 2026-03-29T13:07:01.685Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-03-29T13:08:01.987Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
