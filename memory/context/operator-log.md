@@ -2171,3 +2171,4 @@
 | 2026-03-29T14:57:01.987Z | organize | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-29T15:00:01.986Z |
 | 2026-03-29T14:58:02.120Z | organize | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-29T15:01:02.120Z |
 | 2026-03-29T14:59:02.296Z | organize | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-03-29T15:02:02.296Z |
+| 2026-03-29T15:00:01.430Z | organize | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-29T15:03:01.430Z |
