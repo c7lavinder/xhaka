@@ -112,9 +112,9 @@
     "gracePeriodMinutes": 60
   },
   "heartbeat-check": {
-    "lastRun": "2026-03-29T08:00:00.426Z",
-    "lastStatus": "running",
-    "durationMs": 3049,
+    "lastRun": "2026-03-29T08:00:03.176Z",
+    "lastStatus": "success",
+    "durationMs": 2979,
     "expectedIntervalHours": 0.5,
     "gracePeriodMinutes": 10
   },
