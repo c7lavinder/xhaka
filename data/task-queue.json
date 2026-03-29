@@ -698,9 +698,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-03-29T04:09:32.115Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-03-29T04:09:32.380Z",
-      "startedAt": "2026-03-29T04:11:01.332Z"
+      "startedAt": "2026-03-29T04:11:01.332Z",
+      "completedAt": "2026-03-29T04:11:03.872Z",
+      "proofOfWork": "Audit PASS for commit 5b88a659. 0 concern(s). Artifact: intelligence/audits/2026-03-29-5b88a659.md"
     },
     {
       "id": "task_1774757409491_b3yv30f",
