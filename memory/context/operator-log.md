@@ -2234,3 +2234,4 @@
 | 2026-03-30T14:01:04.790Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-30T14:02:02.641Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-30T14:03:06.659Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-03-30T14:05:04.175Z | organize | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
