@@ -735,6 +735,17 @@
       "startedAt": "2026-03-29T14:11:01.027Z",
       "completedAt": "2026-03-29T14:11:03.440Z",
       "proofOfWork": "Audit PASS for commit cffe0be4. 0 concern(s). Artifact: intelligence/audits/2026-03-29-cffe0be4.md"
+    },
+    {
+      "id": "task_1774856701691_0qq4eup",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-03-30T07:45:01.410Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-03-30T07:45:01.691Z"
     }
   ]
 }
