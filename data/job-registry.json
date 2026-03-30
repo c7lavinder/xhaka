@@ -36,7 +36,7 @@
   },
   "improve": {
     "lastRun": "2026-03-30T11:30:01.828Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1144,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
@@ -78,14 +78,14 @@
   },
   "researcher": {
     "lastRun": "2026-03-30T12:00:00.347Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 973,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 90
   },
   "feedback": {
     "lastRun": "2026-03-30T13:00:00.691Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1182,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
