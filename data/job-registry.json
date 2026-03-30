@@ -56,8 +56,8 @@
     "gracePeriodMinutes": 120
   },
   "operator": {
-    "lastRun": "2026-03-30T13:24:03.623Z",
-    "lastStatus": "success",
+    "lastRun": "2026-03-30T13:25:01.332Z",
+    "lastStatus": "running",
     "durationMs": 2613,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 10
