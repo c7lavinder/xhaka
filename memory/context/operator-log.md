@@ -2242,3 +2242,4 @@
 | 2026-03-30T14:07:08.376Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-03-30T14:08:04.868Z | organize | restart | pending | 1 | failureType=unknown, waitUntil=2026-03-30T14:11:04.868Z |
 | 2026-03-30T14:08:10.226Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
+| 2026-03-30T14:09:01.650Z | SYSTEM | alert | escalated | 0 | 5 jobs down simultaneously — infra suspected |
