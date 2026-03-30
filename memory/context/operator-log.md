@@ -2186,3 +2186,4 @@
 | 2026-03-29T15:12:02.098Z | organize | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-29T15:15:02.098Z |
 | 2026-03-29T15:13:02.869Z | organize | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-29T15:16:02.317Z |
 | 2026-03-30T11:11:01.820Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-30T13:03:06.316Z | cleanup | redeploy | pending | 2 | failureType=rate_limit, waitUntil=2026-03-30T13:06:05.610Z |
