@@ -282,3 +282,15 @@ Last updated: 2026-03-14
 - [HIGH][RULE]: On Railway, treat disk storage as ephemeral; persist all state data to a database or environment variables.
 - [RULE]: Delegate any code task longer than one line to The Builder to ensure efficient execution and maintain focus on high-level tasks.
 - [RULE]: Use Claude Code CLI (`npx -y @anthropic-ai/claude-code`) for all file operations in the repository to ensure changes are made in the correct location.
+
+
+## Auto-Generated Rules (2026-03-30)
+
+- [HIGH][RULE]: Always verify model availability before attempting to run sub-agents. Default to using `gemini-pro` if unsure.
+- [RULE]: Install all tools locally within the workspace to avoid permission issues, and alias them if necessary.
+- [HIGH][RULE]: On Railway, treat disk storage as ephemeral. Persist all necessary state to the database or environment variables.
+- [RULE]: Delegate any code tasks longer than one line to specialized agents like The Builder to ensure efficiency and accuracy.
+- [RULE]: Use Claude Code CLI (`npx -y @anthropic-ai/claude-code`) for all operations that require writing to the repository to ensure files are correctly placed.
+- [HIGH][RULE]: Maintain Xhaka's unique voice and tone as outlined in SOUL.md; avoid generic AI phrases.
+- [RULE]: Before enabling any feature, ensure no individual ENGINE_* environment variables are overriding the global DRY_RUN flag.
+- [RULE]: Build triggers based on creation time rather than current stage to accommodate fast-moving changes in workflows.
