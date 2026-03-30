@@ -1,7 +1,7 @@
 # Tool Monitor — Latest Results
 
-**Last Run:** 2026-03-29T11:05:15.127Z
-**Total Findings:** 3
+**Last Run:** 2026-03-30T11:05:25.249Z
+**Total Findings:** 1
 
 ## Registry Repos Monitored
 
@@ -16,11 +16,6 @@
 | LangSmith | [langchain-ai/langsmith-sdk](https://github.com/langchain-ai/langsmith-sdk) | `0.7.22` |
 | Hindsight | [vectorize-io/hindsight-openclaw](https://github.com/vectorize-io/hindsight-openclaw) | `—` |
 | Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) | `2.1.87` |
-
-## 🚀 New Releases Detected
-
-- **OpenClaw**: `2026.3.24` → `2026.3.28` — [view release](https://github.com/openclaw/openclaw/releases/tag/2026.3.28)
-- **Claude Code**: `2.1.86` → `2.1.87` — [view release](https://github.com/anthropics/claude-code/releases/tag/2.1.87)
 
 ## 📝 Changelog Activity
 
