@@ -2188,3 +2188,4 @@
 | 2026-03-30T11:11:01.820Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-03-30T13:03:06.316Z | cleanup | redeploy | pending | 2 | failureType=rate_limit, waitUntil=2026-03-30T13:06:05.610Z |
 | 2026-03-30T13:03:07.284Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=rate_limit |
+| 2026-03-30T13:07:04.601Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-30T13:10:03.961Z |
