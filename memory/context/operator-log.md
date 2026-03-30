@@ -2190,3 +2190,4 @@
 | 2026-03-30T13:03:07.284Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=rate_limit |
 | 2026-03-30T13:07:04.601Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-03-30T13:10:03.961Z |
 | 2026-03-30T13:11:02.622Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-03-30T13:12:02.605Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
