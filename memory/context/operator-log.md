@@ -2271,3 +2271,4 @@
 | 2026-03-31T13:03:03.320Z | improve | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-31T13:06:03.320Z |
 | 2026-03-31T13:03:06.886Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
 | 2026-03-31T13:04:01.571Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-03-31T13:05:02.008Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
