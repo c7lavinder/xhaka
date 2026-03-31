@@ -12831,3 +12831,4 @@
 2026-03-31T07:00:01.801Z	watchdog	success	946		model=gpt-4o-mini cost=$0.001
 2026-03-31T07:00:03.571Z	heartbeat-check	success	2894		model=gpt-4o-mini cost=$0.001
 2026-03-31T07:00:01.799Z	dispatcher	success	981		model=gpt-4o-mini cost=$0.001
+2026-03-31T07:00:20.966Z	kb-indexer	success	19375		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
