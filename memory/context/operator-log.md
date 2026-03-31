@@ -2267,3 +2267,4 @@
 | 2026-03-31T13:01:03.103Z | improve | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-31T13:04:03.103Z |
 | 2026-03-31T13:01:07.020Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
 | 2026-03-31T13:02:03.559Z | improve | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-03-31T13:05:03.558Z |
+| 2026-03-31T13:02:07.358Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
