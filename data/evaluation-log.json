@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-16T02:06:50.493Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides basic statistics about the scribe's activity but lacks context or significance. It does not highlight any important insights or decisions that would be valuable for memory.",
-    "evaluatedAt": "2026-03-16T02:06:51.827Z"
-  },
-  {
     "jobName": "researcher",
     "runId": "2026-03-16T02:36:10.301Z",
     "score": 60,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks detail or context that would make it significant for memory. It mentions numbers but doesn't explain their relevance or impact.",
     "evaluatedAt": "2026-03-30T05:00:13.509Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-03-31T05:02:54.636Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of activities but lacks significant or insightful information that would be valuable for long-term memory. It is mostly quantitative data without context or implications.",
+    "evaluatedAt": "2026-03-31T05:02:55.906Z"
   }
 ]
