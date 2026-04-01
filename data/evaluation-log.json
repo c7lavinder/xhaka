@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-16T05:16:01.910Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides basic statistics about the scribe's activity but lacks context or significance. It does not highlight any genuinely important items or insights that would be valuable for future reference.",
-    "evaluatedAt": "2026-03-16T05:16:03.318Z"
-  },
-  {
     "jobName": "researcher",
     "runId": "2026-03-16T06:01:12.457Z",
     "score": 60,
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization is somewhat specific, mentioning 'evaluation metrics' and 'Builder for harness improvements', but it lacks clarity on the categories used. It could benefit from more detailed categorization, such as 'Meeting Notes' or 'Project Development', to enhance specificity and usefulness.",
     "evaluatedAt": "2026-04-01T11:00:17.811Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-01T11:00:18.919Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise and highlights a critical aspect of the job, which is the adherence to the 10 non-negotiables. However, it lacks specific details on what these non-negotiables are, which could provide more context and utility.",
+    "evaluatedAt": "2026-04-01T11:00:22.608Z"
   }
 ]
