@@ -1,14 +1,6 @@
 [
   {
     "jobName": "researcher",
-    "runId": "2026-03-16T06:01:12.457Z",
-    "score": 60,
-    "grade": "MEDIUM",
-    "rationale": "The output provides a summary of Polymarket's operations and regulatory status, which are useful insights. However, it lacks specific, actionable implications for how these insights could be directly applied to wholesale real estate operations beyond a general statement about data-driven forecasts. More concrete examples or strategies would enhance its applicability.",
-    "evaluatedAt": "2026-03-16T06:01:13.563Z"
-  },
-  {
-    "jobName": "researcher",
     "runId": "2026-03-16T06:11:15.445Z",
     "score": 60,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The entry is concise and highlights a critical aspect of the job, which is the adherence to the 10 non-negotiables. However, it lacks specific details on what these non-negotiables are, which could provide more context and utility.",
     "evaluatedAt": "2026-04-01T11:00:22.608Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-01T11:00:25.603Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The entry is vague and lacks context, making it difficult to determine its importance or relevance. It does not provide specific or actionable information that would be considered high-signal for memory.",
+    "evaluatedAt": "2026-04-01T11:00:27.197Z"
   }
 ]
