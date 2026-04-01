@@ -2315,3 +2315,4 @@
 | 2026-04-01T04:27:02.085Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T04:30:02.085Z |
 | 2026-04-01T04:28:02.347Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T04:31:02.346Z |
 | 2026-04-01T04:32:01.331Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-04-01T04:33:01.441Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
