@@ -650,9 +650,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-01T04:04:22.309Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-01T04:04:22.509Z",
-      "startedAt": "2026-04-01T04:05:01.406Z"
+      "startedAt": "2026-04-01T04:05:01.406Z",
+      "completedAt": "2026-04-01T04:05:05.713Z",
+      "proofOfWork": "Audit PASS for commit ebd3308f. 0 concern(s). Artifact: intelligence/audits/2026-04-01-ebd3308f.md"
     },
     {
       "id": "task_1775016289267_5xolhak",
