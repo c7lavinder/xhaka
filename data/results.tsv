@@ -1323,3 +1323,4 @@
 2026-04-01T07:00:02.093Z	dispatcher	success	1024		model=gpt-4o-mini cost=$0.001
 2026-04-01T07:00:02.084Z	watchdog	success	970		model=gpt-4o-mini cost=$0.001
 2026-04-01T07:00:22.611Z	kb-indexer	success	21213		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
+2026-04-01T07:00:37.499Z	librarian	success	36467		model=gpt-4o-mini cost=$0.001
