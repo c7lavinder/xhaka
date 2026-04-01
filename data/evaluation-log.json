@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T05:02:44.951Z",
-    "score": 10,
-    "grade": "LOW",
-    "rationale": "The output provides a basic summary of the scribe's activities, but it lacks detail and context. It does not highlight any important or high-signal information that would be valuable for memory retention.",
-    "evaluatedAt": "2026-03-16T05:02:46.199Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T05:05:45.647Z",
     "score": 10,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
     "evaluatedAt": "2026-04-01T11:00:07.861Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-01T11:00:10.169Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The categorization is somewhat specific, identifying a session focused on evaluation metrics and harness improvements. However, it could be more detailed, such as specifying the type of session (e.g., meeting, workshop) and the context or purpose of the discussion.",
+    "evaluatedAt": "2026-04-01T11:00:12.640Z"
   }
 ]
