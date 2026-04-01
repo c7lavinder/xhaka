@@ -735,6 +735,17 @@
       "startedAt": "2026-04-01T05:15:01.433Z",
       "completedAt": "2026-04-01T05:15:04.880Z",
       "proofOfWork": "Audit PASS for commit 9097e224. 0 concern(s). Artifact: intelligence/audits/2026-04-01-9097e224.md"
+    },
+    {
+      "id": "task_1775029802703_flwj5c0",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-01T07:50:02.415Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-01T07:50:02.703Z"
     }
   ]
 }
