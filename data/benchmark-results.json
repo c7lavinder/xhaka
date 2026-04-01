@@ -38,5 +38,25 @@
       "variance": 0,
       "highVariance": false
     }
+  },
+  "2026-04-01": {
+    "researcher": {
+      "score1": 20,
+      "score2": 30,
+      "variance": 10,
+      "highVariance": false
+    },
+    "organize": {
+      "score1": 70,
+      "score2": 70,
+      "variance": 0,
+      "highVariance": false
+    },
+    "scribe": {
+      "score1": 70,
+      "score2": 20,
+      "variance": 50,
+      "highVariance": true
+    }
   }
 }
