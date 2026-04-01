@@ -2299,3 +2299,4 @@
 | 2026-04-01T04:09:03.039Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-04-01T04:12:02.512Z |
 | 2026-04-01T04:09:03.962Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-04-01T04:11:02.768Z | improve | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-04-01T04:14:02.090Z |
+| 2026-04-01T04:13:02.184Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T04:16:02.184Z |
