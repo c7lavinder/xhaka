@@ -1,14 +1,6 @@
 [
   {
     "jobName": "researcher",
-    "runId": "2026-03-16T02:36:10.301Z",
-    "score": 60,
-    "grade": "MEDIUM",
-    "rationale": "The output provides a general overview of Polymarket and its regulatory status, which could be useful for understanding market trends. However, it lacks specific, actionable insights or concrete implications for a researcher in wholesale real estate, such as how exactly Polymarket's trends could be leveraged or what specific actions should be taken based on this understanding.",
-    "evaluatedAt": "2026-03-16T02:36:12.343Z"
-  },
-  {
-    "jobName": "researcher",
     "runId": "2026-03-16T02:36:12.899Z",
     "score": 60,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks significant or insightful information that would be valuable for long-term memory. It is mostly quantitative data without context or implications.",
     "evaluatedAt": "2026-03-31T05:02:55.906Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-01T05:00:06.086Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not promote any genuinely important items to MEMORY.md, as it merely provides a summary of tasks completed without any specific insights or high-signal information. It lacks detail on the significance or impact of the work done.",
+    "evaluatedAt": "2026-04-01T05:00:06.992Z"
   }
 ]
