@@ -2345,3 +2345,4 @@
 | 2026-04-01T05:07:01.775Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T05:10:01.775Z |
 | 2026-04-01T05:08:01.799Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T05:11:01.799Z |
 | 2026-04-01T05:11:01.909Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-04-01T05:12:02.575Z | cleanup | restart | pending | 1 | failureType=unknown, waitUntil=2026-04-01T05:15:02.575Z |
