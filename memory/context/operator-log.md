@@ -2341,3 +2341,4 @@
 | 2026-04-01T05:02:02.222Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-04-01T05:03:02.708Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-04-01T05:04:01.756Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-04-01T05:06:01.714Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-01T05:09:01.714Z |
