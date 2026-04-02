@@ -783,6 +783,17 @@
       "startedAt": "2026-04-02T04:08:01.928Z",
       "completedAt": "2026-04-02T04:08:06.218Z",
       "proofOfWork": "Audit PASS for commit 7ca023bc. 0 concern(s). Artifact: intelligence/audits/2026-04-02-7ca023bc.md"
+    },
+    {
+      "id": "task_1775116502258_jjbm7po",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-02T07:55:01.878Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-02T07:55:02.258Z"
     }
   ]
 }
