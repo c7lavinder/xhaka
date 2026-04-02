@@ -15,7 +15,7 @@
   },
   "propagate": {
     "lastRun": "2026-04-01T11:00:01.151Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 43968,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -155,7 +155,7 @@
   },
   "change-evaluator": {
     "lastRun": "2026-04-01T20:00:01.158Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1029,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
