@@ -2349,3 +2349,4 @@
 | 2026-04-01T05:13:02.384Z | cleanup | restart | pending | 1 | failureType=unknown, waitUntil=2026-04-01T05:16:01.826Z |
 | 2026-04-01T11:11:01.383Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-04-02T04:03:02.247Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-02T04:04:03.593Z | improve | restart | pending | 1 | failureType=unknown, waitUntil=2026-04-02T04:07:03.593Z |
