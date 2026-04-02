@@ -3204,3 +3204,4 @@
 2026-04-02T10:58:01.923Z	dispatcher	success	972		model=gpt-4o-mini cost=$0.001
 2026-04-02T10:59:02.272Z	dispatcher	success	990		model=gpt-4o-mini cost=$0.001
 2026-04-02T11:00:01.886Z	watchdog	success	882		model=gpt-4o-mini cost=$0.001
+2026-04-02T11:00:03.308Z	morning-brief	success	2151		model=gpt-4o cost=$0.025
