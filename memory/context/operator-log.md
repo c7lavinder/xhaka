@@ -2357,3 +2357,4 @@
 | 2026-04-02T04:05:08.358Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
 | 2026-04-02T04:06:01.597Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-04-02T04:07:01.733Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
+| 2026-04-02T04:08:01.930Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
