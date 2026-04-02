@@ -1,14 +1,6 @@
 [
   {
     "jobName": "researcher",
-    "runId": "2026-03-16T06:11:15.445Z",
-    "score": 60,
-    "grade": "MEDIUM",
-    "rationale": "The output provides a general overview of Polymarket and its regulatory environment, which could be relevant for strategic decision-making in real estate. However, it lacks specific, actionable insights or concrete implications for how exactly these prediction markets can be leveraged in wholesale real estate operations.",
-    "evaluatedAt": "2026-03-16T06:11:17.459Z"
-  },
-  {
-    "jobName": "researcher",
     "runId": "2026-03-16T06:11:17.972Z",
     "score": 60,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The entry is vague and lacks context, making it difficult to determine its importance or relevance. It does not provide specific or actionable information that would be considered high-signal for memory.",
     "evaluatedAt": "2026-04-01T11:00:27.197Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-02T05:00:05.574Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output contains technical details about a digest error, but it doesn't provide any genuinely important or high-signal information that would be useful for future reference. The entry is too specific and lacks broader relevance.",
+    "evaluatedAt": "2026-04-02T05:00:07.185Z"
   }
 ]
