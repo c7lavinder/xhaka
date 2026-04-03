@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "researcher",
-    "runId": "2026-03-16T06:11:17.972Z",
-    "score": 60,
-    "grade": "MEDIUM",
-    "rationale": "baseline record",
-    "evaluatedAt": "2026-03-16T06:11:17.972Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-03-16T06:25:50.508Z",
     "score": 0,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output contains technical details about a digest error, but it doesn't provide any genuinely important or high-signal information that would be useful for future reference. The entry is too specific and lacks broader relevance.",
     "evaluatedAt": "2026-04-02T05:00:07.185Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-03T05:00:05.577Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but not high-signal, as it doesn't highlight any significant decisions or rules.",
+    "evaluatedAt": "2026-04-03T05:00:07.310Z"
   }
 ]
