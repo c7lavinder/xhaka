@@ -2405,3 +2405,4 @@
 | 2026-04-03T20:08:03.432Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
 | 2026-04-03T20:09:02.860Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-04-03T20:12:02.315Z |
 | 2026-04-03T20:09:04.065Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
+| 2026-04-03T20:10:02.367Z | cleanup | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-04-03T20:13:02.367Z |
