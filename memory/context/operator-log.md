@@ -2400,3 +2400,4 @@
 | 2026-04-03T20:07:03.193Z | improve | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-04-03T20:10:02.702Z |
 | 2026-04-03T20:07:04.239Z | improve | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-04-03T20:07:07.846Z | cleanup | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-04-03T20:10:07.846Z |
+| 2026-04-03T20:07:08.734Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
