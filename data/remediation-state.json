@@ -1,27 +1,27 @@
 {
-  "lastPersistedAt": "2026-04-03T20:11:02.594Z",
+  "lastPersistedAt": "2026-04-03T20:13:02.093Z",
   "lastInfraAlertAt": 0,
   "lastDeployAlertId": "",
   "attempts": {
     "improve": {
       "count": 3,
       "firstAttemptAt": "2026-04-03T20:03:00.950Z",
-      "lastAttemptAt": "2026-04-03T20:11:02.594Z"
+      "lastAttemptAt": "2026-04-03T20:13:02.093Z"
     },
     "cleanup": {
-      "count": 1,
+      "count": 2,
       "firstAttemptAt": "2026-04-03T20:04:00.848Z",
-      "lastAttemptAt": "2026-04-03T20:11:02.594Z"
+      "lastAttemptAt": "2026-04-03T20:13:02.093Z"
     },
     "agent-scorecard": {
       "count": 3,
       "firstAttemptAt": "2026-03-29T04:03:00.630Z",
-      "lastAttemptAt": "2026-04-03T20:11:02.594Z"
+      "lastAttemptAt": "2026-04-03T20:13:02.093Z"
     },
     "organize": {
       "count": 1,
       "firstAttemptAt": "2026-03-30T14:07:01.400Z",
-      "lastAttemptAt": "2026-04-03T20:11:02.594Z"
+      "lastAttemptAt": "2026-04-03T20:13:02.093Z"
     }
   },
   "activeRemediations": {
@@ -33,11 +33,11 @@
       "waitUntil": "2026-04-03T20:14:02.593Z"
     },
     "cleanup": {
-      "attempt": 1,
-      "startedAt": "2026-04-03T20:04:02.092Z",
+      "attempt": 2,
+      "startedAt": "2026-04-03T20:13:02.093Z",
       "failureType": "railway_infra",
-      "lastAction": "restart",
-      "waitUntil": "2026-04-03T20:07:02.092Z"
+      "lastAction": "redeploy",
+      "waitUntil": "2026-04-03T20:16:02.093Z"
     }
   }
 }
