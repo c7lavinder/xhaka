@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-04-03T11:05:16.851Z",
+  "lastRunAt": "2026-04-04T11:05:16.428Z",
   "versions": {
     "express": "4.22.0",
     "@octokit/rest": "5.0.5",
@@ -14,12 +14,12 @@
     "jsonwebtoken": "9.0.3: chore: bump jws to 4.0.1 (#1007)",
     "posthog-node": "1.3.0",
     "zod": "4.3.6",
-    "langsmith": "0.7.24"
+    "langsmith": "0.7.25"
   },
   "changelogChecked": {
-    "anthropic": "2026-04-03T11:05:11.352Z",
-    "posthog": "2026-04-03T11:05:11.441Z",
-    "railway": "2026-04-03T11:05:11.616Z",
+    "anthropic": "2026-04-04T11:05:10.789Z",
+    "posthog": "2026-04-04T11:05:10.857Z",
+    "railway": "2026-04-04T11:05:10.988Z",
     "openai": "2026-03-28T11:05:09.546Z"
   },
   "repoReleases": {
@@ -27,7 +27,7 @@
     "supabase": "1.26.03",
     "posthog": "posthog-cli/v0.7.4",
     "sentry": "26.3.1",
-    "langsmith": "0.7.24",
-    "claude-code": "2.1.91"
+    "langsmith": "0.7.25",
+    "claude-code": "2.1.92"
   }
 }
