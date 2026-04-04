@@ -2417,3 +2417,4 @@
 | 2026-04-03T20:17:03.344Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-03T20:20:02.778Z |
 | 2026-04-04T11:11:01.955Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-04-04T20:04:01.481Z | improve | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-04T20:04:06.019Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
