@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T06:25:50.508Z",
-    "score": 0,
-    "grade": "LOW",
-    "rationale": "The output does not contain any genuinely important information that should be added to MEMORY.md. It merely provides a summary of tasks completed without any significant insights or details.",
-    "evaluatedAt": "2026-03-16T06:25:51.630Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T06:32:28.291Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but not high-signal, as it doesn't highlight any significant decisions or rules.",
     "evaluatedAt": "2026-04-03T05:00:07.310Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-04T05:00:06.900Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides minimal information about the scribe's activities, focusing only on quantitative data without context or significance. It lacks high-signal insights or important items that warrant memory retention.",
+    "evaluatedAt": "2026-04-04T05:00:07.609Z"
   }
 ]
