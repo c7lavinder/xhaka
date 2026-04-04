@@ -2421,3 +2421,4 @@
 | 2026-04-04T20:05:06.142Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
 | 2026-04-04T20:07:01.546Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-04-04T21:07:01.591Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
+| 2026-04-04T22:08:01.549Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
