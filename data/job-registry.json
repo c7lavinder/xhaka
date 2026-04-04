@@ -189,9 +189,9 @@
     "gracePeriodMinutes": 60
   },
   "librarian": {
-    "lastRun": "2026-04-04T08:01:02.775Z",
-    "lastStatus": "running",
-    "durationMs": 33215,
+    "lastRun": "2026-04-04T08:01:33.979Z",
+    "lastStatus": "success",
+    "durationMs": 31378,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
