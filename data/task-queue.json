@@ -808,9 +808,11 @@
         "trigger": "daily-capture-check",
         "queuedAt": "2026-04-04T08:00:02.279Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-04T08:00:02.643Z",
-      "startedAt": "2026-04-04T08:01:02.066Z"
+      "startedAt": "2026-04-04T08:01:02.066Z",
+      "completedAt": "2026-04-04T08:01:35.956Z",
+      "proofOfWork": "Librarian audit completed at 2026-04-04T08:01:35.684Z. Report: intelligence/librarian-reports/2026-04-04.md. Triggered by task task_1775289602643_olwff0f."
     }
   ]
 }
