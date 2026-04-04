@@ -15,38 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1774703076699_gsea2l4",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "b266d76e",
-        "commitMessage": "chore: results-log [operator=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-28T13:04:36.502Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-28T13:04:36.699Z",
-      "startedAt": "2026-03-28T13:05:01.774Z",
-      "completedAt": "2026-03-28T13:05:04.309Z",
-      "proofOfWork": "Audit PASS for commit b266d76e. 0 concern(s). Artifact: intelligence/audits/2026-03-28-b266d76e.md"
-    },
-    {
-      "id": "task_1774703130259_2yrzd7d",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "f8dc800e",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-28T13:05:29.986Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-28T13:05:30.259Z",
-      "startedAt": "2026-03-28T13:06:01.301Z",
-      "completedAt": "2026-03-28T13:06:04.950Z",
-      "proofOfWork": "Audit PASS for commit f8dc800e. 0 concern(s). Artifact: intelligence/audits/2026-03-28-f8dc800e.md"
-    },
-    {
       "id": "task_1774756949580_oh55e7x",
       "agent": "auditor",
       "task": "verify-build",
