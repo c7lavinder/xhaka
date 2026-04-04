@@ -6417,3 +6417,4 @@
 2026-04-04T10:59:01.631Z	dispatcher	success	807		model=gpt-4o-mini cost=$0.001
 2026-04-04T11:00:02.227Z	capture	success	1302		model=gpt-4o-mini cost=$0.001
 2026-04-04T11:00:02.315Z	daily-log	success	1518		model=gpt-4o-mini cost=$0.001
+2026-04-04T11:00:45.848Z	propagate	success	44445		model=gpt-4o-mini cost=$0.003
