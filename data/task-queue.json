@@ -15,54 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1774756949580_oh55e7x",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "568f3f21",
-        "commitMessage": "chore: results-log [operator=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-29T04:02:29.375Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-29T04:02:29.580Z",
-      "startedAt": "2026-03-29T04:03:01.808Z",
-      "completedAt": "2026-03-29T04:03:04.366Z",
-      "proofOfWork": "Audit PASS for commit 568f3f21. 0 concern(s). Artifact: intelligence/audits/2026-03-29-568f3f21.md"
-    },
-    {
-      "id": "task_1774757010307_7laz94n",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "d5e04b36",
-        "commitMessage": "chore: results-log [operator=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-29T04:03:30.148Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-29T04:03:30.307Z",
-      "startedAt": "2026-03-29T04:05:01.517Z",
-      "completedAt": "2026-03-29T04:05:05.087Z",
-      "proofOfWork": "Audit PASS for commit d5e04b36. 0 concern(s). Artifact: intelligence/audits/2026-03-29-d5e04b36.md"
-    },
-    {
-      "id": "task_1774757041360_cvfz6ne",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "151ec43d",
-        "commitMessage": "chore: job-registry [dispatcher=running] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-03-29T04:04:01.217Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-03-29T04:04:01.361Z",
-      "startedAt": "2026-03-29T04:05:05.699Z",
-      "completedAt": "2026-03-29T04:05:06.603Z",
-      "proofOfWork": "skipped: docs-only commit (151ec43d)"
-    },
-    {
       "id": "task_1774757072328_50whl1l",
       "agent": "auditor",
       "task": "verify-build",
