@@ -682,9 +682,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-05T11:33:31.570Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-05T11:33:31.817Z",
-      "startedAt": "2026-04-05T11:34:01.176Z"
+      "startedAt": "2026-04-05T11:34:01.176Z",
+      "completedAt": "2026-04-05T11:34:04.684Z",
+      "proofOfWork": "Audit PASS for commit ca31b028. 0 concern(s). Artifact: intelligence/audits/2026-04-05-ca31b028.md"
     }
   ]
 }
