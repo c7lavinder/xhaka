@@ -8095,3 +8095,4 @@
 2026-04-05T11:29:01.671Z	dispatcher	success	997		model=gpt-4o-mini cost=$0.001
 2026-04-05T11:30:02.220Z	capture	success	1315		model=gpt-4o-mini cost=$0.001
 2026-04-05T11:30:03.447Z	cleanup	failed	1850		
+2026-04-05T11:31:01.803Z	dispatcher	success	1040		model=gpt-4o-mini cost=$0.001
