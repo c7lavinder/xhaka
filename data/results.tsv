@@ -8057,3 +8057,4 @@
 2026-04-05T11:00:01.657Z	dispatcher	success	885		model=gpt-4o-mini cost=$0.001
 2026-04-05T11:00:03.455Z	heartbeat-check	success	2613		model=gpt-4o-mini cost=$0.001
 2026-04-05T11:00:01.645Z	watchdog	success	973		model=gpt-4o-mini cost=$0.001
+2026-04-05T11:00:46.712Z	propagate	success	45123		model=gpt-4o-mini cost=$0.003
