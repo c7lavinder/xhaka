@@ -71,7 +71,7 @@
   },
   "daily-log": {
     "lastRun": "2026-04-04T23:00:01.321Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1560,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
@@ -155,7 +155,7 @@
   },
   "change-evaluator": {
     "lastRun": "2026-04-04T20:00:01.132Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 908,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
