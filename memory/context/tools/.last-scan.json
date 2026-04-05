@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-04-04T11:05:16.428Z",
+  "lastRunAt": "2026-04-05T11:05:21.104Z",
   "versions": {
     "express": "4.22.0",
     "@octokit/rest": "5.0.5",
@@ -17,9 +17,9 @@
     "langsmith": "0.7.25"
   },
   "changelogChecked": {
-    "anthropic": "2026-04-04T11:05:10.789Z",
-    "posthog": "2026-04-04T11:05:10.857Z",
-    "railway": "2026-04-04T11:05:10.988Z",
+    "anthropic": "2026-04-05T11:05:16.163Z",
+    "posthog": "2026-04-05T11:05:16.235Z",
+    "railway": "2026-04-05T11:05:16.364Z",
     "openai": "2026-03-28T11:05:09.546Z"
   },
   "repoReleases": {
