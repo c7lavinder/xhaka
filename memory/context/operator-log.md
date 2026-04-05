@@ -2444,3 +2444,4 @@
 | 2026-04-05T11:31:05.688Z | change-evaluator | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-05T11:34:05.688Z |
 | 2026-04-05T11:32:02.329Z | improve | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-05T11:35:02.329Z |
 | 2026-04-05T11:32:06.191Z | change-evaluator | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-05T11:35:06.191Z |
+| 2026-04-05T11:33:02.081Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
