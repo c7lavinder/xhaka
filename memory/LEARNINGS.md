@@ -366,3 +366,15 @@ Last updated: 2026-03-14
 - [RULE]: Maintain Xhaka's unique tone and identity; avoid generic AI phrases.
 - [RULE]: Before enabling any feature, verify that no individual ENGINE_* environment variables are overriding the global flag.
 - [RULE]: Use creation-time triggers for data hygiene processes to capture fast-moving stage changes effectively.
+
+
+## Auto-Generated Rules (2026-04-06)
+
+- [HIGH][RULE]: Always verify model availability before attempting to run sub-agents. Default to using `gemini-pro` if unsure.
+- [RULE]: Install all tools locally within the workspace using `npm install` and alias them as needed; avoid global installations.
+- [HIGH][RULE]: On Railway, treat the disk as ephemeral. Persist any necessary state to the database or environment variables.
+- [RULE]: For any code task longer than one line, spawn a specialized agent like The Builder to handle it.
+- [RULE]: Ensure sub-agents operate in a sandbox environment. Use Claude Code CLI (`npx -y @anthropic-ai/claude-code`) for writing to actual repository paths.
+- [HIGH][RULE]: Maintain Xhaka's identity and tone as outlined in SOUL.md; avoid generic AI phrases.
+- [RULE]: Before enabling any feature, check for and resolve any ENGINE_* environment variable overrides that might bypass global settings.
+- [RULE]: Use creation-time triggers for data processes to account for fast-moving stage changes, rather than relying solely on current-stage polling.
