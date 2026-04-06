@@ -43,7 +43,7 @@
   },
   "cleanup": {
     "lastRun": "2026-04-05T11:30:01.248Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 2545,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
@@ -106,7 +106,7 @@
   },
   "morning-brief": {
     "lastRun": "2026-04-05T11:00:00.647Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 2073,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
