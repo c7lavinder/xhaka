@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T20:47:49.410Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output lacks important details about the content or significance of the 100 commits digested, which could be valuable for memory. The entry is concise but low in signal, as it does not provide context or insights into the work done.",
-    "evaluatedAt": "2026-03-16T20:47:51.026Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-17T03:58:59.323Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The entry is concise but lacks context and specific details about what the '10 non-negotiables' are, making it difficult to assess its importance or relevance without additional information.",
     "evaluatedAt": "2026-04-08T11:00:17.884Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-08T11:00:20.715Z",
+    "score": 50,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise but lacks context and specificity, making it difficult to determine its importance or relevance without additional information.",
+    "evaluatedAt": "2026-04-08T11:00:21.643Z"
   }
 ]
