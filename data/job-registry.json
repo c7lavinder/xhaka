@@ -119,9 +119,9 @@
     "gracePeriodMinutes": 10
   },
   "benchmark": {
-    "lastRun": "2026-04-01T11:00:31.239Z",
+    "lastRun": "2026-04-08T11:00:25.211Z",
     "lastStatus": "success",
-    "durationMs": 30804,
+    "durationMs": 25142,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
