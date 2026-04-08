@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T10:20:23.282Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of the scribe's activities but lacks detail on the significance or impact of these activities. It does not highlight genuinely important items or provide high-signal information that would be useful for memory retention.",
-    "evaluatedAt": "2026-03-16T10:20:24.863Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T16:33:17.637Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a very general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
     "evaluatedAt": "2026-04-08T11:00:02.491Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-04-08T11:00:06.646Z",
+    "score": 30,
+    "grade": "LOW",
+    "rationale": "The output provides a general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
+    "evaluatedAt": "2026-04-08T11:00:07.546Z"
   }
 ]
