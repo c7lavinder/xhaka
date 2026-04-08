@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T08:52:17.068Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a brief summary of the scribe's activities but lacks any genuinely important or insightful information that would be valuable for long-term memory. It is concise but low in signal.",
-    "evaluatedAt": "2026-03-16T08:52:18.162Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T10:13:38.046Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks detail or context that would be genuinely important for memory. It is concise but low-signal, as it does not offer insights or significant information about the job.",
     "evaluatedAt": "2026-04-07T05:00:09.369Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-08T05:00:10.987Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output primarily contains error information and technical details about a commit mismatch, which are not high-signal or genuinely important for future reference in MEMORY.md. The entry lacks broader context or insights that would be valuable for long-term memory.",
+    "evaluatedAt": "2026-04-08T05:00:12.643Z"
   }
 ]
