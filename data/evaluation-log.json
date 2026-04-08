@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T17:51:03.166Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but low in signal, as it doesn't highlight any significant decisions or rules that could be useful for future reference.",
-    "evaluatedAt": "2026-03-16T17:51:05.393Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T20:47:49.410Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "HIGH",
     "rationale": "The categorization is somewhat useful, as it identifies a session related to evaluation metrics and harness improvements. However, it lacks specific categories or tags that could make it more actionable or searchable, such as 'evaluation metrics', 'Builder', or 'harness improvements'.",
     "evaluatedAt": "2026-04-08T11:00:16.209Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-08T11:00:17.090Z",
+    "score": 50,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise but lacks context and specific details about what the '10 non-negotiables' are, making it difficult to assess its importance or relevance without additional information.",
+    "evaluatedAt": "2026-04-08T11:00:17.884Z"
   }
 ]
