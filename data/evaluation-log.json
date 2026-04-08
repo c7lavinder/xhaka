@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T16:33:17.637Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides quantitative data about the scribe's activities but lacks context or significance. It does not highlight any genuinely important items or insights that would be valuable for MEMORY.md.",
-    "evaluatedAt": "2026-03-16T16:33:20.110Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T16:41:26.878Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
     "evaluatedAt": "2026-04-08T11:00:07.546Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-08T11:00:10.240Z",
+    "score": 80,
+    "grade": "HIGH",
+    "rationale": "The categorization is somewhat specific and useful, focusing on evaluation metrics and harness improvements. However, it lacks broader context or categorization that could make it more universally applicable or detailed.",
+    "evaluatedAt": "2026-04-08T11:00:11.707Z"
   }
 ]
