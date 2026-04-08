@@ -2530,3 +2530,4 @@
 | 2026-04-08T11:03:02.838Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-08T11:06:02.838Z |
 | 2026-04-08T11:04:02.502Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-04-08T12:05:02.432Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-04-08T13:06:01.963Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
