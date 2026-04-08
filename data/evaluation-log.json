@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-16T16:41:26.878Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a brief summary of the scribe's activities, but it lacks depth and context. It does not highlight any genuinely important items or insights that would be valuable for MEMORY.md.",
-    "evaluatedAt": "2026-03-16T16:41:28.332Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-16T17:51:03.166Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "HIGH",
     "rationale": "The categorization is somewhat specific and useful, focusing on evaluation metrics and harness improvements. However, it lacks broader context or categorization that could make it more universally applicable or detailed.",
     "evaluatedAt": "2026-04-08T11:00:11.707Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-08T11:00:14.671Z",
+    "score": 80,
+    "grade": "HIGH",
+    "rationale": "The categorization is somewhat useful, as it identifies a session related to evaluation metrics and harness improvements. However, it lacks specific categories or tags that could make it more actionable or searchable, such as 'evaluation metrics', 'Builder', or 'harness improvements'.",
+    "evaluatedAt": "2026-04-08T11:00:16.209Z"
   }
 ]
