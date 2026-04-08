@@ -103,3 +103,4 @@
 2026-04-08T14:30:02.398Z	dispatcher	success	1138		model=gpt-4o-mini cost=$0.001
 2026-04-08T14:30:02.829Z	capture	success	1815		model=gpt-4o-mini cost=$0.001
 2026-04-08T14:30:02.553Z	watchdog	success	1249		model=gpt-4o-mini cost=$0.001
+2026-04-08T14:30:05.208Z	heartbeat-check	success	3915		model=gpt-4o-mini cost=$0.001
