@@ -2860,3 +2860,4 @@
 | 2026-04-09T07:00:07.332Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-09T07:03:07.332Z |
 | 2026-04-09T07:01:01.782Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-04-09T07:01:06.181Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-04-09T07:02:02.244Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
