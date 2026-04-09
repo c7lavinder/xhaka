@@ -575,6 +575,17 @@
       "startedAt": "2026-04-09T04:12:01.749Z",
       "completedAt": "2026-04-09T04:12:05.514Z",
       "proofOfWork": "Audit PASS for commit daea3bdb. 0 concern(s). Artifact: intelligence/audits/2026-04-09-daea3bdb.md"
+    },
+    {
+      "id": "task_1775722502615_pqfiout",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-09T08:15:02.417Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-09T08:15:02.615Z"
     }
   ]
 }
