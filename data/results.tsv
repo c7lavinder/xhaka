@@ -1267,3 +1267,4 @@
 2026-04-09T05:00:03.167Z	daily-log	success	1999		model=gpt-4o-mini cost=$0.001
 2026-04-09T05:00:02.064Z	dispatcher	success	1160		model=gpt-4o-mini cost=$0.001
 2026-04-09T05:00:03.087Z	capture	success	1843		model=gpt-4o-mini cost=$0.001
+2026-04-09T05:00:10.014Z	scribe	success	8784		model=gpt-4o cost=$0.025
