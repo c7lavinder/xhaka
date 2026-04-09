@@ -522,9 +522,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-09T04:03:26.407Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-09T04:03:26.549Z",
-      "startedAt": "2026-04-09T04:04:01.911Z"
+      "startedAt": "2026-04-09T04:04:01.911Z",
+      "completedAt": "2026-04-09T04:04:04.755Z",
+      "proofOfWork": "Audit PASS for commit c469130c. 0 concern(s). Artifact: intelligence/audits/2026-04-09-c469130c.md"
     },
     {
       "id": "task_1775707434586_btarrv8",
