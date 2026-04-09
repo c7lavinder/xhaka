@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-17T03:58:59.323Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of activities but lacks detail on the significance or impact of these activities. It does not offer high-signal information that would be valuable for long-term memory storage.",
-    "evaluatedAt": "2026-03-17T03:59:00.543Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-18T05:00:06.808Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The entry is concise but lacks context and specificity, making it difficult to determine its importance or relevance without additional information.",
     "evaluatedAt": "2026-04-08T11:00:21.643Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-09T05:00:04.958Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output contains an error message related to a digest mismatch, which is not a genuinely important item for long-term memory. The entry lacks high-signal information relevant to the job's core tasks.",
+    "evaluatedAt": "2026-04-09T05:00:06.846Z"
   }
 ]
