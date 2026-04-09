@@ -2863,3 +2863,4 @@
 | 2026-04-09T07:02:02.244Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-04-09T07:02:07.172Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
 | 2026-04-09T07:03:01.972Z | cleanup | alert | escalated | 2 | Immediate escalation: code_bug |
+| 2026-04-09T07:03:06.364Z | agent-scorecard | alert | escalated | 2 | Immediate escalation: code_bug |
