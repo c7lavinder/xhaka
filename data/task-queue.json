@@ -15,54 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775102735492_pja7uij",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "325e457d",
-        "commitMessage": "chore: results-log [operator=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-02T04:05:35.270Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-02T04:05:35.492Z",
-      "startedAt": "2026-04-02T04:06:01.598Z",
-      "completedAt": "2026-04-02T04:06:05.522Z",
-      "proofOfWork": "Audit PASS for commit 325e457d. 0 concern(s). Artifact: intelligence/audits/2026-04-02-325e457d.md"
-    },
-    {
-      "id": "task_1775102795423_1ahttnx",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "9e7ec30a",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-02T04:06:35.069Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-02T04:06:35.423Z",
-      "startedAt": "2026-04-02T04:07:01.831Z",
-      "completedAt": "2026-04-02T04:07:05.354Z",
-      "proofOfWork": "Audit PASS for commit 9e7ec30a. 0 concern(s). Artifact: intelligence/audits/2026-04-02-9e7ec30a.md"
-    },
-    {
-      "id": "task_1775102862793_qus0f27",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "7ca023bc",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-02T04:07:42.598Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-02T04:07:42.793Z",
-      "startedAt": "2026-04-02T04:08:01.928Z",
-      "completedAt": "2026-04-02T04:08:06.218Z",
-      "proofOfWork": "Audit PASS for commit 7ca023bc. 0 concern(s). Artifact: intelligence/audits/2026-04-02-7ca023bc.md"
-    },
-    {
       "id": "task_1775116502258_jjbm7po",
       "agent": "librarian",
       "task": "audit",
