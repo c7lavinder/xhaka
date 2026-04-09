@@ -2585,3 +2585,4 @@
 | 2026-04-09T04:26:01.481Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-09T04:29:01.481Z |
 | 2026-04-09T04:26:06.923Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-09T04:29:06.923Z |
 | 2026-04-09T04:27:01.468Z | cleanup | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-09T04:30:01.468Z |
+| 2026-04-09T04:27:06.130Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-09T04:30:06.130Z |
