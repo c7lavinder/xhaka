@@ -71,7 +71,7 @@
   },
   "daily-log": {
     "lastRun": "2026-04-10T05:00:00.510Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 2309,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
