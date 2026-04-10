@@ -67,7 +67,6 @@
 ## 🧠 KEY DECISIONS
 
 - **2026-03-24:** Initiate automated session memory capture via cron job.
-- **2026-03-16:** SDD enforcement — Builder prompts must have SPEC + PLAN + TASKS.
 - **2026-03-19:** Heartbeat moved to gpt-4o-mini — Claude too expensive for orchestration.
 
 ---
