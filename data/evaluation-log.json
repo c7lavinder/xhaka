@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-18T05:00:06.808Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a brief summary of the scribe's activity but lacks any genuinely important or high-signal information that would be valuable for long-term memory storage. It simply states the number of decisions, commits, and rules, which are not inherently significant without context or detail.",
-    "evaluatedAt": "2026-03-18T05:00:08.569Z"
-  },
-  {
     "jobName": "researcher",
     "runId": "2026-03-18T11:00:00.484Z",
     "score": 20,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output contains an error message related to a digest mismatch, which is not a genuinely important item for long-term memory. The entry lacks high-signal information relevant to the job's core tasks.",
     "evaluatedAt": "2026-04-09T05:00:06.846Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-10T05:00:07.451Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important information to promote to MEMORY.md. It only reports an error related to a commit mismatch, which is not high-signal or relevant for future reference.",
+    "evaluatedAt": "2026-04-10T05:00:08.515Z"
   }
 ]
