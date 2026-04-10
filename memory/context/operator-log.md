@@ -2906,3 +2906,4 @@
 | 2026-04-10T10:51:07.370Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-10T10:54:07.370Z |
 | 2026-04-10T10:53:01.856Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-04-10T11:53:01.958Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
+| 2026-04-10T12:54:01.509Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
