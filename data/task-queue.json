@@ -602,9 +602,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-10T17:03:39.724Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-10T17:03:39.961Z",
-      "startedAt": "2026-04-10T17:04:02.272Z"
+      "startedAt": "2026-04-10T17:04:02.272Z",
+      "completedAt": "2026-04-10T17:04:06.845Z",
+      "proofOfWork": "Audit PASS for commit a44cb2f5. 0 concern(s). Artifact: intelligence/audits/2026-04-10-a44cb2f5.md"
     }
   ]
 }
