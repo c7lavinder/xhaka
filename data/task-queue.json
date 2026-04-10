@@ -15,34 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775116502258_jjbm7po",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-02T07:55:01.878Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-02T07:55:02.258Z",
-      "startedAt": "2026-04-02T07:56:01.653Z",
-      "completedAt": "2026-04-02T07:56:38.371Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-02T07:56:38.157Z. Report: intelligence/librarian-reports/2026-04-02.md. Triggered by task task_1775116502258_jjbm7po."
-    },
-    {
-      "id": "task_1775203201731_4bmlk1s",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-03T08:00:01.563Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-03T08:00:01.731Z",
-      "startedAt": "2026-04-03T08:01:01.132Z",
-      "completedAt": "2026-04-03T08:01:37.783Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-03T08:01:37.596Z. Report: intelligence/librarian-reports/2026-04-03.md. Triggered by task task_1775203201731_4bmlk1s."
-    },
-    {
       "id": "task_1775246562516_kux3ahn",
       "agent": "auditor",
       "task": "verify-build",
