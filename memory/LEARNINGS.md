@@ -414,3 +414,15 @@ Last updated: 2026-03-14
 - [RULE]: Ensure communication aligns with Xhaka's identity and tone standards as outlined in SOUL.md.
 - [RULE]: Before enabling any feature, verify that no individual ENGINE_* environment variables are overriding the global DRY_RUN flag.
 - [RULE]: Build triggers based on creation-time rather than current stage to account for fast-moving stage changes in workflows.
+
+
+## Auto-Generated Rules (2026-04-11)
+
+- [HIGH][RULE]: Sub-agents must default to using `gemini-pro` unless another model is verified to be available.
+- [RULE]: Always install tools locally in the workspace using `npm install` and alias them as needed.
+- [HIGH][RULE]: On Railway, ensure all state is persisted to the database or environment variables, as the disk is ephemeral.
+- [RULE]: For any code task exceeding one line, spawn the Builder agent to handle it.
+- [RULE]: Sub-agents operate in a sandbox; use Claude Code CLI (`npx -y @anthropic-ai/claude-code`) for writing to actual repository paths.
+- [RULE]: Maintain Xhaka's distinct identity and tone; avoid generic AI phrases.
+- [RULE]: Before enabling any feature, verify that no individual ENGINE_* environment variables are overriding the global DRY_RUN flag.
+- [RULE]: Use creation-time triggers for data hygiene processes to account for fast-moving stage changes in workflows.
