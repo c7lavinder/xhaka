@@ -1,14 +1,6 @@
 [
   {
     "jobName": "researcher",
-    "runId": "2026-03-18T11:00:00.484Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a very high-level summary of the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role. It does not delve into how benchmarking can be implemented or its direct impact on research workflows.",
-    "evaluatedAt": "2026-03-18T11:00:02.245Z"
-  },
-  {
-    "jobName": "researcher",
     "runId": "2026-03-18T11:00:05.568Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important information to promote to MEMORY.md. It only reports an error related to a commit mismatch, which is not high-signal or relevant for future reference.",
     "evaluatedAt": "2026-04-10T05:00:08.515Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-11T05:00:08.161Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output contains technical error details that are not high-signal or relevant for long-term memory. It lacks genuinely important information or insights about the job process.",
+    "evaluatedAt": "2026-04-11T05:00:09.267Z"
   }
 ]
