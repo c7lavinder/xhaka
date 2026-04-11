@@ -56,11 +56,3 @@ last_updated: 2026-03-16
 
 ### Primary Goal
 **
-
----
-
-## Status
-Stable, with ongoing coaching needs.
-
-## Current State
-The team is maintaining performance, but several members require urgent coaching to improve their effectiveness. Chris Segura, Efren Valenzuela, and Mirna Razo are the primary focus for coaching interventions. Addressing the 66 untagged properties remains a priority for data integrity.
