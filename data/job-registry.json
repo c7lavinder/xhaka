@@ -28,9 +28,9 @@
     "gracePeriodMinutes": 60
   },
   "synthesize": {
-    "lastRun": "2026-04-11T12:00:00.572Z",
-    "lastStatus": "running",
-    "durationMs": 78188,
+    "lastRun": "2026-04-11T12:00:46.536Z",
+    "lastStatus": "success",
+    "durationMs": 46212,
     "expectedIntervalHours": 130,
     "gracePeriodMinutes": 120
   },
