@@ -463,6 +463,17 @@
       "startedAt": "2026-04-11T12:53:02.047Z",
       "completedAt": "2026-04-11T12:53:05.270Z",
       "proofOfWork": "Audit PASS for commit 8ddf35f0. 0 concern(s). Artifact: intelligence/audits/2026-04-11-8ddf35f0.md"
+    },
+    {
+      "id": "task_1775982602691_lbdvky7",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-12T08:30:02.435Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-12T08:30:02.691Z"
     }
   ]
 }
