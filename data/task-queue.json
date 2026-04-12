@@ -15,68 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775333193316_3dt73dl",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "847898a2",
-        "commitMessage": "chore: job-registry [operator=running] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-04T20:06:33.149Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-04T20:06:33.316Z",
-      "startedAt": "2026-04-04T20:07:01.765Z",
-      "completedAt": "2026-04-04T20:07:02.662Z",
-      "proofOfWork": "skipped: docs-only commit (847898a2)"
-    },
-    {
-      "id": "task_1775333240638_qn2pn06",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "54f3a98b",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-04T20:07:20.372Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-04T20:07:20.638Z",
-      "startedAt": "2026-04-04T20:08:01.666Z",
-      "completedAt": "2026-04-04T20:08:05.288Z",
-      "proofOfWork": "Audit PASS for commit 54f3a98b. 0 concern(s). Artifact: intelligence/audits/2026-04-04-54f3a98b.md"
-    },
-    {
-      "id": "task_1775361815968_qhse1fu",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "29f84b32",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-05T04:03:35.752Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-05T04:03:35.968Z",
-      "startedAt": "2026-04-05T04:04:02.073Z",
-      "completedAt": "2026-04-05T04:04:04.988Z",
-      "proofOfWork": "Audit PASS for commit 29f84b32. 0 concern(s). Artifact: intelligence/audits/2026-04-05-29f84b32.md"
-    },
-    {
-      "id": "task_1775376301708_zu3rq0z",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-05T08:05:01.495Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-05T08:05:01.708Z",
-      "startedAt": "2026-04-05T08:06:01.413Z",
-      "completedAt": "2026-04-05T08:06:30.162Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-05T08:06:30.016Z. Report: intelligence/librarian-reports/2026-04-05.md. Triggered by task task_1775376301708_zu3rq0z."
-    },
-    {
       "id": "task_1775388811817_a2azmv5",
       "agent": "auditor",
       "task": "verify-build",
