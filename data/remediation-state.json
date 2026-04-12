@@ -1,28 +1,36 @@
 {
-  "lastPersistedAt": "2026-04-12T10:01:01.348Z",
+  "lastPersistedAt": "2026-04-12T11:01:02.934Z",
   "lastInfraAlertAt": 1775988061348,
   "lastDeployAlertId": "",
   "attempts": {
     "improve": {
       "count": 1,
       "firstAttemptAt": "2026-04-04T20:04:00.628Z",
-      "lastAttemptAt": "2026-04-12T10:01:01.348Z"
+      "lastAttemptAt": "2026-04-12T11:01:02.935Z"
     },
     "cleanup": {
-      "count": 3,
-      "firstAttemptAt": "2026-04-09T04:03:01.074Z",
-      "lastAttemptAt": "2026-04-12T10:01:01.348Z"
+      "count": 1,
+      "firstAttemptAt": "2026-04-12T11:01:00.613Z",
+      "lastAttemptAt": "2026-04-12T11:01:02.935Z"
     },
     "agent-scorecard": {
       "count": 3,
       "firstAttemptAt": "2026-04-09T04:04:01.282Z",
-      "lastAttemptAt": "2026-04-12T10:01:01.348Z"
+      "lastAttemptAt": "2026-04-12T11:01:02.935Z"
     },
     "organize": {
       "count": 1,
       "firstAttemptAt": "2026-03-30T14:07:01.400Z",
-      "lastAttemptAt": "2026-04-12T10:01:01.348Z"
+      "lastAttemptAt": "2026-04-12T11:01:02.935Z"
     }
   },
-  "activeRemediations": {}
+  "activeRemediations": {
+    "cleanup": {
+      "attempt": 1,
+      "startedAt": "2026-04-12T11:01:02.934Z",
+      "failureType": "unknown",
+      "lastAction": "restart",
+      "waitUntil": "2026-04-12T11:04:02.934Z"
+    }
+  }
 }
