@@ -15,38 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775388811817_a2azmv5",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "ca31b028",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-05T11:33:31.570Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-05T11:33:31.817Z",
-      "startedAt": "2026-04-05T11:34:01.176Z",
-      "completedAt": "2026-04-05T11:34:04.684Z",
-      "proofOfWork": "Audit PASS for commit ca31b028. 0 concern(s). Artifact: intelligence/audits/2026-04-05-ca31b028.md"
-    },
-    {
-      "id": "task_1775388851168_0jonvon",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "387299db",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-05T11:34:10.908Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-05T11:34:11.168Z",
-      "startedAt": "2026-04-05T11:35:01.238Z",
-      "completedAt": "2026-04-05T11:35:04.030Z",
-      "proofOfWork": "Audit PASS for commit 387299db. 0 concern(s). Artifact: intelligence/audits/2026-04-05-387299db.md"
-    },
-    {
       "id": "task_1775462701936_l09akkl",
       "agent": "librarian",
       "task": "audit",
