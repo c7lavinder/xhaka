@@ -2980,3 +2980,4 @@
 | 2026-04-13T03:17:01.650Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-04-13T04:01:45.441Z | cleanup | redeploy | pending | 2 | failureType=rate_limit, waitUntil=2026-04-13T04:04:45.440Z |
 | 2026-04-13T04:01:47.266Z | cleanup | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=rate_limit |
+| 2026-04-13T04:01:52.441Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-13T04:04:52.440Z |
