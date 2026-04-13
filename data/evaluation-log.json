@@ -1,14 +1,6 @@
 [
   {
     "jobName": "organize",
-    "runId": "2026-03-18T11:00:09.125Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The categorization is somewhat useful but lacks specificity. The entry could be categorized under 'Project Management' or 'Development Process', but the output does not clearly define these categories, making it less effective for organization.",
-    "evaluatedAt": "2026-03-18T11:00:10.658Z"
-  },
-  {
-    "jobName": "organize",
     "runId": "2026-03-18T11:00:13.456Z",
     "score": 75,
     "grade": "HIGH",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of the scribe's activities, but it lacks important details or insights that would be valuable for future reference. The information is too generic and doesn't offer high-signal content for MEMORY.md.",
     "evaluatedAt": "2026-04-12T05:00:09.424Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-13T05:10:06.669Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of activities but lacks significant details or insights that would be valuable for long-term memory. It is mostly quantitative data without context or implications.",
+    "evaluatedAt": "2026-04-13T05:10:07.476Z"
   }
 ]
