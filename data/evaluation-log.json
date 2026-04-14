@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "organize",
-    "runId": "2026-03-18T11:00:13.456Z",
-    "score": 75,
-    "grade": "HIGH",
-    "rationale": "The output correctly identifies the session as a discussion about evaluation metrics and harness improvements, but it lacks specific categorization or tagging that would make it more useful for future reference.",
-    "evaluatedAt": "2026-03-18T11:00:14.684Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-03-18T11:00:15.357Z",
     "score": 80,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of activities but lacks significant details or insights that would be valuable for long-term memory. It is mostly quantitative data without context or implications.",
     "evaluatedAt": "2026-04-13T05:10:07.476Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-14T05:00:07.249Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a summary of tasks performed but lacks detail on the significance or impact of these tasks. It is not clear why these metrics are important or how they contribute to the overall goals, making it low-signal for memory retention.",
+    "evaluatedAt": "2026-04-14T05:00:08.105Z"
   }
 ]
