@@ -15,7 +15,7 @@
   },
   "propagate": {
     "lastRun": "2026-04-14T11:00:01.509Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 57901,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -106,7 +106,7 @@
   },
   "morning-brief": {
     "lastRun": "2026-04-14T11:00:00.869Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 3119,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
