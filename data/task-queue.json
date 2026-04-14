@@ -474,9 +474,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-14T13:04:58.849Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-14T13:04:59.033Z",
-      "startedAt": "2026-04-14T13:05:01.493Z"
+      "startedAt": "2026-04-14T13:05:01.493Z",
+      "completedAt": "2026-04-14T13:05:05.910Z",
+      "proofOfWork": "Audit PASS for commit e68db5fb. 0 concern(s). Artifact: intelligence/audits/2026-04-14-e68db5fb.md"
     }
   ]
 }
