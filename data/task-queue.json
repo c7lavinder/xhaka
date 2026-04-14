@@ -447,6 +447,17 @@
       "startedAt": "2026-04-13T08:32:01.380Z",
       "completedAt": "2026-04-13T08:32:41.949Z",
       "proofOfWork": "Librarian audit completed at 2026-04-13T08:32:41.761Z. Report: intelligence/librarian-reports/2026-04-13.md. Triggered by task task_1776069002941_pmwhc8d."
+    },
+    {
+      "id": "task_1776155702706_27l224l",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-14T08:35:02.421Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-14T08:35:02.706Z"
     }
   ]
 }
