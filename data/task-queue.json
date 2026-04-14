@@ -415,6 +415,19 @@
       "startedAt": "2026-04-14T08:36:02.221Z",
       "completedAt": "2026-04-14T08:36:44.083Z",
       "proofOfWork": "Librarian audit completed at 2026-04-14T08:36:43.841Z. Report: intelligence/librarian-reports/2026-04-14.md. Triggered by task task_1776155702706_27l224l."
+    },
+    {
+      "id": "task_1776164514879_w2iy45c",
+      "agent": "auditor",
+      "task": "verify-build",
+      "payload": {
+        "commitSha": "2bfe630d",
+        "commitMessage": "chore: reset stuck jobs to failed on boot [feedback]",
+        "author": "c7lavinder",
+        "triggeredAt": "2026-04-14T11:01:54.696Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-14T11:01:54.879Z"
     }
   ]
 }
