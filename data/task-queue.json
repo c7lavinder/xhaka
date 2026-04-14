@@ -442,9 +442,11 @@
         "author": "c7lavinder",
         "triggeredAt": "2026-04-14T13:02:51.442Z"
       },
-      "status": "running",
+      "status": "completed",
       "createdAt": "2026-04-14T13:02:51.665Z",
-      "startedAt": "2026-04-14T13:04:02.164Z"
+      "startedAt": "2026-04-14T13:04:02.164Z",
+      "completedAt": "2026-04-14T13:04:06.675Z",
+      "proofOfWork": "Audit PASS for commit b5cda4da. 0 concern(s). Artifact: intelligence/audits/2026-04-14-b5cda4da.md"
     },
     {
       "id": "task_1776171816745_8i67vy5",
