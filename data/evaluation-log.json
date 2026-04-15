@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "daily-log",
-    "runId": "2026-03-19T17:00:02.615Z",
-    "score": 90,
-    "grade": "HIGH",
-    "rationale": "The log captures specific and meaningful activity related to system operations and decisions. It includes detailed descriptions of key decisions, open issues, tasks, and system status, providing a clear view of the current state and actions taken. The specificity of the issues and decisions, such as the switch to a different model to save credits and the ongoing technical problems, adds to its value.",
-    "evaluatedAt": "2026-03-19T17:00:06.495Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-03-20T05:00:04.371Z",
     "score": 0,
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization is somewhat useful as it highlights key activities and decisions from the session. However, it lacks specific categories that could further organize the information, such as 'Evaluation Metrics', 'Builder Improvements', and 'Key Decisions', which would enhance clarity and utility.",
     "evaluatedAt": "2026-04-15T11:00:18.182Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-15T11:00:19.292Z",
+    "score": 30,
+    "grade": "LOW",
+    "rationale": "The entry is concise but lacks context and specificity. It does not provide enough information about what the '10 non-negotiables' are or why they are important, which reduces its overall signal value.",
+    "evaluatedAt": "2026-04-15T11:00:20.161Z"
   }
 ]
