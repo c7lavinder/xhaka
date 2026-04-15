@@ -1,14 +1,6 @@
 [
   {
     "jobName": "daily-log",
-    "runId": "2026-03-19T05:00:03.253Z",
-    "score": 90,
-    "grade": "HIGH",
-    "rationale": "The log captures meaningful activity with specific details about decisions made, problems identified, and tasks to be completed. It includes timestamps, specific issues, and responses from team members, making it highly specific and relevant to the job context.",
-    "evaluatedAt": "2026-03-19T05:00:05.823Z"
-  },
-  {
-    "jobName": "daily-log",
     "runId": "2026-03-19T17:00:02.615Z",
     "score": 90,
     "grade": "HIGH",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The output categorizes the memory entry under a 'Session' label, which is somewhat specific but could be improved by including more detailed categories such as 'Meeting Summary' or 'Project Update'. The decision and actions are noted, but the categories could be more descriptive to enhance usefulness.",
     "evaluatedAt": "2026-04-15T11:00:12.283Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-15T11:00:15.300Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The categorization is somewhat useful as it highlights key activities and decisions from the session. However, it lacks specific categories that could further organize the information, such as 'Evaluation Metrics', 'Builder Improvements', and 'Key Decisions', which would enhance clarity and utility.",
+    "evaluatedAt": "2026-04-15T11:00:18.182Z"
   }
 ]
