@@ -81,3 +81,8 @@ Current State: The project is stable with no recent changes or activity. All sys
 - chore: job-registry updates for various dispatchers and states
 - chore: results-log updates for various dispatchers and states
 - chore: heartbeat-state update
+## 2026-04-15 (100 commits)
+### 🔄 Changed
+- chore: job-registry updates for dispatcher and capture states
+- chore: results-log updates for dispatcher and capture states
+- chore: heartbeat-state update
