@@ -1,3 +1,3 @@
-Last scanned: 2026-04-14T11:05:20.471Z
+Last scanned: 2026-04-15T11:05:20.447Z
 Deps checked: 127
-Updates found: 1
+Updates found: 2
