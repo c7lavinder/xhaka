@@ -479,6 +479,17 @@
       "startedAt": "2026-04-14T13:05:01.493Z",
       "completedAt": "2026-04-14T13:05:05.910Z",
       "proofOfWork": "Audit PASS for commit e68db5fb. 0 concern(s). Artifact: intelligence/audits/2026-04-14-e68db5fb.md"
+    },
+    {
+      "id": "task_1776242402654_kgtugne",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-15T08:40:02.450Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-15T08:40:02.654Z"
     }
   ]
 }
