@@ -12547,3 +12547,4 @@
 2026-04-15T10:00:02.623Z	dispatcher	success	1394		model=gpt-4o-mini cost=$0.001
 2026-04-15T10:00:02.648Z	capture	success	1798		model=gpt-4o-mini cost=$0.001
 2026-04-15T10:00:02.681Z	watchdog	success	1194		model=gpt-4o-mini cost=$0.001
+2026-04-15T10:00:04.639Z	heartbeat-check	success	3512		model=gpt-4o-mini cost=$0.001
