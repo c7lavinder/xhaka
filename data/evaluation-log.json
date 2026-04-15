@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-20T05:00:04.371Z",
-    "score": 0,
-    "grade": "LOW",
-    "rationale": "The output does not contain any genuinely important information that should be promoted to MEMORY.md. It merely provides a summary of activity without any significant insights or details.",
-    "evaluatedAt": "2026-03-20T05:00:05.866Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-21T05:00:17.826Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The entry is concise but lacks context and specificity. It does not provide enough information about what the '10 non-negotiables' are or why they are important, which reduces its overall signal value.",
     "evaluatedAt": "2026-04-15T11:00:20.161Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-15T11:00:24.495Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise and signals an important guideline for the job, but it lacks context or detail about what the '10 non-negotiables' are, which limits its usefulness.",
+    "evaluatedAt": "2026-04-15T11:00:25.543Z"
   }
 ]
