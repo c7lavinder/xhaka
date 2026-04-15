@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-18T12:52:20.629Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output does not promote any genuinely important items to MEMORY.md. It provides a summary of activity but lacks high-signal, concise entries that would be valuable for future reference.",
-    "evaluatedAt": "2026-03-18T12:52:21.514Z"
-  },
-  {
     "jobName": "daily-log",
     "runId": "2026-03-19T05:00:03.253Z",
     "score": 90,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a very general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
     "evaluatedAt": "2026-04-15T11:00:07.960Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-15T11:00:10.947Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The output categorizes the memory entry under a 'Session' label, which is somewhat specific but could be improved by including more detailed categories such as 'Meeting Summary' or 'Project Update'. The decision and actions are noted, but the categories could be more descriptive to enhance usefulness.",
+    "evaluatedAt": "2026-04-15T11:00:12.283Z"
   }
 ]
