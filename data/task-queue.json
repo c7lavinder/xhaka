@@ -15,20 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775635802788_ematddh",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-08T08:10:02.580Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-08T08:10:02.788Z",
-      "startedAt": "2026-04-08T08:11:01.426Z",
-      "completedAt": "2026-04-08T08:11:34.481Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-08T08:11:34.310Z. Report: intelligence/librarian-reports/2026-04-08.md. Triggered by task task_1775635802788_ematddh."
-    },
-    {
       "id": "task_1775646214894_0bk7b60",
       "agent": "auditor",
       "task": "verify-build",
