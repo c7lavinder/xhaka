@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-18T11:00:19.604Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The entry is concise and highlights a critical aspect of the job, which is the adherence to non-negotiables. However, it lacks specific details on what these non-negotiables are, which could provide more context and increase the signal of the information.",
-    "evaluatedAt": "2026-03-18T11:00:21.191Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-18T12:48:46.548Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It only reports an error related to a commit mismatch, which is not high-signal information for future reference.",
     "evaluatedAt": "2026-04-15T05:00:08.494Z"
+  },
+  {
+    "jobName": "researcher",
+    "runId": "2026-04-15T11:00:01.697Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides a general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
+    "evaluatedAt": "2026-04-15T11:00:03.370Z"
   }
 ]
