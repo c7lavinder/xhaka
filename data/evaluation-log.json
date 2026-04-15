@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-18T11:00:15.357Z",
-    "score": 80,
-    "grade": "HIGH",
-    "rationale": "The entry highlights a critical requirement for the job, emphasizing the importance of adhering to non-negotiables. It is concise and directly relevant to maintaining standards, making it a high-signal addition to MEMORY.md.",
-    "evaluatedAt": "2026-03-18T11:00:16.818Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-18T11:00:19.604Z",
     "score": 70,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a summary of tasks performed but lacks detail on the significance or impact of these tasks. It is not clear why these metrics are important or how they contribute to the overall goals, making it low-signal for memory retention.",
     "evaluatedAt": "2026-04-14T05:00:08.105Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-15T05:00:06.876Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It only reports an error related to a commit mismatch, which is not high-signal information for future reference.",
+    "evaluatedAt": "2026-04-15T05:00:08.494Z"
   }
 ]
