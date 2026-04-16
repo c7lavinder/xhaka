@@ -759,3 +759,4 @@
 2026-04-16T05:00:02.837Z	daily-log	success	2038		model=gpt-4o-mini cost=$0.001
 2026-04-16T05:00:03.948Z	heartbeat-check	success	3125		model=gpt-4o-mini cost=$0.001
 2026-04-16T05:00:11.408Z	scribe	success	10190		model=gpt-4o cost=$0.025
+2026-04-16T05:01:01.975Z	dispatcher	success	1039		model=gpt-4o-mini cost=$0.001
