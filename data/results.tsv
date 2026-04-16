@@ -429,3 +429,4 @@
 2026-04-16T00:28:02.625Z	dispatcher	success	1138		model=gpt-4o-mini cost=$0.001
 2026-04-16T00:29:02.606Z	dispatcher	success	1097		model=gpt-4o-mini cost=$0.001
 2026-04-16T00:30:02.889Z	capture	success	1596		model=gpt-4o-mini cost=$0.001
+2026-04-16T00:30:04.829Z	heartbeat-check	success	3211		model=gpt-4o-mini cost=$0.001
