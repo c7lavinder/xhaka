@@ -2956,3 +2956,4 @@
 2026-04-17T10:58:02.425Z	dispatcher	success	1068		model=gpt-4o-mini cost=$0.001
 2026-04-17T10:59:02.643Z	dispatcher	success	1163		model=gpt-4o-mini cost=$0.001
 2026-04-17T11:00:03.463Z	daily-log	success	1878		model=gpt-4o-mini cost=$0.001
+2026-04-17T11:00:03.458Z	morning-brief	success	2292		model=gpt-4o cost=$0.025
