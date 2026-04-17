@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-22T05:00:15.435Z",
-    "score": 30,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of activities but lacks detail on the significance or impact of these activities, making it low-signal for memory retention.",
-    "evaluatedAt": "2026-03-22T05:00:16.691Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-23T05:00:06.050Z",
     "score": 0,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not provide any genuinely important or high-signal information to be added to MEMORY.md. It only states basic statistics without context or significance.",
     "evaluatedAt": "2026-04-16T05:00:08.377Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-17T05:00:07.537Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important information to promote to MEMORY.md. It primarily consists of error messages and technical details that are not high-signal or relevant for long-term memory.",
+    "evaluatedAt": "2026-04-17T05:00:08.769Z"
   }
 ]
