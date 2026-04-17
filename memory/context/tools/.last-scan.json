@@ -1,12 +1,12 @@
 {
-  "lastRunAt": "2026-04-16T11:05:24.006Z",
+  "lastRunAt": "2026-04-17T11:05:23.597Z",
   "versions": {
     "express": "4.22.0",
     "@octokit/rest": "5.0.5",
     "node-cron": "4.2.2",
     "openai": "6.34.0",
-    "@sentry/node": "10.48.0",
-    "@supabase/supabase-js": "2.103.3-canary.0",
+    "@sentry/node": "10.49.0",
+    "@supabase/supabase-js": "2.103.3",
     "@trpc/client": "11.16.0",
     "@trpc/server": "11.16.0",
     "drizzle-orm": "1.0.0-beta.22",
@@ -17,17 +17,17 @@
     "langsmith": "0.7.32"
   },
   "changelogChecked": {
-    "anthropic": "2026-04-16T11:05:17.981Z",
-    "posthog": "2026-04-16T11:05:18.348Z",
-    "railway": "2026-04-16T11:05:18.593Z",
+    "anthropic": "2026-04-17T11:05:16.909Z",
+    "posthog": "2026-04-17T11:05:17.257Z",
+    "railway": "2026-04-17T11:05:17.734Z",
     "openai": "2026-04-14T11:05:11.948Z"
   },
   "repoReleases": {
-    "openclaw": "2026.4.14",
+    "openclaw": "2026.4.15",
     "supabase": "1.26.04",
-    "posthog": "posthog-cli/v0.7.7",
+    "posthog": "posthog-cli/v0.7.8",
     "sentry": "26.4.0",
     "langsmith": "0.7.32",
-    "claude-code": "2.1.110"
+    "claude-code": "2.1.112"
   }
 }
