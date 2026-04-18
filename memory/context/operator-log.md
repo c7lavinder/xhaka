@@ -3369,3 +3369,4 @@
 | 2026-04-18T14:02:02.364Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-18T14:05:02.364Z |
 | 2026-04-18T14:03:02.078Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-18T14:06:02.078Z |
 | 2026-04-18T14:04:02.221Z | agent-scorecard | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-04-18T14:07:02.221Z |
+| 2026-04-18T14:05:01.236Z | agent-scorecard | rollback | failed | 3 | failureType=rate_limit, waitUntil=2026-04-18T14:08:01.235Z |
