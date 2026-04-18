@@ -3100,3 +3100,4 @@
 | 2026-04-18T11:04:02.822Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-18T11:07:02.197Z |
 | 2026-04-18T11:07:03.030Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-04-18T11:10:02.334Z |
 | 2026-04-18T11:07:11.093Z | agent-scorecard | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-04-18T11:10:11.093Z |
+| 2026-04-18T11:07:12.562Z | agent-scorecard | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
