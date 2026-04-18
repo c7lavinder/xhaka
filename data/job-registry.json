@@ -70,9 +70,9 @@
     "gracePeriodMinutes": 30
   },
   "daily-log": {
-    "lastRun": "2026-04-18T17:00:02.530Z",
+    "lastRun": "2026-04-18T23:00:02.386Z",
     "lastStatus": "success",
-    "durationMs": 1959,
+    "durationMs": 1888,
     "expectedIntervalHours": 6,
     "gracePeriodMinutes": 120
   },
