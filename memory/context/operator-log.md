@@ -3098,3 +3098,4 @@
 | 2026-04-18T11:03:03.663Z | cleanup | restart | pending | 1 | failureType=unknown, waitUntil=2026-04-18T11:06:02.808Z |
 | 2026-04-18T11:03:10.434Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-18T11:06:10.434Z |
 | 2026-04-18T11:04:02.822Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-18T11:07:02.197Z |
+| 2026-04-18T11:07:03.030Z | cleanup | redeploy | pending | 2 | failureType=unknown, waitUntil=2026-04-18T11:10:02.334Z |
