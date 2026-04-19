@@ -3425,3 +3425,4 @@
 | 2026-04-18T15:11:01.771Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-18T15:14:01.771Z |
 | 2026-04-18T15:12:03.489Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-18T15:15:02.736Z |
 | 2026-04-19T11:04:01.822Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
+| 2026-04-19T11:04:07.060Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
