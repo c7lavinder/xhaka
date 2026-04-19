@@ -6442,3 +6442,4 @@
 2026-04-19T07:00:02.794Z	watchdog	success	1083		model=gpt-4o-mini cost=$0.001
 2026-04-19T07:00:03.362Z	capture	success	1642		model=gpt-4o-mini cost=$0.001
 2026-04-19T07:00:20.217Z	kb-indexer	success	18100		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
+2026-04-19T07:00:36.510Z	librarian	success	34756		model=gpt-4o-mini cost=$0.001
