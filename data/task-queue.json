@@ -15,36 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1775911951567_62iw2b5",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "8ddf35f0",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-11T12:52:31.344Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-11T12:52:31.567Z",
-      "startedAt": "2026-04-11T12:53:02.047Z",
-      "completedAt": "2026-04-11T12:53:05.270Z",
-      "proofOfWork": "Audit PASS for commit 8ddf35f0. 0 concern(s). Artifact: intelligence/audits/2026-04-11-8ddf35f0.md"
-    },
-    {
-      "id": "task_1775982602691_lbdvky7",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-12T08:30:02.435Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-12T08:30:02.691Z",
-      "startedAt": "2026-04-12T08:31:02.250Z",
-      "completedAt": "2026-04-12T08:31:39.946Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-12T08:31:39.724Z. Report: intelligence/librarian-reports/2026-04-12.md. Triggered by task task_1775982602691_lbdvky7."
-    },
-    {
       "id": "task_1775991815017_o6q8s6y",
       "agent": "auditor",
       "task": "verify-build",
