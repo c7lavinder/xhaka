@@ -3430,3 +3430,4 @@
 | 2026-04-19T11:06:06.923Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
 | 2026-04-19T11:07:01.821Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-04-19T12:08:01.445Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-04-19T13:08:01.767Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
