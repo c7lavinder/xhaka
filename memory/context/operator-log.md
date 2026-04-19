@@ -3427,3 +3427,4 @@
 | 2026-04-19T11:04:01.822Z | cleanup | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
 | 2026-04-19T11:04:07.060Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
 | 2026-04-19T11:05:08.489Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
+| 2026-04-19T11:06:06.923Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=railway_infra |
