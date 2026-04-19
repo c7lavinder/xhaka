@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-24T05:00:03.523Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output contains mostly procedural or error information that is not of high importance for long-term memory. It lacks concise, high-signal entries that would be valuable for future reference.",
-    "evaluatedAt": "2026-03-24T05:00:04.983Z"
-  },
-  {
     "jobName": "daily-log",
     "runId": "2026-03-25T05:00:03.259Z",
     "score": 70,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a brief summary of the scribe's activity, but it lacks context or detail about the significance of these activities, making it low in signal and not particularly informative for memory.",
     "evaluatedAt": "2026-04-18T05:00:08.158Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-19T05:05:00.283Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not promote any genuinely important items to MEMORY.md. The information provided is minimal and lacks context or significance, making it low-signal and not particularly useful for memory retention.",
+    "evaluatedAt": "2026-04-19T05:05:01.159Z"
   }
 ]
