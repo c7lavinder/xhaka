@@ -15,52 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1776053016622_da4kpc1",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "e0cd69e6",
-        "commitMessage": "chore: job-registry [operator=running] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-13T04:03:36.464Z"
-      },
-      "status": "failed",
-      "createdAt": "2026-04-13T04:03:36.622Z",
-      "startedAt": "2026-04-13T04:04:02.106Z",
-      "completedAt": "2026-04-13T04:04:03.921Z",
-      "proofOfWork": "FAILED: is at fe66c60149c93a70d81051526cda50b6b810fce4 but expected f8bdaa94062b941db78e9fb42029864004489b82 - https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
-    },
-    {
-      "id": "task_1776053080269_69m83mz",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "023a47fd",
-        "commitMessage": "task-queue: pruned 2 old task(s)",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-13T04:04:40.117Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-13T04:04:40.269Z",
-      "startedAt": "2026-04-13T04:05:01.675Z",
-      "completedAt": "2026-04-13T04:05:02.753Z",
-      "proofOfWork": "skipped: docs-only commit (023a47fd)"
-    },
-    {
-      "id": "task_1776069002941_pmwhc8d",
-      "agent": "librarian",
-      "task": "audit",
-      "payload": {
-        "trigger": "daily-capture-check",
-        "queuedAt": "2026-04-13T08:30:02.693Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-13T08:30:02.941Z",
-      "startedAt": "2026-04-13T08:32:01.380Z",
-      "completedAt": "2026-04-13T08:32:41.949Z",
-      "proofOfWork": "Librarian audit completed at 2026-04-13T08:32:41.761Z. Report: intelligence/librarian-reports/2026-04-13.md. Triggered by task task_1776069002941_pmwhc8d."
-    },
-    {
       "id": "task_1776155702706_27l224l",
       "agent": "librarian",
       "task": "audit",
