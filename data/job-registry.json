@@ -91,9 +91,9 @@
     "gracePeriodMinutes": 60
   },
   "inspect": {
-    "lastRun": "2026-04-20T12:00:00.700Z",
-    "lastStatus": "running",
-    "durationMs": 20636,
+    "lastRun": "2026-04-20T12:00:16.728Z",
+    "lastStatus": "success",
+    "durationMs": 16288,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
