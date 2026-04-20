@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "daily-log",
-    "runId": "2026-03-25T05:00:03.259Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The log captures specific activities such as initiating an automated session memory capture and using a specific GitHub API command. However, it lacks detailed context or outcomes related to these actions, making it somewhat generic.",
-    "evaluatedAt": "2026-03-25T05:00:11.330Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-03-25T05:00:09.566Z",
     "score": 70,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not promote any genuinely important items to MEMORY.md. The information provided is minimal and lacks context or significance, making it low-signal and not particularly useful for memory retention.",
     "evaluatedAt": "2026-04-19T05:05:01.159Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-20T05:00:08.058Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not promote any genuinely important items to MEMORY.md. It only reports an error related to a commit hash mismatch, which is not high-signal information for future reference.",
+    "evaluatedAt": "2026-04-20T05:00:08.985Z"
   }
 ]
