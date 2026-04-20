@@ -319,6 +319,17 @@
       "startedAt": "2026-04-19T11:08:01.963Z",
       "completedAt": "2026-04-19T11:08:06.104Z",
       "proofOfWork": "Audit PASS for commit ec29a44e. 0 concern(s). Artifact: intelligence/audits/2026-04-19-ec29a44e.md"
+    },
+    {
+      "id": "task_1776675902636_no9k81g",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-20T09:05:02.372Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-20T09:05:02.636Z"
     }
   ]
 }
