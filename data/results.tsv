@@ -8214,3 +8214,4 @@
 2026-04-20T07:00:05.145Z	heartbeat-check	success	3708		model=gpt-4o-mini cost=$0.001
 2026-04-20T07:00:21.329Z	kb-indexer	success	19546		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
 2026-04-20T07:00:23.933Z	librarian	failed	22472		
+2026-04-20T07:01:02.588Z	dispatcher	success	1252		model=gpt-4o-mini cost=$0.001
