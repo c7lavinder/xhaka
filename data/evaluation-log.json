@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-03-25T05:00:09.566Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The output provides a concise summary of the scribe's activities, highlighting key metrics such as decisions filed, commits digested, and rules captured. However, it lacks context or details on the significance of these activities, which would enhance the signal of the information.",
-    "evaluatedAt": "2026-03-25T05:00:18.841Z"
-  },
-  {
     "jobName": "researcher",
     "runId": "2026-03-25T11:00:01.842Z",
     "score": 20,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not promote any genuinely important items to MEMORY.md. It only reports an error related to a commit hash mismatch, which is not high-signal information for future reference.",
     "evaluatedAt": "2026-04-20T05:00:08.985Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-21T05:00:05.564Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides minimal information about the scribe's activities, such as the number of decisions filed and commits digested, but lacks depth or context to be considered high-signal or genuinely important for memory.",
+    "evaluatedAt": "2026-04-21T05:00:06.913Z"
   }
 ]
