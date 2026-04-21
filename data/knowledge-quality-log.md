@@ -1,5 +1,5 @@
 # Knowledge Quality Report
-_Generated: 2026-04-21T07:00:39.787Z_
+_Generated: 2026-04-21T09:06:41.895Z_
 
 ## Issues Found (39)
 
