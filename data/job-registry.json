@@ -84,9 +84,9 @@
     "gracePeriodMinutes": 90
   },
   "feedback": {
-    "lastRun": "2026-04-21T13:00:01.177Z",
-    "lastStatus": "running",
-    "durationMs": 1326,
+    "lastRun": "2026-04-21T13:00:02.277Z",
+    "lastStatus": "success",
+    "durationMs": 1400,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
