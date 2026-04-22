@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-25T11:00:24.804Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The entry is concise and highlights a critical aspect of the job, which is to honor all non-negotiables and evaluate changes before promoting them. However, it lacks context and specificity about what these non-negotiables are, which could enhance its usefulness.",
-    "evaluatedAt": "2026-03-25T11:00:27.238Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-26T05:00:04.496Z",
     "score": 0,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The entry is vague and lacks context, making it difficult to determine its importance or relevance. It does not provide specific information or insights that would be valuable for future reference.",
     "evaluatedAt": "2026-04-22T11:00:19.751Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-22T11:00:24.147Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise and highlights a critical aspect of the job, emphasizing the importance of adhering to all non-negotiables. However, it lacks specific details about what these non-negotiables are, which could provide more context and clarity.",
+    "evaluatedAt": "2026-04-22T11:00:25.525Z"
   }
 ]
