@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "organize",
-    "runId": "2026-03-25T11:00:17.515Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The categorization is somewhat correct as it identifies key actions and decisions, but lacks specificity in categorizing the memory entries into more detailed categories such as 'Evaluation Metrics', 'Builder Improvements', and 'Key Decisions'. The categories could be more useful if they were more specific.",
-    "evaluatedAt": "2026-03-25T11:00:19.844Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-03-25T11:00:20.691Z",
     "score": 70,
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization is somewhat specific but lacks clarity and detail. The category 'Session' is vague and could be more descriptive, such as 'Team Meeting' or 'Project Discussion'. Additionally, the key decision is mentioned but not clearly categorized, which would enhance the organization.",
     "evaluatedAt": "2026-04-22T11:00:12.420Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-22T11:00:15.593Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The categorization is somewhat useful but lacks specificity. The entry is organized under a general 'Session' category, but it could be more detailed by specifying the context or purpose of the session, such as 'Project Planning' or 'Development Meeting.' Additionally, the decision about metrics could be highlighted as a separate key point.",
+    "evaluatedAt": "2026-04-22T11:00:17.640Z"
   }
 ]
