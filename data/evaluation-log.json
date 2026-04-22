@@ -1,14 +1,6 @@
 [
   {
     "jobName": "organize",
-    "runId": "2026-03-25T11:00:12.234Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The categorization is somewhat specific, identifying a session focused on evaluation metrics and harness improvements. However, it lacks clarity on the broader context or category, such as 'Project Planning' or 'Development Process,' which would make it more useful.",
-    "evaluatedAt": "2026-03-25T11:00:14.655Z"
-  },
-  {
-    "jobName": "organize",
     "runId": "2026-03-25T11:00:17.515Z",
     "score": 70,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a very general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for researchers.",
     "evaluatedAt": "2026-04-22T11:00:08.906Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-22T11:00:11.154Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The categorization is somewhat specific but lacks clarity and detail. The category 'Session' is vague and could be more descriptive, such as 'Team Meeting' or 'Project Discussion'. Additionally, the key decision is mentioned but not clearly categorized, which would enhance the organization.",
+    "evaluatedAt": "2026-04-22T11:00:12.420Z"
   }
 ]
