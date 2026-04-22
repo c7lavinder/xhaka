@@ -133,9 +133,9 @@
     "gracePeriodMinutes": 60
   },
   "behavior-sync": {
-    "lastRun": "2026-04-22T10:50:01.260Z",
-    "lastStatus": "running",
-    "durationMs": 7851,
+    "lastRun": "2026-04-22T10:50:08.883Z",
+    "lastStatus": "success",
+    "durationMs": 7893,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
