@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-25T11:00:20.691Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The entry is concise and emphasizes the importance of adhering to all non-negotiables, which is a high-signal directive for the role. However, it lacks specific details on what these non-negotiables are, which would enhance its utility.",
-    "evaluatedAt": "2026-03-25T11:00:22.181Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-25T11:00:24.804Z",
     "score": 70,
     "grade": "MEDIUM",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization is somewhat useful but lacks specificity. The entry is organized under a general 'Session' category, but it could be more detailed by specifying the context or purpose of the session, such as 'Project Planning' or 'Development Meeting.' Additionally, the decision about metrics could be highlighted as a separate key point.",
     "evaluatedAt": "2026-04-22T11:00:17.640Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-22T11:00:18.751Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The entry is vague and lacks context, making it difficult to determine its importance or relevance. It does not provide specific information or insights that would be valuable for future reference.",
+    "evaluatedAt": "2026-04-22T11:00:19.751Z"
   }
 ]
