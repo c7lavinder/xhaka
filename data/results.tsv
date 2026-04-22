@@ -12068,3 +12068,4 @@
 2026-04-22T11:00:04.366Z	morning-brief	success	3047		model=gpt-4o cost=$0.025
 2026-04-22T11:00:29.525Z	benchmark	success	28141		model=gpt-4o-mini cost=$0.001
 2026-04-22T11:01:02.634Z	dispatcher	success	1221		model=gpt-4o-mini cost=$0.001
+2026-04-22T11:01:13.472Z	propagate	success	71455		model=gpt-4o-mini cost=$0.003
