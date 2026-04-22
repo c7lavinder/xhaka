@@ -1,14 +1,6 @@
 [
   {
     "jobName": "researcher",
-    "runId": "2026-03-25T11:00:01.842Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output is very brief and lacks specific, actionable insights or concrete implications. It merely summarizes a general concept about benchmarking without providing detailed information or steps that a researcher could take to apply this knowledge.",
-    "evaluatedAt": "2026-03-25T11:00:04.428Z"
-  },
-  {
-    "jobName": "researcher",
     "runId": "2026-03-25T11:00:08.039Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides minimal information about the scribe's activities, such as the number of decisions filed and commits digested, but lacks depth or context to be considered high-signal or genuinely important for memory.",
     "evaluatedAt": "2026-04-21T05:00:06.913Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-22T05:00:07.104Z",
+    "score": 0,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important information that should be added to MEMORY.md. It merely provides a summary of activities without any significant insights or details.",
+    "evaluatedAt": "2026-04-22T05:00:08.773Z"
   }
 ]
