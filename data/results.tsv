@@ -354,3 +354,4 @@
 2026-04-23T07:00:02.249Z	watchdog	success	1366		model=gpt-4o-mini cost=$0.001
 2026-04-23T07:00:04.641Z	heartbeat-check	success	3435		model=gpt-4o-mini cost=$0.001
 2026-04-23T07:00:22.163Z	kb-indexer	success	20604		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
+2026-04-23T07:00:39.901Z	librarian	success	38955		model=gpt-4o-mini cost=$0.001
