@@ -661,3 +661,4 @@
 2026-04-23T11:08:02.355Z	dispatcher	success	1174		model=gpt-4o-mini cost=$0.001
 2026-04-23T11:09:02.582Z	dispatcher	success	1298		model=gpt-4o-mini cost=$0.001
 2026-04-23T11:10:03.410Z	capture	failed	2133		
+2026-04-23T11:10:02.331Z	watchdog	success	1146		model=gpt-4o-mini cost=$0.001
