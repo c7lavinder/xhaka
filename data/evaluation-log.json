@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-26T05:00:04.496Z",
-    "score": 0,
-    "grade": "LOW",
-    "rationale": "The output does not contain any genuinely important or high-signal information that should be added to MEMORY.md. It simply states the number of decisions, commits, and rules, which are not inherently significant without context or details.",
-    "evaluatedAt": "2026-03-26T05:00:06.229Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-27T05:00:06.642Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The entry is concise and highlights a critical aspect of the job, emphasizing the importance of adhering to all non-negotiables. However, it lacks specific details about what these non-negotiables are, which could provide more context and clarity.",
     "evaluatedAt": "2026-04-22T11:00:25.525Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-23T05:10:08.215Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output provides basic quantitative data about the scribe's activities but lacks context or significance. It doesn't highlight any important or insightful information that would be valuable for memory retention.",
+    "evaluatedAt": "2026-04-23T05:10:09.860Z"
   }
 ]
