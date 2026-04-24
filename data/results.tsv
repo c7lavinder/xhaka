@@ -2421,3 +2421,4 @@
 2026-04-24T11:00:02.894Z	watchdog	success	1163		model=gpt-4o-mini cost=$0.001
 2026-04-24T11:00:02.837Z	dispatcher	success	1078		model=gpt-4o-mini cost=$0.001
 2026-04-24T11:01:01.920Z	dispatcher	success	1100		model=gpt-4o-mini cost=$0.001
+2026-04-24T11:01:17.837Z	propagate	success	75510		model=gpt-4o-mini cost=$0.003
