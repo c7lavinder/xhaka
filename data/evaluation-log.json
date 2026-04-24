@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-27T05:00:06.642Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output lacks important details and context about the job, such as the nature of the commits or the significance of the work done. It is too vague to be considered high-signal information for MEMORY.md.",
-    "evaluatedAt": "2026-03-27T05:00:08.125Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-28T05:00:07.272Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides basic quantitative data about the scribe's activities but lacks context or significance. It doesn't highlight any important or insightful information that would be valuable for memory retention.",
     "evaluatedAt": "2026-04-23T05:10:09.860Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-24T05:04:28.059Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output indicates a high number of commits digested, which might be important, but lacks context or specific details that would make it high-signal for memory. The absence of decisions filed or rules captured further reduces its significance.",
+    "evaluatedAt": "2026-04-24T05:04:29.695Z"
   }
 ]
