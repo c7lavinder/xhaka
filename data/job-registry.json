@@ -168,8 +168,8 @@
     "gracePeriodMinutes": 120
   },
   "dispatcher": {
-    "lastRun": "2026-04-24T11:44:01.835Z",
-    "lastStatus": "success",
+    "lastRun": "2026-04-24T11:45:00.794Z",
+    "lastStatus": "running",
     "durationMs": 1353,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 5
