@@ -105,9 +105,9 @@
     "gracePeriodMinutes": 120
   },
   "morning-brief": {
-    "lastRun": "2026-04-20T11:00:03.851Z",
+    "lastRun": "2026-04-25T11:00:02.874Z",
     "lastStatus": "success",
-    "durationMs": 2949,
+    "durationMs": 2688,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
