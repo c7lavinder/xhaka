@@ -6580,3 +6580,4 @@
 2026-04-26T17:29:02.760Z	dispatcher	success	1099		model=gpt-4o-mini cost=$0.001
 2026-04-26T17:30:01.984Z	dispatcher	success	1221		model=gpt-4o-mini cost=$0.001
 2026-04-26T17:30:01.994Z	capture	success	1541		model=gpt-4o-mini cost=$0.001
+2026-04-26T17:30:03.948Z	heartbeat-check	success	3125		model=gpt-4o-mini cost=$0.001
