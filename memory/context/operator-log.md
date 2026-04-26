@@ -3661,3 +3661,4 @@
 | 2026-04-26T12:25:04.017Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-26T12:28:04.017Z |
 | 2026-04-26T12:25:09.166Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-26T12:28:09.166Z |
 | 2026-04-26T12:26:01.915Z | improve | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-26T12:29:01.915Z |
+| 2026-04-26T12:26:08.305Z | agent-scorecard | rollback | failed | 3 | failureType=unknown, waitUntil=2026-04-26T12:29:08.304Z |
