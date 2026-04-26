@@ -3583,3 +3583,4 @@
 | 2026-04-26T11:37:04.392Z | improve | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=unknown |
 | 2026-04-26T11:37:10.485Z | agent-scorecard | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-04-26T11:40:10.484Z |
 | 2026-04-26T11:37:11.672Z | agent-scorecard | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
+| 2026-04-26T11:38:03.413Z | agent-scorecard | redeploy | pending | 2 | failureType=railway_infra, waitUntil=2026-04-26T11:41:02.708Z |
