@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-29T05:00:05.393Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output does not provide any genuinely important information that should be promoted to MEMORY.md. It merely states the number of decisions, commits, and rules without any context or significance.",
-    "evaluatedAt": "2026-03-29T05:00:06.450Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-30T05:00:11.918Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output contains a technical error message related to version control, which is not relevant for memory storage. There are no genuinely important items or high-signal information that should be promoted to MEMORY.md.",
     "evaluatedAt": "2026-04-25T05:00:06.949Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-26T05:00:05.902Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It primarily reports an error related to a mismatch in expected and actual commit hashes, which is technical and specific to this instance rather than a high-signal, broadly applicable insight.",
+    "evaluatedAt": "2026-04-26T05:00:06.768Z"
   }
 ]
