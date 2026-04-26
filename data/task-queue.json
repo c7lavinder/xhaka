@@ -15,22 +15,6 @@
       "startedAt": "2026-03-22T11:12:02.154Z"
     },
     {
-      "id": "task_1776596847573_dyqwff4",
-      "agent": "auditor",
-      "task": "verify-build",
-      "payload": {
-        "commitSha": "ec29a44e",
-        "commitMessage": "chore: results-log [dispatcher=success] [railway skip]",
-        "author": "c7lavinder",
-        "triggeredAt": "2026-04-19T11:07:27.411Z"
-      },
-      "status": "completed",
-      "createdAt": "2026-04-19T11:07:27.573Z",
-      "startedAt": "2026-04-19T11:08:01.963Z",
-      "completedAt": "2026-04-19T11:08:06.104Z",
-      "proofOfWork": "Audit PASS for commit ec29a44e. 0 concern(s). Artifact: intelligence/audits/2026-04-19-ec29a44e.md"
-    },
-    {
       "id": "task_1776675902636_no9k81g",
       "agent": "librarian",
       "task": "audit",
