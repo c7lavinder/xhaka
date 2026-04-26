@@ -154,9 +154,9 @@
     "gracePeriodMinutes": 120
   },
   "change-evaluator": {
-    "lastRun": "2026-04-26T20:00:00.474Z",
-    "lastStatus": "running",
-    "durationMs": 1197,
+    "lastRun": "2026-04-26T20:00:01.300Z",
+    "lastStatus": "success",
+    "durationMs": 1124,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
   },
