@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-04-25T11:05:18.789Z",
+  "lastRunAt": "2026-04-26T11:05:23.767Z",
   "versions": {
     "express": "4.22.0",
     "@octokit/rest": "5.0.5",
@@ -17,13 +17,13 @@
     "langsmith": "0.7.36"
   },
   "changelogChecked": {
-    "anthropic": "2026-04-25T11:05:12.896Z",
-    "posthog": "2026-04-25T11:05:12.962Z",
-    "railway": "2026-04-25T11:05:13.219Z",
-    "openai": "2026-04-25T11:05:11.394Z"
+    "anthropic": "2026-04-26T11:05:17.550Z",
+    "posthog": "2026-04-26T11:05:17.629Z",
+    "railway": "2026-04-26T11:05:18.046Z",
+    "openai": "2026-04-26T11:05:11.974Z"
   },
   "repoReleases": {
-    "openclaw": "2026.4.23",
+    "openclaw": "2026.4.24",
     "supabase": "1.26.04",
     "posthog": "posthog-cli/v0.7.10",
     "sentry": "26.4.1",
