@@ -3692,3 +3692,4 @@
 | 2026-04-27T11:41:04.198Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:42:01.723Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:43:02.348Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-27T11:44:01.964Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=rate_limit |
