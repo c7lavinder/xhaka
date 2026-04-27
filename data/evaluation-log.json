@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-03-30T05:00:11.918Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of activities but lacks detail or context that would make it significant for memory. It mentions numbers but doesn't explain their relevance or impact.",
-    "evaluatedAt": "2026-03-30T05:00:13.509Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-03-31T05:02:54.636Z",
     "score": 10,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It primarily reports an error related to a mismatch in expected and actual commit hashes, which is technical and specific to this instance rather than a high-signal, broadly applicable insight.",
     "evaluatedAt": "2026-04-26T05:00:06.768Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-27T05:00:07.995Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The entry provides minimal information about an error related to a digest mismatch, but lacks context or significance for long-term memory. It doesn't highlight any important decisions or actions taken, making it low-signal for memory retention.",
+    "evaluatedAt": "2026-04-27T05:00:09.199Z"
   }
 ]
