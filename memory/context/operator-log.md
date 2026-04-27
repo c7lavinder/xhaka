@@ -3699,3 +3699,4 @@
 | 2026-04-27T11:50:02.471Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:51:02.557Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:53:01.635Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-27T11:55:01.821Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
