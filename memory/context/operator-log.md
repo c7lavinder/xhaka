@@ -3712,3 +3712,4 @@
 | 2026-04-27T12:07:03.636Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T12:09:01.808Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T12:12:05.373Z | agent-scorecard | restart | pending | 1 | failureType=unknown, waitUntil=2026-04-27T12:15:05.373Z |
+| 2026-04-27T12:13:04.206Z | agent-scorecard | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-04-27T12:16:04.206Z |
