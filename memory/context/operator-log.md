@@ -3689,3 +3689,4 @@
 | 2026-04-27T11:35:02.565Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:36:02.477Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:40:01.442Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-27T11:41:04.198Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
