@@ -8,7 +8,7 @@
   },
   "organize": {
     "lastRun": "2026-04-27T04:00:01.697Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 741,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -43,7 +43,7 @@
   },
   "cleanup": {
     "lastRun": "2026-04-26T11:30:01.190Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1584,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
