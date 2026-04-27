@@ -3703,3 +3703,4 @@
 | 2026-04-27T11:56:01.954Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:57:01.836Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
 | 2026-04-27T11:58:02.002Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
+| 2026-04-27T11:59:02.193Z | agent-scorecard | alert | escalated | 4 | All 3 attempts exhausted. failureType=unknown |
