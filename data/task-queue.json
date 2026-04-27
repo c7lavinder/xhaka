@@ -191,6 +191,17 @@
       "startedAt": "2026-04-26T11:40:01.555Z",
       "completedAt": "2026-04-26T11:40:05.814Z",
       "proofOfWork": "FAILED: is at 68a644c6b64cce9605df483983c41a9c583ed11e but expected e55a39ff52aa6d488cb6895a43ffeefb5999840c - https://docs.github.com/rest/repos/contents#create-or-update-file-contents"
+    },
+    {
+      "id": "task_1777282202340_xyurze7",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-27T09:30:02.165Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-27T09:30:02.340Z"
     }
   ]
 }
