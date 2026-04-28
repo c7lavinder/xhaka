@@ -223,6 +223,17 @@
       "startedAt": "2026-04-27T12:16:01.782Z",
       "completedAt": "2026-04-27T12:16:05.992Z",
       "proofOfWork": "Audit PASS for commit f8fb3446. 0 concern(s). Artifact: intelligence/audits/2026-04-27-f8fb3446.md"
+    },
+    {
+      "id": "task_1777368602582_idb7n0h",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-04-28T09:30:02.397Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-04-28T09:30:02.583Z"
     }
   ]
 }
