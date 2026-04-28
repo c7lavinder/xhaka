@@ -64,3 +64,7 @@ Current State: The project has not seen any activity in the past few days. All r
 ## 2026-04-27 (100 commits)
 ### 🔄 Changed
 - chore: heartbeat-state update
+## 2026-04-28 (100 commits)
+### 🔄 Changed
+- chore: job-registry updates with dispatcher and capture statuses
+- chore: results-log updates with dispatcher and watchdog statuses
