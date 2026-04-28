@@ -9444,3 +9444,4 @@
 2026-04-28T07:00:03.593Z	watchdog	success	1497		model=gpt-4o-mini cost=$0.001
 2026-04-28T07:00:03.238Z	dispatcher	success	1485		model=gpt-4o-mini cost=$0.001
 2026-04-28T07:00:05.963Z	heartbeat-check	success	4227		model=gpt-4o-mini cost=$0.001
+2026-04-28T07:00:24.227Z	kb-indexer	success	21997		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
