@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "scribe",
-    "runId": "2026-04-01T05:00:06.086Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output does not promote any genuinely important items to MEMORY.md, as it merely provides a summary of tasks completed without any specific insights or high-signal information. It lacks detail on the significance or impact of the work done.",
-    "evaluatedAt": "2026-04-01T05:00:06.992Z"
-  },
-  {
     "jobName": "researcher",
     "runId": "2026-04-01T11:00:06.627Z",
     "score": 30,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important information for MEMORY.md. It mainly reports an error related to a mismatch in expected and actual commit hashes, which is not high-signal for future reference.",
     "evaluatedAt": "2026-04-28T05:00:08.819Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-29T05:00:06.617Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output provides a brief summary of the scribe's activities, but it lacks important details or insights that would be valuable for long-term memory. The information is too generic and does not offer high-signal content.",
+    "evaluatedAt": "2026-04-29T05:00:08.143Z"
   }
 ]
