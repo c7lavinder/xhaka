@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-02T05:00:05.574Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output contains technical details about a digest error, but it doesn't provide any genuinely important or high-signal information that would be useful for future reference. The entry is too specific and lacks broader relevance.",
-    "evaluatedAt": "2026-04-02T05:00:07.185Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-03T05:00:05.577Z",
     "score": 10,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The entry is concise but lacks context and specificity, making it difficult to determine its importance or relevance without additional information.",
     "evaluatedAt": "2026-04-29T11:00:22.824Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-29T11:00:26.139Z",
+    "score": 30,
+    "grade": "LOW",
+    "rationale": "The entry is vague and lacks context. It mentions '10 non-negotiables' but does not specify what they are, making it difficult to assess its importance or relevance. The instruction to 'evaluate before promoting changes' is generic and not particularly high-signal.",
+    "evaluatedAt": "2026-04-29T11:00:29.102Z"
   }
 ]
