@@ -36,7 +36,7 @@
   },
   "improve": {
     "lastRun": "2026-04-27T11:30:01.544Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1252,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
@@ -106,7 +106,7 @@
   },
   "morning-brief": {
     "lastRun": "2026-04-28T11:00:00.568Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 2748,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
@@ -155,7 +155,7 @@
   },
   "change-evaluator": {
     "lastRun": "2026-04-28T20:00:01.091Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1124,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
