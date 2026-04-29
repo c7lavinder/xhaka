@@ -1,13 +1,5 @@
 [
   {
-    "jobName": "organize",
-    "runId": "2026-04-01T11:00:15.608Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The categorization is somewhat specific, mentioning 'evaluation metrics' and 'Builder for harness improvements', but it lacks clarity on the categories used. It could benefit from more detailed categorization, such as 'Meeting Notes' or 'Project Development', to enhance specificity and usefulness.",
-    "evaluatedAt": "2026-04-01T11:00:17.811Z"
-  },
-  {
     "jobName": "scribe",
     "runId": "2026-04-01T11:00:18.919Z",
     "score": 70,
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output provides a very general statement about the importance of benchmarking in AI evaluation systems but lacks specific, actionable insights or concrete implications for a researcher role.",
     "evaluatedAt": "2026-04-29T11:00:11.046Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-29T11:00:13.577Z",
+    "score": 75,
+    "grade": "HIGH",
+    "rationale": "The categorization of the memory entry is somewhat specific and useful, as it identifies a session focused on evaluation metrics and harness improvements. However, it lacks more detailed categorization or context that could make it more actionable or informative, such as the specific metrics discussed or the implications of the key decision.",
+    "evaluatedAt": "2026-04-29T11:00:15.609Z"
   }
 ]
