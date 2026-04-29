@@ -11508,3 +11508,4 @@
 2026-04-29T11:00:04.703Z	heartbeat-check	success	3557		model=gpt-4o-mini cost=$0.001
 2026-04-29T11:00:34.292Z	benchmark	success	33277		model=gpt-4o-mini cost=$0.001
 2026-04-29T11:01:02.098Z	dispatcher	success	1086		model=gpt-4o-mini cost=$0.001
+2026-04-29T11:01:28.112Z	propagate	success	86241		model=gpt-4o-mini cost=$0.003
