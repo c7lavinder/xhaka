@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-01T11:00:25.603Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The entry is vague and lacks context, making it difficult to determine its importance or relevance. It does not provide specific or actionable information that would be considered high-signal for memory.",
-    "evaluatedAt": "2026-04-01T11:00:27.197Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-02T05:00:05.574Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "MEDIUM",
     "rationale": "The categorization 'Session' is somewhat useful but lacks specificity. It could be improved by specifying the type of session (e.g., 'Meeting' or 'Workshop') and including more details about the participants or context.",
     "evaluatedAt": "2026-04-29T11:00:20.067Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-29T11:00:21.156Z",
+    "score": 60,
+    "grade": "MEDIUM",
+    "rationale": "The entry is concise but lacks context and specificity, making it difficult to determine its importance or relevance without additional information.",
+    "evaluatedAt": "2026-04-29T11:00:22.824Z"
   }
 ]
