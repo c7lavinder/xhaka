@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-01T11:00:18.919Z",
-    "score": 70,
-    "grade": "MEDIUM",
-    "rationale": "The entry is concise and highlights a critical aspect of the job, which is the adherence to the 10 non-negotiables. However, it lacks specific details on what these non-negotiables are, which could provide more context and utility.",
-    "evaluatedAt": "2026-04-01T11:00:22.608Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-01T11:00:25.603Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "HIGH",
     "rationale": "The categorization of the memory entry is somewhat specific and useful, as it identifies a session focused on evaluation metrics and harness improvements. However, it lacks more detailed categorization or context that could make it more actionable or informative, such as the specific metrics discussed or the implications of the key decision.",
     "evaluatedAt": "2026-04-29T11:00:15.609Z"
+  },
+  {
+    "jobName": "organize",
+    "runId": "2026-04-29T11:00:18.664Z",
+    "score": 70,
+    "grade": "MEDIUM",
+    "rationale": "The categorization 'Session' is somewhat useful but lacks specificity. It could be improved by specifying the type of session (e.g., 'Meeting' or 'Workshop') and including more details about the participants or context.",
+    "evaluatedAt": "2026-04-29T11:00:20.067Z"
   }
 ]
