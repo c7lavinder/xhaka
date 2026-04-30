@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-03T05:00:05.577Z",
-    "score": 10,
-    "grade": "LOW",
-    "rationale": "The output provides a summary of activities but lacks important details or insights that would be valuable for memory. It is concise but not high-signal, as it doesn't highlight any significant decisions or rules.",
-    "evaluatedAt": "2026-04-03T05:00:07.310Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-04T05:00:06.900Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The entry is vague and lacks context. It mentions '10 non-negotiables' but does not specify what they are, making it difficult to assess its importance or relevance. The instruction to 'evaluate before promoting changes' is generic and not particularly high-signal.",
     "evaluatedAt": "2026-04-29T11:00:29.102Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-04-30T05:00:07.025Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It mainly consists of error messages and technical details that are not high-signal or relevant for future reference.",
+    "evaluatedAt": "2026-04-30T05:00:08.433Z"
   }
 ]
