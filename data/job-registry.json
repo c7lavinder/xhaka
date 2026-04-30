@@ -196,8 +196,8 @@
     "gracePeriodMinutes": 60
   },
   "kb-indexer": {
-    "lastRun": "2026-04-29T07:00:27.971Z",
-    "lastStatus": "success",
+    "lastRun": "2026-04-30T07:00:01.247Z",
+    "lastStatus": "running",
     "durationMs": 26650,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
