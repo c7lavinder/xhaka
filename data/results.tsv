@@ -12454,3 +12454,4 @@
 2026-04-29T23:59:02.478Z	dispatcher	success	1010		model=gpt-4o-mini cost=$0.001
 2026-04-30T00:00:03.210Z	watchdog	success	1237		model=gpt-4o-mini cost=$0.001
 2026-04-30T00:00:05.257Z	heartbeat-check	success	3608		model=gpt-4o-mini cost=$0.001
+2026-04-30T00:00:03.162Z	researcher	success	1200		model=gpt-4o cost=$0.025
