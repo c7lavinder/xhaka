@@ -107,3 +107,4 @@
 2026-04-30T11:30:02.993Z	watchdog	success	1442		model=gpt-4o-mini cost=$0.001
 2026-04-30T11:30:03.029Z	dispatcher	success	1448		model=gpt-4o-mini cost=$0.001
 2026-04-30T11:30:05.341Z	heartbeat-check	success	3678		model=gpt-4o-mini cost=$0.001
+2026-04-30T11:30:04.145Z	capture	failed	2579		
