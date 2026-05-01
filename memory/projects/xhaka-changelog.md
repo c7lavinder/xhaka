@@ -59,22 +59,5 @@ _No significant changes._
 - task-queue: completed researcher/process-article-inbox [task_1773635401606_kuktuzb]
 - task-queue: update task_177363
 
-Status: No recent updates
-Current State: The project has not seen any activity in the past few days. All recent logs indicate no inbox activity, suggesting a stable state with no new developments or issues.
-## 2026-04-27 (100 commits)
-### 🔄 Changed
-- chore: heartbeat-state update
-## 2026-04-28 (100 commits)
-### 🔄 Changed
-- chore: job-registry updates with dispatcher and capture statuses
-- chore: results-log updates with dispatcher and watchdog statuses
-## 2026-04-29 (100 commits)
-_No significant changes._
-## 2026-05-01 (100 commits)
-### 🔄 Changed
-- chore: job-registry [dispatcher=running] [railway skip]
-- chore: job-registry [dispatcher=success] [railway skip]
-- chore: results-log [dispatcher=success] [railway skip]
-- chore: job-registry [capture=success] [railway skip]
-- chore: results-log [capture=success] [railway skip]
-- chore: heartbeat-state update
+Status: Stable
+Current State: The project is currently stable with no new updates or activities logged in the past few days. The system continues to operate without any significant issues, and all recent tasks have been completed successfully.
