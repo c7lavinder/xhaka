@@ -1521,3 +1521,4 @@
 2026-05-01T07:00:02.449Z	dispatcher	success	1036		model=gpt-4o-mini cost=$0.001
 2026-05-01T07:00:05.177Z	heartbeat-check	success	3669		model=gpt-4o-mini cost=$0.001
 2026-05-01T07:00:23.409Z	kb-indexer	success	21688		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
+2026-05-01T07:00:38.268Z	librarian	success	36873		model=gpt-4o-mini cost=$0.001
