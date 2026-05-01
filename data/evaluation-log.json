@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-04T05:00:06.900Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output provides minimal information about the scribe's activities, focusing only on quantitative data without context or significance. It lacks high-signal insights or important items that warrant memory retention.",
-    "evaluatedAt": "2026-04-04T05:00:07.609Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-05T05:00:05.902Z",
     "score": 10,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It mainly consists of error messages and technical details that are not high-signal or relevant for future reference.",
     "evaluatedAt": "2026-04-30T05:00:08.433Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-05-01T05:00:08.817Z",
+    "score": 20,
+    "grade": "LOW",
+    "rationale": "The output contains a technical error message related to a Git commit mismatch, which is not relevant to the core responsibilities of a scribe. It lacks any genuinely important items or insights that should be promoted to MEMORY.md.",
+    "evaluatedAt": "2026-05-01T05:00:09.782Z"
   }
 ]
