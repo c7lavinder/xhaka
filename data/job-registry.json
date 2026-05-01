@@ -63,9 +63,9 @@
     "gracePeriodMinutes": 10
   },
   "watchdog": {
-    "lastRun": "2026-05-01T18:30:01.223Z",
-    "lastStatus": "running",
-    "durationMs": 2427,
+    "lastRun": "2026-05-01T18:30:02.280Z",
+    "lastStatus": "success",
+    "durationMs": 1298,
     "expectedIntervalHours": 1,
     "gracePeriodMinutes": 30
   },
