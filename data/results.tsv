@@ -1816,3 +1816,4 @@
 2026-05-01T11:00:03.691Z	morning-brief	success	2264		model=gpt-4o cost=$0.025
 2026-05-01T11:00:02.671Z	dispatcher	success	1289		model=gpt-4o-mini cost=$0.001
 2026-05-01T11:01:02.191Z	dispatcher	success	1034		model=gpt-4o-mini cost=$0.001
+2026-05-01T11:01:33.082Z	propagate	success	91567		model=gpt-4o-mini cost=$0.003
