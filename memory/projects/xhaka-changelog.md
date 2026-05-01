@@ -70,3 +70,11 @@ Current State: The project has not seen any activity in the past few days. All r
 - chore: results-log updates with dispatcher and watchdog statuses
 ## 2026-04-29 (100 commits)
 _No significant changes._
+## 2026-05-01 (100 commits)
+### 🔄 Changed
+- chore: job-registry [dispatcher=running] [railway skip]
+- chore: job-registry [dispatcher=success] [railway skip]
+- chore: results-log [dispatcher=success] [railway skip]
+- chore: job-registry [capture=success] [railway skip]
+- chore: results-log [capture=success] [railway skip]
+- chore: heartbeat-state update
