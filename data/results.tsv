@@ -3246,3 +3246,4 @@
 2026-05-02T06:59:02.490Z	dispatcher	success	1000		model=gpt-4o-mini cost=$0.001
 2026-05-02T07:00:02.196Z	dispatcher	success	1129		model=gpt-4o-mini cost=$0.001
 2026-05-02T07:00:20.869Z	kb-indexer	success	19112		indexed=0 skipped=45 model=gpt-4o-mini cost=$0.001
+2026-05-02T07:00:38.369Z	librarian	success	36937		model=gpt-4o-mini cost=$0.001
