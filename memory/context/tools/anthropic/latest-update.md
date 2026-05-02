@@ -1,3 +1,3 @@
-Last scanned: 2026-05-01T11:05:30.923Z
+Last scanned: 2026-05-02T11:05:24.554Z
 Service: Anthropic
-Changelog activity: YES — new content detected
+Changelog activity: none detected
