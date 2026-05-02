@@ -21,9 +21,9 @@
     "gracePeriodMinutes": 60
   },
   "tool-monitor": {
-    "lastRun": "2026-05-02T11:05:00.565Z",
-    "lastStatus": "running",
-    "durationMs": 35005,
+    "lastRun": "2026-05-02T11:05:29.344Z",
+    "lastStatus": "success",
+    "durationMs": 29022,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
