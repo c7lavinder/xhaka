@@ -3830,3 +3830,4 @@
 | 2026-05-03T10:52:01.839Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
 | 2026-05-03T11:52:04.130Z | SYSTEM | alert | escalated | 0 | 4 jobs down simultaneously — infra suspected |
 | 2026-05-03T12:53:01.920Z | SYSTEM | alert | escalated | 0 | 3 jobs down simultaneously — infra suspected |
+| 2026-05-03T13:01:02.577Z | improve | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-05-03T13:04:02.577Z |
