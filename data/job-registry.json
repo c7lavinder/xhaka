@@ -155,7 +155,7 @@
   },
   "change-evaluator": {
     "lastRun": "2026-05-01T20:00:00.386Z",
-    "lastStatus": "running",
+    "lastStatus": "failed",
     "durationMs": 1124,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 120
