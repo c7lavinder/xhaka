@@ -4014,3 +4014,4 @@
 | 2026-05-03T21:21:01.637Z | cleanup | rollback | failed | 3 | failureType=railway_infra, waitUntil=2026-05-03T21:24:01.637Z |
 | 2026-05-03T21:22:02.078Z | cleanup | rollback | failed | 3 | failureType=railway_infra, waitUntil=2026-05-03T21:25:02.078Z |
 | 2026-05-03T21:23:01.925Z | cleanup | rollback | failed | 3 | failureType=railway_infra, waitUntil=2026-05-03T21:26:01.925Z |
+| 2026-05-03T21:24:01.643Z | cleanup | rollback | failed | 3 | failureType=railway_infra, waitUntil=2026-05-03T21:27:01.643Z |
