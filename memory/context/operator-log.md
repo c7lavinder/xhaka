@@ -3932,3 +3932,4 @@
 | 2026-05-03T20:40:04.132Z | improve | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
 | 2026-05-03T20:40:10.180Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-05-03T20:43:10.180Z |
 | 2026-05-03T20:41:04.615Z | improve | alert | pending | 2 | ⚠️ Tier 2: 2 attempts failed. Rollback next. failureType=railway_infra |
+| 2026-05-03T20:41:10.316Z | cleanup | restart | pending | 1 | failureType=railway_infra, waitUntil=2026-05-03T20:44:10.316Z |
