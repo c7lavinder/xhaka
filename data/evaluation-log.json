@@ -1,14 +1,6 @@
 [
   {
     "jobName": "scribe",
-    "runId": "2026-04-06T05:00:05.569Z",
-    "score": 20,
-    "grade": "LOW",
-    "rationale": "The output does not contain any genuinely important items to promote to MEMORY.md. It only includes a technical error message related to a commit mismatch, which is low-signal and not relevant for future reference.",
-    "evaluatedAt": "2026-04-06T05:00:07.114Z"
-  },
-  {
-    "jobName": "scribe",
     "runId": "2026-04-07T05:00:06.972Z",
     "score": 20,
     "grade": "LOW",
@@ -398,5 +390,13 @@
     "grade": "LOW",
     "rationale": "The output contains technical details about an error but lacks important context or insights that would be valuable for future reference. It does not provide a high-signal entry for MEMORY.md.",
     "evaluatedAt": "2026-05-02T05:00:07.521Z"
+  },
+  {
+    "jobName": "scribe",
+    "runId": "2026-05-03T05:00:04.878Z",
+    "score": 10,
+    "grade": "LOW",
+    "rationale": "The output does not provide any genuinely important information to promote to MEMORY.md. It only reports a technical error related to a commit mismatch, which is not high-signal or relevant for future reference.",
+    "evaluatedAt": "2026-05-03T05:00:06.105Z"
   }
 ]
