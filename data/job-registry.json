@@ -147,9 +147,9 @@
     "gracePeriodMinutes": 120
   },
   "agent-scorecard": {
-    "lastRun": "2026-04-12T13:00:03.262Z",
-    "lastStatus": "failed",
-    "durationMs": 2951,
+    "lastRun": "2026-05-03T13:00:04.726Z",
+    "lastStatus": "success",
+    "durationMs": 3943,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
