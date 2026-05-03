@@ -1,8 +1,8 @@
 {
   "capture": {
-    "lastRun": "2026-05-03T11:45:00.761Z",
-    "lastStatus": "running",
-    "durationMs": 2072,
+    "lastRun": "2026-05-03T11:45:02.503Z",
+    "lastStatus": "failed",
+    "durationMs": 1973,
     "expectedIntervalHours": 24,
     "gracePeriodMinutes": 60
   },
