@@ -42,9 +42,9 @@
     "gracePeriodMinutes": 120
   },
   "cleanup": {
-    "lastRun": "2026-05-03T11:30:01.629Z",
-    "lastStatus": "running",
-    "durationMs": 1584,
+    "lastRun": "2026-05-03T11:30:04.973Z",
+    "lastStatus": "failed",
+    "durationMs": 3533,
     "expectedIntervalHours": 168,
     "gracePeriodMinutes": 120
   },
