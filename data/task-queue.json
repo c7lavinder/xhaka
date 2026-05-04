@@ -715,6 +715,17 @@
       "startedAt": "2026-05-03T22:17:02.270Z",
       "completedAt": "2026-05-03T22:17:03.392Z",
       "proofOfWork": "skipped: docs-only commit (a180b8e4)"
+    },
+    {
+      "id": "task_1777888503082_6eizry7",
+      "agent": "librarian",
+      "task": "audit",
+      "payload": {
+        "trigger": "daily-capture-check",
+        "queuedAt": "2026-05-04T09:55:02.835Z"
+      },
+      "status": "pending",
+      "createdAt": "2026-05-04T09:55:03.082Z"
     }
   ]
 }
